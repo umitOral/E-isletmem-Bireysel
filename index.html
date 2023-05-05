@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>archmietCRM-V1</title>
+    <!-- material icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- css -->
+    <link rel="stylesheet" href="./css/style.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <!---------- left aside ------------->
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <h2>archimet <span class="danger">CRM</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-symbols-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="http://127.0.0.1:5500/index.html" class="active">
+                    <span class="material-symbols-sharp">grid_view</span>
+                    <h3>Anasayfa</h3>
+                </a>
+                <a href="http://127.0.0.1:5500/pages/users.html">
+                    <span class="material-symbols-sharp">patient_list</span>
+                    <h3>Hastalar</h3>
+                </a>
+                <a href="http://127.0.0.1:5500/pages/meetings.html">
+                    <span class="material-symbols-sharp">
+                        pending_actions
+                    </span>
+                    <h3>Randevular</h3>
+                    <span class="message-count">24</span>
+                </a>
+                <a href="http://127.0.0.1:5500/pages/statics.html">
+                    <span class="material-symbols-sharp">query_stats</span>
+                    <h3>İstatistik</h3>
+                </a>
+                <a href="#">
+                    <span class="material-symbols-sharp">settings</span></span>
+                    <h3>Ayarlar</h3>
+                </a>
+            </div>
+        </aside>
+
+        <!----------- end of sidebar ----------->
+
+        <main>
+            <h1>deneme</h1>
+            <h1>Genel Durum</h1>
+            <div class="date">
+                <input type="date">
+            </div>
+
+            <div class="insights">
+                <div class="sales">
+                    <span class="material-symbols-sharp">analytics</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Satışlar</h3>
+                            <h1>$25.024</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36" />
+                            </svg>
+                            <div class="number">81%</div>
+                        </div>
+
+                    </div>
+                    <small class="text-muted">Son 24 Saat</small>
+
+                </div>
+
+
+                <!----------- end of static 1 ----------->
+
+                <div class="schedules">
+
+                    <span class="material-symbols-sharp">analytics</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Gerçekleşen Randevular</h3>
+                            <h1>$25.024</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36" />
+                            </svg>
+                            <div class="number">30%</div>
+
+                        </div>
+
+                    </div>
+
+
+                    <small class="text-muted">Son 24 Saat</small>
+                </div>
+
+                <!----------- end of static 2 ----------->
+
+                <div class="expenses">
+
+                    <span class="material-symbols-sharp">monitoring </span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Tahsilatlar</h3>
+                            <h1>$10.864</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36" />
+                            </svg>
+                            <div class="number">50%</div>
+
+                        </div>
+
+                    </div>
+
+
+                    <small class="text-muted">Son 24 Saat</small>
+                </div>
+
+                <!----------- end of static 2 ----------->
+
+            </div>
+            <!----------- end of insights ----------->
+            <h1> Müşteriler</h1>
+            <div class="user-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Müşteri</th>
+                            <th>Borç Durumu</td>
+                            <th>Seans Durumu</th>
+                            <th>İşlem Durumu Durumu</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ahmet Oral</td>
+                            <td>Borçlu</td>
+                            <td ><span class="continue">Devam ediyor</span> </td>
+                            <td>Bitti</td>
+
+                            <td><a href="">Detay</a></td>
+                        </tr>
+                        <tr>
+                            <td>mehmet Eniş</td>
+                            <td>Yok</td>
+                            <td>İşlemde</td>
+                            <td ><span class="finish">Bitti</span> </td>
+                            <td><a href="">Detay</a></td>
+                        </tr>
+                        <tr>
+                            <td>Eda Vural</td>
+                            <td>Borçlu</td>
+                            <td>İşlemde</td>
+                            <td ><span class="finish">Bitti</span> </td>
+                            <td><a href="">Detay</a></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+
+        </main>
+
+        <!-- ---------end of main -->
+        <div class="right">
+            <div class="top">
+                <button id="menu-btn">
+                    <span class="material-symbols-sharp">menu</span>
+                </button>
+                <div class="theme-toggler">
+                    <span class="material-symbols-sharp active">light_mode</span>
+                    <span class="material-symbols-sharp " fill="1">dark_mode</span>
+
+                </div>
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey,<b>Daniel</b></p>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="./photos/1616247568681.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-updates">
+                <h2>Recent Updates</h2>
+                <div class="updates">
+                    <div class="update">
+                        <div class="profile-photo">
+                            <img src="./photos/indir.jpg" alt="">
+                        </div>
+                        <div class="message">
+                            <p><b>Mike Tyson</b> received his Order of lorem ipsum dolor</p>
+                            <small class="text-muted">2 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="update">
+                        <div class="profile-photo">
+                            <img src="./photos/1616247568681.jpg" alt="">
+                        </div>
+                        <div class="message">
+                            <p><b>Murat Aktaş</b> ipsum received lorem Order of lorem ipsum dolor</p>
+                            <small class="text-muted">2 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="update">
+                        <div class="profile-photo">
+                            <img src="./photos/images.jpg" alt="">
+                        </div>
+                        <div class="message">
+                            <p><b>Edip Çalışır</b> received gone Order of lorem ipsum dolor</p>
+                            <small class="text-muted">2 minutes ago</small>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!----------------- end of updates -------------->
+            <div class="analytics">
+                <h2>Sales Analytics</h2>
+                <div class="item item1">
+                    <div class="icon">
+                        <span class="material-symbols-sharp">shopping_basket</span>
+
+                    </div>
+                    <div class="right">
+                        <div class="info">
+                            <h3>Online Orders</h3>
+                            <small>Last 24 Hours</small>
+                        </div>
+                        <span class="success">+39%</span>
+                        <span><b> 38.49</b></span>
+                    </div>
+
+                </div>
+                <div class="item item2">
+                    <div class="icon">
+                        <span class="material-symbols-sharp">person_add</span>
+
+                    </div>
+                    <div class="right">
+                        <div class="info">
+                            <h3>Online Orders</h3>
+                            <small>Last 24 Hours</small>
+                        </div>
+                        <span class="danger">-15%</span>
+                        <span><b> 38.49</b></span>
+                    </div>
+
+                </div>
+                <div class="item item3">
+                    <div class="icon">
+                        <span class="material-symbols-sharp ">shopping_cart</span>
+
+                    </div>
+                    <div class="right">
+                        <div class="info">
+                            <h3>Online Orders</h3>
+                            <small>Last 24 Hours</small>
+                        </div>
+                        <span class="success">+39%</span>
+                        <span><b> 38.49</b></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
