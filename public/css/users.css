@@ -1,0 +1,340 @@
+:root {
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+    --color-white: #fff;
+    --color-info-light: #dce1eb;
+    --color-dark: #363949;
+    --color-light: rgba(132, 139, 200, 0.18);
+    --color-primary-variant: #111e88;
+    --color-dark-variant: #677483;
+    --color-dark-variant2: #b0b1b1;
+
+    --color-background: #f6f6f9;
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    --box-shadow: 0 2rem 1rem var(--color-light);
+
+}
+
+.search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+div.search input[type="search"] {
+
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: var(--border-radius-2);
+    color: gray;
+
+}
+
+.add_customer_btn {
+    background-color: var(--color-white);
+    border: 1px dashed var(--color-dark-variant);
+    padding: 1rem;
+    border-radius: var(--border-radius-2);
+    cursor: pointer;
+}
+
+/* -----------------print section---------- */
+.print {
+    position: relative;
+}
+
+.print-icon {
+
+    background-color: #41f1b6;
+    padding: 0.75rem;
+    font-size: 2rem;
+    border-radius: 50%;
+
+    transition: 0.2s all ease-in-out;
+
+}
+
+.print-selection {
+    width: 13rem;
+    background-color: red;
+    border-radius: var(--border-radius-2);
+    display: none;
+    font-size: 1.1rem;
+    box-shadow: 0.5rem 0.5rem 0.5rem var(--color-light);
+    position: absolute;
+    top: 35px;
+    right: 10px;
+}
+
+.print-selection:hover {
+    display: block;
+}
+
+.print-selection label {
+
+    background-color: #f6f6f9;
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem 0.5rem;
+    transition: 1 all ease-in-out;
+}
+
+.print-selection label:hover {
+
+    transform: scale(1.05);
+    background-color: #fff;
+
+}
+
+.print-selection label:first-child {
+    border-top-right-radius: var(--border-radius-2);
+    border-top-left-radius: var(--border-radius-2);
+    background-color: var(--color-primary);
+}
+
+.print-icon:hover+.print-selection {
+    display: block;
+
+}
+
+/* -----------------print section end -------------- */
+
+
+.pagination {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    color: var(--color-dark-variant);
+
+}
+
+.pagination span {
+    border: 1px solid var(--color-dark-variant2);
+    padding: 0.6rem;
+    text-align: center;
+    font-size: 1rem;
+    border-radius: var(--border-radius-1);
+}
+
+.pagination span:hover {
+    background-color: var(--color-info-light);
+}
+
+main header a {
+    padding: 1.5rem;
+    background-color: white;
+    border: 1px dashed gray;
+    border-radius: var(--border-radius-3);
+    display: block;
+
+}
+
+.user-table table thead th span.material-symbols-sharp {
+
+    border: transparent;
+    font-size: 1.5rem;
+    position: relative;
+    margin-left: 5px;
+    top: 5px;
+    transition: .2s all ease-in;
+}
+
+.user-table table th {
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.user-table table td.active {
+    background-color: rgba(255, 0, 0, 0.035);
+
+}
+
+.user-table table th.active span.material-symbols-sharp {
+    border: 1px solid var(--color-primary);
+    border-radius: 50%;
+    background-color: var(--color-primary);
+
+}
+
+.user-table table th.ars span.material-symbols-sharp {
+    transform: rotate(180deg);
+
+}
+
+.user-table table tr td a {
+    color: #363949;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+}
+
+/* add costumer modal */
+
+.modal {
+    border: 1px solid rgb(202, 201, 201);
+
+    background-color: white;
+    border-radius: var(--border-radius-1);
+    padding: 2rem;
+    min-width: 30%;
+
+    top: 100px;
+    left: 600px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    z-index: 999;
+    display: none;
+
+}
+
+.modal.showed_modal {
+
+    display: block;
+
+}
+
+.modal .inputs input,
+textarea,
+select {
+    border: 1px solid rgba(128, 128, 128, 0.394);
+    display: block;
+    width: 100%;
+    background-color: #F4F6F8;
+    border-radius: var(--border-radius-1);
+    padding: 0.5rem;
+    color: var(--color-dark-variant);
+
+}
+
+.modal button {
+
+    margin-top: 1rem;
+
+
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    color: var(--color-white);
+
+    font-weight: 400;
+    font-size: 1.2rem;
+    background-color: var(--color-success);
+    cursor: pointer;
+
+}
+
+.modal button.cancel_button {
+    background-color: var(--color-danger);
+}
+
+
+
+.modal span {
+    font-weight: 500;
+    display: block;
+    margin-top: 0.7rem;
+}
+
+.modal h2 {
+    text-align: center;
+
+    margin-bottom: 1rem;
+
+}
+.modal .options {
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+.modal .options div {
+
+    display: flex;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.modal .options div label {
+
+    border: 1px solid rgba(128, 128, 128, 0.394);
+    border-radius: var(--border-radius-1);
+    padding: 0.5rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* auto complete -------------- */
+.autocomplete {
+    position: relative;
+    
+    display: flex;
+    gap: 0.5rem;
+}
+
+.autocomplete input {
+    border: 1px solid rgba(128, 128, 128, 0.394);
+    display: block;
+    width: 100%;
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-1);
+    padding: 0.5rem;
+    color: var(--color-dark-variant);
+}
+.autocomplete input[type="submit"] {
+    background-color: var(--color-success);
+    width: 30%;
+    cursor: pointer;
+}
+.autocomplete input[type="submit"]:hover {
+    background-color: #0ced79;
+    
+}
+
+
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+    background-color: #e9e9e9;
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+    background-color: var(--color-primary) !important;
+    color: #ffffff;
+}

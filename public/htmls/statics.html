@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>archmietCRM-V1</title>
+    <!-- material icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- css -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/statics.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <!---------- left aside ------------->
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <h2>archimet <span class="danger">CRM</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-symbols-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="http://127.0.0.1:5500/index.html" class="">
+                    <span class="material-symbols-sharp">grid_view</span>
+                    <h3>Anasayfa</h3>
+                </a>
+                <a href="http://127.0.0.1:5500/pages/users.html">
+                    <span class="material-symbols-sharp">patient_list</span>
+                    <h3>Hastalar</h3>
+                </a>
+                <a href="http://127.0.0.1:5500/pages/meetings.html">
+                    <span class="material-symbols-sharp">
+                        pending_actions
+                    </span>
+                    <h3>Randevular</h3>
+                    <span class="message-count">24</span>
+                </a>
+                <a href="http://127.0.0.1:5500/pages/statics.html" class="active">
+                    <span class="material-symbols-sharp">query_stats</span>
+                    <h3>İstatistik</h3>
+                </a>
+                <a href="#">
+                    <span class="material-symbols-sharp">settings</span></span>
+                    <h3>Ayarlar</h3>
+                </a>
+            </div>
+        </aside>
+
+        <!----------- end of sidebar ----------->
+
+        <main>
+            <div class="">
+                <h1> İSTATİSTİKLER</h1>
+                <hr>
+                <form action="">
+                    <div>
+                        <span>Başlangıç:</span>
+                        <input type="date">
+                    </div>
+                    <div>
+                        <span>Bitiş:</span>
+                        <input type="date">
+                    </div>
+                    <input type="button" value="Getir" class="date_btn">
+                </form>
+                <hr>
+
+                <div class="statics">
+                    <div id="sex_statics" style="width:100%;max-width:350px"></div>
+                    <div id="payment_statics" style="width:100%;max-width:350px"></div>
+                    <div id="proccessType_statics" style="width:100%;max-width:500px"></div>
+                    <div id="revenue_statics" style="width:100%;max-width:500px"></div>
+
+                </div>
+            </div>
+
+
+        </main>
+    </div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <script src="../js/statics.js"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>

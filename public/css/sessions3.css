@@ -1,0 +1,258 @@
+* {
+  box-sizing: border-box;
+}
+
+.main-sessions {
+  display: flex;
+  gap: 2rem;
+}
+.left {
+  width: 50%;
+}
+.calendar {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  border: 1px solid gray;
+  border-radius: 10px;
+}
+.month {
+  display: flex;
+  justify-content: center;
+  min-width: 300px;
+  width: 100%;
+
+  padding: 1rem;
+  align-items: center;
+  font-size: 1.5rem;
+  gap: 2rem;
+  text-transform: capitalize;
+}
+.month .prev,
+.month .next {
+  cursor: pointer;
+}
+.month .prev:hover,
+.month .next:hover {
+  color: white;
+}
+
+.weekdays {
+  display: flex;
+  padding: 20px 0;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: 600;
+}
+.weekdays div {
+  width: 14.28%;
+  text-align: center;
+}
+.days {
+  display: flex;
+
+  flex-wrap: wrap;
+  width: 100%;
+}
+.days .day {
+  width: 14.28%;
+  border: 1px solid gray;
+  text-align: center;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.days .day.active {
+  font-size: 2rem;
+  background-color: rgb(224, 137, 234);
+  color: white;
+}
+.days .day.prev-date,
+.next-date {
+  color: rgba(128, 128, 128, 0.537);
+}
+.days .day:not(.prev-date, .next-date):hover {
+  background-color: rgb(224, 137, 234);
+}
+
+.day.today {
+  font-size: 2rem;
+  color: rgb(224, 137, 234);
+}
+.day.today:hover {
+  font-size: 2rem;
+  color: white;
+}
+.calendar .days .day.event {
+  position: relative;
+}
+.calendar .days .day.event::after {
+  position: absolute;
+  content: "";
+  height: 6px;
+  width: 75%;
+  background-color: rgb(224, 137, 234);
+  bottom: 10px;
+  border-radius: 5px;
+}
+.calendar .days .day:hover::after {
+  background-color: white;
+}
+.calendar .days .day.event.active::after {
+  background-color: white;
+}
+
+.calendar .goto-today {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin: 1rem 0;
+}
+.calendar .goto-today .goto {
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+.calendar .goto-today .goto input {
+  border: none;
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px;
+}
+.calendar .goto-today .goto button {
+  background-color: transparent;
+  border: none;
+  border-left: 1px solid gray;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.calendar .goto-today .today-btn {
+  padding: 5px 10px;
+
+  cursor: pointer;
+}
+.calendar .goto-today .goto button:hover {
+  background-color: aqua;
+}
+
+/* ----------------------------------------right section---------------------------------- */
+.main-sessions .right {
+  width: 40%;
+  border: 1px solid gray;
+  min-height: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+}
+.main-sessions .right .today-date {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  text-transform: capitalize;
+  font-size: 1.5rem;
+}
+.main-sessions .right .events {
+  width: 100%;
+
+  max-height: 600px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-sessions .right .events .event {
+  position: relative;
+  width: 95%;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 20px;
+  cursor: pointer;
+
+  border: 1px solid gray;
+}
+.main-sessions .right .events .event.active {
+  background-color: red;
+}
+
+.main-sessions .right .events .event:nth-child(even) {
+  background-color: rgba(128, 128, 128, 0.1);
+}
+.main-sessions .right .events .event:hover {
+  background-color: rgba(163, 102, 163, 0.541);
+}
+.main-sessions .right .events .event.active {
+  background-color: red;
+}
+.main-sessions .right .events .event input{
+  background-color: red;
+  position: absolute;
+  
+  left: 10px;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+.add-event-wrapper {
+
+  border: 1px solid gray;
+  border-radius: 10px;
+  background-color: white;
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  display:none;
+}
+.add-event-wrapper.active {
+  
+  display:block;
+}
+
+.add-event-wrapper .add-event-header {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  font-size: 1.3rem;
+  padding: 0 20px;
+}
+.add-event-wrapper .add-event-header i {
+  cursor: pointer;
+  background-color: red;
+  padding: 5px;
+}
+.add-event-wrapper .add-event-body input {
+  padding: 10px;
+  margin-bottom: 5px;
+}
+.add-event-wrapper .add-event-body button {
+  padding: 10px;
+}
+.add-session {
+    position: absolute;
+    bottom:10px;
+    right: 10px;
+    padding: 5px 10px;
+    background-color: aquamarine;
+    border: 1px solid gray;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.add-session:hover{
+    font-weight: 400;
+    background-color: rgb(83, 243, 189);
+}
+
+
+/* events list area ------------------- */

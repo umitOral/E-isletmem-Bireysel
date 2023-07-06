@@ -1,0 +1,50 @@
+
+.statics{
+    display: flex;
+    gap: 1rem;
+}
+
+.main-svg{
+    border: 1px solid rgba(128, 128, 128, 0.466);
+    border-radius: 1rem;
+   
+}
+input[type="date"]{
+    padding: 0.5rem;
+    border: 1px solid gray;
+    border-radius: 5px;
+    
+
+}
+
+form {
+    display: flex;
+    gap: 0.8rem;
+    align-items: end;
+    
+}
+form div {
+    display: flex;
+    flex-direction: column;
+    
+    
+}
+.date_btn {
+    
+    background-color: aquamarine;
+    
+    padding: 0.5rem;
+    border:1px solid gray;
+    border-radius: 4px;
+    
+}
+hr {
+    margin: 1rem 0;
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+
+
