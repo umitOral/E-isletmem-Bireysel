@@ -35,7 +35,7 @@ app.use(express.static("public"))
 
 app.get('/', function (req, res) {
 
-    res.render("front-side/main");
+    res.render("front-side/main",domain);
 
 });
 app.get('/login', function (req, res) {
@@ -60,7 +60,7 @@ app.post('/login', function (req, res) {
 
 app.get('/admin', accesControl, function (req, res) {
     console.log(req.url)
-    res.render("admin/index",domain);
+    res.render("admin/index");
 
 });
 
