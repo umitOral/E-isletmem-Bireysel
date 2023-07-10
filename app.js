@@ -11,7 +11,7 @@ const { accesControl } = require('./middlewares')
 const app = express()
 
 const PORT = 3000
-const domain="https://archimet-6223ab9df00c.herokuapp.com"
+
 
 // app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -35,7 +35,7 @@ app.use(express.static("public"))
 
 app.get('/', function (req, res) {
 
-    res.render("front-side/main",domain);
+    res.render("front-side/main");
 
 });
 app.get('/login', function (req, res) {
