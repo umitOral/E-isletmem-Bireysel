@@ -154,6 +154,7 @@ main header a {
 .user-table table th {
     cursor: pointer;
     text-transform: capitalize;
+    padding: 15px;
 }
 
 .user-table table td.active {

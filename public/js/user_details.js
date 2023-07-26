@@ -157,12 +157,16 @@ addProccess.onclick = () => {
 }
 
 cancelModal.forEach(element => {
-    element.onclick = () => {
-        console.log(element)
+    element.addEventListener("click", (e)=>{
+        e.preventDefault()
         modalUser.classList.remove("showed_modal")
         modalSession.classList.remove("showed_modal")
         modalPayment.classList.remove("showed_modal")
-    }
+        modalImage.classList.remove("showed_modal")
+        modalUser.classList.remove("showed_modal")
+        modalProccess.classList.remove("showed_modal")
+        console.log("dada")
+    })
 });
 saveModal.forEach(element => {
     element.onclick = () => {

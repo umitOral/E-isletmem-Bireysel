@@ -1,245 +1,70 @@
-const express = require('express')
-const path = require('path');
-const User = require('./models/user');
-const db = require("./database/db")
-const bodyParser = require('body-parser');
 
 
-//middlewares
-const { accesControl } = require('./middlewares')
+import express, { Router } from 'express';
+import cookieParser from 'cookie-parser';
+import methodOverride from 'method-override';
+import fileUpload from 'express-fileupload'; ///çoook önemli enctype="multipart/form-data" forma eklenecek
+import { v2 as cloudinary } from 'cloudinary';
 
+import connect from './controller/db.js';
+
+import dotenv from 'dotenv';
+import pageRoute from './routes/pageRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import api from './routes/api.js';
+
+import * as authMiddleware from "./middlewares/authMiddleware.js";
+
+
+//dotenv config 
+dotenv.config(); 
+
+//app ana yapısı
 const app = express()
 
-const PORT = 3000
+//db connection
+connect()
+
+//önemli cloudinary config
+cloudinary.config({
+    cloud_name:process.env.CLOUD_NAME,
+    api_key:process.env.CLOUD_API_KEY,
+    api_secret:process.env.CLOUD_API_SECRET
+})
 
 
-// app.use(bodyParser.urlencoded({ extended: true }))
 
 //template engine
 app.set("view engine", "ejs")
 
 //body parser çok önemli
 app.use(express.json());
+//çok önemli form içindeki veriyi almak için
+app.use(express.urlencoded({extended:true}))
+//önemli cookie parser
+app.use(cookieParser())
+// çok önemli put methodunu kullanmak için geçerli
+app.use(methodOverride('_method',{
+    methods:["POST","GET"]
+}))
+//ÇÇOK ÖNEMLİ DOSYA YüKLEMELERİ İÇİN
 
+app.use(fileUpload({useTempFiles:true}))
 
 //static files css,js
-
 app.use(express.static("public"))
 
-
-
-
+app.get("/views/front-side/main.ejs")
 //routes,middlewares
-
-//
-
-app.get('/', function (req, res) {
-
-    res.render("front-side/main");
-
-});
-app.get('/login', function (req, res) {
-    res.render("front-side/login")
-
-});
-app.post('/login', function (req, res) {
-    User.findOne({ "email": req.body.email })
-        .then(result => {
-
-
-            if (result.email === req.body.email && result.password === req.body.password) {
-                console.log("başarılı")
-                res.render("admin/index", { result: result });
-            } else (
-                res.write("yanlış değerler")
-            )
-        })
-        .catch(err => console.log(err))
-
-});
-
-app.get('/admin', accesControl, function (req, res) {
-    console.log(req.url)
-    res.render("admin/index");
-
-});
-
-app.get('/admin/users', function (req, res) {
-
-   res.render("admin/users")
-
-
-});
-
-//APIS  /////////////////////////////////////////////////////
-app.get('/api/users', function (req, res) {
-
-    User.find({})
-        .then((result) => {
-
-            users = result
-            res.json(users)
-
-            console.log(users)
-
-        }).then((err) => {
-
-        })
-
-});
-
-app.post('/api/users', function (req, res) {
-    console.log(req.url)
-    console.log(req.body)
-
-    User.create({
-        
-        name: req.body.name,
-        surname: req.body.surname,
-        company: req.body.company,
-        email: req.body.email,
-        phone: req.body.phone,
-        password: req.body.password,
-
-    }).then((result) => {
-        res.json({
-            succes: true,
-            message: "ekleme başarılı",
-            data: result
-        })
-
-    }).catch((err) => {
-    })
-
-});
-
-app.put('/api/users/:id', function (req, res) {
-    console.log(req.url)
-    console.log(req.params.id)
-    User.findByIdAndUpdate(req.params.id, {
-        name: req.body.name
-    }).then(response => res.json({
-        success: true,
-        message: "put request",
-        data: response
-    })).catch(err => console.log(err))
-
-
-});
-
-
-
-app.delete('/api/users/:id', function (req, res) {
-    User.findByIdAndDelete( req.params.id )
-        .then((response) => {
-
-
-        res.json({
-            success:true,
-            message:"user deleted",
-            data:response
-        })
-
-
-        }).catch((err) => {
-
-        })
-
-
-});
-
-app.get('/admin/users/:_id', function (req, res) {
-    
-    User.findById(req.params._id)
-        .then((result) => {
-
-            user = result
-            res.render("admin/user-details",user);
-            
-            
-
-        }).catch((err) => {
-            console.log(err)
-        })
-
-
-
-});
-
-
-app.get('/register', function (req, res) {
-    res.render("front-side/register");
-
-});
-
-app.post('/register', function (req, res) {
-
-    User.create({
-        name: req.body.name,
-        surname: req.body.surname,
-        company: req.body.company,
-        email: req.body.email,
-        phone: req.body.phone,
-        password: req.body.password,
-
-    }).then((result) => {
-
-        console.log(result)
-        user = result
-        res.render("front-side/succesRegister");
-
-    }).then((err) => {
-
-    })
-});
-app.post('/admin/user/add', function (req, res) {
-
-    User.create({
-        name: req.params.name,
-        surname: req.params.surname,
-        company: req.params.company,
-        email: req.params.email,
-        phone: req.params.phone,
-
-
-    }).then((result) => {
-        console.log(req.params)
-        console.log(result)
-        users = result
-
-
-    }).then((err) => {
-
-    })
-});
-
-
-
-
-// app.post("/users", (req, res, next) => {
-//     console.log(req.url)
-//     console.log(req.body)
-//     user.push(req.body)
-
-//     res.json({
-//         success: true,
-//         message: "post request",
-//         data: user
-//     })
-
-// })
-
-
-//database proccess
-
-
-
-
+app.use("*",authMiddleware.checkUser)
+app.use("/",pageRoute)
+app.use("/api",api)
+app.use("/admin",authMiddleware.authenticateToken,adminRoutes)
 
 
 
 
 ////////////////////////////////////////////
 app.listen(process.env.PORT || 3000, () => {
-    console.log("Server başlatıldı: http://localhost:" + PORT)
+    console.log("application run on " +"http://localhost:"+process.env.PORT)
 })

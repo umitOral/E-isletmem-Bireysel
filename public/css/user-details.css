@@ -55,7 +55,8 @@
 #add_session,
 #add_image,
 #add_payment,
-#add_proccess {
+#add_proccess,
+#delete_user {
 
     border: 1px solid rgba(128, 128, 128, 0.576);
     border-radius: 0.5rem;
@@ -82,6 +83,12 @@
 
     border: 1px solid rgba(56, 54, 54, 0.576);
     background-color: var(--color-success);
+
+}
+#delete_user:hover {
+
+    border: 1px solid rgba(56, 54, 54, 0.576);
+    background-color: var(--color-danger);
 
 }
 

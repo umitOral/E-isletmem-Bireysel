@@ -289,20 +289,20 @@ document.addEventListener("click", (e) => {
 })
 
 
-addEventFromTo.addEventListener("input", (e) => {
-    addEventFromTo.value = addEventFromTo.value.replace(/[^0-9:]/g, "")
-    addEventFromTo.value = addEventFromTo.value.slice(0, 5)
+// addEventFromTo.addEventListener("input", (e) => {
+//     addEventFromTo.value = addEventFromTo.value.replace(/[^0-9:]/g, "")
+//     addEventFromTo.value = addEventFromTo.value.slice(0, 5)
 
-    if (addEventFromTo.value.length == 2) {
-        addEventFromTo.value += ":"
-    }
-    if (e.inputType === "deleteContentBackward") {
-        if (addEventFromTo.value.length === 3) {
-            addEventFromTo.value = addEventFromTo.value.slice(0, 2)
-        }
-    }
+//     if (addEventFromTo.value.length == 2) {
+//         addEventFromTo.value += ":"
+//     }
+//     if (e.inputType === "deleteContentBackward") {
+//         if (addEventFromTo.value.length === 3) {
+//             addEventFromTo.value = addEventFromTo.value.slice(0, 2)
+//         }
+//     }
 
-})
+// })
 
 function addListener() {
     const days = document.querySelectorAll(".day")

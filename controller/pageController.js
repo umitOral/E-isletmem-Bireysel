@@ -1,0 +1,135 @@
+import User from "../models/userModel.js"
+import Service from "../models/serviceModel.js"
+
+const getIndexPage = (req, res) => {
+    try {
+        res.status(200).render("main", {
+            link: "index"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "pagecontroller"
+        })
+    }
+}
+
+const getLoginPage = (req, res) => {
+    try {
+        res.status(200).render("login", {
+            link: "login"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "pagecontroller"
+        })
+    }
+}
+const getservicesPage = async (req, res) => {
+    try {
+        const services = await Service.find()
+        res.status(200).render("operations", {
+            services,
+            link: "operations"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "pagecontroller"
+        })
+    }
+}
+const getRegisterPage = (req, res) => {
+    try {
+        res.status(200).render("register", {
+            link: "register"
+        })
+        res.redirect("indexAdmin")
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "pagecontroller"
+        })
+    }
+}
+const getAdminPage = (req, res) => {
+    try {
+        res.status(200).render("indexAdmin", {
+            link: "indexAdmin"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+const getUsersPage = async (req, res) => {
+    try {
+        const users = await User.find({ _id: { $ne: res.locals.user._id } }).populate(["images"])
+
+        res.status(200).render("users", {
+            users,
+            link: "users"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+
+const getSessionsPage = (req, res) => {
+    try {
+        res.status(200).render("sessions3", {
+            link: "sessions3"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+const getStaticsPage = (req, res) => {
+    try {
+        res.status(200).render("statics", {
+            link: "statics"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+const getSettingsPage = (req, res) => {
+    try {
+        res.status(200).render("settings", {
+            link: "settings"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+const getSinglePage = async (req, res) => {
+    try {
+        const singleUser = await User.findById(req.params.id).sort({ uploadTime: 1 })
+        res.status(200).render("user-details", {
+            singleUser,
+            link: "user_details"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+
+export { getIndexPage, getLoginPage, getRegisterPage, getAdminPage, getUsersPage, getSessionsPage, getStaticsPage, getSettingsPage, getSinglePage, getservicesPage }

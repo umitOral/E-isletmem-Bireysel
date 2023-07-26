@@ -17,47 +17,10 @@
 </head>
 
 <body>
-
+    <%- include('partials/header.ejs') %>
     <div class="container">
         <!---------- left aside ------------->
-        <aside>
-            <div class="top">
-                <div class="logo">
-                    <h2>archimet <span class="danger">CRM</span></h2>
-                </div>
-                <div class="close" id="close-btn">
-                    <span class="material-symbols-sharp">
-                        close
-                    </span>
-                </div>
-            </div>
-
-            <div class="sidebar">
-                <a href="http://127.0.0.1:5500/index.html" class="">
-                    <span class="material-symbols-sharp">grid_view</span>
-                    <h3>Anasayfa</h3>
-                </a>
-                <a href="http://127.0.0.1:5500/pages/users.html">
-                    <span class="material-symbols-sharp">patient_list</span>
-                    <h3>Hastalar</h3>
-                </a>
-                <a href="http://127.0.0.1:5500/pages/meetings.html">
-                    <span class="material-symbols-sharp">
-                        pending_actions
-                    </span>
-                    <h3>Randevular</h3>
-                    <span class="message-count">24</span>
-                </a>
-                <a href="http://127.0.0.1:5500/pages/statics.html" class="active">
-                    <span class="material-symbols-sharp">query_stats</span>
-                    <h3>İstatistik</h3>
-                </a>
-                <a href="#">
-                    <span class="material-symbols-sharp">settings</span></span>
-                    <h3>Ayarlar</h3>
-                </a>
-            </div>
-        </aside>
+        <%- include('partials/aside.ejs') %>
 
         <!----------- end of sidebar ----------->
 

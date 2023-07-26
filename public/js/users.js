@@ -23,9 +23,7 @@ import { Request } from "./requests.js";
 import { UI } from "./ui.js";
 
 const ui = new UI();
-const request = new Request("http://127.0.0.1:3000/api/users")
-
-
+const request = new Request("/api/getAllUsers")
 
 
 eventListeners()
@@ -40,41 +38,19 @@ function eventListeners() {
 
 
 function addUser(e) {
-    const name = nameInput.value
-    const surname = surnNameInput.value
-    const birtdhDate = billingAddressInput.value
-    const address = addressInput.value
-    const phone = phoneInput.value
-    const email = emailInput.value
-    const billingAddress = billingAddressInput.value
-    const notes = notesInput.value
+ 
 
 
-    request.post({
-        name: name,
-        surname: surname,
-        birtdhDate: birtdhDate,
-        address: address,
-        phone: phone,
-        email: email,
-        billingAddress: billingAddress,
-        notes: notes,
-    })
-        .then(newUser => {
-            
-            ui.addUsertoUI(newUser)
-        })
-        .catch(err => console.log(err))
-
-
-    closeModalAddCostumer()
-    e.preventDefault()
+    
+    
 }
 
 function getAllUsers() {
     request.get()
         .then(response => ui.showAllUsersToUI(response))
         .catch(err => console.log(err))
+
+       
 }
 
 
