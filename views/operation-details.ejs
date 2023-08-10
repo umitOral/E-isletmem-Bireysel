@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>archmietCRM-V1</title>
+    <!-- material icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- css -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/users.css">
+</head>
+
+<body>
+    <%- include('partials/header.ejs') %>
+        <div class="container">
+            <!---------- left aside ------------->
+            <%- include("partials/aside.ejs") %>
+
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+
+
+
+
+                    <div class="search">
+
+
+
+                        <div class="add_customer modal" style="display:block">
+                            <h2>
+                                <%= service.serviceName %>
+                            </h2>
+                            <form action="./<%= service._id %>/editService" method="POST" id="register-form"
+                                enctype="multipart/form-data">
+                                <div class="inputs ">
+                                    <span>Hizmet İsmi</span>
+                                    <input type="text" name="serviceName" id="user-name"
+                                        value="<%= service.serviceName %>">
+                                </div>
+
+                                <div class="inputs ">
+                                    <span>Fiyat</span>
+                                    <input type="text" name="servicePrice" id="surname"
+                                        value="<%= service.servicePrice %>">
+                                </div>
+                                <div class="inputs ">
+                                    <span>aktiflik Durumu</span>
+                                    <% if(service.activeorNot===true){ %>
+                                        <select class="activeOrNot" name="activeorNot">
+                                            <option value="0">Aktif</option>
+                                            <option value="1">Aktif Değil</option>
+                                        </select>
+                                        <% } else{ %>
+                                            <select class="activeOrNot" name="activeorNot">
+                                                <option value="1">Aktif Değil</option>
+                                                <option value="0">Aktif</option>
+                                                
+                                            </select>
+                                            <% } %>
+
+                                </div>
+
+
+
+                                <button type="submit" class="save_button" id="add-user">Kaydet</button>
+
+                            </form>
+                            <button class="cancel_button" onclick="" >Vazgeç</button>
+                            
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+                    <div>
+
+                    </div>
+
+
+                    <div>
+                        <div id="demo"></div>
+
+
+
+
+                </main>
+        </div>
+
+
+        <script type="module" src="../js/autocomplete.js"></script>
+        <script type="module" src="../js/requests.js"></script>
+        <script type="module" src="../js/users.js"></script>
+        
+
+
+
+</body>
+
+</html>

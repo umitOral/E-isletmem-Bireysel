@@ -201,15 +201,24 @@ function removeUıProccesType(e) {
 }
 
 function addUıProccesType() {
-    const node = document.createElement("div")
+    
+    // const node = document.createElement("div")
+    const nodeinput = document.createElement("input")
+    nodeinput.value=proccessType.options[proccessType.options.selectedIndex].textContent.trim()
+    nodeinput.setAttribute("name","services")
+    nodeinput.setAttribute("disabled","")
+    nodeinput.setAttribute("value",proccessType.options[proccessType.options.selectedIndex].textContent.trim())
+    
+
+
     const deleteButton = document.createElement("i")
     deleteButton.classList.add("fa-solid")
     deleteButton.classList.add("fa-x")
 
-    const textnode = document.createTextNode(proccessType.options[proccessType.options.selectedIndex].textContent);
-    node.appendChild(textnode)
-    node.appendChild(deleteButton)
-    selected_proccess_type_div.appendChild(node)
+    
+    // node.appendChild(nodeinput)
+    // node.appendChild(deleteButton)
+    selected_proccess_type_div.appendChild(nodeinput)
 }
 
 

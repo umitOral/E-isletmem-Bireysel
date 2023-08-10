@@ -1,5 +1,6 @@
 const calendar = document.querySelector(".calendar"),
     date = document.querySelector(".date1"),
+    
     daysContainer = document.querySelector(".days"),
     prev = document.querySelector(".prev"),
     next = document.querySelector(".next"),
@@ -100,18 +101,7 @@ const eventArray = [
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+// calender  ---------------------------------
 function initCalender() {
     const firstDay = new Date(year, month, 1); //mevcut ayın ilk gün tarihi
     const lastDay = new Date(year, month + 1, 0);  //mevcut ayın son gün tarihi
@@ -200,6 +190,7 @@ function initCalender() {
 
 }
 
+
 initCalender()
 
 function prevMonth() {
@@ -218,10 +209,11 @@ function nextMonth() {
     }
     initCalender()
 }
+
 prev.addEventListener("click", prevMonth)
 next.addEventListener("click", nextMonth)
 
-
+// today   --------------------
 todayBtn.addEventListener("click", () => {
     today = new Date()
     month = today.getMonth()
@@ -265,44 +257,38 @@ function goToDate() {
 
 // todo section --------------------------------------
 const addSessionBtn = document.querySelector(".add-session")
-const addEventWrapper = document.querySelector(".add-event-wrapper")
-const closeAddSessionBtn = document.querySelector(".fa-close")
+const closeAddSessionBtn = document.querySelector(".cancel_button")
 const addEventTitle = document.querySelector(".event-name")
 const addEventFromTo = document.querySelector(".event-time-from")
 const addEventTo = document.querySelector(".event-time-to")
+const modalAddSession = document.querySelector(".modal_session")
+
 
 addSessionBtn.addEventListener("click", showAddEventModal)
+
 closeAddSessionBtn.addEventListener("click", closeAddEventModal)
 
 function showAddEventModal() {
-    addEventWrapper.classList.add("active")
+   
+    
+    modalAddSession.classList.add("showed_modal")
 }
+console.log(closeAddSessionBtn)
 function closeAddEventModal() {
-    addEventWrapper.classList.remove("active")
+    
+    console.log("dda")
+    modalAddSession.classList.remove("showed_modal")
 }
 
 // click outside of wrapper
 document.addEventListener("click", (e) => {
-    if (e.target !== addSessionBtn && !addEventWrapper.contains(e.target)) {
-        addEventWrapper.classList.remove("active")
+    if (e.target !== addSessionBtn && !modalAddSession.contains(e.target)) {
+        modalAddSession.classList.remove("active")
     }
 })
 
 
-// addEventFromTo.addEventListener("input", (e) => {
-//     addEventFromTo.value = addEventFromTo.value.replace(/[^0-9:]/g, "")
-//     addEventFromTo.value = addEventFromTo.value.slice(0, 5)
 
-//     if (addEventFromTo.value.length == 2) {
-//         addEventFromTo.value += ":"
-//     }
-//     if (e.inputType === "deleteContentBackward") {
-//         if (addEventFromTo.value.length === 3) {
-//             addEventFromTo.value = addEventFromTo.value.slice(0, 2)
-//         }
-//     }
-
-// })
 
 function addListener() {
     const days = document.querySelectorAll(".day")
@@ -455,18 +441,16 @@ function updateEvents(date) {
 };
 
 
+allDays = document.querySelectorAll(".day"),
+
+allDays.forEach(element => {
+    element.addEventListener("click", reloadRightMenu)
+});
 
 
-
-
-
-
-
-
-
-
-
-
+function reloadRightMenu() {
+    
+}
 
 
 
@@ -528,7 +512,7 @@ addEventSubmit.addEventListener("click", () => {
     }
 })
 
-
+//convert time  --------------
 function convertTime(time) {
 
     let timeArr = time.split(":");

@@ -7,7 +7,8 @@ const serviceSchema = new Schema({
     serviceName: {
         type: String
     },
-    servicePrice:{type:Number}
+    servicePrice:{type:Number},
+    activeorNot:{type:Boolean,default:true}
     
 })
 

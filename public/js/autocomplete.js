@@ -110,7 +110,7 @@ function getAllUsers() {
     request.get()
         .then(response => {
             const responseLast = response.users
-            console.log(responseLast)
+            
             let users = []
             for (const key in responseLast) {
 

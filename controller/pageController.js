@@ -31,7 +31,7 @@ const getservicesPage = async (req, res) => {
         const services = await Service.find()
         res.status(200).render("operations", {
             services,
-            link: "operations"
+            link: "services"
         })
     } catch (error) {
         res.status(500).json({
@@ -56,7 +56,7 @@ const getRegisterPage = (req, res) => {
 const getAdminPage = (req, res) => {
     try {
         res.status(200).render("indexAdmin", {
-            link: "indexAdmin"
+            link: "index"
         })
     } catch (error) {
         res.status(500).json({
@@ -67,7 +67,7 @@ const getAdminPage = (req, res) => {
 }
 const getUsersPage = async (req, res) => {
     try {
-        const users = await User.find({ _id: { $ne: res.locals.user._id } }).populate(["images"])
+        const users = await User.find({ role: { $ne: "doctor" } }).populate(["images"])
 
         res.status(200).render("users", {
             users,
@@ -80,11 +80,34 @@ const getUsersPage = async (req, res) => {
         })
     }
 }
-
-const getSessionsPage = (req, res) => {
+const getPersonelsPage = async (req, res) => {
     try {
+        const users = await User.find({ role: "doctor" })
+
+        res.status(200).render("personels", {
+            users,
+            link: "personels"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+
+const getSessionsPage = async (req, res) => {
+    try {
+        const doctors = await User.find({ role: "doctor" })
+        const users = await User.find({ role: "customer" })
+        const services = await Service.find({ activeorNot: { $ne: false } })
+
         res.status(200).render("sessions3", {
-            link: "sessions3"
+            link: "sessions",
+            doctors,
+            users,
+            services
+
         })
     } catch (error) {
         res.status(500).json({
@@ -132,4 +155,4 @@ const getSinglePage = async (req, res) => {
     }
 }
 
-export { getIndexPage, getLoginPage, getRegisterPage, getAdminPage, getUsersPage, getSessionsPage, getStaticsPage, getSettingsPage, getSinglePage, getservicesPage }
+export { getIndexPage, getLoginPage, getRegisterPage, getAdminPage, getUsersPage, getSessionsPage, getStaticsPage, getSettingsPage, getSinglePage, getservicesPage, getPersonelsPage }

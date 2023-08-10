@@ -26,9 +26,9 @@ const userSchema = new Schema({
         url:String,
         uploadTime:Number
     }],
-    related: {
+    company: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "Company"
     }
 
 

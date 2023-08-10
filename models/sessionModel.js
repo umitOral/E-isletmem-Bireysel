@@ -3,8 +3,12 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema
 const sessionSchema = new Schema({
-    date: { type: Date },
-    notes: { type: String },
+    
+    date:{type:Date},
+    time: {
+        type:String
+    },
+    description: { type: String },
 
     user: {
         type: Schema.Types.ObjectId,
@@ -15,13 +19,11 @@ const sessionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    processes: [{
-        type: Schema.Types.ObjectId,
-        ref: "Service"
+    
+    services: [{
+        type: String,
 
     }]
-
-
 
 })
 

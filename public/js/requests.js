@@ -21,6 +21,7 @@
         return responseData
 
     }
+    
     async put(id,data) {
         console.log(data)
         const response = await fetch(this.url+"/"+id,{

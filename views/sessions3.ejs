@@ -16,6 +16,7 @@
     <!-- css -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/sessions3.css">
+    <link rel="stylesheet" href="/css/user-details.css">
 
 
 </head>
@@ -33,6 +34,85 @@
                         <h1> Randevular 222</h1>
                         <div class="current_date"></div>
                         <div class="main main-sessions">
+                            <!-- yeni modal           -->
+                            <div class="modal modal_session ">
+
+                                <h2>Seans Ekle</h2>
+
+                                <form action="./sessions/createsession" method="POST">
+                                    <div class="inputs">
+
+
+                                        <div class="title">
+                                            <span>İşlem Tipi:</span>
+                                            <% services.forEach(service=> { %>
+                                                <input type="checkbox" id="vehicle1" name="services" value="<%= service._id %>">
+                                                <label for="vehicle1"> <%= service.serviceName %></label><br>
+                                                <% }) %>
+
+
+
+                                                    <!-- <select name="services" class="proccess_type" id="processes" multiple>
+                                                <% services.forEach(service=> { %>
+                                                    <option value="<%= service._id %>">
+                                                        <%= service.serviceName %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select> -->
+                                                    <div class="selected_proccess_type">
+
+                                                        <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
+                                                    </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="add-event-body">
+                                        <div class="inputs">Hasta:
+                                            <select name="user" class="proccess_type" id="processes">
+
+                                                <% users.forEach(user=> { %>
+                                                    <option value="<%= user._id %>">
+                                                        <%= user.name %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+
+                                        </div>
+                                        <div class="title">Doktor:
+                                            <select name="doctor" class="proccess_type" id="processes">
+
+                                                <% doctors.forEach(doctor=> { %>
+                                                    <option value="<%= doctor._id %>">
+                                                        <%= doctor.name %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="inputs">Tarih:
+                                            <input type="date" name="date" placeholder="Tarih" class="event-time-from">
+                                        </div>
+                                        <div class="inputs"> Saat:
+                                            <select name="time" class="event-time-from">
+                                                <option value="6:00-6:15">6:00-6:15</option>
+                                            </select>
+                                        </div>
+                                        <div class="inputs">Not:
+                                            <input type="text" name="description" cplaceholder="notlar"
+                                                class="event-time-from">
+                                        </div>
+                                        <button type="submit" class="save_button">Seans Ekle +</button>
+
+                                        <span class="cancel_button">Vazgeç</span>
+
+                                    </div>
+                                </form>
+
+
+
+
+
+
+                            </div>
                             <div class="left">
                                 <div class="calendar">
                                     <div class="month">
@@ -50,30 +130,7 @@
                                         <div>Pazar</div>
                                     </div>
                                     <div class="days">
-                                        <!-- <div class="day prev-date">30</div>
-                                <div class="day prev-date">31</div>
-                                <div class="day">1</div>
-                                <div class="day">2</div>
-                                <div class="day">3</div>
-                                <div class="day">4</div>
-                                <div class="day">5</div>
-                                <div class="day event active">6</div>
-                                <div class="day today">7</div>
-                                <div class="day">8</div>
-                                <div class="day">9</div>
-                                <div class="day">10</div>
-                                <div class="day">12</div>
-                                <div class="day">13</div>
-                                <div class="day event">14</div>
-                                <div class="day">15</div>
-                                <div class="day">16</div>
-                                <div class="day event">17</div>
-                                <div class="day">18</div>
-                                <div class="day">19</div>
-                                <div class="day">20</div>
-                                <div class="day next-date">1</div>
-                                <div class="day next-date" >2</div>
-                                <div class="day next-date">3</div> -->
+
                                     </div>
                                     <div class="goto-today">
                                         <div class="goto">
@@ -86,6 +143,7 @@
                             </div>
 
                             <div class="right">
+
                                 <div class="today-date">
                                     <div class="event-day">Pazartesi</div>
                                     <div class="event-date"> 22 Mayıs 2023</div>
@@ -94,46 +152,10 @@
                                     <div></div>
 
                                 </div>
-                                <div class="add-event-wrapper">
-                                    <div class="add-event-header">
-                                        <div class="title">Seans Ekle</div>
-                                        <i class="fa-solid fa-close"></i>
-                                    </div>
-                                    <form action="./sessions/createsession" method="POST">
-                                        <div class="add-event-type">
-                                            <div class="title">Seans Tipi
-                                                <select name="proccess" class="proccess_type" id="processes">
-                                                    <option value="yıkama">Yıkama</option>
-                                                    <option value="saç ekimi">Saç Ekimi</option>
-                                                    <option value="bakım">Bakım</option>
-                                                    <option value="cilt gerdirme">Cilt gerdirme</option>
-                                                </select>
-                                            </div>
 
-                                        </div>
-                                        <div class="add-event-body">
-                                            <div class="add-event-input">
-                                                <input type="text" name="user" placeholder="Hasta İsmi"
-                                                    class="event-name">
-                                            </div>
-                                            <div class="add-event-input">
-                                                <input type="text" name="doctor" placeholder="Doktor"
-                                                    class="event-name">
-                                            </div>
-                                            <div class="add-event-input">
-                                                <input type="date" name="date" placeholder="Tarih"
-                                                    class="event-time-from">
-                                            </div>
-                                            <div class="add-event-input">
-                                                <input type="text" name="description" placeholder="notlar"
-                                                    class="event-time-from">
-                                            </div>
-                                            <button>Seans Ekle +</button>
+                                <button class="add-session">Seans Ekle ++</button>
 
-                                        </div>
-                                </div>
-                                </form>
-                                <button class="add-session">Seans Ekle +</button>
+
 
 
                             </div>
@@ -143,6 +165,8 @@
         </div>
 
         <script src="../js/sessions3.js"></script>
+        <script type="module" src="/js/user_details.js"></script>
+        <script type="module" src="../js/autocomplete.js"></script>
 </body>
 
 </html>

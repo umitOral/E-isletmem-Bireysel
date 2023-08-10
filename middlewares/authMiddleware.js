@@ -1,6 +1,7 @@
 
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
+import Company from '../models/companyModel.js';
 
 const checkUser = async (req, res, next) => {
 
@@ -13,8 +14,8 @@ const checkUser = async (req, res, next) => {
                 res.locals.user = null
                 next()
             } else {
-                const user = await User.findById(decodedToken.userID)
-                res.locals.user = user
+                const company = await Company.findById(decodedToken.userID)
+                res.locals.user = company
                 next()
                 
             }

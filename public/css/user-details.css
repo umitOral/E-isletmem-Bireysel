@@ -285,7 +285,7 @@
 
 .modal {
     border: 1px solid rgb(202, 201, 201);
-
+    z-index:999;
     background-color: white;
     border-radius: var(--border-radius-1);
     padding: 2rem;
@@ -323,8 +323,19 @@
     cursor: pointer;
 }
 
-.modal button.cancel_button {
+.cancel_button {
     background-color: var(--color-danger);
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    color: var(--color-white);
+    text-align: center;
+    font-weight: 400;
+    font-size: 1.2rem;
+    
+    cursor: pointer;
 }
 
 

@@ -1,16 +1,18 @@
 import User from '../models/userModel.js';
+import Company from '../models/companyModel.js';
+
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
 
-const createSeller = async (req, res) => {
+const createCompany = async (req, res) => {
     try {
         const data = req.body
-        data.role = "seller" //  form datasına ekleme çıkarma yapılabilir.
+         //  form datasına ekleme çıkarma yapılabilir.
 
-        const user = await User.create(data)
+        const company = await Company.create(data)
 
 
         res.redirect("login")
@@ -64,7 +66,7 @@ const findUser = async (req, res) => {
 const createUser = async (req, res) => {
     try {
         const data = req.body
-        data.related = res.locals.user._id
+        data.company = res.locals.user._id
 
 
         const user = await User.create(data)
@@ -108,12 +110,12 @@ const editInformations = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         let same = false
-        const user = await User.findOne({ email: req.body.email })
-        const role = user.role
+        const company = await Company.findOne({ email: req.body.email })
+       
 
 
-        if (user && role === "seller") {
-            same = await bcrypt.compare(req.body.password, user.password)
+        if (company ) {
+            same = await bcrypt.compare(req.body.password, company.password)
         } else {
             return res.status(401).json({
                 message: "kullanıcı bulunamadı"
@@ -121,7 +123,7 @@ const loginUser = async (req, res) => {
         }
 
         if (same) {
-            const token = createToken(user._id)
+            const token = createToken(company._id)
             res.cookie("jsonwebtoken", token, {
                 httpOnly: true,
                 maxAge: 1000 * 60 * 60 * 24
@@ -209,4 +211,4 @@ const createToken = (userID) => {
 
 }
 
-export { createSeller, createUser, loginUser, logOut, uploadPictures, editInformations,findUser,deleteUser}
+export { createCompany, createUser, loginUser, logOut, uploadPictures, editInformations,findUser,deleteUser}

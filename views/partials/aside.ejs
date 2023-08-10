@@ -2,26 +2,32 @@
     
 
     <div class="sidebar">
-        <a href="/admin">
+        <a href="/admin" <% if (link==="index") { %>class="active"<% } %>>
             <span class="material-symbols-sharp">grid_view</span>
             <h3>Anasayfa</h3>
         </a>
-        <a href="/admin/users" class="active">
-            <span class="material-symbols-sharp">patient_list</span>
+        <a href="/admin/users" <% if (link==="users") { %>class="active"<% } %>>
+            <span class="material-symbols-sharp">group</span>
             <h3>Hastalar</h3>
         </a>
-        <a href="/admin/sessions">
+        <a href="/admin/personels" <% if (link==="personels") { %>class="active"<% } %> >
+            <span class="material-symbols-sharp">
+                clinical_notes
+                </span>
+            <h3>Personeller</h3>
+        </a>
+        <a href="/admin/sessions" <% if (link==="sessions") { %>class="active"<% } %>>
             <span class="material-symbols-sharp">
                 pending_actions
             </span>
             <h3>Randevular</h3>
             <span class="message-count">24</span>
         </a>
-        <a href="/admin/services">
+        <a href="/admin/services" <% if (link==="services") { %>class="active"<% } %>>
             <span class="material-symbols-sharp">surgical</span>
             <h3>İşlemler</h3>
         </a>
-        <a href="/admin/statics">
+        <a href="/admin/statics" <% if (link==="statics") { %>class="active"<% } %>>
             <span class="material-symbols-sharp">query_stats</span>
             <h3>İstatistik</h3>
         </a>
