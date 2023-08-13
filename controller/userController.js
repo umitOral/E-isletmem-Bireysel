@@ -178,7 +178,8 @@ const uploadPictures = async (req, res) => {
                 })
         }
 
-        // fs.unlinkSync(req.files.upload_file.tempFilePath)
+        
+        fs.unlinkSync(req.files.upload_file.tempFilePath)
         res.redirect("back")
 
     } catch (error) {

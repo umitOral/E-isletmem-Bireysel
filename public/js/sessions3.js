@@ -1,6 +1,13 @@
+
+import { Request } from "./requests.js";
+const request = new Request();
+
+import { UI } from "./ui.js";
+const ui = new UI();
+
 const calendar = document.querySelector(".calendar"),
     date = document.querySelector(".date1"),
-    
+
     daysContainer = document.querySelector(".days"),
     prev = document.querySelector(".prev"),
     next = document.querySelector(".next"),
@@ -40,62 +47,62 @@ const months = [
     "kasım",
     "aralık",
 ]
-const myObj = {
-    "name": "John",
-    "age": 30,
-    "cars": {
-        "car1": "Ford",
-        "car2": "BMW",
-        "car3": "Fiat"
-    }
-}
 
 
 
 
-const eventArray = [
-    {
-        day: 22,
-        month: 05,
-        year: 2023,
-        events: [
-            {
-                title: "ahmet bozkuş",
-                time: "8:30-9:00",
-                type: "bakım"
+let eventArray = []
+
+function getAllSessions(selectedDate) {
+    
+    request.getdeneme("/api/getSingleDaySessions/"+selectedDate)
+        .then(response => {
+            const sessions = response.sessions
+            const events = document.querySelector(".events")
+
+            
+
+            response.sessions.forEach(element => {
+                eventArray.push(element)
+
+            });
+
+            const times = [{
+
+                time: 0,
+                value: "6:00-6:15"
             },
             {
-                title: "Mehmet Bekir",
-                time: "11:00-11:30",
-                type: "mezoterapi"
+                time: 1,
+                value: "6:15-6:30"
+            }, {
+                time: 2,
+                value: "6:30-6:45"
+            }, {
+                time: 3,
+                value: "6:45-7:00"
+            }, {
+                time: 4,
+                value: "7:00-7:15"
             }
-        ]
-    },
-    {
-        day: 23,
-        month: 05,
-        year: 2023,
-        events: [
-            {
-                title: "Ayşe Hızma",
-                time: "9:30-10:00",
-                type: "saç ekimi"
+            ]
+
+
+
+            for (const key in sessions) {
+                if (Object.hasOwnProperty.call(sessions, key)) {
+                    const element = sessions[key];
+                    element.timeValue = times[element.time]
+                    times.splice(element.time, 1, element)
+                }
             }
-        ]
-    },
-    {
-        day: 25,
-        month: 05,
-        year: 2023,
-        events: [
-            {
-                title: "Ebru Dindar",
-                time: "11:30-12:00",
-                type: "Mezo"
-            }
-        ]
-    }
-]
+            
+            ui.showAllSessionToUI(times)
+
+        })
+        .catch(err => console.log(err))
+
+}
 
 
 
@@ -136,6 +143,7 @@ function initCalender() {
     for (let i = 1; i <= lastDate; i++) {
         let event = false;
 
+
         eventArray.forEach(element => {
             if (element.day === i &&
                 element.month === month + 1 &&
@@ -154,7 +162,8 @@ function initCalender() {
             activeDay = i;
 
             getActiveDay(i)
-            updateEvents(i)
+
+
 
             if (event) {
                 days += `
@@ -269,14 +278,14 @@ addSessionBtn.addEventListener("click", showAddEventModal)
 closeAddSessionBtn.addEventListener("click", closeAddEventModal)
 
 function showAddEventModal() {
-   
-    
+
+
     modalAddSession.classList.add("showed_modal")
 }
-console.log(closeAddSessionBtn)
+
 function closeAddEventModal() {
-    
-    console.log("dda")
+
+
     modalAddSession.classList.remove("showed_modal")
 }
 
@@ -296,9 +305,22 @@ function addListener() {
         element.addEventListener("click", (e) => {
             // set current day active
             activeDay = Number(e.target.innerHTML)
+            const activedate = Date()
 
             getActiveDay(activeDay)
-            updateEvents(Number(e.target.innerHTML))
+            const activeDate = new Date(year, month, activeDay)
+            if (month.toString().length==1) {
+                month=month+1
+                month="0"+month
+            }
+            
+            console.log(month)
+            const selectedDate = year + "-" + month + "-" + activeDay
+            
+            ui.deleteAllSessionFromUI()
+            getAllSessions(selectedDate)
+            
+
 
             days.forEach(element => {
                 element.classList.remove("active")
@@ -349,15 +371,17 @@ function addListener() {
 // showing active days at top
 
 
-function getActiveDay(number) {
 
-    const day = new Date(year, month, number)
+function getActiveDay(i) {
+
+    const day = new Date(year, month, i)
     const dayName = day.toString().split(" ")[0]
 
     const dayNameTurkish = dayToTurkish(dayName)
 
     eventDay.innerHTML = dayNameTurkish;
-    eventDate.innerHTML = number + " " + months[month] + " " + year
+    eventDate.innerHTML = i + " " + months[month-1] + " " + year
+
 }
 
 function dayToTurkish(dayName) {
@@ -371,146 +395,14 @@ function dayToTurkish(dayName) {
 
 }
 
-// show events -----------------------------------------------------------------
-let timesArray = ["8:00-8:30", "8:30-9:00", "9:00-9:30", "10:00-10:30", "10:30-11:30", "11:30-12:00"]
-
-
-function updateEvents(date) {
-  
-    const eventOne = document.createElement("div")
-    let timesArray = ["8:00-8:30", "8:30-9:00", "9:00-9:30", "9:30-10:00", "10:00-10:30", "10:30-11:30", "11:30-12:00"]
-
-    let events=[]
-    
-    var matchedDay = eventArray.find(i=> {
-        return i.day == date && i.month == month+1 && i.year == year;
-    });
-    
-    if(matchedDay){
-        timesArray.forEach(singleTime => {
-       
-         var matchedEventData =  matchedDay.events.find(i=> i.time == singleTime);
-
-            if(matchedEventData){
-     
-                eventOne.innerHTML += `
-                <div class="event">
-                    <div class="title">
-                        <i class="fa-solid fa-edit"></i>
-                        <i class="fa-solid fa-trash"></i>
-                        <span>${matchedEventData.title}</span>
-                    </div>
-                    <div class="event-time">${matchedEventData.time}</div>
-                    <div class="event-time">${matchedEventData.type}</div>
-                </div>
-                `
-            }
-            else{
-                eventOne.innerHTML += `
-                    <div class="event">
-                        <input type="checkbox" name="" id="8:30-9:00">
-                        <label for="8:30-9:00">${singleTime}</label>
-            
-                    </div>
-                      `
-            }
-        });
-    }
-    else{
-        timesArray.forEach(singleTime => {
-            eventOne.innerHTML += `
-            <div class="event">
-                <input type="checkbox" name="" id="8:30-9:00">
-                <label for="8:30-9:00">${singleTime}</label>
-    
-            </div>
-              `;
-        });
-    }
-
-
-    
-
-
-
-    let listItem = eventsWrapper.querySelector("div")
-
-
-    eventsWrapper.replaceChild(eventOne, listItem)
-
-};
-
-
-allDays = document.querySelectorAll(".day"),
-
-allDays.forEach(element => {
-    element.addEventListener("click", reloadRightMenu)
-});
-
-
-function reloadRightMenu() {
-    
-}
 
 
 
 
-// add event ------------------------------------------------------------------------------------------
 
-addEventSubmit.addEventListener("click", () => {
-    let eventTitle = addEventTitle.value,
-        eventType = addEventType.options[addEventType.selectedIndex].textContent
 
-    eventTimeFrom = addEventFromTo.value,
-        eventTimeTo = addEventTo.value
-    if (eventTitle === "" || eventTimeFrom === "" || eventTimeTo === "") {
-        alert("Lütfen gerekli alanları doldurunuz.")
-    }
 
-    const timeFrom = convertTime(eventTimeFrom)
-    const timeTo = convertTime(eventTimeTo)
-    const newEvent = {
-        title: eventTitle,
-        time: timeFrom + "-" + timeTo,
-        type: eventType
-    }
 
-    let eventAdded = false
-    // check if eventArray is not emty
-
-    if (eventArray.length > 0) {
-        eventArray.forEach(item => {
-            if (item.day === activeDay &&
-                item.month === month + 1 &&
-                item.year === year
-            ) {
-                eventArray.push(newEvent)
-                eventAdded: true
-            }
-        })
-    }
-    // if eventAarray empty
-    if (!eventAdded) {
-        eventArray.push({
-            day: activeDay,
-            month: month + 1,
-            year: year,
-            events: [newEvent]
-        })
-    }
-
-    addEventWrapper.classList.remove("active")
-    addEventTitle.value = ""
-    addEventFromTo.value = ""
-    addEventTo.value = ""
-
-    updateEvents(activeDay)
-
-    const activeDayElement = document.querySelector(".day.active")
-    if (!activeDayElement.classList.contains("event")) {
-        activeDayElement.classList.add("event")
-    }
-})
 
 //convert time  --------------
 function convertTime(time) {
@@ -525,35 +417,7 @@ function convertTime(time) {
 
 }
 
-eventsWrapper.addEventListener("click", (e) => {
-    if (e.target.classList.contains("fa-trash")) {
-        const eventTitle = e.target.parentNode.lastElementChild.innerHTML
 
-        eventArray.forEach(element => {
-            if (element.day === activeDay &&
-                element.month == month + 1 &&
-                element.year === year
-            ) {
-                element.events.forEach((item, index) => {
-                    if (item.title === eventTitle) {
-                        element.events.splice(index, 1)
-                    }
-                })
-
-                if (element.events.length === 0) {
-                    eventArray.splice(eventArray.indexOf(element), 1)
-                    const activeDayElement = document.querySelector(".day.active")
-                    if (activeDayElement.classList.contains("event")) {
-                        activeDayElement.classList.remove("event")
-                    }
-
-                }
-            }
-        })
-    }
-    updateEvents(activeDay)
-
-})
 
 // deneme kısmı -------------------------------------
 

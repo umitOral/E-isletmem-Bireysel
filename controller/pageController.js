@@ -1,5 +1,6 @@
 import User from "../models/userModel.js"
 import Service from "../models/serviceModel.js"
+import Sessions from "../models/sessionModel.js"
 
 const getIndexPage = (req, res) => {
     try {
@@ -100,12 +101,14 @@ const getSessionsPage = async (req, res) => {
     try {
         const doctors = await User.find({ role: "doctor" })
         const users = await User.find({ role: "customer" })
+        const sessions = await Sessions.find({}).sort({ time: 1 }).populate(["user","doctor"])
         const services = await Service.find({ activeorNot: { $ne: false } })
 
         res.status(200).render("sessions3", {
             link: "sessions",
             doctors,
             users,
+            sessions,
             services
 
         })

@@ -168,7 +168,7 @@
 .main-sessions .right .events .event {
   position: relative;
   width: 95%;
-  min-height: 70px;
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,6 +179,9 @@
 
   border: 1px solid gray;
 }
+
+.full{background-color:palevioletred;}
+
 .main-sessions .right .events .event.active {
   background-color: red;
 }
@@ -256,3 +259,6 @@
 
 
 /* events list area ------------------- */
+tr{
+  border:1px solid black;
+}

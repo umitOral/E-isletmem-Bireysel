@@ -10,6 +10,16 @@
         return responseData
 
     }
+    async getdeneme(url) {
+        
+        console.log(url)
+        const response = await fetch(url)
+        
+        const responseData = await response.json()  
+        console.log(responseData)
+        return responseData
+
+    }
     async post(data) {
         const response = await fetch(this.url,{
             method:"POST",

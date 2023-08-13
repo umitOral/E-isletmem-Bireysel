@@ -10,8 +10,8 @@ import { Request } from "./requests.js";
 const request = new Request("http://127.0.0.1:3000/api/users")
 
 
-console.log(editUserButton)
-console.log(proccessType)
+
+
 
 eventListeners()
 

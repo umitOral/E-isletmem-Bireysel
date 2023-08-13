@@ -6,8 +6,22 @@ const sessionSchema = new Schema({
     
     date:{type:Date},
     time: {
+        type:Object,
+        index:{
+            type:Number,
+            default:0
+        },
+        value:{
+            type:String,
+            default:""
+        }
+        
+    },
+    
+    timepicker:{
         type:String
     },
+    
     description: { type: String },
 
     user: {
