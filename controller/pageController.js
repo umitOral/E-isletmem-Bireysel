@@ -4,8 +4,8 @@ import Sessions from "../models/sessionModel.js"
 
 const getIndexPage = (req, res) => {
     try {
-        res.status(200).render("main", {
-            link: "index"
+        res.status(200).render("front/index", {
+            link: "indexAdmin"
         })
     } catch (error) {
         res.status(500).json({
@@ -44,6 +44,19 @@ const getservicesPage = async (req, res) => {
 const getRegisterPage = (req, res) => {
     try {
         res.status(200).render("register", {
+            link: "register"
+        })
+        res.redirect("indexAdmin")
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "pagecontroller"
+        })
+    }
+}
+const getContactPage = (req, res) => {
+    try {
+        res.status(200).render("front/contact-us", {
             link: "register"
         })
         res.redirect("indexAdmin")
@@ -158,4 +171,4 @@ const getSinglePage = async (req, res) => {
     }
 }
 
-export { getIndexPage, getLoginPage, getRegisterPage, getAdminPage, getUsersPage, getSessionsPage, getStaticsPage, getSettingsPage, getSinglePage, getservicesPage, getPersonelsPage }
+export { getIndexPage, getLoginPage, getRegisterPage, getContactPage,getAdminPage, getUsersPage, getSessionsPage, getStaticsPage, getSettingsPage, getSinglePage, getservicesPage, getPersonelsPage }
