@@ -1,4 +1,5 @@
 import User from '../models/userModel.js';
+import Company from '../models/companyModel.js';
 
 const createPersonel = async (req, res) => {
     try {
@@ -6,6 +7,15 @@ const createPersonel = async (req, res) => {
         data.role = "doctor"
         
         const user = await User.create(data)
+
+        await Company.updateOne({ _id: res.locals.user._id },
+            {
+                $push: {
+                    "doctors": user
+
+                }
+            })
+        
 
 
         res.redirect("back")

@@ -17,13 +17,14 @@ const getAllUsers = async (req, res) => {
         })
     }
 }
-const getAllSessions = async (req, res) => {
-    try {
-        const sessions = await Session.find().populate(["user","doctor"]).sort({time:1})
 
+const getSingleDaySessions = async (req, res) => {
+    try {
+
+        const sessions = await Session.find({ date: req.params.date }).populate(["user", "doctor"]).sort({ time: 1 })
+        console.log(req.params.date)
         res.status(200).json({
-            sessions: sessions,
-            
+            sessions: sessions
         })
     } catch (error) {
         res.status(500).json({
@@ -32,10 +33,24 @@ const getAllSessions = async (req, res) => {
         })
     }
 }
-const getSingleDaySessions = async (req, res) => {
+const getSingleDaySingleDoctorSessions = async (req, res) => {
     try {
+
         
-        const sessions = await Session.find({date:req.params.date}).populate(["user","doctor"]).sort({time:1})
+        const doctors=res.locals.user.doctors
+        
+        let sessions={}
+        
+        
+        for (const doctor of doctors) {
+            const sessionsofdoctor = await Session.find({ date: req.params.date,doctor:doctor }).populate(["user", "doctor"]).sort({ time: 1 })
+            const doctorname=doctor.name
+            console.log(doctorname)
+            // sessions.push({doctorname:sessionsofdoctor});
+            Object.assign(sessions,sessionsofdoctor)
+        }
+
+        
 
         res.status(200).json({
             sessions: sessions
@@ -48,4 +63,4 @@ const getSingleDaySessions = async (req, res) => {
     }
 }
 
-export {getAllUsers,getAllSessions,getSingleDaySessions}
+export { getAllUsers, getSingleDaySessions, getSingleDaySingleDoctorSessions }

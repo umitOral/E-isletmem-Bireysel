@@ -55,9 +55,10 @@ let eventArray = []
 
 function getAllSessions(selectedDate) {
     
-    request.getdeneme("/api/getSingleDaySessions/"+selectedDate)
+    request.getdeneme("/api/getSingleDaySingleDoctorSessions/"+selectedDate)
         .then(response => {
             const sessions = response.sessions
+            console.log(sessions)
             const events = document.querySelector(".events")
 
             
@@ -66,6 +67,7 @@ function getAllSessions(selectedDate) {
                 eventArray.push(element)
 
             });
+            
 
             const times = [{
 
@@ -314,7 +316,7 @@ function addListener() {
                 month="0"+month
             }
             
-            console.log(month)
+           
             const selectedDate = year + "-" + month + "-" + activeDay
             
             ui.deleteAllSessionFromUI()

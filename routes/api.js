@@ -1,13 +1,14 @@
 
 import express from 'express';
-import {getAllUsers,getAllSessions,getSingleDaySessions} from '../controller/apicontrollers.js';
+import {getAllUsers,getSingleDaySessions,getSingleDaySingleDoctorSessions} from '../controller/apicontrollers.js';
 
 const router=express.Router()
 
 
 router.route("/getAllUsers").get(getAllUsers)
-router.route("/getAllSessions").get(getAllSessions)
+
 router.route("/getSingleDaySessions/:date").get(getSingleDaySessions)
+router.route("/getSingleDaySingleDoctorSessions/:date").get(getSingleDaySingleDoctorSessions)
 
 
 export default router

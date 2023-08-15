@@ -14,7 +14,7 @@ const checkUser = async (req, res, next) => {
                 res.locals.user = null
                 next()
             } else {
-                const company = await Company.findById(decodedToken.userID)
+                const company = await Company.findById(decodedToken.userID).populate("doctors")
                 res.locals.user = company
                 next()
                 

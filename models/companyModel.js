@@ -18,14 +18,16 @@ const companySchema = new Schema({
     registerDate: { type: Date, default: Date.now },
     notes: { type: String, require: false },
     debtStatus: { type: Number, require: 0 },
-    doctors: {
+    doctors: [{
         type: Schema.Types.ObjectId,
         ref: "User"
-    },
-    users: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    }
+    }],
+    users: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ]
 
 })
 
