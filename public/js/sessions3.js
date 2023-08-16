@@ -54,52 +54,42 @@ const months = [
 let eventArray = []
 
 function getAllSessions(selectedDate) {
-    
-    request.getdeneme("/api/getSingleDaySingleDoctorSessions/"+selectedDate)
+
+    request.getdeneme("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
         .then(response => {
-            const sessions = response.sessions
-            console.log(sessions)
+            const AllSessions = response.sessionsAllDoctor
+            console.log(AllSessions)   //array
             const events = document.querySelector(".events")
 
-            
+            let allTimes = []
 
-            response.sessions.forEach(element => {
-                eventArray.push(element)
+            AllSessions.forEach(singledoctorsessions => {
+
+                const times = [{ time: 0, value: "6:00-6:15" }, { time: 1, value: "6:15-6:30" }, { time: 2, value: "6:30-6:45" }, { time: 3, value: "6:45-7:00" }, { time: 4, value: "7:00-7:15" }]
+
+                singledoctorsessions.forEach((element,index) => {
+                    times.splice(element.time,1,element)
+                    
+                });
+
+                allTimes.push(times)
+
 
             });
+            console.log("Son:"+allTimes)
             
 
-            const times = [{
-
-                time: 0,
-                value: "6:00-6:15"
-            },
-            {
-                time: 1,
-                value: "6:15-6:30"
-            }, {
-                time: 2,
-                value: "6:30-6:45"
-            }, {
-                time: 3,
-                value: "6:45-7:00"
-            }, {
-                time: 4,
-                value: "7:00-7:15"
-            }
-            ]
-
-
-
-            for (const key in sessions) {
-                if (Object.hasOwnProperty.call(sessions, key)) {
-                    const element = sessions[key];
-                    element.timeValue = times[element.time]
-                    times.splice(element.time, 1, element)
-                }
-            }
             
-            ui.showAllSessionToUI(times)
+
+
+
+            // if (Object.hasOwnProperty.call(sessions, key)) {
+            //     const element = sessions[key];
+            //     element.timeValue = times[element.time]
+            //     times.splice(element.time, 1, element)
+            // }
+            ui.showAllSessionToUI(allTimes)
+            
 
         })
         .catch(err => console.log(err))
@@ -311,17 +301,17 @@ function addListener() {
 
             getActiveDay(activeDay)
             const activeDate = new Date(year, month, activeDay)
-            if (month.toString().length==1) {
-                month=month+1
-                month="0"+month
+            if (month.toString().length == 1) {
+                month = month + 1
+                month = "0" + month
             }
-            
-           
+
+
             const selectedDate = year + "-" + month + "-" + activeDay
-            
+
             ui.deleteAllSessionFromUI()
             getAllSessions(selectedDate)
-            
+
 
 
             days.forEach(element => {
@@ -382,7 +372,7 @@ function getActiveDay(i) {
     const dayNameTurkish = dayToTurkish(dayName)
 
     eventDay.innerHTML = dayNameTurkish;
-    eventDate.innerHTML = i + " " + months[month-1] + " " + year
+    eventDate.innerHTML = i + " " + months[month - 1] + " " + year
 
 }
 

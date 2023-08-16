@@ -160,8 +160,11 @@
                                     <div class="event-day">Pazartesi</div>
                                     <div class="event-date"> 22 Mayıs 2023</div>
                                 </div>
-                                <div class="events"> </div>
-
+                                <div class="events">
+                                    <% doctors.forEach(doctor => { %>
+                                        <div class="single-doctor-events"> <%= doctor.name %></div>
+                                    <% }) %> </div>
+                                
 
 
                                 <button class="add-session">Seans Ekle ++</button>

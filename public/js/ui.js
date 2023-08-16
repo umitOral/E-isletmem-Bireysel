@@ -23,51 +23,80 @@ export class UI {
             `
         });
     }
-    showAllSessionToUI(sessions) {
+    showAllSessionToUI(allTimes) {
         const eventList = document.querySelector(".events")
-        console.log("başarılı")
-        sessions.forEach((element, index) => {
-            if (element._id) {
-                eventList.innerHTML += `
+        console.log("ui başarılı")
 
-            <div class="event full">
-            <span>${element.timeValue.value}</span>
-                
-                <span>${element.date}</span>
-                <span>${element.user.name}</span>
-                <span>${element.doctor.name}</span>
-                
-                
-                <span>DOLU</span>
-                                  
-            </div>
-            
-            `
-            } else {
-                eventList.innerHTML += `
+        allTimes.forEach((singleTime, index) => {
+            // const side = document.createElement("div")
+            // side.setAttribute("class","single-doctor-events")
+            console.log(singleTime)
+            // side.textContent="doktor1"
+            const side=document.querySelector(".single-doctor-events")
+            eventList.appendChild(side)
 
-            <div class="event">
-                <input type="checkbox" name="aaa" id="aaa">
-                <span>${element.value}</span>
-                
-                <span>BOŞ</span>
-                                  
-            </div>
-            
-            `
-            }
+            singleTime.forEach(element => {
+                if (element._id) {
+                    side.innerHTML += `
+                    <div class="event full">
+                    <input type="checkbox" name="aaa" id="aaa">
+                    <span>${element.user.name}</span>
+                    <span>Dolu</span>
+                    `
+                } else {
+                    side.innerHTML += `
+                         
+    
+                          <div class="event">
+                         <input type="checkbox" name="aaa" id="aaa">
+                         <span>${element.value}</span>
+                         <span>BOŞ</span>
+                    
+                    `
+                }
+
+                // if (element._id) {
+                //     eventList.innerHTML += `
+
+                // <div class="event full">
+                // <span>${element.timeValue.value}</span>
+
+                //     <span>${element.date}</span>
+                //     <span>${element.user.name}</span>
+                //     <span>${element.doctor.name}</span>
+
+
+                //     <span>DOLU</span>
+
+                // </div>
+
+                // `
+                // } else {
+                //     eventList.innerHTML += `
+
+                //      <div class="event">
+                //     <input type="checkbox" name="aaa" id="aaa">
+                //     <span>${element.value}</span>
+
+                //     <span>BOŞ</span>
+
+                // </div>
+
+                // `
+                // }
+            });
 
         });
     }
 
     deleteAllSessionFromUI() {
         const events = document.querySelectorAll(".event")
-        
+
 
         events.forEach(element => {
             element.remove()
         });
-        
+
     }
 
     deleteUserFromUI(element) {

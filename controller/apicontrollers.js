@@ -1,5 +1,6 @@
 import User from '../models/userModel.js';
 import Session from '../models/sessionModel.js';
+import { populate } from 'dotenv';
 
 const getAllUsers = async (req, res) => {
     try {
@@ -36,24 +37,24 @@ const getSingleDaySessions = async (req, res) => {
 const getSingleDaySingleDoctorSessions = async (req, res) => {
     try {
 
+
+        const doctors = res.locals.user.doctors
         
-        const doctors=res.locals.user.doctors
-        
-        let sessions={}
-        
-        
-        for (const doctor of doctors) {
-            const sessionsofdoctor = await Session.find({ date: req.params.date,doctor:doctor }).populate(["user", "doctor"]).sort({ time: 1 })
-            const doctorname=doctor.name
-            console.log(doctorname)
-            // sessions.push({doctorname:sessionsofdoctor});
-            Object.assign(sessions,sessionsofdoctor)
+        const sessionsAllDoctor = []
+
+        for (const iterator of doctors) {
+            const sessionsofdoctor = await Session.find({ date: req.params.date, doctor: iterator }).populate(["user","doctor"]).sort({ time: 1 })
+            sessionsAllDoctor.push(sessionsofdoctor)
         }
 
         
+        
+
+        
+
 
         res.status(200).json({
-            sessions: sessions
+            sessionsAllDoctor: sessionsAllDoctor
         })
     } catch (error) {
         res.status(500).json({

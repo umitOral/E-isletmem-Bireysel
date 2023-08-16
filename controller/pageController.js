@@ -27,6 +27,30 @@ const getLoginPage = (req, res) => {
         })
     }
 }
+const getAboutUsPage = (req, res) => {
+    try {
+        res.status(200).render("front/about-us", {
+            link: "about-us"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "pagecontroller"
+        })
+    }
+}
+const getServicesPage = (req, res) => {
+    try {
+        res.status(200).render("front/our-services", {
+            link: "about-us"
+        })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "pagecontroller"
+        })
+    }
+}
 const getservicesPage = async (req, res) => {
     try {
         const services = await Service.find()
@@ -112,7 +136,9 @@ const getPersonelsPage = async (req, res) => {
 
 const getSessionsPage = async (req, res) => {
     try {
-        const doctors = await User.find({ role: "doctor" })
+        
+        const doctors = await User.find({ role: "doctor",company:res.locals.user._id}).sort({registerDate:1})
+        
         const users = await User.find({ role: "customer" })
         const sessions = await Sessions.find({}).sort({ time: 1 }).populate(["user","doctor"])
         const services = await Service.find({ activeorNot: { $ne: false } })
@@ -171,4 +197,4 @@ const getSinglePage = async (req, res) => {
     }
 }
 
-export { getIndexPage, getLoginPage, getRegisterPage, getContactPage,getAdminPage, getUsersPage, getSessionsPage, getStaticsPage, getSettingsPage, getSinglePage, getservicesPage, getPersonelsPage }
+export { getIndexPage, getLoginPage, getRegisterPage, getContactPage,getAdminPage,getServicesPage, getUsersPage,getAboutUsPage, getSessionsPage, getStaticsPage, getSettingsPage, getSinglePage, getservicesPage, getPersonelsPage }

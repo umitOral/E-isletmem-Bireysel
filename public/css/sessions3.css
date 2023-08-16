@@ -141,7 +141,7 @@
 
 /* ----------------------------------------right section---------------------------------- */
 .main-sessions .right {
-  width: 40%;
+  
   border: 1px solid gray;
   min-height: 100%;
   padding: 20px;
@@ -157,12 +157,17 @@
 }
 .main-sessions .right .events {
   width: 100%;
-
+  display:flex;
+  
+  flex-wrap: nowrap;
   max-height: 600px;
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
-  flex-direction: column;
+  
+}
+.single-doctor-events {
+  min-width: 150px;
 }
 
 .main-sessions .right .events .event {
@@ -180,7 +185,7 @@
   border: 1px solid gray;
 }
 
-.full{background-color:palevioletred;}
+.full{background-color:palevioletred !important;}
 
 .main-sessions .right .events .event.active {
   background-color: red;

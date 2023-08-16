@@ -5,8 +5,10 @@ const createPersonel = async (req, res) => {
     try {
         const data = req.body
         data.role = "doctor"
+        data.company=res.locals.user._id
         
         const user = await User.create(data)
+        
 
         await Company.updateOne({ _id: res.locals.user._id },
             {
