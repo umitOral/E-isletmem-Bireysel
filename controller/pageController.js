@@ -144,7 +144,7 @@ const getSessionsPage = async (req, res) => {
         const sessions = await Sessions.find({}).sort({ time: 1 }).populate(["user", "doctor"])
         const services = await Service.find({ activeorNot: { $ne: false } })
 
-        res.status(200).render("sessions3", {
+        res.status(200).render("sessions", {
             link: "sessions",
             doctors,
             users,
