@@ -349,44 +349,43 @@ main .insights .progress .number {
   align-items: center;
 }
 /* -------------------users ----------*/
-main .user-table {
-  width: 100%;
 
-  border-radius: var(--card-border-radius);
 
-  background-color: var(--color-white);
-  padding: var(--card-padding);
-  margin-top: 1rem;
-
-  display: flex;
-  justify-content: center;
-}
-main .user-table table {
+ table {
+  
   border-collapse: collapse;
   text-align: center;
 
   width: 100%;
   transition: all 300ms ease;
 }
+.table-wrapper {
+  margin-top: 1rem;
+ background-color: var(--color-white );
+ padding: 1rem;
+ border-radius: var(--border-radius-2);
+
+}
 main .user-table:hover {
   box-shadow: none;
 }
 
-main .user-table table thead {
+table thead {
   height: 3rem;
 }
-main .user-table table tbody td {
+tbody td {
   border-bottom: 1px solid var(--color-light);
   color: var(--color-dark-variant);
   height: 3rem;
+  padding: 0.5rem;
 }
-main .user-table table tbody tr:last-child td {
+table tbody tr:last-child td {
   border: none;
 }
-main .user-table table tbody tr:hover {
+table tbody tr:hover {
   background-color: var(--color-light);
 }
-main .user-table table thead {
+table thead {
   font-weight: 600;
 }
 
@@ -462,4 +461,15 @@ main .user-table table thead {
   margin: 0;
   justify-content: space-between;
   width: 100%;
+}
+
+.buttons {
+  background-color: var(--color-success);
+
+  cursor: pointer;
+  border: 1px solid rgba(128, 128, 128, 0.394);
+  
+  border-radius: var(--border-radius-1);
+  padding: 0.5rem 1rem;
+  color: var(--color-dark-variant);
 }

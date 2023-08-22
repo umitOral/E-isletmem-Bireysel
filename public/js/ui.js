@@ -23,6 +23,65 @@ export class UI {
             `
         });
     }
+
+    showAllPaymensToUI(data) {
+        const paymentTablesChildren = document.querySelectorAll(".payments-table tbody tr")
+        const paymentTable = document.querySelector(".payments-table tbody")
+
+        const totalIncome = document.querySelector(".total-income")
+        const totalExpenses = document.querySelector(".total-expenses")
+        const totalCash = document.querySelector(".total-cash")
+        const totalCreditCard = document.querySelector(".total-crediTCard")
+        const netCash = document.querySelector(".netCash")
+        
+       console.log(data)
+        
+        
+        for (const iterator of paymentTablesChildren) {
+            
+            iterator.remove()
+        }
+        
+        data.payments.forEach((payment, index) => {
+            paymentTable.innerHTML += `
+            <tr>
+                                            
+                    
+                    <td>${payment.createdAt.substr(0,10)}</td>
+                    <td>${payment.createdAt.substring(11,19)}</td>
+                    <td>${payment.description}</td>
+                    <td>${payment.value}</td> 
+                    <td>${payment.cashOrCard}</td> 
+                    <td><span class="material-symbols-sharp edit_payment">
+                        more_vert
+                    </span>
+                        <div class="edit_payment_small_modal">
+                    
+                            <a href="./payments/${payment._id}/deletePayment">Sil</a>
+                            
+                            <button class="">Düzenle</button>
+                            
+                        </div>
+                        
+                        
+                    
+                    </td> 
+
+                </tr>
+            `
+        });
+
+        totalIncome.innerHTML=data.totalIncome
+        totalCash.innerHTML=data.totalCash
+        totalCreditCard.innerHTML=data.totalCreditCard
+        totalExpenses.innerHTML=data.totalExpenses
+        
+        
+        netCash.innerHTML=data.netCash
+
+    }
+
+
     showAllSessionToUI(allTimes) {
         const eventList = document.querySelector(".events")
         console.log("ui başarılı")
@@ -32,7 +91,7 @@ export class UI {
             // side.setAttribute("class","single-doctor-events")
             console.log(singleTime)
             // side.textContent="doktor1"
-            const side=document.querySelector(".single-doctor-events")
+            const side = document.querySelector(".single-doctor-events")
             eventList.appendChild(side)
 
             singleTime.forEach(element => {

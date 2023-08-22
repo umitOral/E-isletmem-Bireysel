@@ -209,7 +209,7 @@ main header a {
 
 }
 
-.modal .inputs input,
+.inputs input,
 textarea,
 select {
     border: 1px solid rgba(128, 128, 128, 0.394);
