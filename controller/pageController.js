@@ -138,8 +138,9 @@ const getPersonelsPage = async (req, res) => {
 const getSessionsPage = async (req, res) => {
     try {
 
-        const doctors = await User.find({ role: "doctor", company: res.locals.user._id }).sort({ registerDate: 1 })
-
+        const doctors = await User.find({ role: "doctor", company: res.locals.user._id,activeOrNot:true})
+        // sort({ registerDate: 1 })
+        
         const users = await User.find({ role: "customer" })
         const sessions = await Sessions.find({}).sort({ time: 1 }).populate(["user", "doctor"])
         const services = await Service.find({ activeorNot: { $ne: false } })

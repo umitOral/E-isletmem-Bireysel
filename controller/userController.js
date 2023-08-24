@@ -24,16 +24,16 @@ const createCompany = async (req, res) => {
         })
     }
 }
-const deleteUser = async (req, res) => {
+const deactiveUser = async (req, res) => {
     try {
+        console.log("başarılı")
         
-        
-        await User.findByIdAndDelete(req.params.id)
+        await User.findByIdAndUpdate(req.params.id,{activeOrNot:false})
        
 
         
         
-        res.redirect("../../users")
+        res.redirect("../../personels")
 
     } catch (error) {
         res.status(500).json({
@@ -212,4 +212,4 @@ const createToken = (userID) => {
 
 }
 
-export { createCompany, createUser, loginUser, logOut, uploadPictures, editInformations,findUser,deleteUser}
+export { createCompany, createUser, loginUser, logOut, uploadPictures, editInformations,findUser,deactiveUser}

@@ -81,18 +81,12 @@
                                             </select>
 
                                         </div>
-                                        <div class="title">Doktor:
-                                            <select name="doctor" class="proccess_type" id="processes">
-
-                                                <% doctors.forEach(doctor=> { %>
-                                                    <option value="<%= doctor._id %>">
-                                                        <%= doctor.name %>
-                                                    </option>
-                                                    <% }) %>
-                                            </select>
+                                        <div class="inputs">Doktor:
+                                            <input type="text" name="" id="" class="doktor-name" disabled>
                                         </div>
                                         <div class="inputs">Tarih:
-                                            <input type="date" name="date" placeholder="Tarih" class="event-time-from" required>
+                                            <input type="date" name="date" placeholder="Tarih" class="event-time-from"
+                                                required>
                                         </div>
                                         <div class="inputs"> Saat:
                                             <select name="time" class="event-time-from" required>
@@ -106,12 +100,12 @@
                                             </select>
 
                                         </div>
-                                        
+
                                         <div class="inputs">Not:
                                             <input type="text" name="description" cplaceholder="notlar"
                                                 class="event-time-from">
                                         </div>
-                                        
+
                                         <button type="submit" class="save_button">Seans Ekle +</button>
 
                                         <span class="cancel_button">Vazgeç</span>
@@ -160,14 +154,57 @@
                                     <div class="event-day">Pazartesi</div>
                                     <div class="event-date"> 22 Mayıs 2023</div>
                                 </div>
-                                <div class="events">
-                                    <% doctors.forEach(doctor => { %>
-                                        <div class="single-doctor-events"> <%= doctor.name %></div>
-                                    <% }) %> </div>
-                                
+                                <div class="events-all-doctors">
+                                    <% doctors.forEach(doctor=> { %>
+                                        <div class="single-doctor-area">
+                                            <div class="doctor-name" value="<%= doctor.name %>">
+
+                                                <%= doctor.name %>
+
+                                            </div>
+                                            <div class="single-doctor-events">
+                                                <!-- <div class="event full">
+
+                                                    <div class="center">
+                                                        <span>06:00-06:15</span>
+                                                        <hr>
+                                                        <span>Ahmet Oral</span>
+                                                    </div>
+                                                    <div class="">
+                                                        <span class="material-symbols-sharp edit-session">
+                                                            more_vert
+                                                        </span>
+                                                        <div class="session-options-modal">
+                                                            <a href="#">Düzenle</a>
+                                                            <a href="#">Sil</a>
+                                                            <a href="#">Başarılı</a>
+                                                            <a href="#">İptal</a>
+                                                        </div>
 
 
-                                <button class="add-session">Seans Ekle ++</button>
+                                                    </div>
+                                                </div>
+                                                <div class="event">
+
+                                                    <span>06:15-06:30</span>
+                                                    <span class="material-symbols-sharp add-session">
+                                                        add
+                                                    </span>
+
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                        <% }) %>
+
+
+                                </div>
+
+
+
+
+
+
+
 
 
 

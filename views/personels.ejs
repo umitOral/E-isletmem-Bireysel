@@ -115,9 +115,10 @@
                                         onchange="selectAll(this)"><span>Hepsini seç</span></th>
                                 <th>id<span class="material-symbols-sharp ">north</span></th>
                                 <th>İsim Soyisim<span class="material-symbols-sharp">north</span></th>
-                                <th>Borç Durumu<span class="material-symbols-sharp">north</span></td>
-                                <th>Telefon<span class="material-symbols-sharp">north</span></th>
-                                <th>Seans Durumu<span class="material-symbols-sharp">north</span></th>
+                                <th>Çalışma Durumu<span class="material-symbols-sharp">north</span></th>
+                                
+                               
+                                
                             </thead>
                             <tbody id="userList">
                                 <% users.forEach(user=> { %>
@@ -131,8 +132,17 @@
                                         <td>
                                             <%= user.surname %>
                                         </td>
-                                        <td><span class="continue"></span> </td>
-                                        <td><a href="./users/<%= user._id %>">Detay</a></td>
+                                        
+                                        <td>
+                                            <% if(user.activeOrNot ){ %>
+                                                <span class="continue">Aktif</span> 
+                                              <% } else{ %>  
+                                                <span class="finish">Deaktif</span> 
+                                             <% } %>
+                                            
+                                        </td>
+                                        <td><a href="./users/<%= user._id %>/deactiveUser">Sil</a></td>
+                                        <td><a href="./users/<%= user._id %>">Detaylar</a></td>
                                     </tr>
                                     <% }) %>
 

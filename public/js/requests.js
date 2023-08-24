@@ -12,11 +12,10 @@ export class Request {
     }
     async getdeneme(url) {
 
-       console.log(url)
         const response = await fetch(url)
 
         const responseData = await response.json()
-        console.log(responseData)
+        
         return responseData
 
     }

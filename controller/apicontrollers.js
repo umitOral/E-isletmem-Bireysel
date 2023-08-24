@@ -39,18 +39,15 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
 
 
         const doctors = res.locals.user.doctors
-        
-        const sessionsAllDoctor = []
+
+
+     
 
         for (const iterator of doctors) {
-            const sessionsofdoctor = await Session.find({ date: req.params.date, doctor: iterator }).populate(["user","doctor"]).sort({ time: 1 })
+            const sessionsofdoctor = await Session.find({ date: req.params.date, doctor: iterator, activeOrNot: true }).populate(["user", "doctor"]).sort({ time: 1 })
             sessionsAllDoctor.push(sessionsofdoctor)
         }
 
-        
-        
-
-        
 
 
         res.status(200).json({

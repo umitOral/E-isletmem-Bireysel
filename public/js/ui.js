@@ -82,34 +82,48 @@ export class UI {
     }
 
 
-    showAllSessionToUI(allTimes) {
-        const eventList = document.querySelector(".events")
-        console.log("ui başarılı")
+    showAllSessionToUI(allTimesforAllDoctors) {
+        const allDoctorEvents = document.querySelector(".events-all-doctors")
+        const allDoctorAreas = document.querySelectorAll(".single-doctor-events")
+        console.log(allTimesforAllDoctors)
+        allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
 
-        allTimes.forEach((singleTime, index) => {
-            // const side = document.createElement("div")
-            // side.setAttribute("class","single-doctor-events")
-            console.log(singleTime)
-            // side.textContent="doktor1"
-            const side = document.querySelector(".single-doctor-events")
-            eventList.appendChild(side)
-
-            singleTime.forEach(element => {
+            timesForSingleDoctor.forEach((element,index) => {
                 if (element._id) {
-                    side.innerHTML += `
+                    allDoctorAreas[index].innerHTML += `
                     <div class="event full">
-                    <input type="checkbox" name="aaa" id="aaa">
-                    <span>${element.user.name}</span>
-                    <span>Dolu</span>
+
+                        <div class="center">
+                            <span>06:00-06:15</span>
+                            <hr>
+                            <span>${element.user.name}</span>
+                        </div>
+                        <div class="">
+                            <span class="material-symbols-sharp edit-session">
+                                more_vert
+                            </span>
+                            <div class="session-options-modal">
+                                <a href="#">Düzenle</a>
+                                <a href="#">Sil</a>
+                                <a href="#">Başarılı</a>
+                                <a href="#">İptal</a>
+                            </div>
+
+
+                        </div>
+                    </div>
                     `
                 } else {
-                    side.innerHTML += `
+                    allDoctorAreas.innerHTML += `
                          
-    
-                          <div class="event">
-                         <input type="checkbox" name="aaa" id="aaa">
-                         <span>${element.value}</span>
-                         <span>BOŞ</span>
+                    <div class="event">
+                                                    
+                        <span>${element.value}</span>
+                        <span class="material-symbols-sharp add-session">
+                            add
+                        </span>
+
+                    </div>
                     
                     `
                 }

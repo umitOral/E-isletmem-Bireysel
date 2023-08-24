@@ -1,6 +1,6 @@
 import express from 'express';
 import {getAdminPage,getUsersPage,getSessionsPage,getStaticsPage,getSettingsPage,getSinglePage,getservicesPage,getPersonelsPage,getPaymentsPage} from '../controller/pageController.js';
-import {logOut,createUser,uploadPictures,editInformations,findUser,deleteUser} from '../controller/userController.js';
+import {logOut,createUser,uploadPictures,editInformations,findUser,deactiveUser} from '../controller/userController.js';
 import {createPersonel} from '../controller/personelsController.js';
 
 import {addService,getSingleServicePage,editService} from '../controller/serviceControllers.js';
@@ -15,7 +15,7 @@ router.route("/").get(getAdminPage)
 router.route("/users").get(getUsersPage)
 router.route("/users/search").get(findUser)
 router.route("/users/:id").get(getSinglePage)
-router.route("/users/:id/deleteUser").get(deleteUser)
+router.route("/users/:id/deactiveUser").get(deactiveUser)
 router.route("/users/:id/uploadpictures").post(uploadPictures)
 router.route("/users/:id/editInformations").post(editInformations)
 

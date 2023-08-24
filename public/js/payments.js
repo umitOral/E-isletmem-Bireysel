@@ -56,11 +56,7 @@ const body=document.querySelector("body")
 
 function handledEditButton(e) {
 
-    
-
-    // smallModals.forEach(element => {
-    //     element.classList.remove("showed_modal")
-    // });
+ 
 
     if (e.target.classList.contains("edit_payment")) {
         e.target.nextSibling.nextSibling.classList.toggle("showed_modal")

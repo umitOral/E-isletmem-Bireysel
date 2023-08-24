@@ -8,6 +8,7 @@ const Schema = mongoose.Schema
 const userSchema = new Schema({
     name: { type: String, require: true },
     surname: { type: String, require: true },
+    activeOrNot:{type:Boolean,default:true},
     email: { type: String, require: true },
     sex: { type: String, require: false },
     birtdhDate: { type: Date, require: false },
@@ -17,7 +18,7 @@ const userSchema = new Schema({
     company: { type: String, require: false },
     address: { type: String, require: false },
     billingAddress: { type: String, require: false },
-    registerDate: { type: Date, default: Date.now },
+    registerDate: { type: Date, default: new Date()},
     notes: { type: String, require: false },
     debtStatus: { type: Number, require: 0 },
     images: [{
