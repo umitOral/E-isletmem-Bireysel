@@ -84,13 +84,31 @@ export class UI {
 
     showAllSessionToUI(allTimesforAllDoctors) {
         const allDoctorEvents = document.querySelector(".events-all-doctors")
-        const allDoctorAreas = document.querySelectorAll(".single-doctor-events")
+        
+        while (allDoctorEvents.firstChild) {
+            allDoctorEvents.firstChild.remove()
+        }
+
         console.log(allTimesforAllDoctors)
+
         allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
+
+            const singleDoctorArea = document.createElement("div")
+            singleDoctorArea.className="single-doctor-area"
+            
+            singleDoctorArea.innerHTML+=`
+            <div class="doctor-name" value="">
+                ${timesForSingleDoctor[0].doctorName}
+            </div>
+            `
+            const  singleDoctorEvents=document.createElement("div")
+            singleDoctorEvents.className="single-doctor-events"
+            
+            allDoctorEvents.appendChild(singleDoctorArea)
 
             timesForSingleDoctor.forEach((element,index) => {
                 if (element._id) {
-                    allDoctorAreas[index].innerHTML += `
+                    singleDoctorEvents.innerHTML += `
                     <div class="event full">
 
                         <div class="center">
@@ -113,8 +131,9 @@ export class UI {
                         </div>
                     </div>
                     `
+                    singleDoctorArea.appendChild(singleDoctorEvents)
                 } else {
-                    allDoctorAreas.innerHTML += `
+                    singleDoctorEvents.innerHTML += `
                          
                     <div class="event">
                                                     
@@ -126,37 +145,10 @@ export class UI {
                     </div>
                     
                     `
+                    singleDoctorArea.appendChild(singleDoctorEvents)
                 }
 
-                // if (element._id) {
-                //     eventList.innerHTML += `
-
-                // <div class="event full">
-                // <span>${element.timeValue.value}</span>
-
-                //     <span>${element.date}</span>
-                //     <span>${element.user.name}</span>
-                //     <span>${element.doctor.name}</span>
-
-
-                //     <span>DOLU</span>
-
-                // </div>
-
-                // `
-                // } else {
-                //     eventList.innerHTML += `
-
-                //      <div class="event">
-                //     <input type="checkbox" name="aaa" id="aaa">
-                //     <span>${element.value}</span>
-
-                //     <span>BOŞ</span>
-
-                // </div>
-
-                // `
-                // }
+              
             });
 
         });

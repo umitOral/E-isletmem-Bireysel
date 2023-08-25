@@ -39,6 +39,7 @@
 
 .weekdays {
   display: flex;
+  gap: 1rem;
   padding: 20px 0;
   justify-content: space-between;
   width: 100%;

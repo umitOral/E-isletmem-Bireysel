@@ -58,29 +58,31 @@ function getAllSessions(selectedDate) {
     request.getdeneme("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
         .then(response => {
             const AllSessions = response.sessionsAllDoctor
-            console.log(response)   //array
-            const events = document.querySelector(".events")
+              //array
 
-            let allTimes = []
+            console.log(AllSessions)
+            let allTimesofSingleDoctor = []
+            
+            
+            AllSessions.forEach(singleDoctorData=> {
 
-            AllSessions.forEach(singledoctorsessions => {
+                const times = [{ doctorName:singleDoctorData.doctorName },{ time: 0, value: "6:00-6:15" }, { time: 1, value: "6:15-6:30" }, { time: 2, value: "6:30-6:45" }, { time: 3, value: "6:45-7:00" }, { time: 4, value: "7:00-7:15" }]
 
-                const times = [{ time: 0, value: "6:00-6:15" }, { time: 1, value: "6:15-6:30" }, { time: 2, value: "6:30-6:45" }, { time: 3, value: "6:45-7:00" }, { time: 4, value: "7:00-7:15" }]
-
-                singledoctorsessions.forEach((element, index) => {
+                singleDoctorData.sessionsofdoctor.forEach((element, index) => {
                     times.splice(element.time, 1, element)
 
                 });
 
-                allTimes.push(times)
+                allTimesofSingleDoctor.push(times)
 
 
             });
-            console.log("Son:" + allTimes)
+
+            console.log(allTimesofSingleDoctor)
 
 
 
-            ui.showAllSessionToUI(allTimes)
+            ui.showAllSessionToUI(allTimesofSingleDoctor)
 
 
         })
@@ -249,7 +251,7 @@ function goToDate() {
 
 
 // todo section --------------------------------------
-const addSessionBtns = document.querySelectorAll(".add-session")
+
 
 const closeAddSessionBtn = document.querySelector(".cancel_button")
 const addEventTitle = document.querySelector(".event-name")
@@ -258,19 +260,12 @@ const addEventTo = document.querySelector(".event-time-to")
 const modalAddSession = document.querySelector(".modal_session")
 const doktorName = document.querySelector(".doktor-name")
 
-addSessionBtns.forEach(addSessionBtn => {
-    addSessionBtn.addEventListener("click", showAddEventModal)
-});
+
 
 
 closeAddSessionBtn.addEventListener("click", closeAddEventModal)
 
-function showAddEventModal(e) {
-    console.log(e.target.parentElement.parentElement.previousSibling.previousSibling.textContent.trim())
-    doktorName.value=e.target.parentElement.parentElement.previousSibling.previousSibling.textContent.trim()
-    modalAddSession.classList.add("showed_modal")
-    
-}
+
 
 function closeAddEventModal() {
 
@@ -278,12 +273,7 @@ function closeAddEventModal() {
     modalAddSession.classList.remove("showed_modal")
 }
 
-// click outside of wrapper
-document.addEventListener("click", (e) => {
-    if (e.target !== addSessionBtn && !modalAddSession.contains(e.target)) {
-        modalAddSession.classList.remove("active")
-    }
-})
+
 
 
 
@@ -430,18 +420,30 @@ events.forEach(element => {
 // edit session modal area
 
 const rightSection =document.querySelector(".right")
-const sessionOptionsModal =document.querySelectorAll(".session-options-modal")
 
 
 rightSection.addEventListener("click",sessionEditButtonHandled)
 
 function sessionEditButtonHandled(e) {
-
+    
     if (e.target.classList.contains("edit-session")) {
         
         e.target.nextSibling.nextSibling.classList.toggle("showed_modal")
     } else {
         
     }
+
+    if (e.target.classList.contains("add-session")) {
+        showAddEventModal(e)
+    } else {
+        
+    }
    
+}
+
+function showAddEventModal(e) {
+    
+    doktorName.value=e.target.parentElement.parentElement.previousSibling.previousSibling.textContent.trim()
+    modalAddSession.classList.add("showed_modal")
+    
 }
