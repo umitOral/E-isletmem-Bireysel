@@ -1,6 +1,6 @@
 import User from '../models/userModel.js';
 import Session from '../models/sessionModel.js';
-import { populate } from 'dotenv';
+
 
 const getAllUsers = async (req, res) => {
     try {

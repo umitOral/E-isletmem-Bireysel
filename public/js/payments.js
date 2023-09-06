@@ -41,7 +41,7 @@ cancelButtons.forEach(cancelbutton => {
 
 
 function filterPayment(e) {
-    request.getdeneme(`/admin/payments/deneme?startDate=${startDate.value}&endDate=${endDate.value}`)
+    request.getwithUrl(`/admin/payments/getSearchedPayments?startDate=${startDate.value}&endDate=${endDate.value}`)
         .then(response => ui.showAllPaymensToUI(response))
         .catch(err => console.log(err))
     e.preventDefault()

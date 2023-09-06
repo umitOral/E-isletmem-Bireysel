@@ -1,12 +1,19 @@
 
 .statics{
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+.statics div{
+    
+    width: 450px;
 }
 
+
 .main-svg{
-    border: 1px solid rgba(128, 128, 128, 0.466);
+    border: 1px solid rgba(128, 128, 128, 0.174);
     border-radius: 1rem;
+    
    
 }
 input[type="date"]{

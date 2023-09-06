@@ -26,9 +26,11 @@
 }
 
 .search {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    gap: 1rem;
     align-items: center;
+    flex-wrap:wrap ;
 
 }
 
@@ -42,16 +44,18 @@ div.search input[type="search"] {
 }
 
 .add_customer_btn {
-    background-color: var(--color-white);
+    background-color:#a6b0fa;
     border: 1px dashed var(--color-dark-variant);
-    padding: 1rem;
-    border-radius: var(--border-radius-2);
+    padding: 0.5rem;
+    border-radius: var(--border-radius-1);
     cursor: pointer;
 }
 
 /* -----------------print section---------- */
 .print {
-    position: relative;
+    display: flex;
+    justify-content: end;
+    margin-top: 0.5rem;
 }
 
 .print-icon {
@@ -144,7 +148,7 @@ main header a {
 .user-table table thead th span.material-symbols-sharp {
 
     border: transparent;
-    font-size: 1.5rem;
+    font-size: 0.5rem;
     position: relative;
     margin-left: 5px;
     top: 5px;
@@ -183,107 +187,10 @@ main header a {
 
 }
 
-/* add costumer modal */
-
-.modal {
-    border: 1px solid rgb(202, 201, 201);
-
-    background-color: white;
-    border-radius: var(--border-radius-1);
-    padding: 2rem;
-    min-width: 30%;
-
-    top: 100px;
-    left: 600px;
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    z-index: 999;
-    display: none;
-
-}
-
-.modal.showed_modal {
-
-    display: block;
-
-}
-
-.inputs input,
-textarea,
-select {
-    border: 1px solid rgba(128, 128, 128, 0.394);
-    display: block;
-    width: 100%;
-    background-color: #F4F6F8;
-    border-radius: var(--border-radius-1);
-    padding: 0.5rem;
-    color: var(--color-dark-variant);
-
-}
-
-.modal button {
-
-    margin-top: 1rem;
-
-
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    border: none;
-    color: var(--color-white);
-
-    font-weight: 400;
-    font-size: 1.2rem;
-    background-color: var(--color-success);
-    cursor: pointer;
-
-}
-
-.modal button.cancel_button {
-    background-color: var(--color-danger);
-}
-
-
-
-.modal span {
-    font-weight: 500;
-    display: block;
-    margin-top: 0.7rem;
-}
-
-.modal h2 {
-    text-align: center;
-
-    margin-bottom: 1rem;
-
-}
-.modal .options {
-
-    display: flex;
-    flex-direction: column;
-
-}
-
-.modal .options div {
-
-    display: flex;
-    padding: 0.5rem;
-    cursor: pointer;
-}
-
-.modal .options div label {
-
-    border: 1px solid rgba(128, 128, 128, 0.394);
-    border-radius: var(--border-radius-1);
-    padding: 0.5rem;
-    width: 100%;
-    cursor: pointer;
-}
 
 /* auto complete -------------- */
 .autocomplete {
-    position: relative;
+   
     
     display: flex;
     gap: 0.5rem;
@@ -338,4 +245,15 @@ select {
 .autocomplete-active {
     background-color: var(--color-primary) !important;
     color: #ffffff;
+}
+
+
+@media (max-width: 768px) {
+    .search form {
+        width: 100%;
+    }
+    .autocomplete{
+        width: 100%;
+        justify-content: space-around;
+    }
 }

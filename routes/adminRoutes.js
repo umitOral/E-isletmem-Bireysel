@@ -5,6 +5,7 @@ import {createPersonel} from '../controller/personelsController.js';
 
 import {addService,getSingleServicePage,editService} from '../controller/serviceControllers.js';
 import {addPayment,deletePayment,getSearchedPayments,addExpense} from '../controller/paymentsControllers.js';
+import {getStaticswithFilter} from '../controller/staticsController.js';
 import sesssionRoutes from './sessionRoutes.js';
 
 const router=express.Router()
@@ -21,7 +22,7 @@ router.route("/users/:id/editInformations").post(editInformations)
 
 
 router.route("/payments").get(getPaymentsPage)
-router.route("/payments/deneme").get(getSearchedPayments)
+router.route("/payments/getSearchedPayments").get(getSearchedPayments)
 router.route("/payments/:id/deletePayment").get(deletePayment)
 router.route("/payments/addPayment").post(addPayment)
 router.route("/payments/addExpense").post(addExpense)
@@ -31,6 +32,7 @@ router.route("/personels/createPersonel").post(createPersonel)
 
 router.route("/sessions").get(getSessionsPage)
 router.route("/statics").get(getStaticsPage)
+router.route("/statics/getStaticswithFilter").get(getStaticswithFilter)
 router.route("/settings").get(getSettingsPage)
 router.route("/logout").get(logOut)
 router.route("/addUser").post(createUser)

@@ -2,16 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>archmietCRM-V1</title>
-    <!-- material icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <!-- css -->
-    <link rel="stylesheet" href="/css/style.css">
+    <%- include('partials/head.ejs') %>
     <link rel="stylesheet" href="/css/users.css">
     <link rel="stylesheet" href="/css/payments.css">
 
@@ -30,7 +21,7 @@
                     <div class="header">
                         <h1> Payments</h1>
                     </div>
-                    <div class="payments">
+                    <div class="payments table-wrapper">
                         <div class="payments-filter">
                             <form class="payment-form" action="">
                                 <div class="inputs">Başlangıç tarihi:
@@ -217,16 +208,6 @@
                     </div>
 
 
-
-
-
-
-
-
-
-
-
-
                 </main>
         </div>
 
@@ -234,6 +215,7 @@
 
         <script type="module" src="../js/requests.js"></script>
         <script type="module" src="../js/payments.js"></script>
+        <script src="/js/sidebar.js"></script>
 
 
 

@@ -10,7 +10,7 @@ import fs from 'fs';
 const createCompany = async (req, res) => {
     try {
         const data = req.body
-         //  form datasına ekleme çıkarma yapılabilir.
+        //  form datasına ekleme çıkarma yapılabilir.
 
         const company = await Company.create(data)
 
@@ -27,12 +27,12 @@ const createCompany = async (req, res) => {
 const deactiveUser = async (req, res) => {
     try {
         console.log("başarılı")
-        
-        await User.findByIdAndUpdate(req.params.id,{activeOrNot:false})
-       
 
-        
-        
+        await User.findByIdAndUpdate(req.params.id, { activeOrNot: false })
+
+
+
+
         res.redirect("../../personels")
 
     } catch (error) {
@@ -44,16 +44,31 @@ const deactiveUser = async (req, res) => {
 }
 const findUser = async (req, res) => {
     try {
-        const userName=req.query.user
-        console.log(userName)
-        const users=await User.find({ "name":userName})
+        let query=User.find()
         
-        res.status(200).render("search-results",{
+        if (req.query) {
+            const searchObject = {}
+            const regex = new RegExp(req.query.user, "i")
+            searchObject["name"] = regex
+            searchObject["company"] = res.locals.user._id
+            searchObject["role"] = "customer"
+            console.log(searchObject)
+            
+            // searchObject["title"] = regex
+            query=query.where(searchObject)
+        }
+        
+        
+
+        
+        const users = await query
+        
+        res.status(200).render("search-results", {
             users,
-            link:"users"
+            link: "users"
         })
-        
-        
+
+
     } catch (error) {
         res.status(500).json({
             succes: false,
@@ -84,7 +99,7 @@ const editInformations = async (req, res) => {
     try {
         console.log(req.body)
         await User.findByIdAndUpdate(req.params.id,
-            { 
+            {
                 name: req.body.name,
                 surname: req.body.surname,
                 email: req.body.email,
@@ -95,7 +110,7 @@ const editInformations = async (req, res) => {
                 company: req.body.company,
                 billingAddress: req.body.billingAddress,
                 notes: req.body.notes,
-            
+
             })
         res.redirect("back")
     } catch (error) {
@@ -111,10 +126,10 @@ const loginUser = async (req, res) => {
     try {
         let same = false
         const company = await Company.findOne({ email: req.body.email })
-       
 
 
-        if (company ) {
+
+        if (company) {
             same = await bcrypt.compare(req.body.password, company.password)
         } else {
             return res.status(401).json({
@@ -178,7 +193,7 @@ const uploadPictures = async (req, res) => {
                 })
         }
 
-        
+
         fs.unlinkSync(req.files.upload_file.tempFilePath)
         res.redirect("back")
 
@@ -212,4 +227,4 @@ const createToken = (userID) => {
 
 }
 
-export { createCompany, createUser, loginUser, logOut, uploadPictures, editInformations,findUser,deactiveUser}
+export { createCompany, createUser, loginUser, logOut, uploadPictures, editInformations, findUser, deactiveUser }

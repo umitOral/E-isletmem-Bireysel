@@ -2,18 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>archmietCRM-V1</title>
-    <!-- material icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <!-- css -->
-    <link rel="stylesheet" href="../css/style.css">
+    <%- include('partials/head.ejs') %>
     <link rel="stylesheet" href="../css/statics.css">
-
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
 <body>
@@ -31,21 +22,23 @@
                 <form action="">
                     <div>
                         <span>Başlangıç:</span>
-                        <input type="date">
+                        <input type="date" class="start-date">
                     </div>
                     <div>
                         <span>Bitiş:</span>
-                        <input type="date">
+                        <input type="date" class="end-date">
                     </div>
-                    <input type="button" value="Getir" class="date_btn">
+                    
+                    <button class="buttons statics-filter-button">Listele</button>
                 </form>
                 <hr>
 
                 <div class="statics">
-                    <div id="sex_statics" style="width:100%;max-width:350px"></div>
-                    <div id="payment_statics" style="width:100%;max-width:350px"></div>
-                    <div id="proccessType_statics" style="width:100%;max-width:500px"></div>
-                    <div id="revenue_statics" style="width:100%;max-width:500px"></div>
+                    
+                    <div id="sex_statics" ></div>
+                    <div id="payment_statics" ></div>
+                    <div id="proccessType_statics" ></div>
+                    <div id="revenue_statics"></div>
 
                 </div>
             </div>
@@ -53,12 +46,15 @@
 
         </main>
     </div>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <script src="../js/statics.js"></script>
-    <script>
+    
 
-    </script>
+    <script type="module" src="../js/statics.js"></script>
+    <script type="module" src="../js/statics.js"></script>
+    <script type="module" src="/js/requests.js"></script>
+    <script src="/js/sidebar.js"></script>
+    
+    
 </body>
 
 </html>

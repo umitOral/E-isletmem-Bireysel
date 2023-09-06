@@ -10,8 +10,8 @@ export class Request {
         return responseData
 
     }
-    async getdeneme(url) {
-
+    async getwithUrl(url) {
+        
         const response = await fetch(url)
 
         const responseData = await response.json()

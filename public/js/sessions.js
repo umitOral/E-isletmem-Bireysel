@@ -55,7 +55,7 @@ let eventArray = []
 
 function getAllSessions(selectedDate) {
 
-    request.getdeneme("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
+    request.getwithUrl("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
         .then(response => {
             const AllSessions = response.sessionsAllDoctor
               //array

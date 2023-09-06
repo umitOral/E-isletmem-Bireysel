@@ -3,6 +3,15 @@ import Service from "../models/serviceModel.js"
 import Sessions from "../models/sessionModel.js"
 import Payment from "../models/paymentsModel.js"
 
+let now = new Date()
+now.setHours(0, 0, 0, 0)
+let day = now.getDate()
+let month = now.getMonth()
+let year = now.getFullYear()
+
+const todayDate = new Date(year, month, day)
+const tomorrowDate = new Date(year, month, day + 1)
+
 const getIndexPage = (req, res) => {
     try {
         res.status(200).render("front/index", {
@@ -106,8 +115,8 @@ const getAdminPage = (req, res) => {
 }
 const getUsersPage = async (req, res) => {
     try {
-        const users = await User.find({ role: { $ne: "doctor" } }).populate(["images"])
-
+        const users = await User.find({ role: { $ne: "doctor" },company: res.locals.user._id })
+        
         res.status(200).render("users", {
             users,
             link: "users"
@@ -138,13 +147,13 @@ const getPersonelsPage = async (req, res) => {
 const getSessionsPage = async (req, res) => {
     try {
 
-        const doctors = await User.find({ role: "doctor", company: res.locals.user._id,activeOrNot:true})
+        const doctors = await User.find({ role: "doctor", company: res.locals.user._id, activeOrNot: true })
         // sort({ registerDate: 1 })
-        
+
         const users = await User.find({ role: "customer" })
         const sessions = await Sessions.find({}).sort({ time: 1 }).populate(["user", "doctor"])
         const services = await Service.find({ activeorNot: { $ne: false } })
-        
+
         res.status(200).render("sessions", {
             link: "sessions",
             doctors,
@@ -160,10 +169,15 @@ const getSessionsPage = async (req, res) => {
         })
     }
 }
-const getStaticsPage = (req, res) => {
+
+
+const getStaticsPage = async (req, res) => {
     try {
+
+
         res.status(200).render("statics", {
-            link: "statics"
+            link: "statics",
+            
         })
     } catch (error) {
         res.status(500).json({
@@ -186,16 +200,6 @@ const getSettingsPage = (req, res) => {
 }
 const getPaymentsPage = async (req, res) => {
     try {
-
-        let now = new Date()
-        now.setHours(0, 0, 0, 0)
-        let day = now.getDate()
-        let month = now.getMonth()
-        let year = now.getFullYear()
-
-        const todayDate = new Date(year, month, day)
-        const tomorrowDate = new Date(year, month, day + 1)
-
 
 
         // console.log(now.toLocaleString())
@@ -232,8 +236,8 @@ const getPaymentsPage = async (req, res) => {
 
         });
 
-        netCash=totalCash-(-totalExpenses)
-        
+        netCash = totalCash - (-totalExpenses)
+
 
 
         res.status(200).render("payments", {

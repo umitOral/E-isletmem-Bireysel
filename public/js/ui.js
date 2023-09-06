@@ -33,22 +33,22 @@ export class UI {
         const totalCash = document.querySelector(".total-cash")
         const totalCreditCard = document.querySelector(".total-crediTCard")
         const netCash = document.querySelector(".netCash")
-        
-       console.log(data)
-        
-        
+
+        console.log(data)
+
+
         for (const iterator of paymentTablesChildren) {
-            
+
             iterator.remove()
         }
-        
+
         data.payments.forEach((payment, index) => {
             paymentTable.innerHTML += `
             <tr>
                                             
                     
-                    <td>${payment.createdAt.substr(0,10)}</td>
-                    <td>${payment.createdAt.substring(11,19)}</td>
+                    <td>${payment.createdAt.substr(0, 10)}</td>
+                    <td>${payment.createdAt.substring(11, 19)}</td>
                     <td>${payment.description}</td>
                     <td>${payment.value}</td> 
                     <td>${payment.cashOrCard}</td> 
@@ -71,20 +71,20 @@ export class UI {
             `
         });
 
-        totalIncome.innerHTML=data.totalIncome
-        totalCash.innerHTML=data.totalCash
-        totalCreditCard.innerHTML=data.totalCreditCard
-        totalExpenses.innerHTML=data.totalExpenses
-        
-        
-        netCash.innerHTML=data.netCash
+        totalIncome.innerHTML = data.totalIncome
+        totalCash.innerHTML = data.totalCash
+        totalCreditCard.innerHTML = data.totalCreditCard
+        totalExpenses.innerHTML = data.totalExpenses
+
+
+        netCash.innerHTML = data.netCash
 
     }
 
 
     showAllSessionToUI(allTimesforAllDoctors) {
         const allDoctorEvents = document.querySelector(".events-all-doctors")
-        
+
         while (allDoctorEvents.firstChild) {
             allDoctorEvents.firstChild.remove()
         }
@@ -94,19 +94,19 @@ export class UI {
         allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
 
             const singleDoctorArea = document.createElement("div")
-            singleDoctorArea.className="single-doctor-area"
-            
-            singleDoctorArea.innerHTML+=`
+            singleDoctorArea.className = "single-doctor-area"
+
+            singleDoctorArea.innerHTML += `
             <div class="doctor-name" value="">
                 ${timesForSingleDoctor[0].doctorName}
             </div>
             `
-            const  singleDoctorEvents=document.createElement("div")
-            singleDoctorEvents.className="single-doctor-events"
-            
+            const singleDoctorEvents = document.createElement("div")
+            singleDoctorEvents.className = "single-doctor-events"
+
             allDoctorEvents.appendChild(singleDoctorArea)
 
-            timesForSingleDoctor.forEach((element,index) => {
+            timesForSingleDoctor.forEach((element, index) => {
                 if (element._id) {
                     singleDoctorEvents.innerHTML += `
                     <div class="event full">
@@ -148,7 +148,7 @@ export class UI {
                     singleDoctorArea.appendChild(singleDoctorEvents)
                 }
 
-              
+
             });
 
         });
@@ -189,6 +189,20 @@ export class UI {
             <td><a href="#" id="delete-user" style="cursor:pointer; ">Sil</td>
         </tr>
         `
+    }
+
+    createChart(response) {
+        console.log(response)
+        var layoutSexStatics = { title: "Kadın/Erkek Oranı" };
+        var sexStaticsLabels = ["Kadın", "Erkek"];
+        var paymentStaticsLabels = ["Kredi Kartı", "Peşin"];
+        var sexStaticsValues = response.sexStatics;
+        var paymentStaticsValues = response.paymentstatics;
+        var datasexStatics = [{ labels: sexStaticsLabels, values: sexStaticsValues, type: "pie" }];
+        var layoutPaymentStatics = { title: "Kredi Kartı/Peşin Oranı" };
+        var datapaymentStatics = [{ labels: paymentStaticsLabels, values: paymentStaticsValues, type: "pie" }];
+        Plotly.newPlot("sex_statics", datasexStatics, layoutSexStatics);
+        Plotly.newPlot("payment_statics", datapaymentStatics, layoutPaymentStatics);
     }
 
 }

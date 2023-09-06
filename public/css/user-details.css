@@ -380,18 +380,6 @@
 
 
 
-.modal .inputs input,
-textarea,
-select {
-    border: 1px solid rgba(128, 128, 128, 0.394);
-    display: block;
-    width: 100%;
-    background-color: #F4F6F8;
-    border-radius: var(--border-radius-1);
-    padding: 0.5rem;
-    color: var(--color-dark-variant);
-
-}
 
 .modal input[type="image"] {
 
