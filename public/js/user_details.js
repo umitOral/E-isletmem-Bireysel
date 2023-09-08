@@ -1,6 +1,9 @@
 
-const tabs = document.querySelectorAll(".user_information")
-const content = document.querySelectorAll(".userInformationsContent")
+
+
+const showContentsBtn = document.querySelectorAll(".show-content")
+const contents = document.querySelectorAll(".userInformationsContent")
+
 const editUserButton = document.getElementById("edit-user")
 const proccessType = document.querySelector(".proccess_type")
 const selected_proccess_type_div = document.querySelector(".selected_proccess_type")
@@ -22,7 +25,6 @@ function eventListeners() {
 }
 
 
-const userID = document.getElementById("userID").textContent.trim()
 const userName = document.getElementById("user-name")
 const usersurName = document.getElementById("user-surname")
 
@@ -44,21 +46,24 @@ function editUser() {
 
 
 
-tabs.forEach((element, index) => {
+showContentsBtn.forEach((element, index) => {
+    element.addEventListener("click",()=>{
+        
+        showContentsBtn.forEach(element => {
+            
+            element.classList.remove("active")
+            
+        });
+        element.classList.add("active")
 
-    element.onclick = () => {
-
-        tabs.forEach(element => {
-            element.classList.remove("showed")
-        })
-        content.forEach(element => {
+        contents.forEach(element => {
             element.classList.remove("showed_content")
-
-        })
-
-        element.parentElement.nextElementSibling.children[index].classList.add("showed_content")
-        element.classList.add("showed")
-    }
+            
+        });
+        
+        element.parentElement.nextElementSibling.children[0].children[index].classList.add("showed_content")
+    })
+    
 
 
 });

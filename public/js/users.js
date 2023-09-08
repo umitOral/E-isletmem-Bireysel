@@ -6,16 +6,8 @@ const table_rows = document.querySelectorAll("table tbody tr")
 const table_heads = document.querySelectorAll("main .user-table table thead th:not(:first-child) ")
 const userList = document.getElementById("userList")
 const addUserButton = document.getElementById("add-user")
-const nameInput = document.getElementById("user-name")
-const surnNameInput = document.getElementById("surname")
-const birtdhDateInput = document.getElementById("birtdhDate")
-const addressInput = document.getElementById("address")
-const phoneInput = document.getElementById("phone")
-const emailInput = document.getElementById("email")
-const billingAddressInput = document.getElementById("billingAddress")
-const notesInput = document.getElementById("notes")
-const deneme = document.getElementById("deneme")
 
+const checkBoxes = document.querySelectorAll("tbody tr input[type='checkbox']")
 
 
 
@@ -33,15 +25,11 @@ function eventListeners() {
     userList.addEventListener("click", updateorDelete)
     addUserButton.addEventListener("click", addUser)
 
-
 }
 
 
 function addUser(e) {
  
-
-
-    
     
 }
 
@@ -49,8 +37,7 @@ function getAllUsers() {
     request.get()
         .then(response => ui.showAllUsersToUI(response))
         .catch(err => console.log(err))
-
-       
+   
 }
 
 
@@ -63,6 +50,7 @@ function updateorDelete(e) {
         deleteUser(e.target)
     }
 }
+
 function deleteUser(selectedUser) {
     const id = selectedUser.parentElement.parentElement.children[1].textContent.trim()
     console.log(id)
@@ -78,6 +66,8 @@ function deleteUser(selectedUser) {
         alert( "You canceled!");
     }
 }
+
+// -------------table checking process
 
 
 
@@ -103,6 +93,7 @@ table_heads.forEach((head, i) => {
     }
 
 });
+
 function sortTable(column, sort_ars) {
     [...table_rows].sort((a, b) => {
         let first_row = a.querySelectorAll("td")[column].textContent.toLowerCase(),
@@ -114,23 +105,7 @@ function sortTable(column, sort_ars) {
 
 }
 
-// -------------table checking process
-const checkBoxes = document.querySelectorAll("input[type='checkbox']")
 
-function selectAll(myCheckBox) {
-
-    if (myCheckBox.checked == true) {
-        checkBoxes.forEach(element => {
-            element.checked = true
-        })
-    } else {
-        checkBoxes.forEach(element => {
-            element.checked = false
-        });
-
-    }
-
-}
 
 
 // ----print procceess ----

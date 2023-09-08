@@ -115,16 +115,61 @@ const getAdminPage = (req, res) => {
 }
 const getUsersPage = async (req, res) => {
     try {
-        const users = await User.find({ role: { $ne: "doctor" },company: res.locals.user._id })
+        
+        let query=User.find({})
+        if (req.query) {
+            const searchObject={}
+            
+            searchObject["company"] = res.locals.user._id
+            searchObject["role"] = "customer"
+            query=query.where(searchObject)
+            
+        }
+        
+        //pagination
+        const page=parseInt(req.query.page )|| 1
+        const limit=5
+
+        const startIndex=(page-1)*limit
+        const endIndex=page*limit
+        
+        const total= await User.count().where('role').equals('customer').where("company").equals(res.locals.user._id)
+        const lastpage=Math.ceil(total/limit)
+        const pagination={}
+        pagination["page"]=page
+        pagination["lastpage"]=lastpage
+        console.log(lastpage)
+        
+        if (startIndex>0) {
+            pagination.previous={
+                page:page-1,
+                limit:limit
+            }
+            
+        }
+        if (endIndex<total) {
+            pagination.next={
+                page:page+1,
+                limit:limit
+            }
+        }
+
+        query=query.skip(startIndex).limit(limit)
+        const users = await query
+        
         
         res.status(200).render("users", {
             users,
+            total,
+            count: users.length,
+            pagination,
             link: "users"
         })
+
     } catch (error) {
         res.status(500).json({
             succes: false,
-            message: error
+            message: "error"
         })
     }
 }
@@ -213,7 +258,7 @@ const getPaymentsPage = async (req, res) => {
                 $gte: todayDate,
                 $lte: tomorrowDate
             }
-        })
+        }).populate("fromUser","name")
         // console.log(payments)
 
         let totalIncome = 0

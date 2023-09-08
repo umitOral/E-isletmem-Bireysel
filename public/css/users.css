@@ -123,6 +123,14 @@ div.search input[type="search"] {
     color: var(--color-dark-variant);
 
 }
+.pagination-describe {
+    margin-top: 0.5rem;
+    display: flex;
+   
+    justify-content: center;
+    color: var(--color-dark-variant);
+
+}
 
 .pagination span {
     border: 1px solid var(--color-dark-variant2);
@@ -130,6 +138,9 @@ div.search input[type="search"] {
     text-align: center;
     font-size: 1rem;
     border-radius: var(--border-radius-1);
+}
+.pagination span.page-active {
+    background-color: var(--color-dark-variant2);
 }
 
 .pagination span:hover {
@@ -255,5 +266,10 @@ main header a {
     .autocomplete{
         width: 100%;
         justify-content: space-around;
+    }
+    .pagination span {
+        
+        font-size: 0.5rem;
+        
     }
 }

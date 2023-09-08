@@ -4,7 +4,7 @@ import {logOut,createUser,uploadPictures,editInformations,findUser,deactiveUser}
 import {createPersonel} from '../controller/personelsController.js';
 
 import {addService,getSingleServicePage,editService} from '../controller/serviceControllers.js';
-import {addPayment,deletePayment,getSearchedPayments,addExpense} from '../controller/paymentsControllers.js';
+import {addPayment,deletePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
 import {getStaticswithFilter} from '../controller/staticsController.js';
 import sesssionRoutes from './sessionRoutes.js';
 
@@ -24,8 +24,10 @@ router.route("/users/:id/editInformations").post(editInformations)
 router.route("/payments").get(getPaymentsPage)
 router.route("/payments/getSearchedPayments").get(getSearchedPayments)
 router.route("/payments/:id/deletePayment").get(deletePayment)
+router.route("/payments/:id/editPayment").post(editPayment)
 router.route("/payments/addPayment").post(addPayment)
 router.route("/payments/addExpense").post(addExpense)
+
 
 router.route("/personels/").get(getPersonelsPage)
 router.route("/personels/createPersonel").post(createPersonel)

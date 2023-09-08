@@ -25,8 +25,8 @@ export class UI {
     }
 
     showAllPaymensToUI(data) {
-        const paymentTablesChildren = document.querySelectorAll(".payments-table tbody tr")
-        const paymentTable = document.querySelector(".payments-table tbody")
+        const paymentTablesChildren = document.querySelectorAll("table tbody tr")
+        const paymentTable = document.querySelector("table tbody")
 
         const totalIncome = document.querySelector(".total-income")
         const totalExpenses = document.querySelector(".total-expenses")
@@ -163,9 +163,18 @@ export class UI {
         });
 
     }
+    deletePaymentFromUI(payment) {
+        payment.remove()
+
+    }
 
     deleteUserFromUI(element) {
         element.remove()
+    }
+    createEditModal() {
+       
+        
+        
     }
 
 

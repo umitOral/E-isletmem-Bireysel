@@ -20,7 +20,7 @@
                     <div class="header">
                         <h1> Hastalar</h1>
                     </div>
-                    
+
 
                     <div class="search">
                         <form autocomplete="off" action="./users/search">
@@ -50,27 +50,26 @@
                     <div class="table-wrapper">
                         <table>
                             <thead>
-                                <th><input type="checkbox" class="select_all_rows" option_id="select_all"
-                                        onchange="selectAll(this)"><span>Hepsini seç</span></th>
+
                                 <th>İsim<i class="ph-bold ph-arrow-up"></i></th>
                                 <th>Soyisim<i class="ph-bold ph-arrow-up"></i></td>
                                 <th>Telefon<i class="ph-bold ph-arrow-up"></i></th>
-                                
+
                             </thead>
                             <tbody id="userList">
                                 <% users.forEach(user=> { %>
                                     <tr>
-                                        <td>
-                                            <input type="checkbox">
-                                        </td>
+
                                         <td>
                                             <%= user.name %>
                                         </td>
                                         <td>
                                             <%= user.surname %>
                                         </td>
-                                        
-                                        <td><span class="continue"> <%= user.phone %></span> </td>
+
+                                        <td><span class="continue">
+                                                <%= user.phone %>
+                                            </span> </td>
                                         <td><a href="./users/<%= user._id %>">Detay</a></td>
                                     </tr>
                                     <% }) %>
@@ -80,17 +79,35 @@
 
 
                         </table>
-                        
+
                     </div>
 
+                    <div class="pagination-describe">
+                        Toplam <%= total %> hasta içerisinden <%= count %> kişi listelendi
+                    </div>
                     <div class="pagination">
-                        <a href=""><span class="page-active">1</span></a>
-                        <a href=""><span>2</span></a>
-                        <a href=""><span>3</span></a>
-                        <a href=""><span>>>Sonraki Sayfa</span></a>
+
+                        <% if (pagination.previous ) { %>
+                            <a href="./users?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span >Önceki Sayfa<<</span></a>
+                        <% } %>
+                        
+                        <% if (pagination.page>1) { %>
+                            <a href="./users?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span><%= pagination.page-1 %></span></a>
+                        <% } %>
+                        
+                        <a href="./users?page=<%= pagination.page %>&limit=<%=3 %>"><span class="page-active"><%= pagination.page %></span></a>
+
+                        <% if (pagination.page<pagination.lastpage) { %>
+                            <a href="./users?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span ><%= pagination.page+1 %></span></a>
+                        <% } %>
+                        
+
+                         <% if (pagination.next) { %>
+                            <a href="./users?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span> >>Sonraki Sayfa</span></a>
+                        <% } %>
 
                     </div>
-                   
+
                 </main>
                 <div class="add_customer modal">
                     <h2>Yeni Hasta Ekle</h2>
@@ -154,7 +171,7 @@
         </div>
 
 
-        <script type="module" src="../js/autocomplete.js"></script>
+
         <script type="module" src="../js/requests.js"></script>
         <script type="module" src="../js/users.js"></script>
 

@@ -46,13 +46,32 @@ const addExpense = async (req, res) => {
 
 const deletePayment = async (req, res) => {
     try {
-
-
         const payment = await Payment.findByIdAndDelete(req.params.id)
+        
+        res.json({
+            success:true,
+            message:"ödeme silindi"
+        })
 
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "usercontroller error"
+        })
+    }
+}
+const editPayment = async (req, res) => {
+    try {
+        
+        await Payment.findByIdAndUpdate(req.params.id, {
+            fromUser: req.body.fromUser,
+            value: req.body.value,
+            cashOrCard: req.body.cashOrCard,
+            description: req.body.description
+        })
 
         res.redirect("back")
-
+        
 
     } catch (error) {
         res.status(500).json({
@@ -132,4 +151,4 @@ const getSearchedPayments = async (req, res) => {
 
 
 
-export { addPayment, deletePayment, getSearchedPayments,addExpense }
+export { addPayment, deletePayment, getSearchedPayments,addExpense,editPayment}

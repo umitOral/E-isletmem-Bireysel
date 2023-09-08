@@ -3,8 +3,8 @@
 
 <head>
     <%- include('partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/users.css">
-    <link rel="stylesheet" href="/css/payments.css">
+        
+        <link rel="stylesheet" href="/css/payments.css">
 
 </head>
 
@@ -18,193 +18,235 @@
                 <!----------- end of sidebar ----------->
 
                 <main>
-                    <div class="header">
-                        <h1> Payments</h1>
+                    <div class="main-header">
+                        <h1> Kasa</h1>
                     </div>
-                    <div class="payments table-wrapper">
-                        <div class="payments-filter">
-                            <form class="payment-form" action="">
-                                <div class="inputs">Başlangıç tarihi:
-                                    <input type="date" name="startDate" class="startDate">
-                                </div>
-                                <div class="inputs">Bitiş tarihi:
-                                    <input type="date" name="endDate" class="endDate">
-                                </div>
+                    <div class="payments-filter">
+                        <form class="payment-form" action="">
+                            <div class="inputs">Başlangıç tarihi:
+                                <input type="date" name="startDate" class="startDate">
+                            </div>
+                            <div class="inputs">Bitiş tarihi:
+                                <input type="date" name="endDate" class="endDate">
+                            </div>
 
-                                <button class="buttons payments-filter-button">Listele</button>
+                            <button class="buttons payments-filter-button">Listele</button>
 
-                            </form>
+                        </form>
 
-                        </div>
-                        
+                    </div>
+                    <div class="add-payments-button">
                         <button class="buttons payments-add-button">Kasa Ekle+</button>
                         <button class="buttons expenses-add-button">Masraf Ekle-</button>
+                    </div>
 
-                        <div class="modal modal_payment">
-                            <h2>Ödeme Ekle</h2>
-                            <form action="./payments/addPayment" method="POST">
-                                <select name="fromUser" id="fromUser" class="inputs" required>
-                                    <% users.forEach(user=> { %>
-                                        <option value="<%= user._id %>">
-                                            <%= user.name %>
-                                        </option>
-                                        <% }) %>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Tarih</td>
+                                    <td>Saat</td>
+                                    <td>Not</td>
+                                    <td>Tutar</td>
+                                    <td>Ödeme Şekli</td>
+                                    <td>İlgili Hasta</td>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                                </select>
-
-                                <div class="inputs ">
-                                    <span>Ödeme Miktarı:</span>
-                                    <input type="number" name="value" id="" required>
-                                </div>
-
-                                <div class="payment_options ">
-                                    <span>Tahsilat:</span>
-                                    <div>
-                                        <input type="radio" id="credit_card_ratio" name="cashOrCard"
-                                            value="Kredi Kartı">
-                                          <label for="credit_card_ratio">Kredi Kartı</label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" id="cash_ratio" name="cashOrCard" value="Nakit">
-                                          <label for="cash_ratio">Nakit</label>
-                                    </div>
-                                    <div>
-                                        <label for="description">Notlar:</label>
-                                        <textarea name="description" id="description" cols="10" rows="3"></textarea>
-                                         
-                                    </div>
-
-                                </div>
-
-                                <button type="submit" class="save_button">Kaydet</button>
-                                <button class="cancel_button">Vazgeç</button>
-
-
-                            </form>
-                        </div>
-                        <div class="modal expenses_payment">
-                            <h2>Masraf  Ekle</h2>
-                            <form action="./payments/addExpense" method="POST">
-                                
-
-                                <div class="inputs ">
-                                    <span>Masraf Miktarı:</span>
-                                    <input type="number" name="value" id="" required>
-                                </div>
-
-                                <div class="payment_options ">
-                                    <span>Tahsilat:</span>
-                                    <div>
-                                        <input type="radio" id="credit_card_ratio" name="cashOrCard"
-                                            value="Kredi Kartı">
-                                          <label for="credit_card_ratio">Kredi Kartı</label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" id="cash_ratio" name="cashOrCard" value="Nakit">
-                                          <label for="cash_ratio">Nakit</label>
-                                    </div>
-                                    <div>
-                                        <label for="description">Notlar:</label>
-                                        <textarea name="description" id="description" cols="10" rows="3"></textarea>
-                                         
-                                    </div>
-
-                                </div>
-
-                                <button type="submit" class="save_button">Kaydet</button>
-                                <button class="cancel_button">Vazgeç</button>
-
-
-                            </form>
-                        </div>
-
-                        <div class="table-wrapper">
-                            <table class="payments-table">
-                                <thead>
+                                <% payments.forEach(payment=> { %>
                                     <tr>
+                                        <td>
+                                            <%= payment.createdAt.toLocaleDateString() %>
+                                        </td>
+                                        <td>
+                                            <%= payment.createdAt.toLocaleTimeString() %>
+                                        </td>
+                                        <td>
+                                            <%= payment.description %>
+                                        </td>
+                                        <td>
+                                            <%= payment.value %>
+                                        </td>
+                                        <td>
+                                            <%= payment.cashOrCard %>
+                                        </td>
                                         
-                                        <td>Tarih</td>
-                                        <td>Saat</td>
-                                        <td>Not</td>
-                                        
-                                        <td>Tutar</td>
+                                        <td><span class="material-symbols-sharp edit_payment">
+                                                more_vert
+                                            </span>
+                                            <div class="edit_payment_small_modal">
+                                                <button class="delete-payment" value="<%= payment._id %>">Sil</button>
+                                                <button class="edit-payment-btn" value="<%= payment._id %>">Düzenle</button>
+                                            </div>
 
-                                        <td>Ödeme Şekli</td>
+
+
+                                        </td>
+
                                     </tr>
 
-                                </thead>
-                                <tbody>
-
-                                    <% payments.forEach(payment=> { %>
-                                        <tr>
-                                            <td>
-                                                <%= payment.createdAt.toLocaleDateString()
-                                                    %>
-                                            </td>
-                                            <td>
-                                                <%= payment.createdAt.toLocaleTimeString()
-                                                    %>
-                                            </td>
-                                            <td>
-                                                <%= payment.description %>
-                                            </td>
-                                            <td>
-                                                <%= payment.value %>
-                                            </td>
-                                            <td>
-                                                <%= payment.cashOrCard %>
-                                            </td>
-                                            <td><span class="material-symbols-sharp edit_payment">
-                                                    more_vert
-                                                </span>
-                                                <div class="edit_payment_small_modal">
-
-                                                    <a href="./payments/<%= payment._id %>/deletePayment">Sil</a>
-
-                                                    <button class="">Düzenle</button>
-
-                                                </div>
+                                    <% }) %>
 
 
 
-                                            </td>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2">Toplam Ciro:</td>
+                                    <td class="total-income">
+                                        <%= totalIncome%>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2">Toplam Gider:</td>
+                                    <td class="total-expenses">
+                                        <%= totalExpenses %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2">Toplam Nakit:</td>
+                                    <td class="total-cash">
+                                        <%=totalCash%>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2">Toplam Kredi Kartı:</td>
+                                    <td class="total-crediTCard">
+                                        <%=totalCreditCard%>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2">Net Kasa </td>
+                                    <td class="netCash" >
+                                        <%=netCash%>
+                                    </td>
+                                </tr>
+                            </tfoot>
 
-                                        </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                                        <% }) %>
+                    <div class="modal modal_payment">
+                        <h2>Ödeme Ekle</h2>
+                        <form action="./payments/addPayment" method="POST">
+                            <select name="fromUser" id="fromUser" class="inputs" required>
+                                <% users.forEach(user=> { %>
+                                    <option value="<%= user._id %>">
+                                        <%= user.name %>
+                                    </option>
+                                    <% }) %>
+
+                            </select>
+
+                            <div class="inputs ">
+                                <span>Ödeme Miktarı:</span>
+                                <input type="number" name="value" id="" required>
+                            </div>
+
+                            <div class="payment_options ">
+                                <span>Tahsilat:</span>
+                                <div>
+                                    <input type="radio" id="credit_card_ratio" name="cashOrCard" value="Kredi Kartı">
+                                      <label for="credit_card_ratio">Kredi Kartı</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="" name="cashOrCard" value="Nakit">
+                                      <label for="cash_ratio">Nakit</label>
+                                </div>
+                                <div>
+                                    <label for="description">Notlar:</label>
+                                    <textarea name="description" id="" cols="10" rows="3"></textarea>
+                                     
+                                </div>
+
+                            </div>
+
+                            <button type="submit" class="save_button">Kaydet</button>
+                            <button class="cancel_button">Vazgeç</button>
 
 
+                        </form>
+                    </div>
+                    <div class="modal expenses_payment">
+                        <h2>Masraf Ekle</h2>
+                        <form action="./payments/addExpense" method="POST">
 
-                                <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td>Toplam Ciro:</td>
-                                        <td class="total-income"><%= totalIncome%></td></tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>Toplam Gider:</td>
-                                        <td class="total-expenses"><%= totalExpenses %></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>Toplam Nakit:</td>
-                                        <td class="total-cash"><%=totalCash%></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>Toplam Kredi Kartı:</td>
-                                        <td class="total-crediTCard"><%=totalCreditCard%></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>Net Kasa </td>
-                                        <td class="netCash"><%=netCash%></td>
-                                    </tr>
-                                </tfoot>
 
-                                </tbody>
-                            </table>
-                        </div>
+                            <div class="inputs ">
+                                <span>Masraf Miktarı:</span>
+                                <input type="number" name="value" id="" required>
+                            </div>
+
+                            <div class="payment_options ">
+                                <span>Tahsilat:</span>
+                                <div>
+                                    <input type="radio" id="credit_card_ratio" name="cashOrCard" value="Kredi Kartı">
+                                      <label for="credit_card_ratio">Kredi Kartı</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="" name="cashOrCard" value="Nakit">
+                                      <label for="cash_ratio">Nakit</label>
+                                </div>
+                                <div>
+                                    <label for="description">Notlar:</label>
+                                    <textarea name="description" id="" cols="10" rows="3"></textarea>
+                                     
+                                </div>
+
+                            </div>
+
+                            <button type="submit" class="save_button">Kaydet</button>
+                            <button class="cancel_button">Vazgeç</button>
+
+
+                        </form>
+                    </div>
+                    <div class="modal modal_edit_payment">
+                        <h2>Ödeme Düzenle</h2>
+                        <form action="" method="POST" id="edit-payment-form">
+                            <select name="fromUser" id="fromUser" class="inputs" required>
+                                <% users.forEach(user=> { %>
+                                    <option value="<%= user._id %>">
+                                        <%= user.name %>
+                                    </option>
+                                    <% }) %>
+
+                            </select>
+
+                            <div class="inputs ">
+                                <span>Ödeme Miktarı:</span>
+                                <input type="number" name="value" id="payment-value" required>
+                            </div>
+
+                            <div class="payment_options ">
+                                <span>Tahsilat:</span>
+                                <div>
+                                    <input type="radio" id="credit_card_ratio" name="cashOrCard" value="Kredi Kartı">
+                                      <label for="credit_card_ratio">Kredi Kartı</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="cash_ratio" name="cashOrCard" value="Nakit">
+                                      <label for="cash_ratio">Nakit</label>
+                                </div>
+                                <div>
+                                    <label for="description">Notlar:</label>
+                                    <textarea name="description" id="description" cols="10" rows="3"></textarea>
+                                     
+                                </div>
+
+                            </div>
+
+                            <button type="submit" class="save_update_btn">Kaydet</button>
+                            <button class="cancel_button">Vazgeç</button>
+
+
+                        </form>
                     </div>
 
 

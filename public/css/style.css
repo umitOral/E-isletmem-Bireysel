@@ -12,6 +12,7 @@
   --color-light: rgba(132, 139, 200, 0.18);
   --color-primary-variant: #111e88;
   --color-dark-variant: #677483;
+  --color-border-color:#bcbec15d;
 
   --color-background: #f6f6f9;
 
@@ -35,6 +36,9 @@
   text-decoration: none;
   list-style: none;
   box-sizing: border-box;
+}
+ tbody tr {
+  border-bottom: 1px solid var(--color-border-color);
 }
 
 html {
@@ -68,7 +72,7 @@ body {
 .container {
   padding-top: 1rem;
   display: flex;
-  width: 96%;
+  width: 98%;
   margin: 0 auto;
   margin-top: 6rem;
   gap: 1.8rem;
@@ -365,11 +369,17 @@ header {
 
 /* ------------------------MAİN-------------*/
 main {
-  width: 80%;
 
   display: flex;
   flex-direction: column;
-  padding: 0 0.5rem;
+  padding: 2rem;
+  width: 100%;
+  background-color: white;
+  border-radius: var(--card-border-radius);
+}
+.main-header{
+  border-bottom: 1px solid var(--color-border-color);
+  padding-bottom: 1rem;
 }
 
 main .date {
@@ -493,6 +503,7 @@ table th {
   background-color: var(--color-white);
   padding: 1rem 0.5rem;
   border-radius: var(--border-radius-2);
+  border: 1px solid var(--color-border-color);
 }
 main .user-table:hover {
   box-shadow: none;
@@ -503,6 +514,7 @@ tbody td {
   color: var(--color-dark-variant);
   height: 3rem;
   text-align: center;
+  position: relative;
 }
 table tbody tr:last-child td {
   border: none;
@@ -512,6 +524,7 @@ table tbody tr:hover {
 }
 table thead {
   font-weight: 600;
+  text-align: center;
 }
 
 .continue {
@@ -683,7 +696,11 @@ table thead {
     margin-top: 4.5rem;
   }
   main {
-    padding: 0;
+    padding: 0.7rem;
+  }
+  .main-header{
+    
+    text-align: center;
   }
   .sidebar .head .user-details {
     display: none;

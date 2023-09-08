@@ -44,27 +44,61 @@ const deactiveUser = async (req, res) => {
 }
 const findUser = async (req, res) => {
     try {
+
+        //search
         let query=User.find()
-        
         if (req.query) {
             const searchObject = {}
             const regex = new RegExp(req.query.user, "i")
             searchObject["name"] = regex
             searchObject["company"] = res.locals.user._id
             searchObject["role"] = "customer"
-            console.log(searchObject)
+            
             
             // searchObject["title"] = regex
             query=query.where(searchObject)
         }
+
+        //pagination
+        // 1 2 3 4 5..6 7 8
+
+        const page=parseInt(req.query.page )|| 1
+        const limit=3
         
+        const startIndex=(page-1)*limit
+        const endIndex=page*limit
+        
+        const total= await User.count().where('role').equals('customer').where("company").equals(res.locals.user._id)
+        const lastpage=Math.round(total/limit)
+        const pagination={}
+        pagination["page"]=page
+        pagination["lastpage"]=lastpage
         
 
+        if (startIndex>0) {
+            pagination.previous={
+                page:page-1,
+                limit:limit
+            }
+        }
+        if (endIndex<total) {
+            pagination.next={
+                page:page+1,
+                limit:limit
+            }
+        }
+        
+        query=query.skip(startIndex).limit(limit)
         
         const users = await query
         
+        
+        
         res.status(200).render("search-results", {
             users,
+            total,
+            count:users.length,
+            pagination:pagination,
             link: "users"
         })
 
