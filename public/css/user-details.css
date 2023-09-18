@@ -93,8 +93,9 @@
 }
 .contents {
   border-radius: var(--card-border-radius);
+  min-width: 300px;
 }
-.contents .edit-btn {
+.contents .edit-informations-btn {
   background-color: var(--color-success);
   border-radius: var(--border-radius-1);
   cursor: pointer;
@@ -127,6 +128,7 @@
 .sessions,
 .payments,
 .images, .procces {
+  
   display: none;
 }
 
@@ -259,24 +261,10 @@
 /* add user modal ---- */
 
 .modal {
-  border: 1px solid rgb(202, 201, 201);
-  z-index: 999;
-  background-color: white;
-  border-radius: var(--border-radius-1);
-  padding: 2rem;
-  min-width: 30%;
-
-  top: 100px;
-  left: 600px;
-  position: fixed;
-  display: flex;
-  flex-direction: column;
+  
   display: none;
 }
 
-.modal.showed_modal {
-  display: block;
-}
 
 .modal button {
   margin-top: 1rem;

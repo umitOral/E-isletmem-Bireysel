@@ -4,9 +4,20 @@
 const showContentsBtn = document.querySelectorAll(".show-content")
 const contents = document.querySelectorAll(".userInformationsContent")
 
-const editUserButton = document.getElementById("edit-user")
+
 const proccessType = document.querySelector(".proccess_type")
 const selected_proccess_type_div = document.querySelector(".selected_proccess_type")
+const editBtn = document.querySelector(".edit-informations-btn")
+const editUserButton = document.getElementById("edit-user")
+
+const cancelModal = document.querySelectorAll(".modal .cancel_button")
+
+// modals
+const modalUser = document.querySelector(".modal_user")
+const modalSession = document.querySelector(".modal_session")
+const modalPayment = document.querySelector(".modal_payment")
+const modalImage = document.querySelector(".modal_image")
+const modalProccess = document.querySelector(".modal_proccess")
 
 
 import { Request } from "./requests.js";
@@ -22,7 +33,17 @@ function eventListeners() {
     proccessType.addEventListener("change", addUıProccesType)
     selected_proccess_type_div.addEventListener("click", removeUıProccesType)
     editUserButton.addEventListener("click", editUser)
+    editBtn.addEventListener("click", showInformationsModal)
+    
 }
+
+cancelModal.forEach(element => {
+    element.addEventListener("click",()=>{
+        console.log(element.parentElement.parentElement)
+    element.parentElement.parentElement.classList.remove("showed_modal")
+    })
+    
+});
 
 
 const userName = document.getElementById("user-name")
@@ -41,8 +62,9 @@ function editUser() {
         .then(response => console.log(response))
         .catch(err => console.log(err))
 
-    // e.preventDefault();
+    e.preventDefault();
 }
+
 
 
 
@@ -104,15 +126,19 @@ const addProccess = document.getElementById("add_proccess")
 
 
 const saveModal = document.querySelectorAll(".modal .save_button")
-const cancelModal = document.querySelectorAll(".modal .cancel_button")
-
-const modalUser = document.querySelector(".modal_user")
-const modalSession = document.querySelector(".modal_session")
-const modalPayment = document.querySelector(".modal_payment")
-const modalImage = document.querySelector(".modal_image")
-const modalProccess = document.querySelector(".modal_proccess")
 
 
+
+
+function showInformationsModal(e) {
+    console.log("dada")
+    modalUser.classList.add("showed_modal")
+}
+function notshowInformationsModal(e) {
+   modalUser.classList.remove("showed_modal")
+   console.log("dadad")
+    e.preventDefault();
+}
 
 
 addSession.onclick = () => {

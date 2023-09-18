@@ -3,7 +3,7 @@
 
 <head>
     <%- include('partials/head.ejs') %>
-        <link rel="stylesheet" href="/css/users.css">
+        
         <link rel="stylesheet" href="/css/user-details.css">
         <!-- js ----------- -->
         <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
@@ -32,7 +32,7 @@
                             <div class="show-content informations">Bilgiler<i
                                     class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <div class="show-content sessions">Seanslar
+                            <div class="show-content sessions">Randevular
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
                             <div class="show-content payment">Tahsilatlar
@@ -103,7 +103,7 @@
                                         <span>Açıklama</span>
                                         <input type="text" name="" id="" value="<%= singleUser.notes %>" readonly>
                                     </div>
-                                    <span class="edit-btn">Düzenle</span>
+                                    <span class="edit-informations-btn">Düzenle</span>
 
 
                                 </div>
@@ -122,31 +122,8 @@
                                                 <th>Seans Durumu</th>
                                             </thead>
 
-                                            <tr>
-
-                                                <td>1.Seans</td>
-                                                <td>01.01.2023</td>
-
-                                                <td>Kemal Sunal</td>
-
-                                                <td>
-                                                    <p class="continue">Tamamlandı</p>
-                                                </td>
-
-
-                                            </tr>
-                                            <tr>
-
-                                                <td>2.Seans</td>
-                                                <td>03.02.2023</td>
-
-                                                <td>Ali Ateş</td>
-
-                                                <td>
-                                                    <p class="continue">Tamamlandı</p>
-                                                </td>
-
-                                            </tr>
+                                            
+                                            
                                             <tr>
 
                                                 <td>3.Seans</td>
@@ -154,7 +131,7 @@
                                                 <td>Mehmet Atlı</td>
 
                                                 <td>
-                                                    <p class="continue">Tamamlandı</p>
+                                                    <p class="continue"><% sessions.state %></p>
                                                 </td>
 
 
@@ -169,9 +146,7 @@
                                                 <td>
                                                     <p class="finish"> Tamamlanmadı</p>
                                                 </td>
-                                                <td><a href="#">Düzenle<span class="material-symbols-sharp">
-                                                            edit
-                                                        </span></a></td>
+                                                <td><a href="#">Düzenle</a></td>
                                             </tr>
                                         </table>
 
@@ -290,194 +265,189 @@
 
                                 </div>
                                 
+                            </div>                            
+
+                        </div>
+
+                    </div>
+                </main>
+                <div class=" modal modal_user">
+                    
+                    <h2>Genel Bilgileri Düzenle</h2>
+
+                    <form action="./<%= singleUser._id %>/editInformations" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="inputs ">
+                            <span>İsim</span>
+                            <input type="text" name="name" id="user-name"
+                                value="<%= singleUser.name %>">
+                        </div>
+
+                        <div class="inputs ">
+                            <span>Soyisim</span>
+                            <input type="text" name="surname" id="user-surname"
+                                value="<%= singleUser.surname %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Email</span>
+                            <input type="text" name="email" id="" value="<%= singleUser.email %>"
+                                placeholder="<%= singleUser.address %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Adres</span>
+                            <input type="text" name="address" id="" value="<%= singleUser.address %>"
+                                placeholder="<%= singleUser.address %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Telefon</span>
+                            <input type="number" name="phone" id="" value="<%= singleUser.phone %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Şirket</span>
+                            <input type="text" name="company" id="" value="<%= singleUser.company %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Fatura Bilgisi:</span>
+                            <textarea name="billingAddress" id="" cols="70"
+                                rows="2"><%= singleUser.billingAddress %></textarea>
+                        </div>
+                        <div class="inputs ">
+                            <span>Açıklama</span>
+                            <textarea name="notes" id="" cols="70"
+                                rows="2"><%=singleUser.notes%></textarea>
+                        </div>
+                        <button type="submit" id="edit-user">Kaydet</button>
+                        <span class="cancel_button">Vazgeç</span>
+                    </form>
+                </div>
+                <div class="modal modal_session">
+                    <h2>Seans Ekle</h2>
+                    <form action="">
+                        <div class="inputs ">
+                            <span>İsim</span>
+                            <input type="text" name="" id="">
+                        </div>
+                        <div class="inputs ">
+                            <span>Soyisim</span>
+                            <input type="text" name="" id="">
+                        </div>
+                        <div class="inputs ">
+                            <span>Tarih:</span>
+                            <input type="date" name="" id="">
+                        </div>
+                        <div class="inputs">
+                            <span>İşlem Tipi:</span>
+                            <select class="proccess_type">
+                                <option value="0">Yıkama</option>
+                                <option value="1">Saç Ekimi</option>
+                                <option value="2">Bakım</option>
+                                <option value="3">Cilt gerdirme</option>
+                            </select>
+                            <div class="selected_proccess_type">
+                                <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
                             </div>
-
-                            <!----------------------- modals ----------------------------------- -->
-                            <div class="modals">
-                                <div class=" modal modal_user">
-                                    <h2>Genel Bilgileri Düzenle</h2>
-
-
-                                    <form action="./<%= singleUser._id %>/editInformations" method="POST"
-                                        enctype="multipart/form-data">
-                                        <div class="inputs ">
-                                            <span>İsim</span>
-                                            <input type="text" name="name" id="user-name"
-                                                value="<%= singleUser.name %>">
-                                        </div>
-
-                                        <div class="inputs ">
-                                            <span>Soyisim</span>
-                                            <input type="text" name="surname" id="user-surname"
-                                                value="<%= singleUser.surname %>">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Email</span>
-                                            <input type="text" name="email" id="" value="<%= singleUser.email %>"
-                                                placeholder="<%= singleUser.address %>">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Adres</span>
-                                            <input type="text" name="address" id="" value="<%= singleUser.address %>"
-                                                placeholder="<%= singleUser.address %>">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Telefon</span>
-                                            <input type="number" name="phone" id="" value="<%= singleUser.phone %>">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Şirket</span>
-                                            <input type="text" name="company" id="" value="<%= singleUser.company %>">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Fatura Bilgisi:</span>
-                                            <textarea name="billingAddress" id="" cols="70"
-                                                rows="2"><%= singleUser.billingAddress %></textarea>
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Açıklama</span>
-                                            <textarea name="notes" id="" cols="70"
-                                                rows="2"><%=singleUser.notes%></textarea>
-                                        </div>
-                                        <button type="submit" id="edit-user">Kaydet</button>
-                                        <button class="cancel_button">Vazgeç</button>
-                                    </form>
-                                </div>
-                                <div class="modal modal_session">
-                                    <h2>Seans Ekle</h2>
-                                    <form action="">
-                                        <div class="inputs ">
-                                            <span>İsim</span>
-                                            <input type="text" name="" id="">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Soyisim</span>
-                                            <input type="text" name="" id="">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Tarih:</span>
-                                            <input type="date" name="" id="">
-                                        </div>
-                                        <div class="inputs">
-                                            <span>İşlem Tipi:</span>
-                                            <select class="proccess_type">
-                                                <option value="0">Yıkama</option>
-                                                <option value="1">Saç Ekimi</option>
-                                                <option value="2">Bakım</option>
-                                                <option value="3">Cilt gerdirme</option>
-                                            </select>
-                                            <div class="selected_proccess_type">
-                                                <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
-                                            </div>
-                                            <div class="inputs">Açıklama-Notlar:
-                                                <textarea name="" id="" cols="10" rows="3"></textarea>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="save_button">Kaydet</button>
-                                        <button class="cancel_button">Vazgeç</button>
-                                    </form>
-                                </div>
-                                <div class="modal modal_payment">
-                                    <h2>Ödeme Ekle</h2>
-                                    <form action="">
-                                        <div class="inputs ">
-                                            <span>İsim</span>
-                                            <input type="text" id="">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Soyisim</span>
-                                            <input type="text" name="" id="">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Ödeme Miktarı:</span>
-                                            <input type="number" name="" id="">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Tarih:</span>
-                                            <input type="date" name="" id="" value="2023-01-01">
-                                        </div>
-                                        <div class="payment_options ">
-                                            <span>Tahsilat:</span>
-                                            <div>
-                                                <input type="radio" id="credit_card_ratio" name="payment"
-                                                    value="credit_card">
-                                                  <label for="credit_card_ratio">Kredi Kartı</label>
-                                            </div>
-                                            <div>
-                                                <input type="radio" id="cash_ratio" name="payment" value="cash">
-                                                  <label for="cash_ratio">Nakit</label>
-                                            </div>
-
-                                        </div>
-
-                                        <button type="submit" class="save_button">Kaydet</button>
-                                        <button class="cancel_button">Vazgeç</button>
-                                    </form>
-                                </div>
-                                <div class="modal modal_image">
-                                    <h2>Resim Ekle</h2>
-
-                                    <form action="./<%= singleUser._id %>/uploadpictures" method="POST"
-                                        enctype="multipart/form-data">
-
-                                        <div class="inputs ">
-                                            <span>Resim seç</span>
-                                            <input type="file" name="upload_file" src="" alt="" multiple
-                                                onchange="getImagePreview(event)">
-                                        </div>
-                                        <div class="uploaded_images_preview"></div>
-                                        <div>
-                                            çekilme zamanı:
-                                            <input type="text" name="uploadTime" required>
-                                        </div>
-
-
-                                        <button type="submit" class="save_button">Kaydet</button>
-                                        <button class="cancel_button">Vazgeç</button>
-                                    </form>
-                                </div>
-                                <div class="modal modal_proccess">
-                                    <h2>İşlem Ekle</h2>
-                                    <form action="">
-                                        İşlem:
-                                        <select class="proccess_type">
-                                            <option value="0">Yıkama</option>
-                                            <option value="1">Saç Ekimi</option>
-                                            <option value="2">Bakım</option>
-                                            <option value="3">Cilt gerdirme</option>
-                                        </select>
-
-                                        <div class="inputs">Seans Sayısı:
-                                            <input type="number" name="" id="">
-                                        </div>
-                                        <div class="inputs">Fiyat:
-                                            <input type="number" name="" id="">
-                                        </div>
-                                        <div class="inputs">İndirim:
-                                            <input type="number" name="" id="">
-                                        </div>
-                                        <div class="inputs">Peşin/Taksit:
-                                            <select class="payment_type">
-                                                <option value="0">Peşin</option>
-                                                <option value="1">Taksit</option>
-
-                                            </select>
-                                        </div>
-
-
-
-                                        <button type="submit" class="save_button">Kaydet</button>
-                                        <button class="cancel_button">Vazgeç</button>
-                                    </form>
-
-                                </div>
+                            <div class="inputs">Açıklama-Notlar:
+                                <textarea name="" id="" cols="10" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="save_button">Kaydet</button>
+                        <button class="cancel_button">Vazgeç</button>
+                    </form>
+                </div>
+                <div class="modal modal_payment">
+                    <h2>Ödeme Ekle</h2>
+                    <form action="">
+                        <div class="inputs ">
+                            <span>İsim</span>
+                            <input type="text" id="">
+                        </div>
+                        <div class="inputs ">
+                            <span>Soyisim</span>
+                            <input type="text" name="" id="">
+                        </div>
+                        <div class="inputs ">
+                            <span>Ödeme Miktarı:</span>
+                            <input type="number" name="" id="">
+                        </div>
+                        <div class="inputs ">
+                            <span>Tarih:</span>
+                            <input type="date" name="" id="" value="2023-01-01">
+                        </div>
+                        <div class="payment_options ">
+                            <span>Tahsilat:</span>
+                            <div>
+                                <input type="radio" id="credit_card_ratio" name="payment"
+                                    value="credit_card">
+                                  <label for="credit_card_ratio">Kredi Kartı</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="cash_ratio" name="payment" value="cash">
+                                  <label for="cash_ratio">Nakit</label>
                             </div>
 
                         </div>
 
+                        <button type="submit" class="save_button">Kaydet</button>
+                        <button class="cancel_button">Vazgeç</button>
+                    </form>
+                </div>
+                <div class="modal modal_image">
+                    <h2>Resim Ekle</h2>
 
-                    </div>
-                </main>
+                    <form action="./<%= singleUser._id %>/uploadpictures" method="POST"
+                        enctype="multipart/form-data">
+
+                        <div class="inputs ">
+                            <span>Resim seç</span>
+                            <input type="file" name="upload_file" src="" alt="" multiple
+                                onchange="getImagePreview(event)">
+                        </div>
+                        <div class="uploaded_images_preview"></div>
+                        <div>
+                            çekilme zamanı:
+                            <input type="text" name="uploadTime" required>
+                        </div>
+
+
+                        <button type="submit" class="save_button">Kaydet</button>
+                        <button class="cancel_button">Vazgeç</button>
+                    </form>
+                </div>
+                <div class="modal modal_proccess">
+                    <h2>İşlem Ekle</h2>
+                    <form action="">
+                        İşlem:
+                        <select class="proccess_type">
+                            <option value="0">Yıkama</option>
+                            <option value="1">Saç Ekimi</option>
+                            <option value="2">Bakım</option>
+                            <option value="3">Cilt gerdirme</option>
+                        </select>
+
+                        <div class="inputs">Seans Sayısı:
+                            <input type="number" name="" id="">
+                        </div>
+                        <div class="inputs">Fiyat:
+                            <input type="number" name="" id="">
+                        </div>
+                        <div class="inputs">İndirim:
+                            <input type="number" name="" id="">
+                        </div>
+                        <div class="inputs">Peşin/Taksit:
+                            <select class="payment_type">
+                                <option value="0">Peşin</option>
+                                <option value="1">Taksit</option>
+
+                            </select>
+                        </div>
+
+
+
+                        <button type="submit" class="save_button">Kaydet</button>
+                        <button class="cancel_button">Vazgeç</button>
+                    </form>
+
+                </div>
 
         </div>
 

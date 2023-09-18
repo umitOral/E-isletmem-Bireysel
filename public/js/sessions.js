@@ -16,7 +16,8 @@ const calendar = document.querySelector(".calendar"),
     gotoBtn = document.querySelector(".goto-btn"),
     dateInput = document.querySelector(".date-input");
 const eventDay = document.querySelector(".event-day")
-const eventDate = document.querySelector(".event-date")
+
+
 const addEventSubmit = document.querySelector(".add-event-btn")
 const addEventType = document.querySelector(".proccess_type")
 const deleteEvent = document.querySelector(".fa-trash")
@@ -51,50 +52,120 @@ const months = [
 
 
 
-let eventArray = []
+
 
 function getAllSessions(selectedDate) {
+    
 
     request.getwithUrl("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
         .then(response => {
-            const AllSessions = response.sessionsAllDoctor
-              //array
+            
+            const sessionsAllDoctor = response.sessionsAllDoctor
+            const AllDoctor = response.doctors
+            const workHours = response.workHours
+            //array
 
-            console.log(AllSessions)
+
             let allTimesofSingleDoctor = []
-            
-            
-            AllSessions.forEach(singleDoctorData=> {
 
-                const times = [{ doctorName:singleDoctorData.doctorName },{ time: 0, value: "6:00-6:15" }, { time: 1, value: "6:15-6:30" }, { time: 2, value: "6:30-6:45" }, { time: 3, value: "6:45-7:00" }, { time: 4, value: "7:00-7:15" }]
+
+
+            sessionsAllDoctor.forEach(singleDoctorData => {
+                const times = []
+                const begin = workHours.workStart
+                const end = workHours.workEnd
+
+                let beginHour = Number(begin.split(":")[0])
+                let endHour = Number(end.split(":")[0])
+
+                for (let index = 0; index < (endHour - beginHour) * 4; index++) {
+                    const date = new Date(`${selectedDate},${begin}`);
+                    // 
+                    let newDate = addMinutes(date, index * 15)
+                    times[index] = { "time": index, "value": date }
+                }
+
+
 
                 singleDoctorData.sessionsofdoctor.forEach((element, index) => {
-                    times.splice(element.time, 1, element)
+
+                    times.splice((element.timeIndex), 1, element)
+
 
                 });
+
 
                 allTimesofSingleDoctor.push(times)
 
 
             });
 
-            console.log(allTimesofSingleDoctor)
 
 
 
-            ui.showAllSessionToUI(allTimesofSingleDoctor)
+
+            ui.showAllSessionToUI(allTimesofSingleDoctor, AllDoctor)
+
+            changeState(selectedDate)
 
 
         })
+
         .catch(err => console.log(err))
 
+
+
+}
+
+function addMinutes(date, minutes) {
+
+    date.setMinutes(date.getMinutes() + minutes);
+
+    return date;
+}
+
+function changeState(selectedDate) {
+    const sessionOptionsModalOptions = document.querySelectorAll(".session-options-modal span")
+
+    sessionOptionsModalOptions.forEach(element => {
+        element.addEventListener("click", (e) => {
+                console.log(e.target)
+            if (e.target.classList.contains("delete-session")) {
+
+                request.deleteSession("./sessions/" + e.target.parentElement.parentElement.parentElement.dataset.session + "/deleteSession")
+                    .then(response => {
+                        console.log(response)
+                        getAllSessions(selectedDate)
+                    })
+                    .catch(err => console.log(err))
+            }
+
+            if (e.target.classList.contains("save-edit-button")) {
+                
+                
+            }
+
+            if (e.target.classList.contains("change-state")) {
+
+                request.updateStateSession("./sessions/" + e.target.parentElement.parentElement.parentElement.dataset.session + "/updateStateSession?state=" + e.target.textContent)
+                    .then(response => {
+                        console.log(response)
+                        getAllSessions(selectedDate)
+                    })
+                    .catch(err => console.log(err))
+            }
+
+        })
+    });
 }
 
 
 
 
 
-// calender  ---------------------------------
+
+
+// calendar  ---------------------------------
 function initCalender() {
     const firstDay = new Date(year, month, 1); //mevcut ayın ilk gün tarihi
     const lastDay = new Date(year, month + 1, 0);  //mevcut ayın son gün tarihi
@@ -129,17 +200,6 @@ function initCalender() {
     for (let i = 1; i <= lastDate; i++) {
         let event = false;
 
-
-        eventArray.forEach(element => {
-            if (element.day === i &&
-                element.month === month + 1 &&
-                element.year === year
-            ) {
-                event = true;
-
-            }
-        });
-
         if (i === new Date().getDate() &&
             year === new Date().getFullYear() &&
             month === new Date().getMonth()
@@ -149,24 +209,22 @@ function initCalender() {
 
             getActiveDay(i)
 
-
-
             if (event) {
                 days += `
-            <div class="day today event active">${i}</div> `
+                <div class="day today event active">${i}</div> `
             }
             else {
                 days += `
-            <div class="day today active">${i}</div> `
+                <div class="day today active">${i}</div> `
             }
         } else {
             if (event) {
                 days += `
-            <div class="day event">${i}</div> `
+                <div class="day event">${i}</div> `
             }
             else {
                 days += `
-            <div class="day">${i}</div> `
+                <div class="day">${i}</div> `
             }
         }
 
@@ -196,6 +254,7 @@ function prevMonth() {
     }
     initCalender()
 }
+
 function nextMonth() {
     month++;
     if (month > 11) {
@@ -253,27 +312,30 @@ function goToDate() {
 // todo section --------------------------------------
 
 
-const closeAddSessionBtn = document.querySelector(".cancel_button")
+const closeAddSessionBtns = document.querySelectorAll(".cancel_button")
 const addEventTitle = document.querySelector(".event-name")
-const addEventFromTo = document.querySelector(".event-time-from")
+const addEventFromTos = document.querySelectorAll(".event-date-from")
 const addEventTo = document.querySelector(".event-time-to")
-const modalAddSession = document.querySelector(".modal_session")
-const doktorName = document.querySelector(".doktor-name")
+const modalAddSession = document.querySelector(".modal_add_session")
+const modalUpdateSession = document.querySelector(".modal_update_session")
+const doctorIDs = document.querySelectorAll(".doctor-id")
+const timeIndexs = document.querySelectorAll(".timeIndex")
+const timeValues = document.querySelectorAll(".timeValue")
+const hourValues = document.querySelectorAll(".hourValue")
+const doctorNames = document.querySelectorAll(".doctor-name")
 
 
 
 
-closeAddSessionBtn.addEventListener("click", closeAddEventModal)
 
-
-
-function closeAddEventModal() {
-
-
-    modalAddSession.classList.remove("showed_modal")
-}
-
-
+closeAddSessionBtns.forEach(element => {
+    element.addEventListener("click", () => {
+        modalAddSession.classList.remove("showed_modal")
+        modalUpdateSession.classList.remove("showed_modal")
+        
+        
+    })
+});
 
 
 
@@ -295,7 +357,7 @@ function addListener() {
 
 
             const selectedDate = year + "-" + month + "-" + activeDay
-
+            ui.selectedDatetoUI(selectedDate)
             ui.deleteAllSessionFromUI()
             getAllSessions(selectedDate)
 
@@ -317,7 +379,7 @@ function addListener() {
                             element.classList.add("active")
                         }
                     });
-                }, 100);
+                }, 1000);
             }
             // if next mont days clicked
             else if (e.target.classList.contains("next-date")) {
@@ -349,8 +411,6 @@ function addListener() {
 
 // showing active days at top
 
-
-
 function getActiveDay(i) {
 
     const day = new Date(year, month, i)
@@ -359,7 +419,7 @@ function getActiveDay(i) {
     const dayNameTurkish = dayToTurkish(dayName)
 
     eventDay.innerHTML = dayNameTurkish;
-    eventDate.innerHTML = i + " " + months[month - 1] + " " + year
+
 
 }
 
@@ -373,11 +433,6 @@ function dayToTurkish(dayName) {
     return daysTurkish[dayName]
 
 }
-
-
-
-
-
 
 
 
@@ -398,52 +453,66 @@ function convertTime(time) {
 
 
 
-// deneme kısmı -------------------------------------
 
-const events = document.querySelectorAll(".right .event")
-
-events.forEach(element => {
-    element.addEventListener("click", () => {
-
-        if (element.children[0].checked == false) {
-            element.children[0].checked = true
-            element.classList.add("active")
-
-        } else {
-            element.children[0].checked = false
-            element.classList.remove("active")
-        }
-    })
-})
 
 
 // edit session modal area
 
-const rightSection =document.querySelector(".right")
+const rightSection = document.querySelector(".right")
 
 
-rightSection.addEventListener("click",sessionEditButtonHandled)
+rightSection.addEventListener("click", sessionEditButtonHandled)
 
 function sessionEditButtonHandled(e) {
-    
+
     if (e.target.classList.contains("edit-session")) {
         
         e.target.nextSibling.nextSibling.classList.toggle("showed_modal")
-    } else {
-        
     }
 
     if (e.target.classList.contains("add-session")) {
         showAddEventModal(e)
-    } else {
+    }
+    if (e.target.classList.contains("edit-session-btn")) {
+        showEditModal(e)
         
     }
-   
+    
+
 }
+
 
 function showAddEventModal(e) {
     
-    doktorName.value=e.target.parentElement.parentElement.previousSibling.previousSibling.textContent.trim()
-    modalAddSession.classList.add("showed_modal")
+
+   
+
+    timeIndexs[0].value = e.target.parentElement.dataset.time
+    doctorIDs[0].value =e.target.parentElement.parentElement.parentElement.dataset.doctorid
     
+    doctorNames[0].value = e.target.parentElement.parentElement.previousSibling.previousSibling.textContent.trim()
+
+    timeValues[0].value = new Date(e.target.parentElement.dataset.hour)
+    hourValues[0].value = new Date(e.target.parentElement.dataset.hour).toLocaleTimeString()
+
+    addEventFromTos[0].valueAsDate = new Date(year, month - 1, activeDay + 1)
+    modalAddSession.classList.add("showed_modal")
+    console.log(typeof(timeIndexs[0].value))
+
 }
+
+function showEditModal(e) {
+   
+    modalUpdateSession.children[1].setAttribute("action","./sessions/"+e.target.parentElement.parentElement.parentElement.dataset.session+"/updateSession")
+    modalUpdateSession.classList.toggle("showed_modal")
+
+    timeIndexs[1].value = e.target.parentElement.parentElement.parentElement.dataset.timeindex
+    
+    doctorIDs[1].value = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.dataset.doctorid
+    doctorNames[1].value=e.target.parentElement.parentElement.parentElement.parentElement.previousSibling.previousSibling.textContent.trim()
+    timeValues[1].value =new Date(e.target.parentElement.parentElement.parentElement.dataset.timevalue)
+    hourValues[1].value =new Date(e.target.parentElement.parentElement.parentElement.dataset.timevalue).toLocaleTimeString()
+    addEventFromTos[1].valueAsDate = new Date(year, month - 1, activeDay + 1)
+
+}
+

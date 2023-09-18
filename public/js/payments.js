@@ -9,7 +9,7 @@ const editPaymentModal = document.querySelector(".modal_edit_payment")
 
 
 
-const smallModals = document.querySelectorAll(".edit_payment_small_modal")
+
 const startDate = document.querySelector(".startDate")
 const endDate = document.querySelector(".endDate")
 
@@ -99,9 +99,15 @@ editPaymentButtons.forEach(element => {
 
 
 
-function handledEditButton(e) {
+function  handledEditButton (e)  {
+    const smallModals = document.querySelectorAll(".edit_payment_small_modal")
 
     if (e.target.classList.contains("edit_payment")) {
+        smallModals.forEach(modal => {
+            modal.classList.remove("showed_modal")
+            console.log(e.target.nextSibling.nextSibling)
+        });
+        
         e.target.nextSibling.nextSibling.classList.toggle("showed_modal")
 
 
@@ -110,6 +116,7 @@ function handledEditButton(e) {
             modal.classList.remove("showed_modal")
         });
     }
+
 
 }
 

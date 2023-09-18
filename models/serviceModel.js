@@ -8,7 +8,11 @@ const serviceSchema = new Schema({
         type: String
     },
     servicePrice:{type:Number},
-    activeorNot:{type:Boolean,default:true}
+    activeorNot:{type:Boolean,default:true},
+    company:{
+        type:Schema.Types.ObjectId,
+        ref:"company"
+    }
     
 })
 

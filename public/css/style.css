@@ -46,9 +46,19 @@ html {
 }
 input {
   font-family: "Poppins", sans-serif;
+  
+}
+button {
+  border: 1px solid rgba(128, 128, 128, 0.394);
+    
+    border-radius: var(--border-radius-1);
+    padding: 0.5rem;
+    color: var(--color-dark-variant);
+    
+    cursor: pointer;
 }
 
-.inputs input,textarea {
+.inputs input,textarea,select{
   border: 1px solid rgba(128, 128, 128, 0.394);
   display: block;
   width: 100%;
@@ -373,7 +383,7 @@ main {
   display: flex;
   flex-direction: column;
   padding: 2rem;
-  width: 100%;
+  
   background-color: white;
   border-radius: var(--card-border-radius);
 }
@@ -497,6 +507,9 @@ table {
 }
 table th {
   min-width: 30px;
+}
+ td {
+  padding: 0.5rem;
 }
 .table-wrapper {
   margin-top: 1rem;
@@ -684,6 +697,31 @@ table thead {
   padding: 0.5rem;
   width: 100%;
   cursor: pointer;
+}
+
+.info-wrapper{
+  max-width: 500px;
+  border: 1px solid var(--color-border-color);
+  border-radius: var(--border-radius-2);
+  padding: 0.5rem;
+  
+}
+.info-wrapper h2{
+  text-align: center;
+  border-bottom: 1px solid var(--color-border-color);
+}
+.info-wrapper form{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.save_button {
+  background-color: var(--color-success);
+}
+.cancel_button {
+  background-color: var(--color-danger);
 }
 /* mobile ------------------------------------------------------------------------------------ */
 @media (max-width: 768px) {

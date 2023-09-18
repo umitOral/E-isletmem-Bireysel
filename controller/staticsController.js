@@ -1,26 +1,9 @@
 import User from '../models/userModel.js';
 import Payment from '../models/paymentsModel.js';
 
-const getSexStatics = async (req, res) => {
-    try {
-        const manCount = await User.count({}).where({ sex: "erkek" })
-        const womanCount = await User.count({}).where({ sex: "kadın" })
-        const cashCount = await Payment.count({}).where({ cashOrCard: "Nakit" })
-        const creditCardCount = await Payment.count({}).where({ cashOrCard: "Kredi Kartı" })
 
-        res.status(200).json({
-            sexstatics: [womanCount, manCount],
-            paymentstatics: [cashCount, creditCardCount]
 
-        })
-    } catch (error) {
-        res.status(500).json({
-            succes: false,
-            message: error
-        })
-    }
-}
-const getStaticswithFilter = async (req, res) => {
+const getSexStaticsWithFilter = async (req, res) => {
     try {
 
         let startDate = new Date(req.query.startDate)
@@ -51,7 +34,47 @@ const getStaticswithFilter = async (req, res) => {
                 $lte: endDate
             }
         })
+        
+        res.json({
+            link:"statics",
+            message: "sex_statics",
+            sexStatics: [womanCount, manCount]
+        })
+        
 
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "usercontroller error"
+        })
+    }
+}
+const getNewUserStaticswithFilter = async (req, res) => {
+    try {
+
+       
+        
+        res.json({
+            succes:"true"
+        })
+        
+
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "usercontroller error"
+        })
+    }
+}
+const getPaymentStaticsWithFilter = async (req, res) => {
+    try {
+
+        let startDate = new Date(req.query.startDate)
+        let endDate = new Date(req.query.endDate)
+        startDate.setHours(0, 0, 0, 0)
+        endDate.setHours(0, 0, 0, 0)
+        let day = endDate.getDate()
+        endDate.setDate(day + 1)
 
         const cashCount = await Payment.count({
             cashOrCard: "Nakit",
@@ -69,13 +92,9 @@ const getStaticswithFilter = async (req, res) => {
                 $lte: endDate
             }
         })
-        
-
-
 
         res.status(200).json({
             succes: true,
-            sexStatics: [womanCount, manCount],
             paymentstatics: [cashCount, creditCardCount]
         })
 
@@ -89,5 +108,5 @@ const getStaticswithFilter = async (req, res) => {
 }
 
 export {
-    getSexStatics, getStaticswithFilter
+    getPaymentStaticsWithFilter, getSexStaticsWithFilter,getNewUserStaticswithFilter
 }

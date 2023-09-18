@@ -23,6 +23,11 @@ export class UI {
             `
         });
     }
+    selectedDatetoUI (selectedDate) {
+        
+        const eventDate = document.querySelector(".event-date")
+        eventDate.innerHTML=selectedDate
+    }
 
     showAllPaymensToUI(data) {
         const paymentTablesChildren = document.querySelectorAll("table tbody tr")
@@ -82,25 +87,28 @@ export class UI {
     }
 
 
-    showAllSessionToUI(allTimesforAllDoctors) {
+    showAllSessionToUI(allTimesforAllDoctors,AllDoctor) {
+        
         const allDoctorEvents = document.querySelector(".events-all-doctors")
 
         while (allDoctorEvents.firstChild) {
             allDoctorEvents.firstChild.remove()
         }
 
-        console.log(allTimesforAllDoctors)
+        
 
         allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
 
             const singleDoctorArea = document.createElement("div")
             singleDoctorArea.className = "single-doctor-area"
+            singleDoctorArea.setAttribute("data-doctorid",AllDoctor[index]._id)
 
             singleDoctorArea.innerHTML += `
             <div class="doctor-name" value="">
-                ${timesForSingleDoctor[0].doctorName}
+                ${AllDoctor[index].name}
             </div>
             `
+            // singleDoctorArea.dataset=AllDoctor[index]._id
             const singleDoctorEvents = document.createElement("div")
             singleDoctorEvents.className = "single-doctor-events"
 
@@ -109,22 +117,28 @@ export class UI {
             timesForSingleDoctor.forEach((element, index) => {
                 if (element._id) {
                     singleDoctorEvents.innerHTML += `
-                    <div class="event full">
+                    <div class="event full" data-session="${element._id}" data-timevalue="${element.timeValue}" data-timeindex="${element.timeIndex}">
 
                         <div class="center">
-                            <span>06:00-06:15</span>
+                            <span>${("0"+new Date(element.timeValue).getHours()).substr(-2)+":"+new Date(element.timeValue).getMinutes()}</span>
+                            
                             <hr>
                             <span>${element.user.name}</span>
+                            <span class="buttons">${element.state}</span>
+
                         </div>
-                        <div class="">
+                        <div class="" >
                             <span class="material-symbols-sharp edit-session">
                                 more_vert
                             </span>
                             <div class="session-options-modal">
-                                <a href="#">Düzenle</a>
-                                <a href="#">Sil</a>
-                                <a href="#">Başarılı</a>
-                                <a href="#">İptal</a>
+                                <span class="edit-session-btn">Düzenle</span>
+                                <span class="delete-session">Sil</span>
+                                <span class="change-state">Bitti</span>
+                                <span class="change-state">Seansta</span>
+                                <span class="change-state">Hasta Gelmedi</span>
+                                <span class="change-state">Personel Gelmedi</span>
+                                
                             </div>
 
 
@@ -135,9 +149,9 @@ export class UI {
                 } else {
                     singleDoctorEvents.innerHTML += `
                          
-                    <div class="event">
-                                                    
-                        <span>${element.value}</span>
+                    <div class="event" data-time="${index}" data-hour="${element.value}">
+                                             
+                        <span>${("0"+element.value.getHours()).substr(-2)+":"+("0"+element.value.getMinutes()).substr(-2)} </span>
                         <span class="material-symbols-sharp add-session">
                             add
                         </span>
@@ -172,9 +186,9 @@ export class UI {
         element.remove()
     }
     createEditModal() {
-       
-        
-        
+
+
+
     }
 
 
@@ -201,17 +215,38 @@ export class UI {
     }
 
     createChart(response) {
+        
+        const sexStaticsLabels = ["Kadın", "Erkek"];
+        const sexStaticsValues = response.sexStatics;
+    
         console.log(response)
-        var layoutSexStatics = { title: "Kadın/Erkek Oranı" };
-        var sexStaticsLabels = ["Kadın", "Erkek"];
-        var paymentStaticsLabels = ["Kredi Kartı", "Peşin"];
-        var sexStaticsValues = response.sexStatics;
-        var paymentStaticsValues = response.paymentstatics;
-        var datasexStatics = [{ labels: sexStaticsLabels, values: sexStaticsValues, type: "pie" }];
-        var layoutPaymentStatics = { title: "Kredi Kartı/Peşin Oranı" };
-        var datapaymentStatics = [{ labels: paymentStaticsLabels, values: paymentStaticsValues, type: "pie" }];
-        Plotly.newPlot("sex_statics", datasexStatics, layoutSexStatics);
-        Plotly.newPlot("payment_statics", datapaymentStatics, layoutPaymentStatics);
+
+        if (response.sexStatics[0]==0 &&response.sexStatics[0]==0) {
+            document.querySelector(".filter-info").innerHTML=`Bu tarih aralığında yeni kullanıcı kaydı bulunamadı `
+        } else {
+            document.querySelector(".filter-info").innerHTML=``
+
+            new Chart("sex_statics", {
+                type: "pie",
+                data: {
+                    labels: sexStaticsLabels,
+                    datasets: [{
+    
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'
+                        ],
+                        data: sexStaticsValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Kadın-Erkek Oranı"
+                    }
+                }
+            });
+        }
+        
     }
 
 }

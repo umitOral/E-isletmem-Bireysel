@@ -24,15 +24,25 @@ const createCompany = async (req, res) => {
         })
     }
 }
-const deactiveUser = async (req, res) => {
+const deactivateUser = async (req, res) => {
     try {
         console.log("başarılı")
 
         await User.findByIdAndUpdate(req.params.id, { activeOrNot: false })
+        res.redirect("../../personels")
 
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "usercontroller delete error"
+        })
+    }
+}
+const activateUser = async (req, res) => {
+    try {
+       
 
-
-
+        await User.findByIdAndUpdate(req.params.id, { activeOrNot: true })
         res.redirect("../../personels")
 
     } catch (error) {
@@ -90,14 +100,84 @@ const findUser = async (req, res) => {
         
         query=query.skip(startIndex).limit(limit)
         
-        const users = await query
+        const data = await query
         
         
         
         res.status(200).render("search-results", {
-            users,
+            header:"hastalar",
+            data,
             total,
-            count:users.length,
+            count:data.length,
+            pagination:pagination,
+            link: "users"
+        })
+
+
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "usercontroller error"
+        })
+    }
+}
+const findPersonels = async (req, res) => {
+    try {
+
+        //search
+        let query=User.find()
+        if (req.query) {
+            const searchObject = {}
+            const regex = new RegExp(req.query.user, "i")
+            searchObject["name"] = regex
+            searchObject["company"] = res.locals.user._id
+            searchObject["role"] = "doctor"
+            
+            
+            // searchObject["title"] = regex
+            query=query.where(searchObject)
+        }
+
+        //pagination
+        // 1 2 3 4 5..6 7 8
+
+        const page=parseInt(req.query.page )|| 1
+        const limit=3
+        
+        const startIndex=(page-1)*limit
+        const endIndex=page*limit
+        
+        const total= await User.count().where('role').equals('doctor').where("company").equals(res.locals.user._id)
+        const lastpage=Math.round(total/limit)
+        const pagination={}
+        pagination["page"]=page
+        pagination["lastpage"]=lastpage
+        
+
+        if (startIndex>0) {
+            pagination.previous={
+                page:page-1,
+                limit:limit
+            }
+        }
+        if (endIndex<total) {
+            pagination.next={
+                page:page+1,
+                limit:limit
+            }
+        }
+        
+        query=query.skip(startIndex).limit(limit)
+        
+        const data = await query
+        
+        
+        
+        res.status(200).render("search-results", {
+            header:"Personeller",
+            data,
+            total,
+            count:data.length,
             pagination:pagination,
             link: "users"
         })
@@ -261,4 +341,4 @@ const createToken = (userID) => {
 
 }
 
-export { createCompany, createUser, loginUser, logOut, uploadPictures, editInformations, findUser, deactiveUser }
+export { createCompany, createUser, loginUser, logOut, uploadPictures, editInformations, findUser, deactivateUser,findPersonels,activateUser }

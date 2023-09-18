@@ -5,57 +5,14 @@ const ui = new UI();
 
 
 
+const getSexStaticsBtn = document.querySelector(".sex-statics_btn")
+const getNewUsersStaticsBtn = document.querySelector(".new-users-statics_btn")
+const getSexStaticsFilterBtn = document.querySelector(".sex-statics-filter-button")
+const getNewUserSStaticsFilterBtn = document.querySelector(".new-users-statics-filter-button")
 
 
-var proccessTypeStaticsLabels = ["Saç Ekimi", "Dolgu", "Yıkama", "Bakım", "Botox"];
-var proccessTypeStaticsValues = [55, 49, 44, 24, 15];
-var RevenueStaticsLabels = ["pazt", "salı", "çarş", "per", "cum"];
-var RevenueStaticsValues = [50, 60, 45, 56, 20];
-
-
-
-var layoutproccessTypeStatics = { title: "İşlemler" };
-var layoutRevenueStatics = {title: "Ciro Değişimi"};
-
-
-
-var dataProccessType = [{ x: proccessTypeStaticsLabels, y: proccessTypeStaticsValues, type: "bar" }];
-var dataRevenueStatics = [{
-    x: RevenueStaticsLabels,
-    y: RevenueStaticsValues,
-    type: "bar"
-}];
-
-
-
-
-
-Plotly.newPlot("proccessType_statics", dataProccessType, layoutproccessTypeStatics);
-Plotly.newPlot("revenue_statics", dataRevenueStatics, layoutRevenueStatics);
-
-
-const getStaticsBtn = document.querySelector(".statics-filter-button")
 const startDate = document.querySelector(".start-date")
 const endDate = document.querySelector(".end-date")
-
-
-request.getwithUrl(`/admin/statics/getStaticswithFilter?startDate=${startDate.value}&endDate=${Date().now}`)
-.then((response)=>{
-    console.log(response)
-    var layoutSexStatics = { title: "Kadın/Erkek Oranı" };
-    var sexStaticsLabels = ["Kadın", "Erkek"];
-    var paymentStaticsLabels = ["Kredi Kartı", "Peşin"];
-    var sexStaticsValues = response.sexstatics;
-    var paymentStaticsValues = response.paymentstatics;
-    var datasexStatics = [{ labels: sexStaticsLabels, values: sexStaticsValues, type: "pie" }];
-    var layoutPaymentStatics = { title: "Kredi Kartı/Peşin Oranı" };
-    var datapaymentStatics = [{ labels: paymentStaticsLabels, values: paymentStaticsValues, type: "pie" }];
-    Plotly.newPlot("sex_statics", datasexStatics, layoutSexStatics);
-    Plotly.newPlot("payment_statics", datapaymentStatics, layoutPaymentStatics);
-})
-.catch((err)=>{
-    console.log(err)
-})
 
 
 
@@ -65,16 +22,27 @@ eventListeners()
 
 function eventListeners() {
 
-    getStaticsBtn.addEventListener("click", getStaticswithFilter)
+    getSexStaticsBtn.addEventListener("click", getSexStaticswithFilter)
+    getNewUsersStaticsBtn.addEventListener("click", getNewUserStaticswithFilter)
+    getSexStaticsFilterBtn.addEventListener("click", getSexStaticswithFilter)
+    getNewUserSStaticsFilterBtn.addEventListener("click", getNewUserStaticswithFilter)
     startDate.addEventListener("change", dateRange)
-
 }
 
 
 
-function getStaticswithFilter(e) {
-    request.getwithUrl(`/admin/statics/getStaticswithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
+
+
+function getSexStaticswithFilter(e) {
+    request.getwithUrl(`/admin/statics/getSexStaticsWithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
         .then(response => ui.createChart(response))
+        .catch(err => console.log(err))
+    e.preventDefault()
+}
+
+function getNewUserStaticswithFilter(e) {
+    request.getwithUrl(`/admin/statics/getNewUserStaticswithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
+        .then(response =>ui.createChart(response) )
         .catch(err => console.log(err))
     e.preventDefault()
 }
@@ -94,3 +62,34 @@ function dateRange() {
     endDate.setAttribute("min", value)
 
 }
+
+//statics menu and showed buttons
+
+const everyStatics = document.querySelectorAll(".statics-menu ul li")
+const everyFilterButtons = document.querySelectorAll(".buttons")
+console.log(everyFilterButtons)
+
+everyStatics.forEach((element, index) => {
+
+    element.addEventListener("click", () => {
+        
+        everyStatics.forEach(element => {
+            element.style.backgroundColor = "white"
+        });
+        
+        element.style.backgroundColor = "green"
+        document.querySelector(".sub-header-statics h2").innerHTML=element.textContent
+
+        everyFilterButtons.forEach(button => {
+            button.style.display="none"
+        });
+
+        everyFilterButtons[index].style.display="block"
+    })
+
+    
+    
+    
+
+
+});

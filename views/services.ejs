@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/users.css">
+</head>
+
+<body>
+    <%- include('partials/header.ejs') %>
+        <div class="container">
+            <!---------- left aside ------------->
+            <%- include("partials/aside.ejs") %>
+
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <div class="header">
+                        <h1> Hizmetler</h1>
+                    </div>
+                    <div class="search">
+                        <form autocomplete="off" action="./search">
+                            <div class="autocomplete inputs">
+                                <input id="myInput" type="text" name="services" placeholder="Hizmet Seç">
+                                <input type="submit" value="Ara">
+                            </div>
+
+                        </form>
+                        <div class="add_customer_btn">Hizmet Ekle +</div>
+
+                    </div>
+
+                    <div class="print">
+
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Export As &nbsp; &#10140</label>
+                            <label for="" class="to_pdf" onclick="window.print()">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+                            <label for="" class="to_json">JSON<span class="material-symbols-sharp"></span></label>
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
+                        </div>
+
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+
+                                <th>Hizmet<i class="ph-bold ph-arrow-up"></i></th>
+                                <th>Fiyat<i class="ph-bold ph-arrow-up"></i></th>
+                            </thead>
+                            <tbody id="userList">
+                                <% services.forEach(service=> { %>
+                                    <tr>
+
+                                        <td>
+                                            <%= service.serviceName %>
+                                        </td>
+                                        <td>
+                                            <%= service.servicePrice %>
+                                        </td>
+                                        <td>
+                                            <% if(service.activeorNot===true){ %>
+                                                <span class="continue">Aktif</span>
+                                                <% } else{ %>
+                                                    <span class="finish">Deaktif</span>
+                                                    <% } %>
+
+                                        </td>
+                                        <% if(service.activeorNot){ %>
+                                            <td><a href="./<%= service._id %>/deactivateService">Deaktive Et</a></td>
+                                          <% } else{ %>  
+                                            <td><a href="./<%= service._id %>/activateService">Aktif Et</a></td>
+                                         <% } %>
+
+                                        <td><a href="./<%= service._id %>">Detay</a></td>
+                                    </tr>
+                                    <% }) %>
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+                    <div class="pagination-describe">
+                        Toplam <%= total %> Hizmet içerisinden <%= count %> adet listelendi
+                    </div>
+                    <div class="pagination">
+
+                        <% if (pagination.previous ) { %>
+                            <a href="./?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span >Önceki Sayfa<<</span></a>
+                        <% } %>
+                        
+                        <% if (pagination.page>1) { %>
+                            <a href="./?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span><%= pagination.page-1 %></span></a>
+                        <% } %>
+                        
+                        <a href="./?page=<%= pagination.page %>&limit=<%=3 %>"><span class="page-active"><%= pagination.page %></span></a>
+
+                        <% if (pagination.page<pagination.lastpage) { %>
+                            <a href="./?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span ><%= pagination.page+1 %></span></a>
+                        <% } %>
+                        
+
+                         <% if (pagination.next) { %>
+                            <a href="./?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span> >>Sonraki Sayfa</span></a>
+                        <% } %>
+
+                    </div>
+                    <div class="add_customer modal">
+                        <h2>Yeni Hizmet Ekle</h2>
+                        <form action="./addService" method="POST" id="register-form">
+                            <div class="inputs ">
+                                <span>Hizmet Adı:</span>
+                                <input type="text" name="serviceName" id="user-name" required
+                                    placeholder="Lütfen bir kullanıcı adı giriniz">
+                            </div>
+
+                            <div class="inputs ">
+                                <span>Fiyat</span>
+                                <input type="text" name="servicePrice" id="surname">
+                            </div>
+                            
+                            
+                        
+                            <button type="submit" class="save_button" id="add-user">Kaydet</button>
+                            <button class="cancel_button">Vazgeç</button>
+                        </form>
+                    </div>
+                       
+
+
+
+
+                </main>
+        </div>
+
+
+        <script type="module" src="/js/autocomplete.js"></script>
+        <script type="module" src="/js/requests.js"></script>
+        <script type="module" src="/js/users.js"></script>
+        <script src="/js/sidebar.js"></script>
+
+
+</body>
+
+</html>

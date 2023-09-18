@@ -20,93 +20,37 @@
                         <h1> Personeller</h1>
                     </div>
 
-
-
                     <div class="search">
-                        <form autocomplete="off" action="./users/search">
+                        <form autocomplete="off" action="./personels/search">
                             <div class="autocomplete inputs" style="width:300px;">
                                 <input id="myInput" type="text" name="user" placeholder="Personel Seç">
-                                <input type="submit" value="Getir">
+                                <input type="submit" value="Ara">
                             </div>
 
                         </form>
                         <div class="add_customer_btn">Yeni Personel Ekle +</div>
+                    </div>
+                    <div class="print">
 
-                        <div class="add_customer modal">
-                            <h2>Yeni Personel Ekle</h2>
-                            <form action="./personels/createPersonel" method="POST" id="register-form">
-                                <div class="inputs ">
-                                    <span>İsim</span>
-                                    <input type="text" name="name" id="user-name" required
-                                        placeholder="Lütfen bir kullanıcı adı giriniz">
-                                </div>
-
-                                <div class="inputs ">
-                                    <span>Soyisim</span>
-                                    <input type="text" name="surname" id="surname">
-                                </div>
-                                
-                                <div class="inputs ">
-                                    <span>Doğum Tarihi</span>
-                                    <input type="date" name="birtdhDate" id="birtdhDate">
-                                </div>
-                                <div class="inputs ">
-                                    <span>Adres</span>
-                                    <input type="text" name="address" id="address">
-
-                                </div>
-                                <div class="inputs ">
-                                    <span>Telefon</span>
-                                    <input type="number" name="phone" id="phone">
-                                </div>
-                                <div class="inputs ">
-                                    <span>Mail</span>
-                                    <input type="email" name="email" id="email">
-                                </div>
-
-                                <div class="inputs ">
-                                    <span>Fatura Bilgisi:</span>
-                                    <textarea name="billingAddress" id="billingAddress" cols="70" rows="2"></textarea>
-                                </div>
-                                <div class="inputs ">
-                                    <span>Açıklama</span>
-                                    <textarea name="notes" id="notes" cols="70" rows="2"></textarea>
-                                </div>
-                                <button type="submit" class="save_button" id="add-user">Kaydet</button>
-                                <button class="cancel_button">Vazgeç</button>
-                            </form>
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Export As &nbsp; &#10140</label>
+                            <label for="" class="to_pdf" onclick="window.print()">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+                            <label for="" class="to_json">JSON<span class="material-symbols-sharp"></span></label>
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
                         </div>
 
-
-                        <div class="print">
-
-                            <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
-                            <div class="print-selection">
-                                <label>Export As &nbsp; &#10140</label>
-                                <label for="" class="to_pdf" onclick="window.print()">PDF<span
-                                        class="material-symbols-sharp">picture_as_pdf</span></label>
-                                <label for="" class="to_json">JSON<span class="material-symbols-sharp"></span></label>
-                                <label for="" class="to_xlsx">XLSX<span
-                                        class="material-symbols-sharp">description</span></label>
-                            </div>
-
-                        </div>
-
-
                     </div>
-
-
-                    <div>
-
-                    </div>
-                    <div class="user-table">
-                        <table id="user-table-main">
+                    <div class="table-wrapper">
+                        <table >
                             <thead>
-                                <th><input type="checkbox" class="select_all_rows" option_id="select_all"
-                                        onchange="selectAll(this)"><span>Hepsini seç</span></th>
-                                <th>id<span class="material-symbols-sharp ">north</span></th>
-                                <th>İsim Soyisim<span class="material-symbols-sharp">north</span></th>
-                                <th>Çalışma Durumu<span class="material-symbols-sharp">north</span></th>
+                                
+                                
+                                <th>İsim<span class="material-symbols-sharp">north</span></th>
+                                <th>Soyisim<span class="material-symbols-sharp">north</span></th>
+                                <th>Aktiflik<span class="material-symbols-sharp">north</span></th>
                                 
                                
                                 
@@ -114,9 +58,7 @@
                             <tbody id="userList">
                                 <% users.forEach(user=> { %>
                                     <tr>
-                                        <td>
-                                            <input type="checkbox">
-                                        </td>
+                                        
                                         <td>
                                             <%= user.name %>
                                         </td>
@@ -132,7 +74,12 @@
                                              <% } %>
                                             
                                         </td>
-                                        <td><a href="./users/<%= user._id %>/deactiveUser">Sil</a></td>
+                                        <% if(user.activeOrNot){ %>
+                                            <td><a href="./users/<%= user._id %>/deactivateUser">Deaktive Et</a></td>
+                                          <% } else{ %>  
+                                            <td><a href="./users/<%= user._id %>/activateUser">Aktif Et</a></td>
+                                         <% } %>
+                                        
                                         <td><a href="./users/<%= user._id %>">Detaylar</a></td>
                                     </tr>
                                     <% }) %>
@@ -144,24 +91,86 @@
                         </table>
 
                     </div>
+                    <div class="pagination-describe">
+                        Toplam <%= total %> hasta içerisinden <%= count %> kişi listelendi
+                    </div>
                     <div class="pagination">
-                        <a href=""><span class="page-active">1</span></a>
-                        <a href=""><span>2</span></a>
-                        <a href=""><span>3</span></a>
-                        <a href=""><span>>>Sonraki Sayfa</span></a>
+
+                        <% if (pagination.previous ) { %>
+                            <a href="./personels?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span >Önceki Sayfa<<</span></a>
+                        <% } %>
+                        
+                        <% if (pagination.page>1) { %>
+                            <a href="./personels?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span><%= pagination.page-1 %></span></a>
+                        <% } %>
+                        
+                        <a href="./personels?page=<%= pagination.page %>&limit=<%=3 %>"><span class="page-active"><%= pagination.page %></span></a>
+
+                        <% if (pagination.page<pagination.lastpage) { %>
+                            <a href="./personels?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span ><%= pagination.page+1 %></span></a>
+                        <% } %>
+                        
+
+                         <% if (pagination.next) { %>
+                            <a href="./personels?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span> >>Sonraki Sayfa</span></a>
+                        <% } %>
 
                     </div>
-                    <div>
-                        <div id="demo"></div>
+                    
+                        
 
 
 
 
                 </main>
+                <div class="add_customer modal">
+                    <h2>Yeni Personel Ekle</h2>
+                    <form action="./personels/createPersonel" method="POST" id="register-form">
+                        <div class="inputs ">
+                            <span>İsim</span>
+                            <input type="text" name="name" id="user-name" required
+                                placeholder="Lütfen bir kullanıcı adı giriniz">
+                        </div>
+
+                        <div class="inputs ">
+                            <span>Soyisim</span>
+                            <input type="text" name="surname" id="surname">
+                        </div>
+                        
+                        <div class="inputs ">
+                            <span>Doğum Tarihi</span>
+                            <input type="date" name="birtdhDate" id="birtdhDate">
+                        </div>
+                        <div class="inputs ">
+                            <span>Adres</span>
+                            <input type="text" name="address" id="address">
+
+                        </div>
+                        <div class="inputs ">
+                            <span>Telefon</span>
+                            <input type="number" name="phone" id="phone">
+                        </div>
+                        <div class="inputs ">
+                            <span>Mail</span>
+                            <input type="email" name="email" id="email">
+                        </div>
+
+                        <div class="inputs ">
+                            <span>Fatura Bilgisi:</span>
+                            <textarea name="billingAddress" id="billingAddress" cols="70" rows="2"></textarea>
+                        </div>
+                        <div class="inputs ">
+                            <span>Açıklama</span>
+                            <textarea name="notes" id="notes" cols="70" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="save_button" id="add-user">Kaydet</button>
+                        <button class="cancel_button">Vazgeç</button>
+                    </form>
+                </div>
         </div>
 
 
-        <script type="module" src="../js/autocomplete.js"></script>
+        
         <script type="module" src="../js/requests.js"></script>
         <script type="module" src="../js/users.js"></script>
         <script src="/js/sidebar.js"></script>

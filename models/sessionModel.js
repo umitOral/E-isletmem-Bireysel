@@ -5,17 +5,12 @@ const Schema = mongoose.Schema
 const sessionSchema = new Schema({
     
     date:{type:Date},
-    time: {
-        type:Object,
-        index:{
-            type:Number,
-            default:0
-        },
-        value:{
-            type:String,
-            default:""
-        }
-        
+    
+    timeIndex: {
+            type:Number, 
+    },
+    timeValue: {
+            type:Date, 
     },
     
     timepicker:{
@@ -36,8 +31,11 @@ const sessionSchema = new Schema({
     
     services: [{
         type: String,
-
-    }]
+    }],
+    state:{
+        type:String,
+        default:"Bekleniyor"
+    }
 
 })
 

@@ -24,6 +24,8 @@ function eventListeners() {
     document.addEventListener("DOMContentLoaded", getAllUsers)
     userList.addEventListener("click", updateorDelete)
     addUserButton.addEventListener("click", addUser)
+    
+
 
 }
 
@@ -113,7 +115,7 @@ function sortTable(column, sort_ars) {
 const pdf_btn = document.querySelector(".to_pdf")
 const json_btn = document.querySelector(".to_json")
 const xlsx_btn = document.querySelector(".to_xlsx")
-const costumer_table = document.querySelector(".user-table-main")
+const costumer_table = document.querySelector("table")
 
 
 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head.ejs') %>
+        <link rel="stylesheet" href="../../css/statics.css">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+</head>
+
+<body>
+    <%- include('../partials/header.ejs') %>
+        <div class="container">
+            <!---------- left aside ------------->
+            <%- include('../partials/aside.ejs') %>
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <h1> Kasa İstatistikleri</h1>
+                    <div class="statics-wrapper">
+                        <div class="statics-menu">
+                            <ul>
+                                <li class="sex-statics_btn"><span>Kadın-Erkek Oranı</span></li>
+                                <li><span>Yeni hasta Oranı</span></li>
+                                <li><span>Eski hasta Oranı</span></li>
+                            </ul>
+                        </div>
+                        <div class="sub-header-statics"><h2></h2></div>
+                        <div class="statics-area">
+
+                            <form action="">
+                                <div>
+                                    <span>Başlangıç:</span>
+                                    <input type="date" class="start-date">
+                                </div>
+                                <div>
+                                    <span>Bitiş:</span>
+                                    <input type="date" class="end-date">
+                                </div>
+
+                                <button class="buttons statics-filter-button">Listele</button>
+                            </form>
+                            <hr>
+
+                            <div class="statics">
+                                <canvas id="sex_statics" style="width:100%;max-width:800px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </main>
+        </div>
+
+
+
+
+        <script type="module" src="../../js/statics.js"></script>
+        <script type="module" src="/js/requests.js"></script>
+        <script src="/js/sidebar.js"></script>
+
+
+
+</body>
+
+</html>

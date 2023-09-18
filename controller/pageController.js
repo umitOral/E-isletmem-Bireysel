@@ -63,11 +63,55 @@ const getServicesPage = (req, res) => {
 }
 const getservicesPage = async (req, res) => {
     try {
-        const services = await Service.find()
-        res.status(200).render("operations", {
+
+        let query=Service.find({})
+
+        if (req.query) {
+            const searchObject={}
+            searchObject["company"] = res.locals.user._id
+            query=query.where(searchObject)
+            
+        }
+        
+        //pagination
+        const page=parseInt(req.query.page )|| 1
+        const limit=5
+
+        const startIndex=(page-1)*limit
+        const endIndex=page*limit
+        
+        const total= await Service.count().where("company").equals(res.locals.user._id)
+        const lastpage=Math.ceil(total/limit)
+        const pagination={}
+        pagination["page"]=page
+        pagination["lastpage"]=lastpage
+        console.log(lastpage)
+        
+        if (startIndex>0) {
+            pagination.previous={
+                page:page-1,
+                limit:limit
+            }
+            
+        }
+        if (endIndex<total) {
+            pagination.next={
+                page:page+1,
+                limit:limit
+            }
+        }
+
+        query=query.skip(startIndex).limit(limit)
+        const services = await query
+
+        res.status(200).render("services", {
             services,
+            total,
+            count: services.length,
+            pagination,
             link: "services"
         })
+
     } catch (error) {
         res.status(500).json({
             succes: false,
@@ -113,6 +157,8 @@ const getAdminPage = (req, res) => {
         })
     }
 }
+
+
 const getUsersPage = async (req, res) => {
     try {
         
@@ -175,9 +221,52 @@ const getUsersPage = async (req, res) => {
 }
 const getPersonelsPage = async (req, res) => {
     try {
-        const users = await User.find({ role: "doctor" })
+        let query=User.find({})
+        if (req.query) {
+            const searchObject={}
+            
+            searchObject["company"] = res.locals.user._id
+            searchObject["role"] = "doctor"
+            query=query.where(searchObject)
+            
+        }
+        
+        //pagination
+        const page=parseInt(req.query.page )|| 1
+        const limit=10
+
+        const startIndex=(page-1)*limit
+        const endIndex=page*limit
+        
+        const total= await User.count().where('role').equals('doctor').where("company").equals(res.locals.user._id)
+        const lastpage=Math.ceil(total/limit)
+        const pagination={}
+        pagination["page"]=page
+        pagination["lastpage"]=lastpage
+        console.log(lastpage)
+        
+        if (startIndex>0) {
+            pagination.previous={
+                page:page-1,
+                limit:limit
+            }
+            
+        }
+        if (endIndex<total) {
+            pagination.next={
+                page:page+1,
+                limit:limit
+            }
+        }
+
+        query=query.skip(startIndex).limit(limit)
+        const users = await query
+        
 
         res.status(200).render("personels", {
+            pagination,
+            total,
+            count:users.length,
             users,
             link: "personels"
         })
@@ -216,14 +305,64 @@ const getSessionsPage = async (req, res) => {
 }
 
 
-const getStaticsPage = async (req, res) => {
+
+const getPaymentStaticsPage = async (req, res) => {
     try {
 
 
-        res.status(200).render("statics", {
-            link: "statics",
+        res.status(200).render("statics/payments-statics.ejs", {
+            link: "user-statics",
             
         })
+        
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+const getUsersStaticsPage = async (req, res) => {
+    try {
+
+
+        res.status(200).render("statics/users-statics.ejs", {
+            link: "payments-statics",
+            
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+const getPersonelsStaticsPage = async (req, res) => {
+    try {
+
+
+        res.status(200).render("statics/personels-statics.ejs", {
+            link: "personels-statics",
+            
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: error
+        })
+    }
+}
+const getAppointmentsStaticsPage = async (req, res) => {
+    try {
+
+
+        res.status(200).render("statics/appointments-statics.ejs", {
+            link: "appointments-statics",
+            
+        })
+        
     } catch (error) {
         res.status(500).json({
             succes: false,
@@ -233,8 +372,9 @@ const getStaticsPage = async (req, res) => {
 }
 const getSettingsPage = (req, res) => {
     try {
+        const user=res.locals.user
         res.status(200).render("settings", {
-            link: "settings"
+            link: "settings",user
         })
     } catch (error) {
         res.status(500).json({
@@ -305,17 +445,21 @@ const getPaymentsPage = async (req, res) => {
 }
 const getSinglePage = async (req, res) => {
     try {
-        const singleUser = await User.findById(req.params.id).sort({ uploadTime: 1 })
+        const singleUser = await User.findById(req.params.id)
+        const sessions = await Sessions.find({}).where("user").equals(req.params.id)
+        console.log(sessions)
         res.status(200).render("user-details", {
             singleUser,
+            sessions,
             link: "user_details"
         })
     } catch (error) {
         res.status(500).json({
             succes: false,
+            
             message: error
         })
     }
 }
 
-export { getPaymentsPage, getIndexPage, getLoginPage, getRegisterPage, getContactPage, getAdminPage, getServicesPage, getUsersPage, getAboutUsPage, getSessionsPage, getStaticsPage, getSettingsPage, getSinglePage, getservicesPage, getPersonelsPage }
+export { getSettingsPage,getAppointmentsStaticsPage,getPersonelsStaticsPage,getUsersStaticsPage,getPaymentStaticsPage,getPaymentsPage, getIndexPage, getLoginPage, getRegisterPage, getContactPage, getAdminPage, getServicesPage, getUsersPage, getAboutUsPage, getSessionsPage, getSinglePage, getservicesPage, getPersonelsPage }

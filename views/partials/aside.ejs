@@ -10,7 +10,7 @@
                     <span>AY</span>
                 </div>
                 <div class="user-details">
-                    <p class="title">Pebme Amak Studio</p>
+                    <p class="title"><%= user.companyName %></p>
                     <p class="name">Ahmet Yavuz</p>
                 </div>
             </div>
@@ -43,9 +43,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/admin/services" <% if (link==="services" ) { %>class="active"<% } %>>
+                            <a href="/admin/services/" <% if (link==="services" ) { %>class="active"<% } %>>
                                 <i class="icon ph-bold ph-eyedropper"></i>
-                                    <span class="text">İşlemler</span>
+                                    <span class="text">Hizmetler</span>
                             </a>
                         </li>
                         <li>
@@ -64,14 +64,25 @@
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="/admin/payment-statics">
+                                    <a href="/admin/statics/payment-statics">
                                         <span class="text">Kasa İstatistikleri</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/admin/users-statics">
+                                    <a href="/admin/statics/users-statics">
                                         <span class="text">Kullanıcı İstatistikleri</span>
                                     </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/statics/personels-statics">
+                                        <span class="text">Personel İstatistikleri</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/statics/appointments-statics">
+                                        <span class="text">Randevu İstatistikleri</span>
+                                    </a>
+                                    
                                 </li>
                                 
                             </ul>
@@ -82,10 +93,20 @@
                     <p class="title">Ayarlar</p>
                     <ul>
                         <li>
-                            <a href="/admin/settings">
+                            <a href="#">
                                 <i class="icon ph-bold ph-gear"></i>
                                 <span class="text">AYARLAR</span>
+                                <i class="arrow ph-bold ph-caret-down"></i>
                             </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="/admin/settings">
+                                        <span class="text">Şirket Bilgileri</span>
+                                    </a>
+                                </li>
+                                
+                                
+                            </ul>
                         </li>
                     </ul>
                 </div>

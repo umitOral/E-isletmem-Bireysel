@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-   <%- include('partials/head.ejs') %>
-    <link rel="stylesheet" href="../css/sessions.css">
-    <link rel="stylesheet" href="/css/user-details.css">
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="../css/sessions.css">
+
 
 
 </head>
@@ -22,91 +22,8 @@
                         <h1> Randevular 222</h1>
                         <div class="current_date"></div>
                         <div class="main main-sessions">
-                            <!-- yeni modal           -->
-                            <div class="modal modal_session ">
-
-                                <h2>Seans Ekle</h2>
-
-                                <form action="./sessions/createsession" method="POST">
-                                    <div class="inputs">
 
 
-                                        <div class="title">
-                                            <span>İşlem Tipi:</span>
-                                            <% services.forEach(service=> { %>
-                                                <input type="checkbox" id="vehicle1" name="services"
-                                                    value="<%= service._id %>">
-                                                <label for="vehicle1">
-                                                    <%= service.serviceName %>
-                                                </label><br>
-                                                <% }) %>
-
-
-
-                                                    <!-- <select name="services" class="proccess_type" id="processes" multiple>
-                                                <% services.forEach(service=> { %>
-                                                    <option value="<%= service._id %>">
-                                                        <%= service.serviceName %>
-                                                    </option>
-                                                    <% }) %>
-                                            </select> -->
-                                                    <div class="selected_proccess_type">
-
-                                                        <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
-                                                    </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="add-event-body">
-                                        <div class="inputs">Hasta:
-                                            <select name="user" class="proccess_type" id="processes" required>
-
-                                                <% users.forEach(user=> { %>
-                                                    <option value="<%= user._id %>">
-                                                        <%= user.name %>
-                                                    </option>
-                                                    <% }) %>
-                                            </select>
-
-                                        </div>
-                                        <div class="inputs">Doktor:
-                                            <input type="text" name="" id="" class="doktor-name" disabled>
-                                        </div>
-                                        <div class="inputs">Tarih:
-                                            <input type="date" name="date" placeholder="Tarih" class="event-time-from"
-                                                required>
-                                        </div>
-                                        <div class="inputs"> Saat:
-                                            <select name="time" class="event-time-from" required>
-                                                <option value="0">6:00-6:15</option>
-                                                <option value="1">6:15-6:30</option>
-                                                <option value="2">6:30-6:45</option>
-                                                <option value="3">6:45-7:00</option>
-                                                <option value="4">7:00-7:15</option>
-
-
-                                            </select>
-
-                                        </div>
-
-                                        <div class="inputs">Not:
-                                            <input type="text" name="description" cplaceholder="notlar"
-                                                class="event-time-from">
-                                        </div>
-
-                                        <button type="submit" class="save_button">Seans Ekle +</button>
-
-                                        <span class="cancel_button">Vazgeç</span>
-
-                                    </div>
-                                </form>
-
-
-
-
-
-
-                            </div>
                             <div class="left">
                                 <div class="calendar">
                                     <div class="month">
@@ -144,44 +61,6 @@
                                 </div>
                                 <div class="events-all-doctors">
 
-                                    <!-- <div class="single-doctor-area">
-                                        <div class="doctor-name" value="">
-
-                                            doktorx
-
-                                        </div>
-                                        <div class="single-doctor-events">
-                                            <div class="event full">
-
-                                                <div class="center">
-                                                    <span>06:00-06:15</span>
-                                                    <hr>
-                                                    <span>Ahmet Oral</span>
-                                                </div>
-                                                <div class="">
-                                                    <span class="material-symbols-sharp edit-session">
-                                                        more_vert
-                                                    </span>
-                                                    <div class="session-options-modal">
-                                                        <a href="#">Düzenle</a>
-                                                        <a href="#">Sil</a>
-                                                        <a href="#">Başarılı</a>
-                                                        <a href="#">İptal</a>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                            <div class="event">
-
-                                                <span>06:15-06:30</span>
-                                                <span class="material-symbols-sharp add-session">
-                                                    add
-                                                </span>
-
-                                            </div>
-                                        </div>
-                                    </div> -->
 
                                 </div>
 
@@ -190,12 +69,163 @@
 
                         </div>
                 </main>
+                <div class="modal modal_add_session ">
+
+                    <h2>Seans Ekle</h2>
+
+                    <form action="./sessions/createsession" method="POST">
+                        <div class="inputs">
+
+                            <div class="title">
+                                <span>İşlem Tipi:</span>
+                                <% services.forEach(service=> { %>
+                                    <input type="checkbox" id="service1" name="services" value="<%= service._id %>">
+                                    <label for="service1">
+                                        <%= service.serviceName %>
+                                    </label><br>
+                                    <% }) %>
+
+                                        <!-- <select name="services" class="proccess_type" id="processes" multiple>
+                                    <% services.forEach(service=> { %>
+                                        <option value="<%= service._id %>">
+                                            <%= service.serviceName %>
+                                        </option>
+                                        <% }) %>
+                                </select> -->
+                                        <div class="selected_proccess_type">
+
+                                            <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
+                                        </div>
+                            </div>
+
+                        </div>
+                        <div class="add-event-body">
+                            <div class="inputs">Hasta:
+                                <select name="user" class="proccess_type" id="processes" required>
+
+                                    <% users.forEach(user=> { %>
+                                        <option value="<%= user._id %>">
+                                            <%= user.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+
+                            </div>
+
+                            <div class="inputs"  style="display: none;">timeIndex:
+                                <input type="text" name="timeIndex" id="" class="timeIndex">
+                            </div>
+                            <div class="inputs">Saat:
+                                <input type="text" name="" id="" class="hourValue" readonly>
+                            </div>
+                            <div class="inputs" style="display: none;">SaatFull:
+                                <input type="text" name="timeValue" id="" class="timeValue" readonly>
+                            </div>
+                            <div class="inputs">Doktor:
+                                <input type="text" id="" class="doctor-name" readonly>
+                            </div>
+                            <div class="inputs" style="display: none;">DoktorID:
+                                <input type="text" name="doctor" id="" class="doctor-id">
+                            </div>
+                            <div class="inputs">Tarih:
+                                <input type="date" name="date" placeholder="Tarih" class="event-date-from" readonly>
+                            </div>
+
+
+                            <div class="inputs">Not:
+                                <input type="text" name="description" cplaceholder="notlar">
+                            </div>
+
+                            <button type="submit" class="save_button">Seans Ekle +</button>
+                            
+
+                            <span class="cancel_button">Vazgeç</span>
+
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal modal_update_session ">
+
+                    <h2>Seans Düzenle</h2>
+
+                    <form action="./sessions/updateSession <%=  %>" method="POST">
+                        <div class="inputs">
+
+                            <div class="title">
+                                <span>İşlem Tipi:</span>
+                                <% services.forEach(service=> { %>
+                                    <input type="checkbox" id="service1" name="services" value="<%= service._id %>">
+                                    <label for="service1">
+                                        <%= service.serviceName %>
+                                    </label><br>
+                                    <% }) %>
+
+                                        <!-- <select name="services" class="proccess_type" id="processes" multiple>
+                                    <% services.forEach(service=> { %>
+                                        <option value="<%= service._id %>">
+                                            <%= service.serviceName %>
+                                        </option>
+                                        <% }) %>
+                                </select> -->
+                                        <div class="selected_proccess_type">
+
+                                            <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
+                                        </div>
+                            </div>
+
+                        </div>
+                        <div class="add-event-body">
+                            <div class="inputs">Hasta:
+                                <select name="user" class="proccess_type" id="processes" required>
+
+                                    <% users.forEach(user=> { %>
+                                        <option value="<%= user._id %>">
+                                            <%= user.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+
+                            </div>
+
+                            <div class="inputs"  style="display: ;">timeIndex:
+                                <input type="text" name="timeIndex" id="" class="timeIndex">
+                            </div>
+                            <div class="inputs">Saat:
+                                <input type="text" name="" id="" class="hourValue" readonly>
+                            </div>
+                            <div class="inputs" style="display: none;">SaatFull:
+                                <input type="text" name="timeValue" id="" class="timeValue" readonly>
+                            </div>
+                            <div class="inputs">Doktor:
+                                <input type="text" id="" class="doctor-name" readonly>
+                            </div>
+                            <div class="inputs" style="display: ;">DoktorID:
+                                <input type="text" name="doctor" id="" class="doctor-id">
+                            </div>
+                            <div class="inputs">Tarih:
+                                <input type="date" name="date" placeholder="Tarih" class="event-date-from" readonly>
+                            </div>
+
+
+                            <div class="inputs">Not:
+                                <input type="text" name="description" cplaceholder="notlar">
+                            </div>
+
+                            <button type="submit" class="save_button">Kaydet</button>
+                            
+                            <span class="cancel_button">Vazgeç</span>
+
+                        </div>
+                    </form>
+
+                </div>
         </div>
 
         <script type="module" src="/js/requests.js"></script>
         <script type="module" src="/js/ui.js"></script>
         <script type="module" src="../js/sessions.js"></script>
-        <script type="module" src="/js/user_details.js"></script>
+
         <script src="/js/sidebar.js"></script>
 
 </body>

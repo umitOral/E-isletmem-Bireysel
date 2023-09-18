@@ -25,9 +25,9 @@
                     <div class="search">
                         <form autocomplete="off" action="./search?page=1&limit=3">
                             <div class="autocomplete inputs">
-                                <input id="myInput" type="text" name="user" placeholder="Hasta Seç">
+                                <input id="myInput" type="text" name="services" placeholder="arama yapın...">
                                 
-                                <input type="submit" value="Getir">
+                                <input type="submit" value="Ara">
                             </div>
 
                         </form>
@@ -52,24 +52,28 @@
                         <table>
                             <thead>
                                 
-                                <th>İsim<i class="ph-bold ph-arrow-up"></i></th>
-                                <th>Soyisim<i class="ph-bold ph-arrow-up"></i></td>
-                                <th>Telefon<i class="ph-bold ph-arrow-up"></i></th>
+                                <th>Hizmet<i class="ph-bold ph-arrow-up"></i></th>
+                                <th>Aktiflik<i class="ph-bold ph-arrow-up"></i></td>
+                                <th>Fiyat<i class="ph-bold ph-arrow-up"></i></th>
                                 
                             </thead>
                             <tbody id="userList">
-                                <% data.forEach(user=> { %>
+                                <% data.forEach(element=> { %>
                                     <tr>
                                         
                                         <td>
-                                            <%= user.name %>
+                                            <%= element.serviceName %>
                                         </td>
                                         <td>
-                                            <%= user.surname %>
+                                            <% if(element.activeOrNot ){ %>
+                                                <span class="continue">Aktif</span> 
+                                              <% } else{ %>  
+                                                <span class="finish">Deaktif</span> 
+                                             <% } %>
                                         </td>
                                         
-                                        <td><span class="continue"> <%= user.phone %></span> </td>
-                                        <td><a href="./<%= user._id %>">Detay</a></td>
+                                        <td><span > <%= element.servicePrice %></span> </td>
+                                        <td><a href="./<%= element._id %>">Detay</a></td>
                                     </tr>
                                     <% }) %>
 
@@ -81,7 +85,7 @@
                         
                     </div>
                     <div class="pagination-describe">
-                        Toplam <%= total %> hasta içerisinden <%= count %> kişi listelendi
+                        Toplam <%= total %> Veri içerisinden <%= count %> kişi listelendi
                     </div>
                     <div class="pagination">
                         
@@ -108,60 +112,21 @@
                    
                 </main>
                 <div class="add_customer modal">
-                    <h2>Yeni Hasta Ekle</h2>
-                    <form action="../addUser" method="POST" id="register-form">
+                    <h2>Yeni Hizmet Ekle</h2>
+                    <form action="./services/addService" method="POST" id="register-form">
                         <div class="inputs ">
-                            <span>İsim</span>
-                            <input type="text" name="name" id="user-name" required
+                            <span>Hizmet Adı:</span>
+                            <input type="text" name="serviceName" id="user-name" required
                                 placeholder="Lütfen bir kullanıcı adı giriniz">
                         </div>
 
                         <div class="inputs ">
-                            <span>Soyisim</span>
-                            <input type="text" name="surname" id="surname">
+                            <span>Fiyat</span>
+                            <input type="text" name="servicePrice" id="surname">
                         </div>
-                        <div class="options">
-                            <span>Cinsiyet:</span>
-                            <div>
-                                <input type="radio" id="sex-women" name="sex" value="kadın" checked="checked">
-                                  <label for="sex-women">Kadın</label>
-
-                                <input type="radio" id="sex-man" name="sex" value="erkek">
-                                  <label for="sex-man">Erkek</label>
-
-
-
-
-                            </div>
-
-
-                        </div>
-                        <div class="inputs ">
-                            <span>Doğum Tarihi</span>
-                            <input type="date" name="birtdhDate" id="birtdhDate">
-                        </div>
-                        <div class="inputs ">
-                            <span>Adres</span>
-                            <input type="text" name="address" id="address">
-
-                        </div>
-                        <div class="inputs ">
-                            <span>Telefon</span>
-                            <input type="number" name="phone" id="phone">
-                        </div>
-                        <div class="inputs ">
-                            <span>Mail</span>
-                            <input type="email" name="email" id="email">
-                        </div>
-
-                        <div class="inputs ">
-                            <span>Fatura Bilgisi:</span>
-                            <textarea name="billingAddress" id="billingAddress" rows="2"></textarea>
-                        </div>
-                        <div class="inputs">
-                            <span>Açıklama</span>
-                            <textarea name="notes" id="notes" rows="2"></textarea>
-                        </div>
+                        
+                        
+                    
                         <button type="submit" class="save_button" id="add-user">Kaydet</button>
                         <button class="cancel_button">Vazgeç</button>
                     </form>

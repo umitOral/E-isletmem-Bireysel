@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        
+        <link rel="stylesheet" href="/css/user-details.css">
+        <!-- js ----------- -->
+        <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
+</head>
+
+<body>
+    <%- include('partials/header.ejs') %>
+        <div class="container">
+            <!---------- left aside ------------->
+            <%- include("partials/aside.ejs") %>
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <div class="user-informations">
+
+                        <div class="left_section">
+                            <div class="user-img"><i class="ph-bold ph-user"></i></div>
+                            <span>
+                                <!-- <%= user._id %> -->
+                                    
+                            </span>
+
+                            <div class="show-content informations">Genel Bilgiler<i
+                                    class="fa-solid fa-pen-to-square edit"></i>
+                            </div>
+                            <div class="show-content sessions">Sms Ayarları
+                                <i class="fa-solid fa-pen-to-square edit"></i>
+                            </div>
+                            
+
+                        </div>
+
+
+                        <div class="right_section">
+                            
+
+                            <div class="contents">
+
+                                <div class="userInformationsContent showed_content  generals">
+                                    <h2>Bilgiler</h2>
+                                    <hr>
+                                    <div class="inputs ">
+                                        <span>Yetkili İsmi:</span>
+                                        <input type="text" name="authorizedName" id="name" value="<%= user.authorizedName %>" readonly>
+                                    </div>
+                                    <div class="inputs ">
+                                        <span>Şirket İsmi:</span>
+                                        <input type="text" name="companyName" id="surname" value="<%= user.companyName %>"
+                                            readonly>
+                                    </div>
+                                    
+                                    
+                                    <div class="inputs ">
+                                        <span>Mail</span>
+                                        <input type="email" name="email" id="" value="<%= user.email %>" readonly>
+                                    </div>
+                                    <div class="inputs ">
+                                        <span>Telefon:</span>
+                                        <input type="text" name="phone" id="" value="<%= user.phone %>" readonly>
+                                    </div>
+
+                                    <div class="inputs">
+                                        <span>Adres:</span>
+                                        <input type="text" name="address" value="<%= user.address %>" readonly>
+                                    </div>
+                                    <div class="inputs">
+                                        <span>Fatura Adresi:</span>
+                                        <input type="text" name="billingAddress" value="<%= user.billingAddress %>" readonly>
+                                    </div>
+                                    <div class="inputs">
+                                        <span>Başlangıç Saati:</span>
+                                        <input type="text" name="workHours" value="<%= user.workHours.workStart %>" readonly>
+                                    </div>
+                                    <div class="inputs">
+                                        <span>Bitiş Saati:</span>
+                                        <input type="text" name="workHours" value="<%= user.workHours.workEnd %>" readonly>
+                                    </div>
+                                    
+                                    
+                                    <span class="edit-informations-btn">Düzenle</span>
+
+
+                                </div>
+                                
+                                <div class="userInformationsContent payments">
+                                    <h2>Sms ayarlarını düzenle</h2>
+                                    
+                                </div>
+                                
+                                
+                                
+                            </div>                            
+
+                        </div>
+
+                    </div>
+                </main>
+                <div class=" modal modal_user">
+                    
+                    <h2>Genel Bilgileri Düzenle</h2>
+
+                    <form action="./settings/<%= user._id %>/updateCompany" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="inputs ">
+                            <span>Yetkili Adı:</span>
+                            <input type="text" name="authorizedName" id="user-name"
+                                value="<%= user.authorizedName %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Şirket Adı:</span>
+                            <input type="text" name="companyName" id="user-name"
+                                value="<%= user.companyName %>">
+                        </div>
+
+                        
+                        <div class="inputs ">
+                            <span>Email</span>
+                            <input type="text" name="email" id="" value="<%= user.email %>"
+                                placeholder="<%= user.address %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Telefon</span>
+                            <input type="text" name="phone" id="" value="<%= user.phone %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Adres</span>
+                            <input type="text" name="address" id="" value="<%= user.address %>"
+                                placeholder="<%= user.address %>">
+                        </div>
+                        <div class="inputs ">
+                            <span>Fatura Adresi:</span>
+                            <textarea name="billingAddress" id="" cols="70"
+                                rows="2"><%= user.billingAddress %></textarea>
+                        </div>
+                        
+                        <div class="inputs ">
+                            
+                            <span>Başlangıç Saati:</span>
+                            <input type="time" name="workHours.workStart" id="" value="<%= user.workHours.workStart  %>">
+                            <span>Bitiş Saati:</span>
+                            <input type="time" name="workHours.workEnd" id="" value="<%= user.workHours.workEnd %>">
+                        </div>
+                        
+                        
+                        <button type="submit" id="edit-user">Kaydet</button>
+                        <span class="cancel_button">Vazgeç</span>
+                    </form>
+                </div>
+                
+
+        </div>
+
+
+        </main>
+        </div>
+
+        <!-- <script type="module" src="../js/requests.js"></script> -->
+
+
+
+        <script type="module" src="/js/requests.js"></script>
+        <script type="module" src="/js/company_details.js"></script>
+        <script src="/js/sidebar.js"></script>
+
+
+
+
+
+</body>
+
+</html>

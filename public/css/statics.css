@@ -1,20 +1,52 @@
 
+.statics-wrapper{
+    display: flex;
+    flex-direction: column;
+    /* background-color: yellow; */
+    
+}
+.statics-menu{
+    display: flex;
+    padding: 0.5rem;
+    width: 20%;
+}
+.statics-area{
+    /* background-color: rgb(204, 204, 116); */
+    padding: 0.5rem;
+    border: 1px solid gray;
+    border-radius: 1rem;
+    width: 100%;
+}
+
+
+.statics-menu ul li{
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid gray;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+.statics-menu ul li:hover{
+    background-color: greenyellow;
+}
 .statics{
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
 }
-.statics div{
-    
-    width: 450px;
-}
 
+.statics-area form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+   
+    
+}
 
 .main-svg{
     border: 1px solid rgba(128, 128, 128, 0.174);
     border-radius: 1rem;
-    
-   
+  
 }
 input[type="date"]{
     padding: 0.5rem;
@@ -24,18 +56,8 @@ input[type="date"]{
 
 }
 
-form {
-    display: flex;
-    gap: 0.8rem;
-    align-items: end;
-    
-}
-form div {
-    display: flex;
-    flex-direction: column;
-    
-    
-}
+
+
 .date_btn {
     
     background-color: aquamarine;

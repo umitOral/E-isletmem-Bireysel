@@ -8,10 +8,10 @@ const addPayment = async (req, res) => {
 
         req.body.company = res.locals.user._id
         req.body.date = new Date()
-
+        console.log(req.body)
         const payment = await Payment.create(req.body)
 
-        console.log(payment)
+        
         res.redirect("back")
 
 
@@ -135,9 +135,6 @@ const getSearchedPayments = async (req, res) => {
             totalCash,
             totalCreditCard,
             netCash
-            
-
-
         })
 
 

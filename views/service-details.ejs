@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head.ejs') %>
+    
+        
+</head>
+
+<body>
+    <%- include('partials/header.ejs') %>
+        <div class="container">
+            <!---------- left aside ------------->
+            <%- include("partials/aside.ejs") %>
+
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <div class="info-wrapper">
+                        <h2>
+                            <%= service.serviceName%>
+                        </h2>
+                        <form action="./<%= service._id %>/editService" method="POST" id="register-form"
+                            enctype="multipart/form-data">
+                            <div class="inputs ">
+                                <span>Hizmet İsmi</span>
+                                <input type="text" name="serviceName" id="user-name" value="<%= service.serviceName %>">
+                            </div>
+
+                            <div class="inputs ">
+                                <span>Fiyat</span>
+                                <input type="text" name="servicePrice" id="surname" value="<%= service.servicePrice %>">
+                            </div>
+                            <div class="inputs ">
+                                <span>aktiflik Durumu:</span>
+                                <% if(service.activeorNot===true){ %>
+                                    <select class="activeOrNot" name="activeorNot">
+                                        <option value="0">Aktif</option>
+                                        <option value="1">Deaktif</option>
+                                    </select>
+                                    <% } else{ %>
+                                        <select class="activeOrNot" name="activeorNot">
+                                            <option value="1">Deaktif</option>
+                                            <option value="0">Aktif</option>
+
+                                        </select>
+                                        <% } %>
+
+                            </div>
+
+                            <button type="submit" class="save_button" id="add-user" >Kaydet</button>
+                            <button class="cancel_button" onclick="window.history.go(-1); return false;">Vazgeç</button>
+                        </form>
+                        
+
+                    </div>
+
+                </main>
+        </div>
+
+
+        
+        
+        <script src="/js/sidebar.js"></script>
+
+
+
+</body>
+
+</html>

@@ -39,7 +39,9 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
 
 
         const doctors = res.locals.user.doctors
-
+        const workHours = res.locals.user.workHours
+        console.log(req.params)
+        
         const sessionsAllDoctor = []
         
 
@@ -49,12 +51,14 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
             sessionsAllDoctor.push({doctorName:i.name,sessionsofdoctor:sessionsofdoctor})
             
         }
-        
 
 
 
         res.status(200).json({
+            workHours,
+            doctors:doctors,
             sessionsAllDoctor: sessionsAllDoctor
+
         })
     } catch (error) {
         res.status(500).json({
