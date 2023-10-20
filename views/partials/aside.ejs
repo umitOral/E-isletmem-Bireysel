@@ -9,8 +9,10 @@
                 <div class="user-img">
                     <span>AY</span>
                 </div>
-                <div class="user-details">
+                <div class="user-details"><% if (locals.user) { %>
                     <p class="title"><%= user.companyName %></p>
+                <% } %>
+                    
                     <p class="name">Ahmet Yavuz</p>
                 </div>
             </div>

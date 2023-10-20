@@ -2,6 +2,7 @@ import User from "../models/userModel.js"
 import Service from "../models/serviceModel.js"
 import Sessions from "../models/sessionModel.js"
 import Payment from "../models/paymentsModel.js"
+import Companies from "../models/companyModel.js"
 
 let now = new Date()
 now.setHours(0, 0, 0, 0)
@@ -17,6 +18,28 @@ const getIndexPage = (req, res) => {
         res.status(200).render("front/index", {
             link: "indexAdmin"
         })
+    } catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "pagecontroller"
+        })
+    }
+}
+const getSuperAdminPage = async(req, res) => {
+    try {
+
+        let companies=await Companies.find({})
+        console.log("başarılı")
+      
+
+        res.status(200).render("superAdmin", {
+            companies,
+            
+            count: companies.length,
+            
+            link: "companies"
+        })
+
     } catch (error) {
         res.status(500).json({
             succes: false,
@@ -124,7 +147,7 @@ const getRegisterPage = (req, res) => {
         res.status(200).render("register", {
             link: "register"
         })
-        res.redirect("indexAdmin")
+        
     } catch (error) {
         res.status(500).json({
             succes: false,
@@ -137,7 +160,7 @@ const getContactPage = (req, res) => {
         res.status(200).render("front/contact-us", {
             link: "register"
         })
-        res.redirect("indexAdmin")
+        
     } catch (error) {
         res.status(500).json({
             succes: false,
@@ -462,4 +485,4 @@ const getSinglePage = async (req, res) => {
     }
 }
 
-export { getSettingsPage,getAppointmentsStaticsPage,getPersonelsStaticsPage,getUsersStaticsPage,getPaymentStaticsPage,getPaymentsPage, getIndexPage, getLoginPage, getRegisterPage, getContactPage, getAdminPage, getServicesPage, getUsersPage, getAboutUsPage, getSessionsPage, getSinglePage, getservicesPage, getPersonelsPage }
+export { getSuperAdminPage,getSettingsPage,getAppointmentsStaticsPage,getPersonelsStaticsPage,getUsersStaticsPage,getPaymentStaticsPage,getPaymentsPage, getIndexPage, getLoginPage, getRegisterPage, getContactPage, getAdminPage, getServicesPage, getUsersPage, getAboutUsPage, getSessionsPage, getSinglePage, getservicesPage, getPersonelsPage }

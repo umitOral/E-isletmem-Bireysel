@@ -6,7 +6,7 @@ import {createPersonel} from '../controller/personelsController.js';
 import {addService,getSingleServicePage,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
 import {addPayment,deletePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
 import {getSexStaticsWithFilter,getPaymentStaticsWithFilter,getNewUserStaticswithFilter} from '../controller/staticsController.js';
-import {updateCompany} from '../controller/companyControllers.js';
+import {updateCompany,errorTest} from '../controller/companyControllers.js';
 import sesssionRoutes from './sessionRoutes.js';
 
 const router=express.Router()
@@ -15,6 +15,7 @@ const router=express.Router()
 
 router.route("/").get(getAdminPage)
 router.route("/users").get(getUsersPage)
+router.route("/errorTest").get(errorTest)
 
 router.route("/users/search").get(findUser)
 router.route("/users/:id").get(getSinglePage)

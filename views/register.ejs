@@ -1,32 +1,31 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
 
-    <title>Mexant Template - Services page</title>
+  <title>Kayıt Ol</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
-    <link rel="stylesheet" href="assets/css/owl.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
-    
-<!--
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+  <link rel="stylesheet" href="css/login.css">
+  
+  <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
+  <link rel="stylesheet" href="assets/css/owl.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+  <link rel="stylesheet" href="css/register.css">
+
+  <!--
 
 TemplateMo 574 Mexant
 
@@ -34,135 +33,89 @@ https://templatemo.com/tm-574-mexant
 
 -->
 
-  </head>
+</head>
 
 <body>
 
 
   <!-- ***** Header Area Start ***** -->
   <%- include('./partials/header-front.ejs') %>
-  <!-- ***** Header Area End ***** -->
+    <!-- ***** Header Area End ***** -->
 
-  <section>
-    <div class="page-heading">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="header-text">
-              <h2>KAYIT OL</h2>
-              <div class="div-dec"></div>
+    <section>
+      <div class="page-heading">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="header-text">
+                <h2>KAYIT OL</h2>
+                <div class="div-dec"></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ***** Main Banner Area End ***** -->
-  <div class="container-login">
-    <form action="/register" method="POST" id="register-form" >
-        
+    <!-- ***** Main Banner Area End ***** -->
+    <div class="container-login">
+      <form action="/register" method="POST" id="register-form">
+
         <div class="input">
-            <span>Kullanıcı Adı:</span>
-            <input type="text" name="authorizedName" id="user-name" required placeholder="Lütfen bir kullanıcı adı giriniz">
+          <span>Kullanıcı Adı:</span>
+          <input type="text" name="authorizedName" id="user-name" required
+            placeholder="Lütfen bir kullanıcı adı giriniz">
         </div>
-        
-        <div class="form-group">
-            <span>Email:</span>
-            <input type="email" name="email" id="email" required placeholder="Lütfen mail adresinisi giriniz">
-        </div>
-        <div class="form-group">
-            <span>Telefon:</span>
-            <input type="number" name="phone" id="phone" required placeholder="Lütfen telefon numaranızı giriniz">
-        </div>
-        
-        <div class="form-group">
-            <span>Şifre:</span>
-            <input type="password" name="password" id="passwordd" required placeholder="lütfen şifrenizi giriniz">
-        </div>
-        <div class="form-group">
-            <span>Şifre Tekrar:</span>
 
-            <input type="password" name="password-again" id="password-repeat" required placeholder="lütfen Aynı şifreyi tekrar giriniz giriniz">
+        <div class="form-group">
+          <span>Email:</span>
+          <input type="email" name="email" id="email" required placeholder="Lütfen mail adresinisi giriniz">
         </div>
-        <button type="submit" id="register-btn">Kayıt Ol</button>
+        <div class="form-group">
+          <span>Telefon:</span>
+          <input type="number" name="phone" id="phone" required placeholder="Lütfen telefon numaranızı giriniz">
+        </div>
+
+        <div class="form-group">
+          <span>Şifre:</span>
+          <input type="password" name="password" id="password" required placeholder="lütfen şifrenizi giriniz">
+        </div>
+        <div class="form-group">
+          <span>Şifre Tekrar:</span>
+
+          <input type="password" name="password2" id="password2" required
+            placeholder="lütfen Aynı şifreyi tekrar giriniz giriniz">
+        </div>
         
+        <button type="submit" id="register-btn">Kayıt Ol</button>
+
 
         <span>Hesabın varsa</span>
+
         <a href="/login">Giriş Yap</a>
 
-    </form>
+      </form>
 
-</div>
-<script src="../js/register.js"></script>
+    </div>
 
+
+    <dialog>
+      <p></p><span>KAPAT</span>
+      <a href="./login">GİRİŞ SAYFASINA GİT</a>
+    </dialog>
+    
   
 
- 
+    <%- include('./partials/front-footer.ejs') %>
 
- 
+      <!-- Scripts -->
+      <!-- Bootstrap core JavaScript -->
 
- 
-  <%- include('./partials/front-footer.ejs') %>
+      <script type="module" src="./js/register.js"></script>
+      <script type="module" src="/js/requests.js"></script>
+      
+      
 
-  <!-- Scripts -->
-  <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
 
-    <script src="assets/js/isotope.min.js"></script>
-    <script src="assets/js/owl-carousel.js"></script>
-
-    <script src="assets/js/tabs.js"></script>
-    <script src="assets/js/swiper.js"></script>
-    <script src="assets/js/custom.js"></script>
-    <script>
-        var interleaveOffset = 0.5;
-
-      var swiperOptions = {
-        loop: true,
-        speed: 1000,
-        grabCursor: true,
-        watchSlidesProgress: true,
-        mousewheelControl: true,
-        keyboardControl: true,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        },
-        on: {
-          progress: function() {
-            var swiper = this;
-            for (var i = 0; i < swiper.slides.length; i++) {
-              var slideProgress = swiper.slides[i].progress;
-              var innerOffset = swiper.width * interleaveOffset;
-              var innerTranslate = slideProgress * innerOffset;
-              swiper.slides[i].querySelector(".slide-inner").style.transform =
-                "translate3d(" + innerTranslate + "px, 0, 0)";
-            }      
-          },
-          touchStart: function() {
-            var swiper = this;
-            for (var i = 0; i < swiper.slides.length; i++) {
-              swiper.slides[i].style.transition = "";
-            }
-          },
-          setTransition: function(speed) {
-            var swiper = this;
-            for (var i = 0; i < swiper.slides.length; i++) {
-              swiper.slides[i].style.transition = speed + "ms";
-              swiper.slides[i].querySelector(".slide-inner").style.transition =
-                speed + "ms";
-            }
-          }
-        }
-      };
-
-      var swiper = new Swiper(".swiper-container", swiperOptions);
-    </script>
-
-  </body>
 </html>
-
-
-

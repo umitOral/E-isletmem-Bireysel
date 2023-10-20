@@ -32,7 +32,11 @@
 }
 
 
-
+.res-message {
+  background-color: rgba(255, 0, 0, 0.29);
+  padding: 1rem;
+  border-radius: 1rem;
+}
 .container-login {
     font-family: 'Poppins', sans-serif;
     

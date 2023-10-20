@@ -1,0 +1,45 @@
+
+
+::backdrop {
+    background-color: gray;
+    opacity: 0.4;
+    
+  }
+  dialog{
+    left: 0;
+    border: 1px solid rgba(128, 128, 128, 0.584);
+    border-radius: 1rem;
+    padding: 4rem 6rem;
+    text-align: center;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    
+    z-index: 999;
+    
+  }
+  dialog a {
+    margin-top: 2rem;
+    padding: 4px 6px;
+    color: rgb(54, 53, 53);
+    border: 1px solid rgba(128, 128, 128, 0.221);
+    background-color: #41F1B6;
+    border-radius: 4px;
+  }
+  dialog span {
+    margin-top: 2rem;
+    padding: 4px 6px;
+    color: rgb(54, 53, 53);
+    border: 1px solid rgba(128, 128, 128, 0.221);
+    background-color: rgb(247, 128, 148);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  dialog a:hover {
+    background-color: #1adb9b;
+    color: rgb(54, 53, 53);
+  }
+  dialog p {
+    margin-bottom: 1rem;
+  }

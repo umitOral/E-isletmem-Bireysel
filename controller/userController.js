@@ -6,22 +6,34 @@ import jwt from 'jsonwebtoken';
 
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
+import { CustomError } from '../helpers/error/CustomError.js';
 
-const createCompany = async (req, res) => {
+
+
+const createCompany = async (req, res,next) => {
     try {
+        
         const data = req.body
-        //  form datasına ekleme çıkarma yapılabilir.
+        
 
+        if (data.password!==data.password2) {
+            return next(new Error("Girdiğiniz şifreler farklıdır",400))
+        }
         const company = await Company.create(data)
+        
 
+        res.json({
+            succes:true,
+            message:"Kaydınız başarıyla gerçekleşti.",
+            data:company
+        })
 
-        res.redirect("login")
+        next()
 
     } catch (error) {
-        res.status(500).json({
-            succes: false,
-            message: "usercontroller error"
-        })
+        
+        return next(error)
+
     }
 }
 const deactivateUser = async (req, res) => {
@@ -236,7 +248,7 @@ const editInformations = async (req, res) => {
 }
 
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res,next) => {
     try {
         let same = false
         const company = await Company.findOne({ email: req.body.email })
@@ -246,9 +258,7 @@ const loginUser = async (req, res) => {
         if (company) {
             same = await bcrypt.compare(req.body.password, company.password)
         } else {
-            return res.status(401).json({
-                message: "kullanıcı bulunamadı"
-            })
+            return next(new Error("Kayıtlı kullanıcı Bulunamadı",400))
         }
 
         if (same) {
@@ -258,17 +268,17 @@ const loginUser = async (req, res) => {
                 maxAge: 1000 * 60 * 60 * 24
             })
 
-            res.redirect("admin")
-        } else {
             res.status(401).json({
-                success: false,
-                message: "şifreler uyuşmuyor"
+                success: true,
+                message: "Giriş Başarılı,yönlendiriliyorsunuz ..."
             })
+        } else {
+            return next(new Error("Kullanıcı adı veya şifresi yanlış",400))
         }
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: error
+            message: "Girişte sistemsel bir hata oluştu."
         })
     }
 }

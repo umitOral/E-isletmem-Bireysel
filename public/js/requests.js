@@ -44,7 +44,28 @@ export class Request {
         const responseData = await response.json()
 
         return responseData
+    }
+    async postWithUrl(url,data) {
+        const response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { "Content-type": "application/json" }
+        })
+        const responseData = await response.json()
 
+        return responseData
+    }
+
+    async createCompany(data,url) {
+        
+        const response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { "Content-type": "application/json" }
+        })
+        const responseData = await response.json()
+
+        return responseData
     }
 
     async put(id, data) {

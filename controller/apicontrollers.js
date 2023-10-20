@@ -19,6 +19,7 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+
 const getSingleDaySessions = async (req, res) => {
     try {
 
@@ -68,4 +69,4 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
     }
 }
 
-export { getAllUsers, getSingleDaySessions, getSingleDaySingleDoctorSessions }
+export { getAllUsers, getSingleDaySessions, getSingleDaySingleDoctorSessions}

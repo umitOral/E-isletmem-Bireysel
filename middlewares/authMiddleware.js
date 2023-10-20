@@ -23,7 +23,7 @@ const checkUser = async (req, res, next) => {
     } else {
         res.locals.user = null
         next()
-        console.log("başarısız token")
+        console.log("gerekli token bulunamadı lütfen giriş yapınız")
         
     }
 

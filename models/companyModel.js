@@ -1,61 +1,58 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
-
-
-
-const Schema = mongoose.Schema
-const companySchema = new Schema({
-
+const Schema = mongoose.Schema;
+const companySchema = new Schema(
+  {
     authorizedName: { type: String, require: true },
     companyName: { type: String, require: false },
-    email: { type: String, require: true },
+    email: { type: String, require: true, index: { unique: true } },
 
-    password: { type: String, require: false },
+    password: {
+      type: String,
+      require: true,
+      minLength: [4, "şifre uzunluğu en az 4 karakter olmalıdır."] },
     phone: { type: String, require: false },
     address: { type: String, require: false },
     billingAddress: { type: String, require: false },
     registerDate: { type: Date, default: Date.now },
     notes: { type: String, require: false },
     debtStatus: { type: Number, require: 0 },
-    doctors: [{
+    doctors: [
+      {
         type: Schema.Types.ObjectId,
-        ref: "User"
-    }],
+        ref: "User",
+      },
+    ],
     workHours: {
-        type: Object,
-        workStart: {
-            type: String,
-            default: "8:00"
-        },
-        workEnd: {
-            type: String,
-            default: "8:00"
-        },
+      type: Object,
+      workStart: {
+        type: String,
+        default: "8:00",
+      },
+      workEnd: {
+        type: String,
+        default: "8:00",
+      },
     },
-
-
     users: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "User"
-        }
-    ]
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    activeOrNot: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
 
-})
-
-companySchema.pre('save', function (next) {
-    const company = this
-    bcrypt.hash(company.password, 10, (err, hash) => {
-        company.password = hash
-        next()
-    });
-
-
+companySchema.pre("save", function (next) {
+  const company = this;
+  bcrypt.hash(company.password, 10, (err, hash) => {
+    company.password = hash;
+    next();
+  });
 });
 
-
-
-
-const Company = mongoose.model("Company", companySchema)
-export default Company
+const Company = mongoose.model("Company", companySchema);
+export default Company;

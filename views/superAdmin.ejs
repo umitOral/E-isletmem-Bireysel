@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/users.css">
+</head>
+
+<body>
+    <%- include('partials/header.ejs') %>
+        <div class="container">
+            <!---------- left aside ------------->
+            <%- include("partials/aside.ejs") %>
+
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <div class="header">
+                        <h1> BAYİLER</h1>
+                    </div>
+
+                    <div class="search">
+                        <form autocomplete="off" action="./personels/search">
+                            <div class="autocomplete inputs" style="width:300px;">
+                                <input id="myInput" type="text" name="user" placeholder="Personel Seç">
+                                <input type="submit" value="Ara">
+                            </div>
+
+                        </form>
+                        <div class="add_customer_btn">Yeni Personel Ekle +</div>
+                    </div>
+                    <div class="print">
+
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Export As &nbsp; &#10140</label>
+                            <label for="" class="to_pdf" onclick="window.print()">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+                            <label for="" class="to_json">JSON<span class="material-symbols-sharp"></span></label>
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
+                        </div>
+
+                    </div>
+                    <div class="table-wrapper">
+                        <table >
+                            <thead>
+                                
+                                
+                                <th>companyName<span class="material-symbols-sharp">north</span></th>
+                                <th>email<span class="material-symbols-sharp">north</span></th>
+                                <th>authorizedName<span class="material-symbols-sharp">north</span></th>
+                                
+                               
+                                
+                            </thead>
+                            <tbody id="userList">
+                                <% companies.forEach(company=> { %>
+                                    <tr>
+                                        
+                                        <td>
+                                            <%= company.companyName %>
+                                        </td>
+                                        <td>
+                                            <%= company.email %>
+                                        </td>
+                                        <td>
+                                            <%= company.authorizedName %>
+                                        </td>
+                                        <td>
+                                            <%= company.registerDate %>
+                                        </td>
+                                        
+
+                                        <td><a href="./companies/<%= company._id %>">Detaylar</a></td>
+                                        <td><a style="display: block; background-color: red; padding: 1rem;" href="./superAdmin/companies/delete/<%= company._id %>">Sil</a></td>
+                                    </tr>
+                                    <% }) %>
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+                    
+                    
+                    
+
+                </main>
+                <div class="add_customer modal">
+                    <h2>Yeni Personel Ekle</h2>
+                    <form action="./personels/createPersonel" method="POST" id="register-form">
+                        <div class="inputs ">
+                            <span>İsim</span>
+                            <input type="text" name="name" id="user-name" required
+                                placeholder="Lütfen bir kullanıcı adı giriniz">
+                        </div>
+
+                        <div class="inputs ">
+                            <span>Soyisim</span>
+                            <input type="text" name="surname" id="surname">
+                        </div>
+                        
+                        <div class="inputs ">
+                            <span>Doğum Tarihi</span>
+                            <input type="date" name="birtdhDate" id="birtdhDate">
+                        </div>
+                        <div class="inputs ">
+                            <span>Adres</span>
+                            <input type="text" name="address" id="address">
+
+                        </div>
+                        <div class="inputs ">
+                            <span>Telefon</span>
+                            <input type="number" name="phone" id="phone">
+                        </div>
+                        <div class="inputs ">
+                            <span>Mail</span>
+                            <input type="email" name="email" id="email">
+                        </div>
+
+                        <div class="inputs ">
+                            <span>Fatura Bilgisi:</span>
+                            <textarea name="billingAddress" id="billingAddress" cols="70" rows="2"></textarea>
+                        </div>
+                        <div class="inputs ">
+                            <span>Açıklama</span>
+                            <textarea name="notes" id="notes" cols="70" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="save_button" id="add-user">Kaydet</button>
+                        <button class="cancel_button">Vazgeç</button>
+                    </form>
+                </div>
+        </div>
+
+
+        
+        <script type="module" src="../js/requests.js"></script>
+        <script type="module" src="../js/users.js"></script>
+        <script src="/js/sidebar.js"></script>
+
+
+
+</body>
+
+</html>
