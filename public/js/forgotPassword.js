@@ -10,20 +10,16 @@ loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
   let data={
     email:loginForm.email.value,
-    password:loginForm.password.value,
+    
   }
   request
-    .postWithUrl("./login",data)
+    .postWithUrl("./forgotPassword",data)
     .then((response) => {
-      messageModal.style="display:block"
+      messageModal.style.display="block"
       messageModal.textContent=response.message
-        if (response.success==true) {
-            setTimeout(() => {
-                window.location.assign("/admin")
-            }, 1000);
-        }
     })
     .catch((err) => {
+      
       console.log(err);
       
     });

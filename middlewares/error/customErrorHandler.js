@@ -18,11 +18,13 @@ const customErrorHandler = (err, req, res, next) => {
   if (err.name === "ValidationError") {
     customError = new CustomError(err.errors.password.properties.message, 400);
   }
+ 
 
   console.log(err.name)
   res.status(customError.status || 500).json({
     succes: false,
     message: customError.message || "internal Server error",
+    data:err
   });
 };
 

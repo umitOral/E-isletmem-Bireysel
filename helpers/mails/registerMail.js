@@ -1,4 +1,4 @@
-const registerMail =`
+const registerMail = `
     <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 
 <head>
@@ -454,8 +454,17 @@ const registerMail =`
 </body>
 
 </html>
-    `
-const deneme="aaa"
+    `;
+
+const resetPasswordMailHtml = function (url) {
+    return (`
+    <h1>Şifre sıfırlama</h1>
+    <p>Aşağıdaki bağlantıya tıklayarak şifrenizi sıfırlayabilirsiniz</p>
+    ${url}
+    <p>Bu bağlantı 10dk boyunca geçerli olacaktır.</p>
+
+    `)
+} 
 
 
-export {registerMail,deneme}
+export { registerMail,resetPasswordMailHtml};

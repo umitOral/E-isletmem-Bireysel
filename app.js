@@ -55,7 +55,7 @@ app.use(express.static("public"));
 
 app.get("/views/front-side/main.ejs");
 //routes,middlewares
-app.use("*", authMiddleware.checkUser);
+app.use("/admin", authMiddleware.checkUser);
 app.use("/", pageRoute);
 app.use("/api", api);
 app.use("/admin", authMiddleware.authenticateToken, adminRoutes);
@@ -66,4 +66,5 @@ app.use(customErrorHandler)
 ////////////////////////////////////////////
 app.listen(process.env.PORT || 3000, () => {
   console.log('\x1b[33m%s\x1b[0m',"application run on " + "http://localhost:" + process.env.PORT);
+  
 });
