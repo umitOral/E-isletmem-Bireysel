@@ -254,6 +254,9 @@ header
   min-height: 80px;
   background: transparent;
 }
+.logo img {
+  width: 100px;
+}
 
 .header-area .main-nav .logo {
   line-height: 120px;

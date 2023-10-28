@@ -9,11 +9,21 @@
                 <div class="user-img">
                     <span>AY</span>
                 </div>
-                <div class="user-details"><% if (locals.user) { %>
-                    <p class="title"><%= user.companyName %></p>
-                <% } %>
-                    
-                    <p class="name">Ahmet Yavuz</p>
+                <div class="user-details">
+                    <% if (locals.user) { %>
+                        <p class="title">
+                            <%= locals.user.companyName %>
+                        </p>
+                        <% } %>
+
+                </div>
+                <div class="user-details">
+                    <% if (locals.user) { %>
+                        <p class="title">
+                            <%= locals.user.authorizedName %>
+                        </p>
+                        <% } %>
+
                 </div>
             </div>
             <div class="nav">
@@ -28,36 +38,36 @@
                         </li>
                         <li>
                             <a href="/admin/users" <% if (link==="users" ) { %>class="active"<% } %>>
-                                <i class="icon ph-bold ph-users"></i>
+                                    <i class="icon ph-bold ph-users"></i>
                                     <span class="text">Hastalar</span>
                             </a>
                         </li>
                         <li>
                             <a href="/admin/personels" <% if (link==="personels" ) { %>class="active"<% } %>>
-                                <i class="icon ph-bold ph-stethoscope"></i>
+                                    <i class="icon ph-bold ph-stethoscope"></i>
                                     <span class="text">Personel</span>
                             </a>
                         </li>
                         <li>
                             <a href="/admin/sessions" <% if (link==="sessions" ) { %>class="active"<% } %>>
-                                <i class="icon ph-bold ph-calendar-check"></i>
+                                    <i class="icon ph-bold ph-calendar-check"></i>
                                     <span class="text">Seanslar</span>
                             </a>
                         </li>
                         <li>
                             <a href="/admin/services/" <% if (link==="services" ) { %>class="active"<% } %>>
-                                <i class="icon ph-bold ph-eyedropper"></i>
+                                    <i class="icon ph-bold ph-eyedropper"></i>
                                     <span class="text">Hizmetler</span>
                             </a>
                         </li>
                         <li>
                             <a href="/admin/payments" <% if (link==="payments" ) { %>class="active"<% } %>>
-                                <i class="icon ph-bold ph-currency-circle-dollar"></i>
+                                    <i class="icon ph-bold ph-currency-circle-dollar"></i>
                                     <span class="text">Kasa</span>
                             </a>
                         </li>
-                        
-                        
+
+
                         <li>
                             <a href="#">
                                 <i class="icon ph-bold ph-chart-bar"></i>
@@ -84,9 +94,9 @@
                                     <a href="/admin/statics/appointments-statics">
                                         <span class="text">Randevu İstatistikleri</span>
                                     </a>
-                                    
+
                                 </li>
-                                
+
                             </ul>
                         </li>
                     </ul>
@@ -106,8 +116,8 @@
                                         <span class="text">Şirket Bilgileri</span>
                                     </a>
                                 </li>
-                                
-                                
+
+
                             </ul>
                         </li>
                     </ul>

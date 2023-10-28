@@ -267,32 +267,84 @@ const uploadPictures = async (req, res) => {
         use_filename: true,
         folder: "archimet",
       });
-
-      return result.secure_url;
+      console.log(result);
+      return { secure_url: result.secure_url, public_id:result.public_id };
     };
 
     const files = req.files.upload_file;
 
-    for (const file of files) {
-      const path = file.tempFilePath;
-      const newPath = await cloudinaryImageUploadMethod(path);
-
+    if (files.length === undefined) {
+      console.log("tek resim");
+      const path = files.tempFilePath;
+      const data = await cloudinaryImageUploadMethod(path);
+      
       await User.updateOne(
         { _id: req.params.id },
         {
           $push: {
-            images: { url: newPath, uploadTime: req.body.uploadTime },
+            images: { url: data.secure_url, uploadTime: req.body.uploadTime,public_id:data.public_id},
           },
         }
       );
+
+      fs.unlinkSync(files.tempFilePath);
     }
 
-    fs.unlinkSync(req.files.upload_file.tempFilePath);
+    if (files.length > 0) {
+      console.log("ÇOKLU RESİM");
+
+      for (const file of files) {
+        console.log(file);
+        const path = file.tempFilePath;
+        const data = await cloudinaryImageUploadMethod(path);
+        await User.updateOne(
+          { _id: req.params.id },
+          {
+            $push: {
+              images: { url: data.secure_url, uploadTime: req.body.uploadTime,public_id:data.public_id },
+            },
+          }
+        );
+
+        fs.unlinkSync(file.tempFilePath);
+      }
+    }
+
     res.redirect("back");
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       succes: "ekleme hatası",
       message: error,
+    });
+  }
+};
+
+const deletePhoto = async (req, res) => {
+  try {
+    cloudinary.uploader.destroy("archimet/"+req.params.public_id, function (error, result) {
+      if (error) {
+        console.log(error);
+      }
+      console.log(result);
+    });
+
+    console.log(req.params);
+    
+    await User.updateOne(
+      { _id: req.params.id },
+      {
+        $pull: {
+          images: { public_id:"archimet/"+req.params.public_id },
+        },
+      }
+    );
+
+    res.redirect("back")
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "delete photo error",
     });
   }
 };
@@ -326,6 +378,7 @@ const resetPasswordMail = async (req, res, next) => {
         "host"
       )}/newPassword/${resetToken}`;
       passwordResetMail(email, resetUrl);
+      console.log(resetUrl);
       res.status(200).json({
         succes: true,
         message: "şifre sıfırlama maili gönderildi.",
@@ -358,4 +411,5 @@ export {
   deactivateUser,
   findPersonels,
   activateUser,
+  deletePhoto,
 };

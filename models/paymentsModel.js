@@ -21,14 +21,11 @@ const paymentSchema = new Schema({
     },
     description: {
         type: String
-    },
-    createdAt: {
-        type: Date,
-        default: new Date()
-        
     }
+    
 
 },
+{ timestamps: true }
 )
 
 

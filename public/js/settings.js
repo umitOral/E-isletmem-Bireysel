@@ -1,13 +1,18 @@
 
+console.log(    "dada")
 
 
-const showContentsBtn = document.querySelectorAll(".show-content")
+const showContentsBtns = document.querySelectorAll(".show-content")
 const contents = document.querySelectorAll(".userInformationsContent")
-
+const userID = document.querySelector(".userID").dataset.user
+const messageBox = document.querySelector(".information-modal")
 
 
 const editBtn = document.querySelector(".edit-informations-btn")
-const editUserButton = document.getElementById("edit-user")
+const changePassworForm = document.getElementById("change-password-form")
+
+const informationForm = document.getElementById("informations-form")
+
 
 const cancelModal = document.querySelectorAll(".modal .cancel_button")
 
@@ -27,9 +32,9 @@ eventListeners()
 
 function eventListeners() {
     
-    
-    editUserButton.addEventListener("click", editUser)
     editBtn.addEventListener("click", showInformationsModal)
+    changePassworForm.addEventListener("submit", changePassword)
+    informationForm.addEventListener("submit", changeInformations)
     
 }
 
@@ -42,32 +47,71 @@ cancelModal.forEach(element => {
 });
 
 
-const userName = document.getElementById("user-name")
-const usersurName = document.getElementById("user-surname")
 
 
-function editUser() {
-    const name=userName.value ||userName.placeholder
-    const surName=usersurName.value ||usersurName.placeholder
-   
-    request.put(userID, {
-        name: name,
-        surname: surName
+
+
+
+
+
+function changePassword(e) {
+    e.preventDefault();
+
+    request.postWithUrl("./settings/"+userID+"/updateCompanyPassword", {
+        
+        password:changePassworForm.password.value,
+        password2:changePassworForm.password2.value
         
     })
-        .then(response => console.log(response))
-        .catch(err => console.log(err))
+        .then(response => {
+            console.log(response)
+            messageBox.textContent=response.message
+            messageBox.style.display="block"
+            
+            setTimeout(() => {
+                messageBox.style.display="none"
+            }, 3000);
+        })
+        .catch(err => console.log("hata:"+err))
 
+    
+}
+function changeInformations(e) {
     e.preventDefault();
+
+    request.postWithUrl("./settings/"+userID+"/updateCompanyInformations", {
+        
+        authorizedName:informationForm.authorizedName.value,
+        companyName:informationForm.companyName.value,
+        email:informationForm.email.value,
+        phone:informationForm.phone.value,
+        address:informationForm.address.value,
+        billingAddress:informationForm.billingAddress.value,
+        
+    })
+        .then(response => {
+            console.log(response)
+            modalUser.classList.remove("showed_modal")
+            messageBox.textContent=response.message
+            messageBox.style.display="block"
+            
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+            
+        })
+        .catch(err => console.log("hata:"+err))
+
+    
 }
 
 
 
 
-showContentsBtn.forEach((element, index) => {
+showContentsBtns.forEach((element, index) => {
     element.addEventListener("click",()=>{
         
-        showContentsBtn.forEach(element => {
+        showContentsBtns.forEach(element => {
             
             element.classList.remove("active")
             

@@ -3,6 +3,7 @@ import Service from "../models/serviceModel.js";
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
 import Companies from "../models/companyModel.js";
+import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 
 let now = new Date();
@@ -61,9 +62,7 @@ const getSuperAdminPage = async (req, res) => {
 
     res.status(200).render("superAdmin", {
       companies,
-
       count: companies.length,
-
       link: "companies",
     });
   } catch (error) {
@@ -402,6 +401,7 @@ const getAppointmentsStaticsPage = async (req, res) => {
 };
 const getSettingsPage = (req, res) => {
   try {
+    
     const user = res.locals.user;
     res.status(200).render("settings", {
       link: "settings",
@@ -471,13 +471,15 @@ const getPaymentsPage = async (req, res) => {
 const getSinglePage = async (req, res) => {
   try {
     const singleUser = await User.findById(req.params.id);
-    const sessions = await Sessions.find({})
-      .where("user")
-      .equals(req.params.id);
-    console.log(sessions);
+    const payments = await Payment.find({fromUser:req.params.id});
+    const sessions = await Sessions.find({}).populate(["doctor"])
+
+    
+    
     res.status(200).render("user-details", {
       singleUser,
       sessions,
+      payments,
       link: "user_details",
     });
   } catch (error) {

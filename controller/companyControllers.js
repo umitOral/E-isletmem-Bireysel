@@ -1,49 +1,57 @@
-import Session from '../models/sessionModel.js';
-import Company from '../models/companyModel.js';
-import {CustomError} from '../helpers/error/CustomError.js';
+import Session from "../models/sessionModel.js";
+import Company from "../models/companyModel.js";
+import { CustomError } from "../helpers/error/CustomError.js";
 
-const updateCompany = async (req, res) => {
-    try {
-        console.log(req.body)
-
-
-        const company = await Company.findByIdAndUpdate(req.params.id,
-            req.body)
-
-        res.redirect("back")
-
-    }
-    catch (error) {
-        res.status(500).json({
-            succes: false,
-            message: "create session error"
-        })
-    }
-}
-const errorTest = (req, res,next) => {
-    return next(new SyntaxError("yyyy hatası",400))
+const updateCompanyPassword = async (req, res, next) => {
+  try {
+    console.log(req.body);
     
-}
+      if (req.body.password !==req.body.password2) {
+        return next(new Error("şifreler aynı değil"), 400);
+      }
+    
+
+    const company = await Company.findOne({_id:req.params.id});
+      company.password=req.body.password
+      company.save()
+    res.json({
+      succes: true,
+      message: "bilgiler başarıyla değiştirildi.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "update error",
+    });
+  }
+};
+const updateCompanyInformations = async (req, res, next) => {
+  try {
+    await Company.findByIdAndUpdate(req.params.id, req.body);
+
+    res.json({
+      succes: true,
+      message: "bilgiler başarıyla değiştirildi.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "create session error",
+    });
+  }
+};
 
 const deleteCompany = async (req, res) => {
-    try {
-       
+  try {
+    const company = await Company.findByIdAndDelete(req.params.id);
 
+    res.redirect("back");
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "delete error",
+    });
+  }
+};
 
-        const company = await Company.findByIdAndDelete(req.params.id)
-
-        
-        res.redirect("back")
-
-    }
-    catch (error) {
-        res.status(500).json({
-            succes: false,
-            message: "create session error"
-        })
-    }
-}
-
-
-
-export { updateCompany,deleteCompany,errorTest }
+export { updateCompanyPassword, deleteCompany, updateCompanyInformations };

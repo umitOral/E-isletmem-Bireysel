@@ -13,6 +13,7 @@ router.route("/getSingleDaySingleDoctorSessions/:date").get(getSingleDaySingleDo
 router.route("/newPassword/:token").post(newPassword)
 
 
+
 //static apı's
 
 

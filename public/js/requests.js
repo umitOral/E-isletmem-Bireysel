@@ -92,6 +92,13 @@ export class Request {
         return ("veri silindi")
 
     }
+    async deletewithUrl(url) {
+        console.log(url)
+        const response = await fetch(url)
+        const responseData = await response.json()
+        return responseData
+
+    }
 
 }
 

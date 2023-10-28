@@ -3,7 +3,7 @@
 
 <head>
     <%- include('partials/head.ejs') %>
-        
+
         <link rel="stylesheet" href="/css/user-details.css">
         <!-- js ----------- -->
         <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
@@ -50,7 +50,7 @@
 
 
                         <div class="right_section">
-                            
+
 
                             <div class="contents">
 
@@ -109,45 +109,42 @@
                                 </div>
                                 <div class="userInformationsContent  sessions ">
                                     <h2>Seanslar</h2>
-                                    <div class="operation_name"> <b>Saç Ekimi:</b></div>
+                                    <hr>
 
                                     <div class="table user-table">
                                         <table class="user-table-main">
                                             <thead>
 
-                                                <th>Seans</th>
                                                 <th>Tarih</th>
-                                                <th>Personel</td>
-
+                                                <th>Personel</th>
+                                                <th>İşlemler</td>
                                                 <th>Seans Durumu</th>
                                             </thead>
+                                            <% sessions.forEach(session=> { %>
+                                                <tr>
 
-                                            
-                                            
-                                            <tr>
-
-                                                <td>3.Seans</td>
-                                                <td>02.05.2023</td>
-                                                <td>Mehmet Atlı</td>
-
-                                                <td>
-                                                    <p class="continue"><% sessions.state %></p>
-                                                </td>
+                                                    <td>
+                                                        <%= new Date(session.date).toLocaleDateString() %>
+                                                    </td>
+                                                    <td>
+                                                        <%= session.doctor.name %>
+                                                    </td>
+                                                    <td>
+                                                        <%= session %>
+                                                    </td>
 
 
-                                            </tr>
-                                            <tr>
 
-                                                <td>4.Seans</td>
-                                                <td>04.07.2023</td>
+                                                    <td>
+                                                        <p class="finish">
+                                                            <%= session.state %>
+                                                        </p>
+                                                    </td>
+                                                    <td><a href="#">Düzenle</a></td>
+                                                </tr>
+                                                <% }) %>
 
-                                                <td>05328756458</td>
 
-                                                <td>
-                                                    <p class="finish"> Tamamlanmadı</p>
-                                                </td>
-                                                <td><a href="#">Düzenle</a></td>
-                                            </tr>
                                         </table>
 
                                     </div>
@@ -155,7 +152,7 @@
                                 </div>
                                 <div class="userInformationsContent payments">
                                     <h2>Ödemeler</h2>
-                                    <div class="operation_name"> <b>Saç Ekimi:</b></div>
+
                                     <div class="table user-table">
                                         <table class="user-table-main">
                                             <thead>
@@ -166,33 +163,33 @@
 
                                             </thead>
 
-                                            <tr>
-                                                <td>1</td>
-                                                <td>01.01.2023</td>
-                                                <td> Kredi Kartı</td>
-                                                <td>5000tl</td>
+                                            <% payments.forEach(payment=> { %>
+                                                <tr>
+
+                                                    <td>
+                                                        <%= new Date(payment.createdAt).toLocaleDateString() %>
+                                                    </td>
+                                                    <td>
+                                                        <%= payment.cashOrCard %>
+                                                    </td>
+                                                    <td>
+                                                        <%= payment.value %>
+                                                    </td>
 
 
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>03.02.2023</td>
-                                                <td>Nakit</td>
-                                                <td>1200tl</td>
 
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>02.05.2023</td>
-                                                <td>Kredi Kartı</td>
-                                                <td> 2800tl</td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td>Toplam:</td>
-                                                <td> 10000</td>
-                                            </tr>
+
+                                                    <td><a href="#">Düzenle</a></td>
+                                                </tr>
+                                                <% }) %>
+
+
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>Toplam:</td>
+                                                        <td> 10000</td>
+                                                    </tr>
 
                                         </table>
 
@@ -201,21 +198,35 @@
                                 </div>
                                 <div class="userInformationsContent  images ">
                                     <h2>Resimler</h2>
-                                    <div class="small_images">
-                                        <% singleUser.images.forEach(element=> { %>
+                                    <hr>
+                                    <button class="button add">Resim Ekle</button>
+                                    
+                                    
+                                    <div class="all-images">
+                                        <div class="small_images">
+                                            <% singleUser.images.forEach(element=> { %>
+    
+                                                <img src=" <%= element.url %>" alt="aaa">
+                                                <div class="small_images_options">
+                                                    <span>
+                                                        <%=element.uploadTime %> .Ay
+                                                    </span>
+                                                    
+                                                    
+                                                        <a href="./<%= singleUser.id %>/<%= element.public_id.split("/")[1] %>/deletePhoto" data-photoid="<%= element._id %>">Sil</a>
+                                                    
+                                                </div>
+    
+    
+                                                <% }) %>
+                                        </div>
+                                        <div id="big_image_wrapper">
+                                            <img src="" alt="" class="imageBig">
+    
+                                        </div>
 
-                                            <img src=" <%= element.url %>" alt="aaa">
-                                            <span>
-                                                <%=element.uploadTime %> .Ay
-                                            </span>
-
-
-                                            <% }) %>
                                     </div>
-                                    <div id="big_image_wrapper">
-                                        <img src="" alt="" class="imageBig">
-
-                                    </div>
+                                    
 
                                 </div>
                                 <div class="userInformationsContent procces">
@@ -264,29 +275,26 @@
                                     </div>
 
                                 </div>
-                                
-                            </div>                            
+
+                            </div>
 
                         </div>
 
                     </div>
                 </main>
                 <div class=" modal modal_user">
-                    
+
                     <h2>Genel Bilgileri Düzenle</h2>
 
-                    <form action="./<%= singleUser._id %>/editInformations" method="POST"
-                        enctype="multipart/form-data">
+                    <form action="./<%= singleUser._id %>/editInformations" method="POST" enctype="multipart/form-data">
                         <div class="inputs ">
                             <span>İsim</span>
-                            <input type="text" name="name" id="user-name"
-                                value="<%= singleUser.name %>">
+                            <input type="text" name="name" id="user-name" value="<%= singleUser.name %>">
                         </div>
 
                         <div class="inputs ">
                             <span>Soyisim</span>
-                            <input type="text" name="surname" id="user-surname"
-                                value="<%= singleUser.surname %>">
+                            <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>">
                         </div>
                         <div class="inputs ">
                             <span>Email</span>
@@ -313,8 +321,7 @@
                         </div>
                         <div class="inputs ">
                             <span>Açıklama</span>
-                            <textarea name="notes" id="" cols="70"
-                                rows="2"><%=singleUser.notes%></textarea>
+                            <textarea name="notes" id="" cols="70" rows="2"><%=singleUser.notes%></textarea>
                         </div>
                         <button type="submit" id="edit-user">Kaydet</button>
                         <span class="cancel_button">Vazgeç</span>
@@ -376,8 +383,7 @@
                         <div class="payment_options ">
                             <span>Tahsilat:</span>
                             <div>
-                                <input type="radio" id="credit_card_ratio" name="payment"
-                                    value="credit_card">
+                                <input type="radio" id="credit_card_ratio" name="payment" value="credit_card">
                                   <label for="credit_card_ratio">Kredi Kartı</label>
                             </div>
                             <div>
@@ -394,12 +400,11 @@
                 <div class="modal modal_image">
                     <h2>Resim Ekle</h2>
 
-                    <form action="./<%= singleUser._id %>/uploadpictures" method="POST"
-                        enctype="multipart/form-data">
+                    <form action="./<%= singleUser._id %>/uploadpictures" method="POST" enctype="multipart/form-data">
 
                         <div class="inputs ">
                             <span>Resim seç</span>
-                            <input type="file" name="upload_file" src="" alt="" multiple
+                            <input type="file" name="upload_file" src="" alt="" multiple required
                                 onchange="getImagePreview(event)">
                         </div>
                         <div class="uploaded_images_preview"></div>
@@ -409,7 +414,7 @@
                         </div>
 
 
-                        <button type="submit" class="save_button">Kaydet</button>
+                        <button type="submit" class="save_button" id="add-img-save-button">Kaydet</button>
                         <button class="cancel_button">Vazgeç</button>
                     </form>
                 </div>
@@ -448,6 +453,7 @@
                     </form>
 
                 </div>
+                <div class="loader-hidden"></div>
 
         </div>
 
@@ -462,6 +468,9 @@
         <script type="module" src="/js/requests.js"></script>
         <script type="module" src="/js/user_details.js"></script>
         <script src="/js/sidebar.js"></script>
+        <script>
+            
+        </script>
 
 
 

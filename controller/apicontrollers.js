@@ -80,6 +80,7 @@ const getSingleDaySessions = async (req, res) => {
     });
   }
 };
+
 const getSingleDaySingleDoctorSessions = async (req, res) => {
   try {
     const doctors = res.locals.user.doctors;
@@ -119,5 +120,5 @@ export {
   getAllUsers,
   getSingleDaySessions,
   getSingleDaySingleDoctorSessions,
-  newPassword,
+  newPassword
 };

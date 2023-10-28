@@ -22,9 +22,9 @@ const userSchema = new Schema({
     notes: { type: String, require: false },
     debtStatus: { type: Number, require: 0 },
     images: [{
-       
         description:String,
         url:String,
+        public_id:String,
         uploadTime:Number
     }],
     company: {

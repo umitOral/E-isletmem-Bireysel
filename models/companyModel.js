@@ -72,6 +72,8 @@ companySchema.methods.createResetPasswordToken = function (companyEmail) {
     this.passwordResetTokenExpires=Date.now()+10*60*1000 //10 minutes
   
   return resetToken;
+  
+
 };
 
 const Company = mongoose.model("Company", companySchema);

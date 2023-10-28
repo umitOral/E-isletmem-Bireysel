@@ -51,7 +51,9 @@
   align-self: center;
   margin-bottom: 0.5rem;
 }
-
+.all-images{
+  display: flex;
+}
 .left_section .show-content{
   border: 1px solid rgba(128, 128, 128, 0.576);
   border-radius: 0.5rem;
@@ -184,6 +186,30 @@
 
 .userInformationsContent.images .small_images img.focused {
   border: 3px solid rgb(231, 6, 6);
+}
+.small_images_options{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  top: -20px;
+}
+.small_images_options a{
+  background-color: var(--color-danger);
+  cursor: pointer;
+}
+.small_images_options a:hover{
+  background-color:red;
+  
+}
+.userInformationsContent.images .small_images span,.userInformationsContent.images .small_images a {
+  border: 1px solid gray;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  
+  background-color: #fff;
+}
+.userInformationsContent.images .small_images span:last-child:hover {
+  background-color: #cdcdcd;
 }
 
 .userInformationsContent.images #big_image_wrapper {

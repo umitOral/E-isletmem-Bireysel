@@ -1,12 +1,12 @@
 import express from 'express';
 import {getSettingsPage,getAdminPage,getUsersPage,getSessionsPage,getPersonelsStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getservicesPage,getPersonelsPage,getPaymentsPage} from '../controller/pageController.js';
-import {logOut,createUser,uploadPictures,editInformations,findUser,findPersonels,deactivateUser,activateUser} from '../controller/userController.js';
+import {logOut,createUser,deletePhoto,uploadPictures,editInformations,findUser,findPersonels,deactivateUser,activateUser} from '../controller/userController.js';
 import {createPersonel} from '../controller/personelsController.js';
 
 import {addService,getSingleServicePage,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
 import {addPayment,deletePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
 import {getSexStaticsWithFilter,getPaymentStaticsWithFilter,getNewUserStaticswithFilter} from '../controller/staticsController.js';
-import {updateCompany,errorTest} from '../controller/companyControllers.js';
+import {updateCompanyPassword,updateCompanyInformations} from '../controller/companyControllers.js';
 import sesssionRoutes from './sessionRoutes.js';
 
 const router=express.Router()
@@ -15,13 +15,14 @@ const router=express.Router()
 
 router.route("/").get(getAdminPage)
 router.route("/users").get(getUsersPage)
-router.route("/errorTest").get(errorTest)
+
 
 router.route("/users/search").get(findUser)
 router.route("/users/:id").get(getSinglePage)
 router.route("/users/:id/deactivateUser").get(deactivateUser)
 router.route("/users/:id/activateUser").get(activateUser)
 router.route("/users/:id/uploadpictures").post(uploadPictures)
+router.route("/users/:id/:public_id/deletePhoto").get(deletePhoto)
 router.route("/users/:id/editInformations").post(editInformations)
 
 
@@ -59,7 +60,8 @@ router.route("/services/:id/activateService").get(activateService)
 router.route("/services/addService").post(addService)
 
 router.route("/settings/").get(getSettingsPage)
-router.route("/settings/:id/updateCompany").post(updateCompany)
+router.route("/settings/:id/updateCompanyPassword").post(updateCompanyPassword)
+router.route("/settings/:id/updateCompanyInformations").post(updateCompanyInformations)
 
 router.use("/sessions",sesssionRoutes)
 
