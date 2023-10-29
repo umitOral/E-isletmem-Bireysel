@@ -9,7 +9,7 @@ const connect=()=>{
         console.log("mongodb atlas bağlantısı başarılı")
     })
     .catch((err)=>{
-        console.log("Db error:"+err)
+        return (new Error("database bağlantısı başarısız",500))
     })
 }
 

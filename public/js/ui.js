@@ -122,7 +122,7 @@ export class UI {
                         <div class="center">
                             <span>${("0"+new Date(element.timeValue).getHours()).substr(-2)+":"+new Date(element.timeValue).getMinutes()}</span>
                             
-                            <hr>
+                            
                             <span>${element.user.name}</span>
                             <span class="buttons">${element.state}</span>
 

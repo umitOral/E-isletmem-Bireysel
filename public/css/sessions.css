@@ -198,13 +198,14 @@
   justify-content: space-between;
   gap: 1rem;
   align-items: center;
-  
+  border-top: 1px solid #fdfdfd;
   padding: 1rem;
   background-color: rgba(0, 255, 153, 0.389);
 }
 .single-doctor-events .center {
   
   display: flex;
+  
   flex-direction: column;
 }
 
@@ -232,6 +233,7 @@
 
 .full {
   background-color: rgba(216, 112, 147, 0.464) !important;
+  justify-content: space-between;
 }
 
 .main-sessions .right .events .event.active {

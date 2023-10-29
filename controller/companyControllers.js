@@ -27,8 +27,13 @@ const updateCompanyPassword = async (req, res, next) => {
 };
 const updateCompanyInformations = async (req, res, next) => {
   try {
-    await Company.findByIdAndUpdate(req.params.id, req.body);
+    req.body.workHours={
+      "workStart":req.body.workStart,
+      "workEnd":req.body.workEnd,
+    }
 
+    await Company.findByIdAndUpdate(req.params.id, req.body);
+    console.log(req.body)
     res.json({
       succes: true,
       message: "bilgiler başarıyla değiştirildi.",

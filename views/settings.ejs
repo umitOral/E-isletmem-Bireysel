@@ -19,7 +19,7 @@
 
                 <main>
                     <div class="user-informations">
-                       
+
                         <div class="left_section">
                             <div class="user-img"><i class="ph-bold ph-user"></i></div>
                             <input type="text" class="userID" data-user="<%= user._id %>" hidden>
@@ -97,11 +97,11 @@
                                     <h2>Sms ayarları</h2>
                                 </div>
                                 <div class="userInformationsContent payments">
-                                    <form action="./settings/<%= user._id %>/updateCompany" method="POST" id="change-password-form"
-                                        enctype="multipart/form-data">
+                                    <form action="./settings/<%= user._id %>/updateCompany" method="POST"
+                                        id="change-password-form" enctype="multipart/form-data">
                                         <h2>Şifre ayarları</h2>
                                         <hr>
-                                        
+
                                         <div class="inputs ">
                                             <span>Yeni Şifre:</span>
                                             <input type="text" name="password" id="password" value="">
@@ -110,7 +110,7 @@
                                             <span>Yeni Şifre Tekrar:</span>
                                             <input type="text" name="password2" id="password2" value="">
                                         </div>
-                                        
+
                                         <button type="submit">Şifre Kaydet</button>
 
 
@@ -130,7 +130,8 @@
 
                     <h2>Genel Bilgileri Düzenle</h2>
 
-                    <form action="./settings/<%= user._id %>/updateCompanyInformations" method="POST" enctype="multipart/form-data" id="informations-form">
+                    <form action="./settings/<%= user._id %>/updateCompanyInformations" method="POST"
+                        enctype="multipart/form-data" id="informations-form">
                         <div class="inputs ">
                             <span>Yetkili Adı:</span>
                             <input type="text" name="authorizedName" id="" value="<%= user.authorizedName %>">
@@ -160,14 +161,12 @@
                             <textarea name="billingAddress" id="" cols="70"
                                 rows="2"><%= user.billingAddress %></textarea>
                         </div>
-
+                        
                         <div class="inputs ">
-
                             <span>Başlangıç Saati:</span>
-                            <input type="time" name="workHours.workStart" id=""
-                                value="<%= user.workHours.workStart  %>">
+                            <input type="time" name="workStart" id="" value="<%= user.workHours.workStart  %>">
                             <span>Bitiş Saati:</span>
-                            <input type="time" name="workHours.workEnd" id="" value="<%= user.workHours.workEnd %>">
+                            <input type="time" name="workEnd" id="" value="<%= user.workHours.workEnd %>">
                         </div>
 
 
@@ -183,12 +182,12 @@
         </main>
         </div>
         <div class="information-modal">AAAA</div>
-        
+
 
 
         <script type="module" src="/js/settings.js"></script>
         <script type="module" src="/js/requests.js"></script>
-        
+
         <script src="/js/sidebar.js"></script>
 
 

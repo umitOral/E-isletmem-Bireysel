@@ -83,10 +83,12 @@ const getSingleDaySessions = async (req, res) => {
 
 const getSingleDaySingleDoctorSessions = async (req, res) => {
   try {
-    const doctors = res.locals.user.doctors;
+    
+    const doctors = await User.find({id:res.locals.user_id,role:"doctor",activeOrNot:true});
     const workHours = res.locals.user.workHours;
-    console.log(req.params);
-
+    
+   
+    console.log(req.params)
     const sessionsAllDoctor = [];
 
     for (const i of doctors) {
@@ -102,7 +104,7 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
         sessionsofdoctor: sessionsofdoctor,
       });
     }
-
+    console.log(sessionsAllDoctor)
     res.status(200).json({
       workHours,
       doctors: doctors,

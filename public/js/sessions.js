@@ -59,16 +59,13 @@ function getAllSessions(selectedDate) {
 
     request.getwithUrl("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
         .then(response => {
-            
+            console.log(response)
             const sessionsAllDoctor = response.sessionsAllDoctor
             const AllDoctor = response.doctors
             const workHours = response.workHours
             //array
 
-
             let allTimesofSingleDoctor = []
-
-
 
             sessionsAllDoctor.forEach(singleDoctorData => {
                 const times = []
@@ -85,24 +82,16 @@ function getAllSessions(selectedDate) {
                     times[index] = { "time": index, "value": date }
                 }
 
-
-
                 singleDoctorData.sessionsofdoctor.forEach((element, index) => {
 
                     times.splice((element.timeIndex), 1, element)
 
-
                 });
-
 
                 allTimesofSingleDoctor.push(times)
 
 
             });
-
-
-
-
 
             ui.showAllSessionToUI(allTimesofSingleDoctor, AllDoctor)
 
@@ -352,7 +341,7 @@ function addListener() {
             const activeDate = new Date(year, month, activeDay)
             if (month.toString().length == 1) {
                 month = month + 1
-                month = "0" + month
+                month =  month
             }
 
 

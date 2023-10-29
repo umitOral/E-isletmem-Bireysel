@@ -57,7 +57,7 @@ app.get("/views/front-side/main.ejs");
 //routes,middlewares
 app.use("/admin", authMiddleware.checkUser);
 app.use("/", pageRoute);
-app.use("/api", api);
+app.use("/api",authMiddleware.checkUser, api);
 app.use("/admin", authMiddleware.authenticateToken, adminRoutes);
 app.use("/superAdmin",authMiddleware.authenticateToken,superAdminRoutes);
 //error handlers

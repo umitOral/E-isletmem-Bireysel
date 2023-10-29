@@ -87,6 +87,8 @@ function changeInformations(e) {
         phone:informationForm.phone.value,
         address:informationForm.address.value,
         billingAddress:informationForm.billingAddress.value,
+        workStart:informationForm.workStart.value,
+        workEnd:informationForm.workEnd.value
         
     })
         .then(response => {

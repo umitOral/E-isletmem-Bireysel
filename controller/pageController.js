@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import Service from "../models/serviceModel.js";
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
-import Companies from "../models/companyModel.js";
+import Company from "../models/companyModel.js";
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 
@@ -57,7 +57,7 @@ const getForgotPasswordPage = async (req, res, next) => {
 };
 const getSuperAdminPage = async (req, res) => {
   try {
-    let companies = await Companies.find({});
+    let companies = await Company.find({});
     console.log("başarılı");
 
     res.status(200).render("superAdmin", {
