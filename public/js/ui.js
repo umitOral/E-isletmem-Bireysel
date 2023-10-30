@@ -152,9 +152,12 @@ export class UI {
                     <div class="event" data-time="${index}" data-hour="${element.value}">
                                              
                         <span>${("0"+element.value.getHours()).substr(-2)+":"+("0"+element.value.getMinutes()).substr(-2)} </span>
+                        <input type="checkbox" name="aaa" id="">
+
                         <span class="material-symbols-sharp add-session">
                             add
                         </span>
+
 
                     </div>
                     
