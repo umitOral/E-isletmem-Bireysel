@@ -88,7 +88,7 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
     const workHours = res.locals.user.workHours;
     
    
-    console.log(req.params)
+    
     const sessionsAllDoctor = [];
 
     for (const i of doctors) {

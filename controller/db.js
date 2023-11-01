@@ -1,17 +1,14 @@
-import mongoose from 'mongoose';
-const connect=()=>{
-    mongoose.connect(process.env.DB_URI,{  
-        dbName:"archimet",
-        useNewUrlParser:true,
-        useUnifiedTopology:true
-    })
-    .then(()=>{
-        console.log("mongodb atlas bağlantısı başarılı")
-    })
-    .catch((err)=>{
-        return (new Error("database bağlantısı başarısız",500))
-    })
-}
+import mongoose from "mongoose";
 
-export default connect
+const connect = async() => {
+  await mongoose
+    .connect(process.env.DB_URI, {
+      dbName: "archimet",
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then((response) => console.log("db bağlantısı başarılı"))
+    .catch((err=>console.log(err)));
+};
 
+export default connect;

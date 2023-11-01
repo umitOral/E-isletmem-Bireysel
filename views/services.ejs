@@ -7,10 +7,11 @@
 </head>
 
 <body>
-    <%- include('partials/header.ejs') %>
-        <div class="container">
+    <%- include("partials/aside.ejs") %>
+    
+        <section id="content">
             <!---------- left aside ------------->
-            <%- include("partials/aside.ejs") %>
+            <%- include('partials/header.ejs') %>
 
 
                 <!----------- end of sidebar ----------->
@@ -71,11 +72,11 @@
                                         </td>
                                         <% if(service.activeorNot){ %>
                                             <td><a href="./<%= service._id %>/deactivateService">Deaktive Et</a></td>
-                                          <% } else{ %>  
-                                            <td><a href="./<%= service._id %>/activateService">Aktif Et</a></td>
-                                         <% } %>
+                                            <% } else{ %>
+                                                <td><a href="./<%= service._id %>/activateService">Aktif Et</a></td>
+                                                <% } %>
 
-                                        <td><a href="./<%= service._id %>">Detay</a></td>
+                                                    <td><a href="./<%= service._id %>">Detay</a></td>
                                     </tr>
                                     <% }) %>
 
@@ -92,23 +93,33 @@
                     <div class="pagination">
 
                         <% if (pagination.previous ) { %>
-                            <a href="./?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span >Önceki Sayfa<<</span></a>
-                        <% } %>
-                        
-                        <% if (pagination.page>1) { %>
-                            <a href="./?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span><%= pagination.page-1 %></span></a>
-                        <% } %>
-                        
-                        <a href="./?page=<%= pagination.page %>&limit=<%=3 %>"><span class="page-active"><%= pagination.page %></span></a>
+                            <a href="./?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
+                                    Sayfa<<< /span></a>
+                            <% } %>
 
-                        <% if (pagination.page<pagination.lastpage) { %>
-                            <a href="./?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span ><%= pagination.page+1 %></span></a>
-                        <% } %>
-                        
+                                <% if (pagination.page>1) { %>
+                                    <a href="./?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span>
+                                            <%= pagination.page-1 %>
+                                        </span></a>
+                                    <% } %>
 
-                         <% if (pagination.next) { %>
-                            <a href="./?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span> >>Sonraki Sayfa</span></a>
-                        <% } %>
+                                        <a href="./?page=<%= pagination.page %>&limit=<%=3 %>"><span
+                                                class="page-active">
+                                                <%= pagination.page %>
+                                            </span></a>
+
+                                        <% if (pagination.page<pagination.lastpage) { %>
+                                            <a href="./?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span>
+                                                    <%= pagination.page+1 %>
+                                                </span></a>
+                                            <% } %>
+
+
+                                                <% if (pagination.next) { %>
+                                                    <a
+                                                        href="./?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
+                                                            >>Sonraki Sayfa</span></a>
+                                                    <% } %>
 
                     </div>
                     <div class="add_customer modal">
@@ -124,20 +135,20 @@
                                 <span>Fiyat</span>
                                 <input type="text" name="servicePrice" id="surname">
                             </div>
-                            
-                            
-                        
+
+
+
                             <button type="submit" class="save_button" id="add-user">Kaydet</button>
                             <button class="cancel_button">Vazgeç</button>
                         </form>
                     </div>
-                       
+
 
 
 
 
                 </main>
-        </div>
+        </section>
 
 
         <script type="module" src="/js/autocomplete.js"></script>

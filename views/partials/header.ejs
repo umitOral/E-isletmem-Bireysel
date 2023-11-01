@@ -1,7 +1,31 @@
 <header>
-    
-        <div class="logo">
-            <img src="/photos/logo.png" alt="" s>
+    <div class="head">
+        <img src="/photos/logo.png" alt="">
+    </div>
+    <div>
+        
+        <div>
+            <i class="ph ph-buildings"></i>
+            <span class="text">
+                <%= locals.user.companyName %>
+            </span>
         </div>
+        
+        <div>
+            <i class="ph ph-user-circle"></i>
+            <span class="text">
+                <%= locals.user.authorizedName %>
+            </span>
+        </div>
+    </div>
+
+
+    </div>
+
+    <a href="/admin/logout">
+        <i class="icon ph-bold ph-sign-out"></i>
+        <span class="text">Çıkış</span>
+    </a>
+
 
 </header>

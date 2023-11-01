@@ -1,12 +1,9 @@
-* {
-  box-sizing: border-box;
-  margin:0px;
-  padding: 0px;
-}
+
 
 .main-sessions {
   display: flex;
   gap: 2rem;
+  height: 100%;
 }
 .cancel_button{
   margin-top: 1rem;
@@ -28,6 +25,10 @@
   flex-direction: column;
   border: 1px solid gray;
   border-radius: 10px;
+  
+}
+#add-session-btn{
+  background-color: var(--color-succes);
 }
 .month {
   display: flex;
@@ -156,16 +157,18 @@
 /* ----------------------------------------right section---------------------------------- */
 .main-sessions .right {
   border: 1px solid gray;
-  min-height: 100%;
-  padding: 20px;
+  height: 638px;
+  padding: 1rem;
   border-radius: 10px;
   display: flex;
+  align-items: center;
   flex-direction: column;
+  gap: 0.5rem;
 }
 .main-sessions .right .today-date {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 2rem;
   text-transform: capitalize;
   font-size: 1.5rem;
   border: 1px solid rgba(128, 128, 128, 0.459);
@@ -175,7 +178,7 @@
   width: 100%;
   display: flex;
   gap: 1rem;
-
+  height: 100%;
   margin-top: 1rem;
 
   overflow-x: hidden;

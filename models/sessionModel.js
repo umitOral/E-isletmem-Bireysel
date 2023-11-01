@@ -1,46 +1,47 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
+const Schema = mongoose.Schema;
+const sessionSchema = new Schema(
+  {
+    timeIndexes: [
+      {
+        type: Number
+      }
+    ],
+    date: {
+      type: Date
+    },
+    startHour: {
+      type: Date
+    },
+    endHour: {
+      type: Date
+    },
 
-const Schema = mongoose.Schema
-const sessionSchema = new Schema({
-    
-    date:{type:Date},
-    
-    timeIndex: {
-            type:Number, 
-    },
-    timeValue: {
-            type:Date, 
-    },
-    
-    timepicker:{
-        type:String
-    },
-    
     description: { type: String },
 
     user: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
+      type: Schema.Types.ObjectId,
+      ref: "User"
     },
 
     doctor: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
+      type: Schema.Types.ObjectId,
+      ref: "User"
     },
-    
-    services: [{
-        type: String,
-    }],
-    state:{
-        type:String,
-        default:"Bekleniyor"
-    }
 
-})
+    services: [
+      {
+        type: Schema.Types.ObjectId
+      },
+    ],
+    state: {
+      type: String,
+      default: "Bekleniyor"
+    },
+  },
+  { timestamps: true }
+);
 
-
-
-
-const Session = mongoose.model("Session", sessionSchema)
-export default Session
+const Session = mongoose.model("Session", sessionSchema);
+export default Session;

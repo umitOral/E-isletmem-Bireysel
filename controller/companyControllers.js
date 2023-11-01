@@ -41,7 +41,7 @@ const updateCompanyInformations = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       succes: false,
-      message: "create session error",
+      message: "update company error",
     });
   }
 };

@@ -7,11 +7,11 @@
 </head>
 
 <body>
-    <%- include('partials/header.ejs') %>
-        <div class="container">
+    <%- include("partials/aside.ejs") %>
+        <section id="content">
             <!---------- left aside ------------->
-            <%- include("partials/aside.ejs") %>
-
+            
+            <%- include('partials/header.ejs') %>
 
                 <!----------- end of sidebar ----------->
 
@@ -134,7 +134,7 @@
                         <button class="cancel_button">Vazgeç</button>
                     </form>
                 </div>
-        </div>
+            </section>
 
 
         

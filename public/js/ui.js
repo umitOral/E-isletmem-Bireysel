@@ -120,7 +120,11 @@ export class UI {
                     <div class="event full" data-session="${element._id}" data-timevalue="${element.timeValue}" data-timeindex="${element.timeIndex}">
 
                         <div class="center">
-                            <span>${("0"+new Date(element.timeValue).getHours()).substr(-2)+":"+new Date(element.timeValue).getMinutes()}</span>
+                        <div>
+                        <span>${new Date(element.startHour).toLocaleTimeString().slice(0,5)}-</span><span>${new Date(element.endHour).toLocaleTimeString().slice(0,5)}</span>
+
+                        </div>
+                            
                             
                             
                             <span>${element.user.name}</span>
@@ -149,14 +153,19 @@ export class UI {
                 } else {
                     singleDoctorEvents.innerHTML += `
                          
-                    <div class="event" data-time="${index}" data-hour="${element.value}">
+                    <div class="event" data-time="${index}" data-hour="${element.startHour}" data-endHour="">
                                              
-                        <span>${("0"+element.value.getHours()).substr(-2)+":"+("0"+element.value.getMinutes()).substr(-2)} </span>
+                        <div>
+                        <span>${new Date(element.startHour).toLocaleTimeString().slice(0,5)} </span>
+                        
+                        </div>
+                        <span>  Boş</span>
+                        <div>
                         <input type="checkbox" name="aaa" id="">
+                        </div>
+                        
 
-                        <span class="material-symbols-sharp add-session">
-                            add
-                        </span>
+                       
 
 
                     </div>

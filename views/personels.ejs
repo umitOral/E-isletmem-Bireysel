@@ -3,16 +3,16 @@
 
 <head>
     <%- include('partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/users.css">
+        <link rel="stylesheet" href="/css/users.css">
 </head>
 
 <body>
-    <%- include('partials/header.ejs') %>
-        <div class="container">
+    <%- include("partials/aside.ejs") %>
+    
+        <section id="content">
             <!---------- left aside ------------->
-            <%- include("partials/aside.ejs") %>
-
-
+            
+            <%- include('partials/header.ejs') %>
                 <!----------- end of sidebar ----------->
 
                 <main>
@@ -44,43 +44,43 @@
 
                     </div>
                     <div class="table-wrapper">
-                        <table >
+                        <table>
                             <thead>
-                                
-                                
+
+
                                 <th>İsim<span class="material-symbols-sharp">north</span></th>
                                 <th>Soyisim<span class="material-symbols-sharp">north</span></th>
                                 <th>Aktiflik<span class="material-symbols-sharp">north</span></th>
-                                
-                               
-                                
+
+
+
                             </thead>
                             <tbody id="userList">
                                 <% users.forEach(user=> { %>
                                     <tr>
-                                        
+
                                         <td>
                                             <%= user.name %>
                                         </td>
                                         <td>
                                             <%= user.surname %>
                                         </td>
-                                        
+
                                         <td>
                                             <% if(user.activeOrNot ){ %>
-                                                <span class="continue">Aktif</span> 
-                                              <% } else{ %>  
-                                                <span class="finish">Deaktif</span> 
-                                             <% } %>
-                                            
+                                                <span class="continue">Aktif</span>
+                                                <% } else{ %>
+                                                    <span class="finish">Deaktif</span>
+                                                    <% } %>
+
                                         </td>
                                         <% if(user.activeOrNot){ %>
                                             <td><a href="./users/<%= user._id %>/deactivateUser">Deaktive Et</a></td>
-                                          <% } else{ %>  
-                                            <td><a href="./users/<%= user._id %>/activateUser">Aktif Et</a></td>
-                                         <% } %>
-                                        
-                                        <td><a href="./users/<%= user._id %>">Detaylar</a></td>
+                                            <% } else{ %>
+                                                <td><a href="./users/<%= user._id %>/activateUser">Aktif Et</a></td>
+                                                <% } %>
+
+                                                    <td><a href="./users/<%= user._id %>">Detaylar</a></td>
                                     </tr>
                                     <% }) %>
 
@@ -97,27 +97,38 @@
                     <div class="pagination">
 
                         <% if (pagination.previous ) { %>
-                            <a href="./personels?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span >Önceki Sayfa<<</span></a>
-                        <% } %>
-                        
-                        <% if (pagination.page>1) { %>
-                            <a href="./personels?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span><%= pagination.page-1 %></span></a>
-                        <% } %>
-                        
-                        <a href="./personels?page=<%= pagination.page %>&limit=<%=3 %>"><span class="page-active"><%= pagination.page %></span></a>
+                            <a
+                                href="./personels?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
+                                    Sayfa<<< /span></a>
+                            <% } %>
 
-                        <% if (pagination.page<pagination.lastpage) { %>
-                            <a href="./personels?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span ><%= pagination.page+1 %></span></a>
-                        <% } %>
-                        
+                                <% if (pagination.page>1) { %>
+                                    <a href="./personels?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span>
+                                            <%= pagination.page-1 %>
+                                        </span></a>
+                                    <% } %>
 
-                         <% if (pagination.next) { %>
-                            <a href="./personels?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span> >>Sonraki Sayfa</span></a>
-                        <% } %>
+                                        <a href="./personels?page=<%= pagination.page %>&limit=<%=3 %>"><span
+                                                class="page-active">
+                                                <%= pagination.page %>
+                                            </span></a>
+
+                                        <% if (pagination.page<pagination.lastpage) { %>
+                                            <a href="./personels?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span>
+                                                    <%= pagination.page+1 %>
+                                                </span></a>
+                                            <% } %>
+
+
+                                                <% if (pagination.next) { %>
+                                                    <a
+                                                        href="./personels?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
+                                                            >>Sonraki Sayfa</span></a>
+                                                    <% } %>
 
                     </div>
-                    
-                        
+
+
 
 
 
@@ -136,7 +147,7 @@
                             <span>Soyisim</span>
                             <input type="text" name="surname" id="surname">
                         </div>
-                        
+
                         <div class="inputs ">
                             <span>Doğum Tarihi</span>
                             <input type="date" name="birtdhDate" id="birtdhDate">
@@ -167,10 +178,10 @@
                         <button class="cancel_button">Vazgeç</button>
                     </form>
                 </div>
-        </div>
+        </section>
 
 
-        
+
         <script type="module" src="../js/requests.js"></script>
         <script type="module" src="../js/users.js"></script>
         <script src="/js/sidebar.js"></script>

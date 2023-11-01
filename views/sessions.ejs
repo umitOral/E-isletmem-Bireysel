@@ -11,16 +11,18 @@
 
 <body>
 
-    <%- include('partials/header.ejs') %>
-        <div class="container">
+    <%- include('partials/aside.ejs') %>
+        <section id="content">
             <!---------- left aside ------------->
-            <%- include('partials/aside.ejs') %>
+            
+            <%- include('partials/header.ejs') %>
 
                 <!----------- end of sidebar ----------->
 
                 <main>
                     <div class="header">
                         <h1> Randevular 222</h1>
+                        
                         <div class="current_date"></div>
                         <div class="main main-sessions">
 
@@ -28,9 +30,9 @@
                             <div class="left">
                                 <div class="calendar">
                                     <div class="month">
-                                        <i class="fa-solid fa-chevron-left prev"></i>
+                                        <i class="ph ph-caret-left"></i>
                                         <div class="date1">Mayıs 2023</div>
-                                        <i class="fa-solid fa-chevron-right next"></i>
+                                        <i class="ph ph-caret-right"></i>
                                     </div>
                                     <div class="weekdays">
                                         <div>Pa</div>
@@ -57,9 +59,11 @@
                             <div class="right">
 
                                 <div class="today-date">
-                                    <div class="event-day">Pazartesi</div>
-                                    <div class="event-date"> 22 Mayıs 2023</div>
+                                    <div class="event-day">ppppp</div>
+                                    <div class="event-date"> pp ppp ppp</div>
+                                    
                                 </div>
+                                <div class="add-session"><button id="add-session-btn">Randevu Ekle</button></div>
                                 <div class="events-all-doctors">
 
 
@@ -72,9 +76,10 @@
                 </main>
                 <div class="modal modal_add_session ">
 
-                    <h2>Seans Ekle</h2>
+                    
 
-                    <form action="./sessions/createsession" method="POST">
+                    <form action="./sessions/createsession" method="POST" id="add-session-form">
+                        <h2>Randevu Ekle</h2>
                         <div class="inputs">
 
                             <div class="title">
@@ -113,15 +118,19 @@
 
                             </div>
 
-                            <div class="inputs"  style="display: none;">timeIndex:
-                                <input type="text" name="timeIndex" id="" class="timeIndex">
+                            <div class="inputs"  >timeIndex:
+                                <input type="text" name="timeIndexes" id="" class="timeIndex">
                             </div>
-                            <div class="inputs">Saat:
-                                <input type="text" name="" id="" class="hourValue" readonly>
+                            <div class="inputs"  >timeIndex1:
+                                <input type="text" name="timeIndexes" id="" class="timeIndex">
                             </div>
-                            <div class="inputs" style="display: none;">SaatFull:
-                                <input type="text" name="timeValue" id="" class="timeValue" readonly>
+                            <div class="inputs">Başlangıç Saati:
+                                <input type="text" name="startHour" id="" class="startHour" readonly>
                             </div>
+                            <div class="inputs">Bitiş Saati:
+                                <input type="text" name="endHour" id="" class="endHour" readonly>
+                            </div>
+                            
                             <div class="inputs">Doktor:
                                 <input type="text" id="" class="doctor-name" readonly>
                             </div>
@@ -189,11 +198,11 @@
 
                             </div>
 
-                            <div class="inputs"  style="display: ;">timeIndex:
+                            <div class="inputs"  ">timeIndex:
                                 <input type="text" name="timeIndex" id="" class="timeIndex">
                             </div>
                             <div class="inputs">Saat:
-                                <input type="text" name="" id="" class="hourValue" readonly>
+                                <input type="text" name="" id="" class="startHour" readonly>
                             </div>
                             <div class="inputs" style="display: none;">SaatFull:
                                 <input type="text" name="timeValue" id="" class="timeValue" readonly>
@@ -201,7 +210,7 @@
                             <div class="inputs">Doktor:
                                 <input type="text" id="" class="doctor-name" readonly>
                             </div>
-                            <div class="inputs" style="display: ;">DoktorID:
+                            <div class="inputs" ">DoktorID:
                                 <input type="text" name="doctor" id="" class="doctor-id">
                             </div>
                             <div class="inputs">Tarih:
@@ -221,7 +230,7 @@
                     </form>
 
                 </div>
-        </div>
+            </section>
 
         <script type="module" src="/js/requests.js"></script>
         <script type="module" src="/js/ui.js"></script>

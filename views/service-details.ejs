@@ -8,10 +8,11 @@
 </head>
 
 <body>
-    <%- include('partials/header.ejs') %>
-        <div class="container">
+    <%- include("partials/aside.ejs") %>
+    
+        <section id="content">
             <!---------- left aside ------------->
-            <%- include("partials/aside.ejs") %>
+            <%- include('partials/header.ejs') %>
 
 
                 <!----------- end of sidebar ----------->
@@ -57,7 +58,7 @@
                     </div>
 
                 </main>
-        </div>
+            </section>
 
 
         

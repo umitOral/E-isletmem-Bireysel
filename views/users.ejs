@@ -7,14 +7,12 @@
 </head>
 
 <body>
-    <%- include('partials/header.ejs') %>
-        <div class="container">
+    <%- include("partials/aside.ejs") %>
+        <section id="content">
+            <%- include('partials/header.ejs') %>
             <!---------- left aside ------------->
-            <%- include("partials/aside.ejs") %>
-
-
-                <!----------- end of sidebar ----------->
-
+            
+               
                 <main>
 
                     <div class="header">
@@ -72,6 +70,10 @@
                                                 <%= user.phone %>
                                             </span> </td>
                                         <td><a href="./users/<%= user._id %>">Detay</a></td>
+                                        <td><a href="./users/<%= user._id %>">Detay</a></td>
+                                        <td><a href="./users/<%= user._id %>">Detay</a></td>
+                                        <td><a href="./users/<%= user._id %>">Detay</a></td>
+                                        <td><a href="./users/<%= user._id %>">Detay</a></td>
                                     </tr>
                                     <% }) %>
 
@@ -110,7 +112,7 @@
                     </div>
 
                 </main>
-                <div class="add_customer modal">
+                 <div class="add_customer modal">
                     <h2>Yeni Hasta Ekle</h2>
                     <form action="./addUser" method="POST" id="register-form">
                         <div class="inputs ">
@@ -132,11 +134,7 @@
                                 <input type="radio" id="sex-man" name="sex" value="erkek">
                                   <label for="sex-man">Erkek</label>
 
-
-
-
                             </div>
-
 
                         </div>
                         <div class="inputs ">
@@ -169,7 +167,9 @@
                         <button class="cancel_button">Vazgeç</button>
                     </form>
                 </div>
-        </div>
+
+                
+        </seciton>
 
 
 

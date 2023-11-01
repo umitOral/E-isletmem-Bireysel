@@ -2,12 +2,14 @@ import Session from '../models/sessionModel.js';
 
 const createSession = async (req, res) => {
     try {
-        console.log(req.body)
         
-        req.body.state="bekleniyor"
+        req.body.endHour = new Date(req.body.date+" "+req.body.endHour);
+        req.body.startHour = new Date(req.body.date+" "+req.body.startHour);
+        req.body.date = new Date(req.body.date);
         
+
         const session=await Session.create(req.body)
-        console.log(req.body)
+        
         res.redirect("back")
         
     }
@@ -18,6 +20,7 @@ const createSession = async (req, res) => {
         })
     }
 }
+
 const deleteSession = async (req, res) => {
     try {
 
