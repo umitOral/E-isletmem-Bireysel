@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/users.css">
+        <link rel="stylesheet" href="/css/companyPayment.css">
+</head>
+
+<body>
+    <%- include("partials/aside.ejs") %>
+        <section id="content">
+            <%- include('partials/header.ejs') %>
+                <!---------- left aside ------------->
+
+
+                <main>
+
+                    <div class="header">
+                        <h1> Ödeme Yap</h1>
+                    </div>
+                    <div class="paymentFrom">
+
+                    </div>
+
+                    <div class="companyPaymentContent">
+
+                        <div class="premium">
+                            <div class="plan_head">Premium Plan </div>
+                            <span class="price">499TL/Ay</span>
+                            <span>(yıllık ödemede <b>1118 TL</b> Kazanın)</span>
+                            <div>
+                                <hr>
+                                <ul>
+                                    <li><i class="ph ph-check"></i>Sınırsız Randevu</li>
+                                    <li><i class="ph ph-check"></i>Ürün / Hizmet Yönetimi</li>
+                                    <li><i class="ph ph-check"></i>Gelişmiş Raporlama</li>
+                                    <li><i class="ph ph-check"></i>Kasa (Gelir/Gider) Yönetimi</li>
+                                    <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <form action="./addCompanyPayment" method="POST" id="register-form">
+
+                            <div class="inputs ">
+                                <span>cardNumber</span>
+                                <input type="text" name="cardNumber" id="surname" value="5528790000000008">
+                            </div>
+                            <div class="inputs ">
+                                <span>expireMonth</span>
+                                <input type="text" name="expireMonth" id="surname" value="12">
+                            </div>
+                            <div class="inputs ">
+                                <span>expireYear</span>
+                                <input type="text" name="expireYear" id="surname" value="2030">
+                            </div>
+                            <div class="inputs ">
+                                <span>cvc</span>
+                                <input type="text" name="cvc" id="surname" value="123">
+                            </div>
+                            <div class="inputs ">
+                                <span>cardUserName</span>
+                                <input type="text" name="cardUserName" id="surname" value="John Doe">
+                            </div>
+                            <div class="inputs ">
+                                <span>registerCard</span>
+                                <input type="checkbox" name="registerCard" id="" value="1">
+                            </div>
+
+
+                            <button type="submit" class="save_button" id="add-user">Ödeme Yap</button>
+
+                        </form>
+                    </div>
+
+
+
+
+
+                </main>
+                <div class="loader_wrapper hidden">
+                    <img src="../photos/loading.gif" alt="" class="loader">
+                </div>
+
+
+
+        </section>
+        <div class="response_modal"></div>
+
+
+        <script type="module" src="/js/companyPayment.js"></script>
+        <script type="module" src="../js/requests.js"></script>
+
+
+        <script src="/js/sidebar.js"></script>
+
+
+
+
+</body>
+
+</html>

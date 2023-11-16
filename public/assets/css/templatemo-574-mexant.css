@@ -68,7 +68,7 @@ html[xmlns] .clearfix {
 ul, li {
   padding: 0;
   margin: 0;
-  list-style: none;
+  
 }
 
 header, nav, section, article, aside, footer, hgroup {
@@ -91,6 +91,11 @@ html, body {
 
 a {
   text-decoration: none !important;
+  
+}
+footer a{
+  color: white;
+  padding: 0.5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -207,7 +212,7 @@ section {
 .section-heading h4 {
   margin-top: 10px;
   line-height: 40px;
-  font-size: 36px;
+  
   font-weight: 700;
   text-transform: capitalize;
   color: #212741;
@@ -255,7 +260,11 @@ header
   background: transparent;
 }
 .logo img {
-  width: 100px;
+  width: 180px;
+}
+
+footer img{
+  width: 50%;
 }
 
 .header-area .main-nav .logo {
@@ -885,7 +894,7 @@ section.simple-cta {
   background-position: center center;
   background-size: cover;
   width: 100%;
-  padding: 80px 0px;
+  padding: 60px 0px;
 }
 
 section.simple-cta .left-image {
@@ -1260,7 +1269,7 @@ page heading
 }
 
 .page-heading h2 {
-  font-size: 56px;
+  font-size: 40px;
   color: #000;
   font-weight: 700;
   text-align: center;

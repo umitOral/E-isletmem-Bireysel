@@ -39,11 +39,17 @@ const months = [
   "kasım",
   "aralık",
 ];
-window.addEventListener("load",()=>{
-  eventDay.textContent=today.toLocaleDateString("locale",{weekday:"long"})
-  eventDate.textContent=today.toLocaleDateString()
-})
+window.addEventListener("load", () => {
+  eventDay.textContent = today.toLocaleDateString("locale", {
+    weekday: "long",
+  });
+  eventDate.textContent = today.toLocaleDateString();
+});
 function getAllSessions(selectedDate) {
+  if (selectedDate.length===9) {
+    selectedDate=selectedDate.slice(0,8)+"0"+selectedDate.slice(8)
+  }
+  console.log(selectedDate)
   request
     .getwithUrl("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
     .then((response) => {
@@ -57,29 +63,49 @@ function getAllSessions(selectedDate) {
 
       sessionsAllDoctor.forEach((singleDoctorData) => {
         const times = [];
-        const begin = workHours.workStart;
-        const end = workHours.workEnd;
+        const workStartTime = workHours.workStart;
+        const workFinishTime = workHours.workEnd;
+        const workPeriod = workHours.workPeriod;
 
-        let beginHour = Number(begin.split(":")[0]);
-        let endHour = Number(end.split(":")[0]);
+        let beginHour = Number(workStartTime.split(":")[0]);
+        let endHour = Number(workFinishTime.split(":")[0]);
 
-        for (let index = 0; index < (endHour - beginHour) * 4; index++) {
-          const date = new Date(`${selectedDate},${begin}`);
-          //
-          let newDate = addMinutes(date, index * 15);
-          times[index] = { timeIndex: index, startHour: date };
-        }
-
-        singleDoctorData.sessionsofdoctor.forEach((element, index) => {
+        for (
+          let index = 0;
+          index < (endHour - beginHour) * (60 / workPeriod);
+          index++
+        ) {
           
-          times.splice(element.timeIndexes[0],element.timeIndexes[1]-element.timeIndexes[0], element);
+          //
+          
+          times[index] = {
+            timeIndex: index,
+            startHour: addMinutes(index*workPeriod),
+            endHour: addMinutes(((index+1)*workPeriod))
+          };
+        }
+        function addMinutes(minutes) {
+          const date = new Date(`${selectedDate},${workStartTime}`);
+          date.setMinutes(date.getMinutes() + minutes);
+        
+          return date;
+        }
+       
+        singleDoctorData.sessionsofdoctor.forEach((element, index) => {
+          times.splice(
+            element.timeIndexes[0],
+            element.timeIndexes[1] - element.timeIndexes[0]+1,
+            element
+          );
         });
 
         allTimesofSingleDoctor.push(times);
-
       });
-      console.log(allTimesofSingleDoctor)
+      
+      
       ui.showAllSessionToUI(allTimesofSingleDoctor, AllDoctor);
+
+     
 
       changeState(selectedDate);
       deneme();
@@ -99,17 +125,15 @@ function deneme() {
     });
   });
 }
-function addMinutes(date, minutes) {
-  date.setMinutes(date.getMinutes() + minutes);
 
-  return date;
-}
+
+
 
 function changeState(selectedDate) {
+ 
   const sessionOptionsModalOptions = document.querySelectorAll(
     ".session-options-modal span"
   );
-
   sessionOptionsModalOptions.forEach((element) => {
     element.addEventListener("click", (e) => {
       console.log(e.target);
@@ -307,8 +331,9 @@ function addListener() {
   days.forEach((element) => {
     element.addEventListener("click", (e) => {
       // set current day active
-
-      activeDay = Number(e.target.innerHTML);
+      
+      let activeDay = Number(e.target.innerHTML);
+      
       const activedate = Date();
 
       getActiveDay(activeDay);
@@ -318,11 +343,11 @@ function addListener() {
         month = month;
       }
 
-      const selectedDate = year + "-" + month + "-" + activeDay;
+      const selectedDate = year + "-" + (month+1) + "-" + activeDay;
       ui.selectedDatetoUI(selectedDate);
       ui.deleteAllSessionFromUI();
       getAllSessions(selectedDate);
-
+  
       days.forEach((element) => {
         element.classList.remove("active");
       });
@@ -330,8 +355,6 @@ function addListener() {
       if (e.target.classList.contains("prev-date")) {
         prevMonth();
         setTimeout(() => {
-         
-
           days.forEach((element) => {
             if (
               !element.classList.contains("prev-date") &&
@@ -346,8 +369,6 @@ function addListener() {
       else if (e.target.classList.contains("next-date")) {
         nextMonth();
         setTimeout(() => {
-          
-
           days.forEach((element) => {
             if (
               !element.classList.contains("next-date") &&
@@ -407,11 +428,12 @@ const addSessionBtn = document.querySelector("#add-session-btn");
 
 addSessionBtn.addEventListener("click", function () {
   const addSessionForm = document.getElementById("add-session-form");
-  const checkBoxes = document.querySelectorAll("input[type='checkbox']");
+  const checkBoxes = document.querySelectorAll(".event input[type='checkbox']");
+  console.log(checkBoxes);
   let checkedElements = [];
   checkBoxes.forEach((element, index) => {
     if (element.checked) {
-      checkedElements.push(element.previousElementSibling);
+      checkedElements.push(element);
     }
   });
 
@@ -425,8 +447,22 @@ const rightSection = document.querySelector(".right");
 rightSection.addEventListener("click", sessionEditButtonHandled);
 
 function sessionEditButtonHandled(e) {
+  const sessionOptionsModalOptions = document.querySelectorAll(
+    ".session-options-modal"
+  );
+
   if (e.target.classList.contains("edit-session")) {
+    sessionOptionsModalOptions.forEach(element => {
+      element.classList.remove("showed_modal")
+    });
     e.target.nextSibling.nextSibling.classList.toggle("showed_modal");
+  }else{
+    
+    
+     
+    sessionOptionsModalOptions.forEach(element => {
+      element.classList.remove("showed_modal")
+    });
   }
 
   if (e.target.classList.contains("edit-session-btn")) {
@@ -435,27 +471,30 @@ function sessionEditButtonHandled(e) {
 }
 
 function showAddEventModal(e, addSessionForm) {
-  console.log(e[0].parentElement.parentElement.parentElement.dataset.doctorid);
-  console.log(addSessionForm);
-  timeindexes[0].value = e[0].parentElement.dataset.time;
-  timeindexes[1].value = e[e.length - 1].parentElement.dataset.time;
+  
+
+ 
+  timeindexes[0].value = e[0].parentElement.parentElement.dataset.time;
+  timeindexes[1].value =
+    e[e.length - 1].parentElement.parentElement.dataset.time;
 
   doctorIDs[0].value =
-    e[0].parentElement.parentElement.parentElement.dataset.doctorid;
+    e[0].parentElement.parentElement.parentElement.parentElement.dataset.doctorid;
 
   doctorNames[0].value =
-    e[0].parentElement.parentElement.previousSibling.previousSibling.textContent.trim();
+    e[0].parentElement.parentElement.parentElement.previousSibling.previousSibling.textContent.trim();
 
   timeValues[0].value = new Date(e[0].parentElement.dataset.hour);
+
   startHour[0].value = new Date(
-    e[0].parentElement.dataset.hour
+    e[0].parentElement.parentElement.dataset.starthour
   ).toLocaleTimeString();
-
+    
   endHour[0].value = new Date(
-    e[e.length - 1].parentElement.dataset.hour
+    e[e.length - 1].parentElement.parentElement.dataset.endhour
   ).toLocaleTimeString();
 
-  addEventFromTos[0].valueAsDate = new Date(year, month - 1, activeDay + 1);
+  addEventFromTos[0].valueAsDate = new Date(year, month, activeDay + 1);
 
   modalAddSession.classList.add("showed_modal");
 }

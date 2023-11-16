@@ -37,6 +37,10 @@ const companySchema = new Schema(
         type: String,
         default: "8:00",
       },
+      workPeriod:{
+        type:Number,
+        default:15
+      }
     },
 
     users: [

@@ -48,7 +48,7 @@
 }
 .month .prev:hover,
 .month .next:hover {
-  color: white;
+  color: greenyellow;
 }
 
 .weekdays {
@@ -211,6 +211,10 @@
   
   flex-direction: column;
 }
+.single-doctor-events .event .options {
+  
+  position: relative;
+}
 
 
 .event-edit-icons  {
@@ -342,7 +346,7 @@ tr {
    
 }
 .session-options-modal.showed_modal{
-  
+  z-index: 999;
   display: block;
   display: flex;
 }

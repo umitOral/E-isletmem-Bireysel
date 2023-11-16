@@ -88,7 +88,9 @@ function changeInformations(e) {
         address:informationForm.address.value,
         billingAddress:informationForm.billingAddress.value,
         workStart:informationForm.workStart.value,
-        workEnd:informationForm.workEnd.value
+        workEnd:informationForm.workEnd.value,
+        workPeriod:Number(informationForm.workPeriod.value),
+        
         
     })
         .then(response => {

@@ -8,7 +8,7 @@ const selected_proccess_type_div = document.querySelector(
 const editBtn = document.querySelector(".edit-informations-btn");
 const editUserButton = document.getElementById("edit-user");
 const addImageButton = document.querySelector("button.add");
-const loader = document.querySelector(".loader-hidden");
+const loader = document.querySelector(".loader_wrapper.hidden");
 const addImageSaveButton = document.querySelector("#add-img-save-button");
 const deleteImageBtn = document.querySelectorAll(
   ".small_images_options span:last-child"
@@ -34,7 +34,7 @@ function eventListeners() {
   editUserButton.addEventListener("click", editUser);
   editBtn.addEventListener("click", showInformationsModal);
   addImageButton.addEventListener("click", showAddImageModal);
-  addImageSaveButton.addEventListener("click", loaderShow);
+  
 }
 
 cancelModal.forEach((element) => {
@@ -60,9 +60,7 @@ const userName = document.getElementById("user-name");
 const usersurName = document.getElementById("user-surname");
 
 
-function loaderShow() {
-  loader.classList.toggle("loader");
-}
+
 
 function editUser() {
   const name = userName.value || userName.placeholder;

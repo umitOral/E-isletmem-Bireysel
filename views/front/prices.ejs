@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <title>Fiyatlar</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+  <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
+
+  <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
+  <link rel="stylesheet" href="assets/css/owl.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+ 
+  <style>
+    .prices{
+      border: 1px solid gray;
+      
+      border-radius: 1rem;
+    }
+    .col-lg-10 a{
+      display: block;
+        margin-top: 1rem;
+    color: black;
+    padding: 0.5rem 1rem;
+    background-color: greenyellow;
+    text-align: center;
+    border: 1px solid gray;
+    border-radius: 1rem;
+    }
+    .col-lg-10 ul{
+    padding: 2rem;
+    }
+    .plan_head{
+      text-align: center;
+    font-size: large;
+    font-weight: 600;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    background-color: #36E0E0;
+    color: white;
+    padding: 0.75rem;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <!-- ***** Header Area Start ***** -->
+  <%- include('../partials/header-front.ejs') %>
+    <!-- ***** Header Area End ***** -->
+
+    <section>
+      <div class="page-heading">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="header-text">
+                <h2>FİYATLAR</h2>
+                <div class="div-dec"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- ***** Main Banner Area End ***** -->
+
+
+
+    <section class="rpices">
+      <div class="container">
+        <div class="row">
+          
+          <div class="col-lg-10 " style="display: flex; gap: 2rem;margin-bottom: 2rem;">
+            <div class="prices free">
+              <div class="plan_head">Ücretsiz Plan </div>
+              
+              <span class="price" style="font-size: xx-large;display: block; text-align: center;">Ücretsiz/30gün</span>
+
+              
+              <div>
+                <hr>
+                <ul>
+                  <li><i class="ph ph-check"></i>Sınırsız Randevu</li>
+                  <li><i class="ph ph-check"></i>Ürün / Hizmet Yönetimi</li>
+                  <li><i class="ph ph-check"></i>Gelişmiş Raporlama</li>
+                  <li><i class="ph ph-check"></i>Kasa (Gelir/Gider) Yönetimi</li>
+                  <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
+                  <a href="/register">Hemen Dene</a>
+                </ul>
+              </div>
+
+            </div>
+            <div class="prices premium">
+              <div class="plan_head" >Premium Plan </div>
+              <span class="price" style="font-size: xx-large;display: block; text-align: center;">499/Ay</span>
+              
+              <span>(yıllık ödemede <b>1118 TL</b> Kazanın)</span>
+              <div>
+                <hr>
+                <ul>
+                  <li><i class="ph ph-check"></i>Sınırsız Randevu</li>
+                  <li><i class="ph ph-check"></i>Ürün / Hizmet Yönetimi</li>
+                  <li><i class="ph ph-check"></i>Gelişmiş Raporlama</li>
+                  <li><i class="ph ph-check"></i>Kasa (Gelir/Gider) Yönetimi</li>
+                  <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
+                  <a href="/register">Hemen Dene</a>
+                  
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <%- include('../partials/front-footer.ejs') %>
+
+      <!-- Scripts -->
+      <!-- Bootstrap core JavaScript -->
+      <script src="vendor/jquery/jquery.min.js"></script>
+      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+      <script src="assets/js/isotope.min.js"></script>
+      <script src="assets/js/owl-carousel.js"></script>
+
+      <script src="assets/js/tabs.js"></script>
+      <script src="assets/js/swiper.js"></script>
+      <script src="assets/js/custom.js"></script>
+      <script>
+        var interleaveOffset = 0.5;
+
+        var swiperOptions = {
+          loop: true,
+          speed: 1000,
+          grabCursor: true,
+          watchSlidesProgress: true,
+          mousewheelControl: true,
+          keyboardControl: true,
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+          },
+          on: {
+            progress: function () {
+              var swiper = this;
+              for (var i = 0; i < swiper.slides.length; i++) {
+                var slideProgress = swiper.slides[i].progress;
+                var innerOffset = swiper.width * interleaveOffset;
+                var innerTranslate = slideProgress * innerOffset;
+                swiper.slides[i].querySelector(".slide-inner").style.transform =
+                  "translate3d(" + innerTranslate + "px, 0, 0)";
+              }
+            },
+            touchStart: function () {
+              var swiper = this;
+              for (var i = 0; i < swiper.slides.length; i++) {
+                swiper.slides[i].style.transition = "";
+              }
+            },
+            setTransition: function (speed) {
+              var swiper = this;
+              for (var i = 0; i < swiper.slides.length; i++) {
+                swiper.slides[i].style.transition = speed + "ms";
+                swiper.slides[i].querySelector(".slide-inner").style.transition =
+                  speed + "ms";
+              }
+            }
+          }
+        };
+
+        var swiper = new Swiper(".swiper-container", swiperOptions);
+      </script>
+
+</body>
+
+</html>

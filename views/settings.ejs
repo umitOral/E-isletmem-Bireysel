@@ -10,11 +10,12 @@
 </head>
 
 <body>
-    <%- include('partials/header.ejs') %>
-        <div class="container">
-            <!---------- left aside ------------->
-            <%- include("partials/aside.ejs") %>
+    <%- include("partials/aside.ejs") %>
 
+        <section id="content">
+            <!---------- left aside ------------->
+
+            <%- include('partials/header.ejs') %>
                 <!----------- end of sidebar ----------->
 
                 <main>
@@ -84,6 +85,11 @@
                                     <div class="inputs">
                                         <span>Bitiş Saati:</span>
                                         <input type="text" name="workHours" value="<%= user.workHours.workEnd %>"
+                                            readonly>
+                                    </div>
+                                    <div class="inputs">
+                                        <span>Seans Süresi:</span>
+                                        <input type="text" name="workHours" value="<%= user.workHours.workPeriod %>"
                                             readonly>
                                     </div>
 
@@ -161,12 +167,21 @@
                             <textarea name="billingAddress" id="" cols="70"
                                 rows="2"><%= user.billingAddress %></textarea>
                         </div>
-                        
+
                         <div class="inputs ">
                             <span>Başlangıç Saati:</span>
                             <input type="time" name="workStart" id="" value="<%= user.workHours.workStart  %>">
                             <span>Bitiş Saati:</span>
                             <input type="time" name="workEnd" id="" value="<%= user.workHours.workEnd %>">
+                            <span>Seans aralığı:</span>
+                            <select name="workPeriod" id="" >
+                                <option value="10">10dk</option>
+                                <option value="15">15dk</option>
+                                <option value="20">20dk</option>
+                                <option value="30">30dk</option>
+                                <option value="60">60dk</option>
+                            </select>
+
                         </div>
 
 
@@ -176,7 +191,7 @@
                 </div>
 
 
-        </div>
+        </section>
 
 
         </main>

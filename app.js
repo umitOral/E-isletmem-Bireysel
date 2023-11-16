@@ -24,6 +24,7 @@ const app = express();
 //db connection
 connect();
 
+
 //önemli cloudinary config
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -64,7 +65,7 @@ app.use("/superAdmin",authMiddleware.authenticateToken,superAdminRoutes);
 app.use(customErrorHandler)
 
 ////////////////////////////////////////////
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3004, () => {
   console.log('\x1b[33m%s\x1b[0m',"application run on " + "http://localhost:" + process.env.PORT);
   
 });

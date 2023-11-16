@@ -3,6 +3,21 @@ export class UI {
         this.table = document.getElementById("userList")
 
     }
+    createResponseModal(message,succes_or_not) {
+        
+        const responseModal=document.querySelector(".response_modal")
+        const newResponse=document.createElement("div")
+        newResponse.classList="response_"+succes_or_not
+        newResponse.innerHTML+=`
+            <span>${message}</span><i class="ph ph-x"></i>
+        `
+        
+        responseModal.appendChild(newResponse)
+        setTimeout(() => {
+            newResponse.remove()
+        }, 4000);
+        
+    }
     showAllUsersToUI(users) {
         users.forEach((element, index) => {
             this.table.innerHTML += `
@@ -96,7 +111,7 @@ export class UI {
         }
 
         
-
+        console.log(allTimesforAllDoctors)
         allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
 
             const singleDoctorArea = document.createElement("div")
@@ -124,14 +139,12 @@ export class UI {
                         <span>${new Date(element.startHour).toLocaleTimeString().slice(0,5)}-</span><span>${new Date(element.endHour).toLocaleTimeString().slice(0,5)}</span>
 
                         </div>
-                            
-                            
-                            
+
                             <span>${element.user.name}</span>
                             <span class="buttons">${element.state}</span>
 
                         </div>
-                        <div class="" >
+                        <div class="options" >
                             <span class="material-symbols-sharp edit-session">
                                 more_vert
                             </span>
@@ -153,10 +166,12 @@ export class UI {
                 } else {
                     singleDoctorEvents.innerHTML += `
                          
-                    <div class="event" data-time="${index}" data-hour="${element.startHour}" data-endHour="">
+                    <div class="event" data-time="${index}" data-startHour="${element.startHour}" data-endHour="${element.endHour}">
                                              
                         <div>
                         <span>${new Date(element.startHour).toLocaleTimeString().slice(0,5)} </span>
+                        <span>${new Date(element.endHour).toLocaleTimeString().slice(0,5)} </span>
+                        
                         
                         </div>
                         <span>  Boş</span>

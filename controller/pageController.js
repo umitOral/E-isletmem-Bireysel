@@ -97,10 +97,70 @@ const getAboutUsPage = (req, res) => {
     });
   }
 };
+const getTermOfUsePage = (req, res) => {
+  try {
+    res.status(200).render("front/term-of-use", {
+      link: "about-us",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "pagecontroller",
+    });
+  }
+};
 const getServicesPage = (req, res) => {
   try {
     res.status(200).render("front/our-services", {
       link: "about-us",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "pagecontroller",
+    });
+  }
+};
+const returnPoliciesPage = (req, res) => {
+  try {
+    res.status(200).render("front/return-policies", {
+      link: "return-policies",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "pagecontroller",
+    });
+  }
+};
+const privacyPoliciesPage = (req, res) => {
+  try {
+    res.status(200).render("front/privacy-policies", {
+      link: "privacy-policies",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "pagecontroller",
+    });
+  }
+};
+const kvkkPage = (req, res) => {
+  try {
+    res.status(200).render("front/kvkk", {
+      link: "kvkk",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "pagecontroller",
+    });
+  }
+};
+const getPricesPage = (req, res) => {
+  try {
+    res.status(200).render("front/prices", {
+      link: "prices",
     });
   } catch (error) {
     res.status(500).json({
@@ -414,6 +474,21 @@ const getSettingsPage = (req, res) => {
     });
   }
 };
+const companyPaymentPage = (req, res) => {
+  try {
+    
+    const user = res.locals.user;
+    res.status(200).render("companyPaymentPage", {
+      link: "companyPaymentPage",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: error,
+    });
+  }
+};
 const getPaymentsPage = async (req, res) => {
   try {
     // console.log(now.toLocaleString())
@@ -513,4 +588,9 @@ export {
   getservicesPage,
   getPersonelsPage,
   resetPasswordPage,
+  companyPaymentPage,
+  getTermOfUsePage,
+  returnPoliciesPage,
+  privacyPoliciesPage,
+  kvkkPage,getPricesPage
 };

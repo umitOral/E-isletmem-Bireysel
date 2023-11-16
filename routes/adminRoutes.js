@@ -1,12 +1,12 @@
 import express from 'express';
-import {getSettingsPage,getAdminPage,getUsersPage,getSessionsPage,getPersonelsStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getservicesPage,getPersonelsPage,getPaymentsPage} from '../controller/pageController.js';
+import {companyPaymentPage,getSettingsPage,getAdminPage,getUsersPage,getSessionsPage,getPersonelsStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getservicesPage,getPersonelsPage,getPaymentsPage} from '../controller/pageController.js';
 import {logOut,createUser,deletePhoto,uploadPictures,editInformations,findUser,findPersonels,deactivateUser,activateUser} from '../controller/userController.js';
 import {createPersonel} from '../controller/personelsController.js';
 
 import {addService,getSingleServicePage,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
 import {addPayment,deletePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
 import {getSexStaticsWithFilter,getPaymentStaticsWithFilter,getNewUserStaticswithFilter} from '../controller/staticsController.js';
-import {updateCompanyPassword,updateCompanyInformations} from '../controller/companyControllers.js';
+import {updateCompanyPassword,updateCompanyInformations,addCompanyPayment} from '../controller/companyControllers.js';
 import sesssionRoutes from './sessionRoutes.js';
 
 const router=express.Router()
@@ -32,6 +32,10 @@ router.route("/payments/:id/deletePayment").get(deletePayment)
 router.route("/payments/:id/editPayment").post(editPayment)
 router.route("/payments/addPayment").post(addPayment)
 router.route("/payments/addExpense").post(addExpense)
+
+
+router.route("/companyPaymentPage").get(companyPaymentPage)
+router.route("/addCompanyPayment").post(addCompanyPayment)
 
 
 router.route("/personels").get(getPersonelsPage)
