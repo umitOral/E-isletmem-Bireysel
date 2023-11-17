@@ -2,7 +2,7 @@ import Session from "../models/sessionModel.js";
 import Company from "../models/companyModel.js";
 import Order from "../models/OrderModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
-import Iyzipay from "Iyzipay";
+import Iyzipay from "iyzipay";
 import { v4 as uuidv4 } from "uuid";
 
 const updateCompanyPassword = async (req, res, next) => {
