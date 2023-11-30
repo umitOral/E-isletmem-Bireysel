@@ -22,7 +22,7 @@ const modalUser = document.querySelector(".modal_user")
 
 
 import { Request } from "./requests.js";
-const request = new Request("http://127.0.0.1:3000/api/users")
+const request = new Request()
 
 
 
@@ -64,7 +64,7 @@ function changePassword(e) {
         
     })
         .then(response => {
-            console.log(response)
+            
             messageBox.textContent=response.message
             messageBox.style.display="block"
             

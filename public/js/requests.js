@@ -1,104 +1,95 @@
 export class Request {
-    constructor(url) {
-        this.url = url
-    }
+  constructor(url) {
+    this.url = url;
+  }
 
-    async get() {
-        const response = await fetch(this.url)
-        const responseData = await response.json()
+  async get() {
+    const response = await fetch(this.url);
+    const responseData = await response.json();
 
-        return responseData
+    return responseData;
+  }
+  async getwithUrl(url) {
+    const response = await fetch(url);
 
-    }
-    async getwithUrl(url) {
+    const responseData = await response.json();
 
-        const response = await fetch(url)
+    return responseData;
+  }
+  async deletePayment(url) {
+    const response = await fetch(url);
+    const responseData = await response.json();
+    return responseData;
+  }
+  async deleteSession(url) {
+    const response = await fetch(url);
+    const responseData = await response.json();
+    return responseData;
+  }
+  async updateStateSession(url) {
+    const response = await fetch(url);
+    const responseData = await response.json();
+    return responseData;
+  }
 
-        const responseData = await response.json()
+  async post(data) {
+    const response = await fetch(this.url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-type": "application/json" },
+    });
+    const responseData = await response.json();
 
-        return responseData
+    return responseData;
+  }
+  async postWithUrl(url, data) {
+    console.log(url);
+    console.log(data);
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-type": "application/json" },
+    });
+    const responseData = await response.json();
 
-    }
-    async deletePayment(url) {
-        const response = await fetch(url)
-        const responseData = await response.json()
-        return responseData
-    }
-    async deleteSession(url) {
-        const response = await fetch(url)
-        const responseData = await response.json()
-        return responseData
-    }
-    async updateStateSession(url) {
-        const response = await fetch(url)
-        const responseData = await response.json()
-        return responseData
-    }
-    
-    async post(data) {
-        const response = await fetch(this.url, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json" }
-        })
-        const responseData = await response.json()
+    return responseData;
+  }
 
-        return responseData
-    }
-    async postWithUrl(url,data) {
-        
-        const response = await fetch(url, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json" }
-        })
-        const responseData = await response.json()
+  async createCompany(data, url) {
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-type": "application/json" },
+    });
+    const responseData = await response.json();
 
-        return responseData
-    }
+    return responseData;
+  }
 
-    async createCompany(data,url) {
-        
-        const response = await fetch(url, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json" }
-        })
-        const responseData = await response.json()
+  async put(id, data) {
+    console.log(data);
+    const response = await fetch(this.url + "/" + id, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: { "Content-type": "application/json" },
+    });
+    const responseData = await response.json();
 
-        return responseData
-    }
+    return responseData;
+  }
 
-    async put(id, data) {
-        console.log(data)
-        const response = await fetch(this.url + "/" + id, {
-            method: "PUT",
-            body: JSON.stringify(data),
-            headers: { "Content-type": "application/json" }
-        })
-        const responseData = await response.json()
+  async delete(id) {
+    console.log(this.url + "/" + id);
+    const response = await fetch(this.url + "/" + id, {
+      method: "DELETE",
+    });
 
-        return responseData
-
-    }
-
-
-    async delete(id) {
-        console.log(this.url + "/" + id)
-        const response = await fetch(this.url + "/" + id, {
-            method: "DELETE"
-        })
-
-        return ("veri silindi")
-
-    }
-    async deletewithUrl(url) {
-        console.log(url)
-        const response = await fetch(url)
-        const responseData = await response.json()
-        return responseData
-
-    }
-
+    return "veri silindi";
+  }
+  async deletewithUrl(url) {
+    console.log(url);
+    const response = await fetch(url);
+    const responseData = await response.json();
+    return responseData;
+  }
 }
-

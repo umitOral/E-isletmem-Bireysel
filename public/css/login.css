@@ -48,7 +48,7 @@
     
     display: flex;
     justify-content: center;
-    margin: 50px auto;
+    margin: 30px auto;
     box-shadow: var(--box-shadow);
     background-color: white;
     flex-direction: column;
@@ -86,7 +86,7 @@
   
     
 }
-.container-login form input {
+.container-login form input:not([type='checkbox']) {
     
   width: 100%;
   margin-bottom: 1rem;
@@ -103,7 +103,7 @@
   padding: 0.7rem;
   border-radius: 0.5rem;
   border: 1px solid gray;
-  
+  margin: 1rem 0;
   background-color: var(--color-success);
   cursor: pointer;
     font-size: 1.3rem;
@@ -111,3 +111,49 @@
   
     
 }
+u{
+  cursor: pointer;
+}
+hr{
+  color: gray;
+}
+.terms_modal{
+  display:none;
+  position: fixed;
+  background-color: white;
+  z-index: 999;
+  top: 10%;
+  left: 25%;
+  width: 50%;
+  height: 90%;
+  overflow:hidden;
+  padding: 1rem;
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  border-radius: 1rem;
+}
+.terms_modal.showed_modal{
+  display:block;
+}
+ .terms_header{
+  text-align: center;
+  
+  padding: 0.5rem;
+  
+}
+ .terms_body{
+  height: 80%;
+  overflow: auto;
+  padding:0.5rem 1.5rem;
+  
+}
+.terms_footer {
+ display: flex;
+padding: 0.5rem;
+ justify-content: end;
+}
+.terms_footer span{
+  border: 1px solid rgba(128, 128, 128, 0.199);
+  background-color: #41F1B6;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;

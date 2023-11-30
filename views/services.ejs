@@ -4,6 +4,7 @@
 <head>
     <%- include('partials/head.ejs') %>
         <link rel="stylesheet" href="/css/users.css">
+        <link rel="stylesheet" href="/css/services.css">
 </head>
 
 <body>
@@ -28,7 +29,7 @@
                             </div>
 
                         </form>
-                        <div class="add_customer_btn">Hizmet Ekle +</div>
+                        <div class="add_service_btn "><button>Hizmet Ekle +</button></div>
 
                     </div>
 
@@ -60,7 +61,10 @@
                                             <%= service.serviceName %>
                                         </td>
                                         <td>
-                                            <%= service.servicePrice %>
+                                            <div class="inputs" data-servicesID="<%= service._id %>">
+                                                <input type="text" class="price_inputs" value="<%= service.servicePrice %>">
+                                                <i class="ph ph-floppy-disk save_buttons"></i>
+                                            </div>
                                         </td>
                                         <td>
                                             <% if(service.activeorNot===true){ %>
@@ -71,12 +75,12 @@
 
                                         </td>
                                         <% if(service.activeorNot){ %>
-                                            <td><a href="./<%= service._id %>/deactivateService">Deaktive Et</a></td>
+                                            <td><a href="./services/<%= service._id %>/deactivateService">Deaktive Et</a></td>
                                             <% } else{ %>
-                                                <td><a href="./<%= service._id %>/activateService">Aktif Et</a></td>
+                                                <td><a href="./services/<%= service._id %>/activateService">Aktif Et</a></td>
                                                 <% } %>
 
-                                                    <td><a href="./<%= service._id %>">Detay</a></td>
+                                                    
                                     </tr>
                                     <% }) %>
 
@@ -87,53 +91,20 @@
                         </table>
 
                     </div>
-                    <div class="pagination-describe">
-                        Toplam <%= total %> Hizmet içerisinden <%= count %> adet listelendi
-                    </div>
-                    <div class="pagination">
-
-                        <% if (pagination.previous ) { %>
-                            <a href="./?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
-                                    Sayfa<<< /span></a>
-                            <% } %>
-
-                                <% if (pagination.page>1) { %>
-                                    <a href="./?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span>
-                                            <%= pagination.page-1 %>
-                                        </span></a>
-                                    <% } %>
-
-                                        <a href="./?page=<%= pagination.page %>&limit=<%=3 %>"><span
-                                                class="page-active">
-                                                <%= pagination.page %>
-                                            </span></a>
-
-                                        <% if (pagination.page<pagination.lastpage) { %>
-                                            <a href="./?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span>
-                                                    <%= pagination.page+1 %>
-                                                </span></a>
-                                            <% } %>
-
-
-                                                <% if (pagination.next) { %>
-                                                    <a
-                                                        href="./?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
-                                                            >>Sonraki Sayfa</span></a>
-                                                    <% } %>
-
-                    </div>
-                    <div class="add_customer modal">
+                   
+                    
+                    <div class="add_service modal">
                         <h2>Yeni Hizmet Ekle</h2>
-                        <form action="./addService" method="POST" id="register-form">
+                        <form action="./services/addService" method="POST" id="register-form">
                             <div class="inputs ">
                                 <span>Hizmet Adı:</span>
                                 <input type="text" name="serviceName" id="user-name" required
                                     placeholder="Lütfen bir kullanıcı adı giriniz">
                             </div>
 
-                            <div class="inputs ">
+                            <div class="inputs" >
                                 <span>Fiyat</span>
-                                <input type="text" name="servicePrice" id="surname">
+                                <input type="number" name="servicePrice" id="surname" required>
                             </div>
 
 
@@ -143,17 +114,15 @@
                         </form>
                     </div>
 
-
-
-
-
                 </main>
+                <div class="information-modal">AAAA</div>
         </section>
 
 
-        <script type="module" src="/js/autocomplete.js"></script>
+        
         <script type="module" src="/js/requests.js"></script>
-        <script type="module" src="/js/users.js"></script>
+        
+        <script type="module" src="/js/services.js"></script>
         <script src="/js/sidebar.js"></script>
 
 

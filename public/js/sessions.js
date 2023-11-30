@@ -429,7 +429,7 @@ const addSessionBtn = document.querySelector("#add-session-btn");
 addSessionBtn.addEventListener("click", function () {
   const addSessionForm = document.getElementById("add-session-form");
   const checkBoxes = document.querySelectorAll(".event input[type='checkbox']");
-  console.log(checkBoxes);
+  
   let checkedElements = [];
   checkBoxes.forEach((element, index) => {
     if (element.checked) {
@@ -523,3 +523,40 @@ function showEditModal(e) {
   ).toLocaleTimeString();
   addEventFromTos[1].valueAsDate = new Date(year, month - 1, activeDay + 1);
 }
+
+
+//add session modal actions
+
+const proccessType = document.querySelector(".proccess_type");
+const selected_proccess_type = document.querySelector(".selected_proccess_type");
+
+proccessType.addEventListener("change",()=>{
+    console.log("başarılı")
+    const proccessDiv = document.createElement("div");
+    const nodeinput = document.createElement("input");
+    nodeinput.value =
+      proccessType.options[proccessType.options.selectedIndex].textContent.trim();
+    nodeinput.setAttribute("name", "services");
+    nodeinput.setAttribute("disabled", "");
+    nodeinput.setAttribute(
+      "value",
+      proccessType.options[proccessType.options.selectedIndex].textContent.trim()
+    );
+  
+    const deleteButton = document.createElement("i");
+    
+    deleteButton.classList.add("ph");
+    deleteButton.classList.add("ph-x");
+
+    proccessDiv.appendChild(nodeinput);
+    proccessDiv.appendChild(deleteButton)
+    selected_proccess_type.appendChild(proccessDiv)
+
+    const selectedProcess = document.querySelectorAll(".selected_proccess_type div i");
+    selectedProcess.forEach(element => {
+      element.addEventListener("click",(e)=>{
+        element.parentElement.remove()
+      })
+    });  
+})
+

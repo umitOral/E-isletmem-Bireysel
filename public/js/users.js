@@ -15,7 +15,7 @@ import { Request } from "./requests.js";
 import { UI } from "./ui.js";
 
 const ui = new UI();
-const request = new Request("/api/getAllUsers")
+const request = new Request()
 
 
 eventListeners()
@@ -36,7 +36,7 @@ function addUser(e) {
 }
 
 function getAllUsers() {
-    request.get()
+    request.getwithUrl("api/getAllUsers")
         .then(response => ui.showAllUsersToUI(response))
         .catch(err => console.log(err))
    

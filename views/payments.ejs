@@ -3,20 +3,18 @@
 
 <head>
     <%- include('partials/head.ejs') %>
-        
+
         <link rel="stylesheet" href="/css/payments.css">
 
 </head>
 
 <body>
-    <%- include('partials/header.ejs') %>
-        <div class="container">
+    <%- include("partials/aside.ejs") %>
+    
+        
             <!---------- left aside ------------->
-            <%- include("partials/aside.ejs") %>
-
-
-                <!----------- end of sidebar ----------->
-
+            <section id="content">
+                <%- include('partials/header.ejs') %>
                 <main>
                     <div class="main-header">
                         <h1> Kasa</h1>
@@ -71,13 +69,14 @@
                                         <td>
                                             <%= payment.cashOrCard %>
                                         </td>
-                                        
+
                                         <td><span class="material-symbols-sharp edit_payment">
                                                 more_vert
                                             </span>
                                             <div class="edit_payment_small_modal">
                                                 <button class="delete-payment" value="<%= payment._id %>">Sil</button>
-                                                <button class="edit-payment-btn" value="<%= payment._id %>">Düzenle</button>
+                                                <button class="edit-payment-btn"
+                                                    value="<%= payment._id %>">Düzenle</button>
                                             </div>
 
 
@@ -122,7 +121,7 @@
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Net Kasa </td>
-                                    <td class="netCash" >
+                                    <td class="netCash">
                                         <%=netCash%>
                                     </td>
                                 </tr>
@@ -251,7 +250,13 @@
 
 
                 </main>
-        </div>
+            </section>
+
+
+                <!----------- end of sidebar ----------->
+
+                
+        
 
 
 

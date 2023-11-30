@@ -37,10 +37,10 @@ const companySchema = new Schema(
         type: String,
         default: "8:00",
       },
-      workPeriod:{
-        type:Number,
-        default:15
-      }
+      workPeriod: {
+        type: Number,
+        default: 15,
+      },
     },
 
     users: [
@@ -49,9 +49,23 @@ const companySchema = new Schema(
         ref: "User",
       },
     ],
-    passwordResetToken: { type: String },
-    passwordResetTokenExpires: { type: Date },
+    plan: {
+      type: String,
+      enum: ["deneme", "premium", "hediye"],
+      default: "deneme",
+    },
+    subscribeEndDate: { type: Date, default: null },
+
     activeOrNot: { type: Boolean, default: true },
+    services: [
+      {
+        serviceName: {
+          type: String,
+        },
+        servicePrice: { type: Number },
+        activeorNot: { type: Boolean, default: true },
+      }
+    ]
   },
   { timestamps: true }
 );
@@ -65,19 +79,14 @@ companySchema.pre("save", function (next) {
 });
 
 companySchema.methods.createResetPasswordToken = function (companyEmail) {
-  
-  
   const resetToken = jwt.sign({ companyEmail }, process.env.JWT_SECRET, {
     expiresIn: "60m",
   });
 
-  
-    this.passwordResetToken=resetToken
-    this.passwordResetTokenExpires=Date.now()+10*60*1000 //10 minutes
-  
-  return resetToken;
-  
+  this.passwordResetToken = resetToken;
+  this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000; //10 minutes
 
+  return resetToken;
 };
 
 const Company = mongoose.model("Company", companySchema);

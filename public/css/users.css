@@ -1,267 +1,253 @@
 :root {
-    --color-primary: #7380ec;
-    --color-danger: #ff7782;
-    --color-success: #41f1b6;
-    --color-warning: #ffbb55;
-    --color-white: #fff;
-    --color-info-light: #dce1eb;
-    --color-dark: #363949;
-    --color-light: rgba(132, 139, 200, 0.18);
-    --color-primary-variant: #111e88;
-    --color-dark-variant: #677483;
-    --color-dark-variant2: #b0b1b1;
+  --color-primary: #7380ec;
+  --color-danger: #ff7782;
+  --color-success: #41f1b6;
+  --color-warning: #ffbb55;
+  --color-white: #fff;
+  --color-info-light: #dce1eb;
+  --color-dark: #363949;
+  --color-light: rgba(132, 139, 200, 0.18);
+  --color-primary-variant: #111e88;
+  --color-dark-variant: #677483;
+  --color-dark-variant2: #b0b1b1;
 
-    --color-background: #f6f6f9;
+  --color-background: #f6f6f9;
 
-    --card-border-radius: 2rem;
-    --border-radius-1: 0.4rem;
-    --border-radius-2: 0.8rem;
-    --border-radius-3: 1.2rem;
+  --card-border-radius: 2rem;
+  --border-radius-1: 0.4rem;
+  --border-radius-2: 0.8rem;
+  --border-radius-3: 1.2rem;
 
-    --card-padding: 1.8rem;
-    --padding-1: 1.2rem;
+  --card-padding: 1.8rem;
+  --padding-1: 1.2rem;
 
-    --box-shadow: 0 2rem 1rem var(--color-light);
-
+  --box-shadow: 0 2rem 1rem var(--color-light);
 }
 
 .search {
-    width: 100%;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap:wrap ;
-
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 div.search input[type="search"] {
-
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: var(--border-radius-2);
+  color: gray;
+}
+#register-form{
+    border: 1px solid rgba(128, 128, 128, 0.4);
     padding: 1rem;
-    font-size: 1rem;
-    border-radius: var(--border-radius-2);
-    color: gray;
-
+    border-radius: 1rem;
+    
+}
+.inputs.dates{
+  display: flex;
+  gap: 1rem;
+}
+.registerCard{
+  display: flex;
+  gap:0.5rem;
+  padding: 0.7rem 0.7rem 0.7rem 0;
 }
 
 .add_customer_btn {
-    background-color:#a6b0fa;
-    border: 1px dashed var(--color-dark-variant);
-    padding: 0.5rem;
-    border-radius: var(--border-radius-1);
-    cursor: pointer;
+  background-color: #a6b0fa;
+  border: 1px dashed var(--color-dark-variant);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-1);
+  cursor: pointer;
 }
 
 /* -----------------print section---------- */
 .print {
-    display: flex;
-    justify-content: end;
-    margin-top: 0.5rem;
+  display: flex;
+  justify-content: end;
+  margin-top: 0.5rem;
 }
 
 .print-icon {
+  background-color: #41f1b6;
+  padding: 0.75rem;
+  font-size: 2rem;
+  border-radius: 50%;
 
-    background-color: #41f1b6;
-    padding: 0.75rem;
-    font-size: 2rem;
-    border-radius: 50%;
-
-    transition: 0.2s all ease-in-out;
-
+  transition: 0.2s all ease-in-out;
 }
 
 .print-selection {
-    width: 13rem;
-    background-color: red;
-    border-radius: var(--border-radius-2);
-    display: none;
-    font-size: 1.1rem;
-    box-shadow: 0.5rem 0.5rem 0.5rem var(--color-light);
-    position: absolute;
-    top: 35px;
-    right: 10px;
+  width: 13rem;
+  background-color: red;
+  border-radius: var(--border-radius-2);
+  display: none;
+  font-size: 1.1rem;
+  box-shadow: 0.5rem 0.5rem 0.5rem var(--color-light);
+  position: absolute;
+  top: 35px;
+  right: 10px;
 }
 
 .print-selection:hover {
-    display: block;
+  display: block;
 }
 
 .print-selection label {
-
-    background-color: #f6f6f9;
-    display: flex;
-    justify-content: space-around;
-    padding: 1rem 0.5rem;
-    transition: 1 all ease-in-out;
+  background-color: #f6f6f9;
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem 0.5rem;
+  transition: 1 all ease-in-out;
 }
 
 .print-selection label:hover {
-
-    transform: scale(1.05);
-    background-color: #fff;
-
+  transform: scale(1.05);
+  background-color: #fff;
 }
 
 .print-selection label:first-child {
-    border-top-right-radius: var(--border-radius-2);
-    border-top-left-radius: var(--border-radius-2);
-    background-color: var(--color-primary);
+  border-top-right-radius: var(--border-radius-2);
+  border-top-left-radius: var(--border-radius-2);
+  background-color: var(--color-primary);
 }
 
-.print-icon:hover+.print-selection {
-    display: block;
-
+.print-icon:hover + .print-selection {
+  display: block;
 }
 
 /* -----------------print section end -------------- */
 
-
 .pagination {
-    margin-top: 1.5rem;
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    color: var(--color-dark-variant);
-
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  color: var(--color-dark-variant);
 }
 .pagination-describe {
-    margin-top: 0.5rem;
-    display: flex;
-   
-    justify-content: center;
-    color: var(--color-dark-variant);
+  margin-top: 0.5rem;
+  display: flex;
 
+  justify-content: center;
+  color: var(--color-dark-variant);
 }
 
 .pagination span {
-    border: 1px solid var(--color-dark-variant2);
-    padding: 0.6rem;
-    text-align: center;
-    font-size: 1rem;
-    border-radius: var(--border-radius-1);
+  border: 1px solid var(--color-dark-variant2);
+  padding: 0.6rem;
+  text-align: center;
+  font-size: 1rem;
+  border-radius: var(--border-radius-1);
 }
 .pagination span.page-active {
-    background-color: var(--color-dark-variant2);
+  background-color: var(--color-dark-variant2);
 }
 
 .pagination span:hover {
-    background-color: var(--color-info-light);
+  background-color: var(--color-info-light);
 }
 
 main header a {
-    padding: 1.5rem;
-    background-color: white;
-    border: 1px dashed gray;
-    border-radius: var(--border-radius-3);
-    display: block;
-
+  padding: 1.5rem;
+  background-color: white;
+  border: 1px dashed gray;
+  border-radius: var(--border-radius-3);
+  display: block;
 }
 
 .user-table table thead th span.material-symbols-sharp {
-
-    border: transparent;
-    font-size: 0.5rem;
-    position: relative;
-    margin-left: 5px;
-    top: 5px;
-    transition: .2s all ease-in;
+  border: transparent;
+  font-size: 0.5rem;
+  position: relative;
+  margin-left: 5px;
+  top: 5px;
+  transition: 0.2s all ease-in;
 }
 
 .user-table table th {
-    cursor: pointer;
-    text-transform: capitalize;
-    padding: 15px;
+  cursor: pointer;
+  text-transform: capitalize;
+  padding: 15px;
 }
 
 .user-table table td.active {
-    background-color: rgba(255, 0, 0, 0.035);
-
+  background-color: rgba(255, 0, 0, 0.035);
 }
 
 .user-table table th.active span.material-symbols-sharp {
-    border: 1px solid var(--color-primary);
-    border-radius: 50%;
-    background-color: var(--color-primary);
-
+  border: 1px solid var(--color-primary);
+  border-radius: 50%;
+  background-color: var(--color-primary);
 }
 
 .user-table table th.ars span.material-symbols-sharp {
-    transform: rotate(180deg);
-
+  transform: rotate(180deg);
 }
 
 .user-table table tr td a {
-    color: #363949;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-
+  color: #363949;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
-
 
 /* auto complete -------------- */
 .autocomplete {
-   
-    
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 }
-
 
 .autocomplete input[type="submit"] {
-    background-color: var(--color-success);
-    width: 30%;
-    cursor: pointer;
+  background-color: var(--color-success);
+  width: 30%;
+  cursor: pointer;
 }
 .autocomplete input[type="submit"]:hover {
-    background-color: #0ced79;
-    
+  background-color: #0ced79;
 }
 
-
-
 .autocomplete-items {
-    position: absolute;
-    border: 1px solid #d4d4d4;
-    border-bottom: none;
-    border-top: none;
-    z-index: 99;
-    /*position the autocomplete items to be the same width as the container:*/
-    top: 100%;
-    left: 0;
-    right: 0;
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
 }
 
 .autocomplete-items div {
-    padding: 10px;
-    cursor: pointer;
-    background-color: #fff;
-    border-bottom: 1px solid #d4d4d4;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
 }
 
 /*when hovering an item:*/
 .autocomplete-items div:hover {
-    background-color: #e9e9e9;
+  background-color: #e9e9e9;
 }
 
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
-    background-color: var(--color-primary) !important;
-    color: #ffffff;
+  background-color: var(--color-primary) !important;
+  color: #ffffff;
 }
 
-
 @media (max-width: 768px) {
-    .search form {
-        width: 100%;
-    }
-    .autocomplete{
-        width: 100%;
-        justify-content: space-around;
-    }
-    .pagination span {
-        
-        font-size: 0.5rem;
-        
-    }
+  .search form {
+    width: 100%;
+  }
+  .autocomplete {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .pagination span {
+    font-size: 0.5rem;
+  }
 }

@@ -15,6 +15,9 @@ const OrderSchema = new Schema(
     paymentId: {
       type: String,
     },
+    paymentDuration:{
+      type:Number
+    },
     paymentTransactionId: {
       type: String,
     },

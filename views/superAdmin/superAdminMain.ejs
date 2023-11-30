@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-    <%- include('partials/head.ejs') %>
+    <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/users.css">
 </head>
 
 <body>
-    <%- include("partials/aside.ejs") %>
+    <%- include("../partials/aside.ejs") %>
         <section id="content">
             <!---------- left aside ------------->
             
-            <%- include('partials/header.ejs') %>
+            <%- include('../partials/header.ejs') %>
 
                 <!----------- end of sidebar ----------->
 
@@ -51,6 +51,7 @@
                                 <th>companyName<span class="material-symbols-sharp">north</span></th>
                                 <th>email<span class="material-symbols-sharp">north</span></th>
                                 <th>authorizedName<span class="material-symbols-sharp">north</span></th>
+                                <th>Register Date<span class="material-symbols-sharp">north</span></th>
                                 
                                
                                 
@@ -69,7 +70,9 @@
                                             <%= company.authorizedName %>
                                         </td>
                                         <td>
-                                            <%= company.registerDate %>
+                                            <%= company.registerDate.toLocaleDateString()%>//
+                                            <%= company.registerDate.toLocaleTimeString()%>
+
                                         </td>
                                         
 

@@ -15,7 +15,7 @@ const userSchema = new Schema({
     role: { type: String, default: "customer" },
     password: { type: String, require: false },
     phone: { type: String, require: false },
-    company: { type: String, require: false },
+    userCompany: { type: String, default:""},
     address: { type: String, require: false },
     billingAddress: { type: String, require: false },
     registerDate: { type: Date, default: new Date()},

@@ -1,7 +1,8 @@
-import Session from "../models/sessionModel.js";
 import Company from "../models/companyModel.js";
 import Order from "../models/OrderModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
+import { orderSuccesEmail } from "./mailControllers.js";
+
 import Iyzipay from "iyzipay";
 import { v4 as uuidv4 } from "uuid";
 
@@ -64,12 +65,20 @@ const deleteCompany = async (req, res) => {
 };
 const addCompanyPayment = async (req, res) => {
   try {
-    
+    console.log(req.body);
+
     const id = uuidv4();
-    
     const company = await Company.findOne({ _id: res.locals.user._id });
 
-    const { cardUserName, cardNumber, expireMonth, expireYear, cvc,price } = req.body;
+    const {
+      cardUserName,
+      cardNumber,
+      expireMonth,
+      expireYear,
+      cvc,
+      price,
+      type,
+    } = req.body;
 
     const iyzipay = new Iyzipay({
       apiKey: process.env.IYZICO_API_KEY_TEST,
@@ -100,7 +109,7 @@ const addCompanyPayment = async (req, res) => {
         name: "John",
         surname: "Doe",
         gsmNumber: "+905350000000",
-        email: "email@email.com",
+        email: company.email,
         identityNumber: "74300864791",
         lastLoginDate: "2015-10-05 12:43:35",
         registrationDate: "2013-04-21 15:12:09",
@@ -137,34 +146,77 @@ const addCompanyPayment = async (req, res) => {
       ],
     };
 
-    
     iyzipay.payment.create(request, async function (err, result) {
       if (err) {
         console.log(err);
       }
-      
+
       await Order.create({
         company: company._id,
-        amount:result.paidPrice,
-        paymentId:result.paymentId,
-        paymentTransactionId:result.paymentTransactionId
+        amount: result.paidPrice,
+        paymentId: result.paymentId,
+        paymentTransactionId: result.paymentTransactionId,
+        paymentDuration:Number(req.body.paymentDuration)
+      })
+
+      let newDate=new Date()
+      let subscribeEndDate= company.subscribeEndDate
       
-      }).then(response=>console.log(response))
-      .catch(err=>console.log(err));
+
+      if (subscribeEndDate && subscribeEndDate<newDate) {
+        console.log("abonelik süresi yok")
+        if (type==="aylık") {
+       
+          subscribeEndDate= new Date(newDate.setMonth(newDate.getMonth()+1)).toISOString()
+       }
+       if (type==="6aylık") {
+        subscribeEndDate= new Date(newDate.setMonth(newDate.getMonth()+6)).toISOString()
+
+       }
+       if (type==="yıllık") {
+        subscribeEndDate= new Date(newDate.setMonth(newDate.getMonth()+12)).toISOString()
+
+       }
+      }else{
+        console.log("abonelik süresi var")
+        let diffTime=parseInt((subscribeEndDate-newDate)/(24*60*60*1000),10)
+        console.log(diffTime)
+        if (type==="aylık") {
+         
+          subscribeEndDate= new Date(newDate.setDate(newDate.getDate()+diffTime+1+30)).toISOString()
+          
+       }
+       if (type==="6aylık") {
+        
+        subscribeEndDate= new Date(newDate.setDate(newDate.getDate()+diffTime+1+180)).toISOString()
+      }
+       if (type==="yıllık") {
+        subscribeEndDate= new Date(newDate.setDate(newDate.getDate()+diffTime+1+365)).toISOString()
+      }
+      }
       
-      if (result.status==="success") {
+
+      await Company.findByIdAndUpdate(company,{
+        subscribeEndDate:subscribeEndDate
+        
+      })
+        .then((response) => {
+          orderSuccesEmail(request);
+        })
+        .catch((err) => console.log(err));
+
+      if (result.status === "success") {
         res.status(200).json({
-          success:true,
-          message:"işlem başarıyla gerçekleşti.",
-          result
+          success: true,
+          message: "işlem başarıyla gerçekleşti.",
+          result,
         });
       } else {
         res.status(200).json({
-          success:false,
-          result
+          success: false,
+          result,
         });
       }
-     
     });
   } catch (error) {
     res.status(500).json({

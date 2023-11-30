@@ -1,0 +1,16 @@
+.inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.inputs i{
+    font-size: 1.3rem;
+    padding: 0.5rem;
+    border: 1px solid rgba(128, 128, 128, 0.374);
+    border-radius: 0.2rem;
+    cursor: pointer;
+    display: none;
+}
+.inputs i.showed{
+    display: block;
+}

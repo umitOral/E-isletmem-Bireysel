@@ -18,6 +18,7 @@
 
                     <div class="header">
                         <h1> Ödeme Yap</h1>
+                        
                     </div>
                     <div class="paymentFrom">
 
@@ -26,9 +27,9 @@
                     <div class="companyPaymentContent">
 
                         <div class="premium">
-                            <div class="plan_head">Premium Plan </div>
-                            <span class="price">499TL/Ay</span>
-                            <span>(yıllık ödemede <b>1118 TL</b> Kazanın)</span>
+                            <div class="plan_head">Aylık Ödeme</div>
+                            <span class="price">500TL/Ay</span>
+                            
                             <div>
                                 <hr>
                                 <ul>
@@ -39,39 +40,90 @@
                                     <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
                                 </ul>
                             </div>
+                            <div class="" data-price="500" data-type="aylık" data-paymentDuration="30">
+                                <button class="select_packet">Seç</button>
+                            </div>
+
+                        </div>
+                        <div class="premium">
+                            <div class="plan_head" data-type="6aylık" data-paymentDuration="180">6 Aylık Ödeme</div>
+                            <span class="price">400TL/Ay</span>
+                            <span>(Kazancınız <b>600TL</b>)</span>
+                            <span>Toplam tutar: 2400TL</span>
+                            <div>
+                                <hr>
+                                <ul>
+                                    <li><i class="ph ph-check"></i>Sınırsız Randevu</li>
+                                    <li><i class="ph ph-check"></i>Ürün / Hizmet Yönetimi</li>
+                                    <li><i class="ph ph-check"></i>Gelişmiş Raporlama</li>
+                                    <li><i class="ph ph-check"></i>Kasa (Gelir/Gider) Yönetimi</li>
+                                    <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
+                                </ul>
+                            </div>
+                            <div class="" data-price="2400" data-type="6aylık">
+                                <button class="select_packet">Seç</button>
+                            </div>
+
+                        </div>
+                        <div class="premium">
+                            <div class="plan_head"> Yıllık Ödeme</div>
+                            <span class="price">300TL/Ay</span>
+                            <span>(Kazancınız <b>2400TL</b>)</span>
+                            <span>Toplam tutar: 3600TL</span>
+                            <div>
+                                <hr>
+                                <ul>
+                                    <li><i class="ph ph-check"></i>Sınırsız Randevu</li>
+                                    <li><i class="ph ph-check"></i>Ürün / Hizmet Yönetimi</li>
+                                    <li><i class="ph ph-check"></i>Gelişmiş Raporlama</li>
+                                    <li><i class="ph ph-check"></i>Kasa (Gelir/Gider) Yönetimi</li>
+                                    <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
+                                </ul>
+                            </div>
+                            <div class="" data-price="3600" data-type="yıllık" data-paymentDuration="365">
+                                <button class="select_packet">Seç</button>
+                            </div>
 
                         </div>
                         <form action="./addCompanyPayment" method="POST" id="register-form">
 
                             <div class="inputs ">
-                                <span>cardNumber</span>
+                                <span>Kart Numarası</span>
                                 <input type="text" name="cardNumber" id="surname" value="5528790000000008">
                             </div>
                             <div class="inputs ">
-                                <span>expireMonth</span>
-                                <input type="text" name="expireMonth" id="surname" value="12">
-                            </div>
-                            <div class="inputs ">
-                                <span>expireYear</span>
-                                <input type="text" name="expireYear" id="surname" value="2030">
-                            </div>
-                            <div class="inputs ">
-                                <span>cvc</span>
-                                <input type="text" name="cvc" id="surname" value="123">
-                            </div>
-                            <div class="inputs ">
-                                <span>cardUserName</span>
+                                <span>Kart Sahibi</span>
                                 <input type="text" name="cardUserName" id="surname" value="John Doe">
                             </div>
-                            <div class="inputs ">
-                                <span>registerCard</span>
+                            <div class="inputs dates">
+                                <div>
+                                    <span>expireMonth</span>
+                                    <input type="text" name="expireMonth" id="surname" value="12">
+                                </div>
+                                <div>
+                                    <span>expireYear</span>
+                                    <input type="text" name="expireYear" id="surname" value="2030">
+                                </div>
+                                <div>
+                                    <span>cvc</span>
+                                    <input type="text" name="cvc" id="surname" value="123">
+                                </div>
+                            </div>
+                            
+                            <div class="registerCard">
                                 <input type="checkbox" name="registerCard" id="" value="1">
+                                <span>Kartımı Sakla</span>
+
                             </div>
 
 
                             <button type="submit" class="save_button" id="add-user">Ödeme Yap</button>
 
                         </form>
+                        <div style="font-size: 1.5rem;">
+                            <span>Toplam Tutar:</span>
+                            <span class="total">0</span><span>TL</span>
+                        </div>
                     </div>
 
 

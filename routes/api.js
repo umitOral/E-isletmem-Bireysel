@@ -14,6 +14,7 @@ router.route("/newPassword/:token").post(newPassword)
 
 
 
+
 //static apı's
 
 

@@ -9,7 +9,11 @@ console.log(form.authorizedName);
 
 const dialog = document.querySelector("dialog");
 const modalMessage = document.querySelector("dialog p");
+const terms = document.querySelector("u");
+const termsModal = document.querySelector(".terms_modal");
+const closeTermsSpan = document.querySelector(".terms_footer span");
 
+console.log(termsModal)
 
 const closeButton = document.querySelector("dialog span");
 console.log(closeButton)
@@ -17,6 +21,14 @@ closeButton.addEventListener("click",()=>{
   dialog.close()
 })
 
+terms.addEventListener("click",()=>{
+  console.log("başarılı")
+  termsModal.classList.add("showed_modal")
+})
+closeTermsSpan.addEventListener("click",()=>{
+  console.log("kapandı")
+  termsModal.classList.remove("showed_modal")
+})
 
 // "Show the dialog" button opens the dialog modally
 form.addEventListener("submit", (e) => {

@@ -1,8 +1,10 @@
 import User from "../models/userModel.js";
-import Service from "../models/serviceModel.js";
+
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
+import Orders from "../models/OrderModel.js";
+import { Ticket } from "../models/ticketModel.js";
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 
@@ -29,9 +31,8 @@ const getIndexPage = (req, res) => {
 };
 const resetPasswordPage = async (req, res) => {
   try {
-    
     res.status(200).render("front/newPassword", {
-      token:req.params.token,
+      token: req.params.token,
       link: "newPassword",
       message: "success",
     });
@@ -44,7 +45,6 @@ const resetPasswordPage = async (req, res) => {
 };
 const getForgotPasswordPage = async (req, res, next) => {
   try {
-    
     res.status(200).render("front/forgotPassword", {
       link: "forgotPassword",
     });
@@ -60,9 +60,26 @@ const getSuperAdminPage = async (req, res) => {
     let companies = await Company.find({});
     console.log("başarılı");
 
-    res.status(200).render("superAdmin", {
+    res.status(200).render("superAdmin/superAdminMain", {
       companies,
       count: companies.length,
+      link: "companies",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "pagecontroller",
+    });
+  }
+};
+const getSuperAdminTicketsPage = async (req, res) => {
+  try {
+    let tickets = await Ticket.find({});
+    console.log("başarılı");
+
+    res.status(200).render("superAdmin/superAdminTickets", {
+      tickets,
+      count: tickets.length,
       link: "companies",
     });
   } catch (error) {
@@ -75,7 +92,7 @@ const getSuperAdminPage = async (req, res) => {
 
 const getLoginPage = (req, res) => {
   try {
-    res.status(200).render("login", {
+    res.status(200).render("front/login", {
       link: "login",
     });
   } catch (error) {
@@ -171,51 +188,16 @@ const getPricesPage = (req, res) => {
 };
 const getservicesPage = async (req, res) => {
   try {
-    let query = Service.find({});
+    let company = res.locals.user;
+    
 
-    if (req.query) {
-      const searchObject = {};
-      searchObject["company"] = res.locals.user._id;
-      query = query.where(searchObject);
-    }
-
-    //pagination
-    const page = parseInt(req.query.page) || 1;
-    const limit = 5;
-
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-
-    const total = await Service.count()
-      .where("company")
-      .equals(res.locals.user._id);
-    const lastpage = Math.ceil(total / limit);
-    const pagination = {};
-    pagination["page"] = page;
-    pagination["lastpage"] = lastpage;
-    console.log(lastpage);
-
-    if (startIndex > 0) {
-      pagination.previous = {
-        page: page - 1,
-        limit: limit,
-      };
-    }
-    if (endIndex < total) {
-      pagination.next = {
-        page: page + 1,
-        limit: limit,
-      };
-    }
-
-    query = query.skip(startIndex).limit(limit);
-    const services = await query;
-
+    const services = await company.services;
+    
+ 
+    
     res.status(200).render("services", {
       services,
-      total,
-      count: services.length,
-      pagination,
+
       link: "services",
     });
   } catch (error) {
@@ -225,9 +207,10 @@ const getservicesPage = async (req, res) => {
     });
   }
 };
+
 const getRegisterPage = (req, res) => {
   try {
-    res.status(200).render("register", {
+    res.status(200).render("front/register", {
       link: "register",
     });
   } catch (error) {
@@ -394,7 +377,6 @@ const getSessionsPage = async (req, res) => {
     const sessions = await Sessions.find({})
       .sort({ time: 1 })
       .populate(["user", "doctor"]);
-    const services = await Service.find({ activeorNot: { $ne: false } });
 
     res.status(200).render("sessions", {
       link: "sessions",
@@ -414,7 +396,7 @@ const getSessionsPage = async (req, res) => {
 const getPaymentStaticsPage = async (req, res) => {
   try {
     res.status(200).render("statics/payments-statics.ejs", {
-      link: "user-statics",
+      link: "statics",
     });
   } catch (error) {
     res.status(500).json({
@@ -426,7 +408,7 @@ const getPaymentStaticsPage = async (req, res) => {
 const getUsersStaticsPage = async (req, res) => {
   try {
     res.status(200).render("statics/users-statics.ejs", {
-      link: "payments-statics",
+      link: "statics",
     });
   } catch (error) {
     res.status(500).json({
@@ -438,7 +420,7 @@ const getUsersStaticsPage = async (req, res) => {
 const getPersonelsStaticsPage = async (req, res) => {
   try {
     res.status(200).render("statics/personels-statics.ejs", {
-      link: "personels-statics",
+      link: "statics",
     });
   } catch (error) {
     res.status(500).json({
@@ -450,7 +432,7 @@ const getPersonelsStaticsPage = async (req, res) => {
 const getAppointmentsStaticsPage = async (req, res) => {
   try {
     res.status(200).render("statics/appointments-statics.ejs", {
-      link: "appointments-statics",
+      link: "statics",
     });
   } catch (error) {
     res.status(500).json({
@@ -461,7 +443,6 @@ const getAppointmentsStaticsPage = async (req, res) => {
 };
 const getSettingsPage = (req, res) => {
   try {
-    
     const user = res.locals.user;
     res.status(200).render("settings", {
       link: "settings",
@@ -476,11 +457,25 @@ const getSettingsPage = (req, res) => {
 };
 const companyPaymentPage = (req, res) => {
   try {
-    
     const user = res.locals.user;
     res.status(200).render("companyPaymentPage", {
       link: "companyPaymentPage",
       user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: error,
+    });
+  }
+};
+const companyPaymentsListPage = async (req, res) => {
+  try {
+    const orders = await Orders.find({});
+    console.log(orders);
+    res.status(200).render("companyPaymentsList", {
+      link: "companyPaymentsList",
+      orders,
     });
   } catch (error) {
     res.status(500).json({
@@ -546,11 +541,9 @@ const getPaymentsPage = async (req, res) => {
 const getSinglePage = async (req, res) => {
   try {
     const singleUser = await User.findById(req.params.id);
-    const payments = await Payment.find({fromUser:req.params.id});
-    const sessions = await Sessions.find({}).populate(["doctor"])
+    const payments = await Payment.find({ fromUser: req.params.id });
+    const sessions = await Sessions.find({}).populate(["doctor"]);
 
-    
-    
     res.status(200).render("user-details", {
       singleUser,
       sessions,
@@ -592,5 +585,8 @@ export {
   getTermOfUsePage,
   returnPoliciesPage,
   privacyPoliciesPage,
-  kvkkPage,getPricesPage
+  kvkkPage,
+  getPricesPage,
+  getSuperAdminTicketsPage,
+  companyPaymentsListPage,
 };

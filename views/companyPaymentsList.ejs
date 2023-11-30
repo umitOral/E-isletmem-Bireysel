@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/users.css">
+</head>
+
+<body>
+    <%- include("partials/aside.ejs") %>
+        <section id="content">
+            <%- include('partials/header.ejs') %>
+            <!---------- left aside ------------->
+            
+               
+                <main>
+
+                    <div class="header">
+                        <h1> Satın alınan Abonelikler</h1>
+                    </div>
+
+
+                    <div class="search">
+                       
+                        <div class="add_customer_btn">Yeni Ödeme Yap +</div>
+
+                    </div>
+
+                    <div class="print">
+
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Export As &nbsp; &#10140</label>
+                            <label for="" class="to_pdf" onclick="window.print()">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+                            <label for="" class="to_json">JSON<span class="material-symbols-sharp"></span></label>
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
+                        </div>
+
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+
+                                <th>Tarih<i class="ph-bold ph-arrow-up"></i></th>
+                                <th>Miktar<i class="ph-bold ph-arrow-up"></i></th>
+                                <th>Ödeme No<i class="ph-bold ph-arrow-up"></i></td>
+                                <th>Süre<i class="ph-bold ph-arrow-up"></i></th>
+                                
+
+                            </thead>
+                            <tbody id="userList">
+                                <% orders.forEach(order=> { %>
+                                    <tr>
+
+                                        <td>
+                                            <%= order.createdAt.toLocaleDateString() %>
+                                        </td>
+                                        <td>
+                                            <%= order.amount %>TL
+                                        </td>
+                                        <td>
+                                            <%= order.paymentId %>
+                                        </td>
+                                        <td>
+                                            <span><%= order.paymentDuration %>Gün</span>
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <% }) %>
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+
+                  
+                  
+
+                </main>
+                
+
+                
+        </seciton>
+
+
+
+        <script type="module" src="../js/requests.js"></script>
+        <script type="module" src="../js/users.js"></script>
+
+        <script src="/js/sidebar.js"></script>
+
+
+
+</body>
+
+</html>

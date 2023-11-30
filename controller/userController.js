@@ -12,6 +12,23 @@ import { CustomError } from "../helpers/error/CustomError.js";
 const createCompany = async (req, res, next) => {
   try {
     const data = req.body;
+    const newDate=new Date()
+    req.body.subscribeEndDate=new Date(newDate.setMonth(newDate.getMonth()+1)).toISOString()
+    
+    const processes = process.env.SERVICES.split(",");
+    
+    req.body.services=[]
+
+    processes.forEach((process, index) => {
+      req.body.services.push({
+        serviceName:process,
+        servicePrice:99,
+        activeorNot:false
+    })
+    console.log(process)
+    })
+
+    console.log(req.body);
 
     if (data.password !== data.password2) {
       return next(new Error("Girdiğiniz şifreler farklıdır", 400));
@@ -186,7 +203,7 @@ const findPersonels = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
+const addUser = async (req, res) => {
   try {
     const data = req.body;
     data.company = res.locals.user._id;
@@ -216,6 +233,7 @@ const editInformations = async (req, res) => {
       company: req.body.company,
       billingAddress: req.body.billingAddress,
       notes: req.body.notes,
+      userCompany: req.body.userCompany,
     });
     res.redirect("back");
   } catch (error) {
@@ -268,7 +286,7 @@ const uploadPictures = async (req, res) => {
         folder: "archimet",
       });
       console.log(result);
-      return { secure_url: result.secure_url, public_id:result.public_id };
+      return { secure_url: result.secure_url, public_id: result.public_id };
     };
 
     const files = req.files.upload_file;
@@ -277,12 +295,16 @@ const uploadPictures = async (req, res) => {
       console.log("tek resim");
       const path = files.tempFilePath;
       const data = await cloudinaryImageUploadMethod(path);
-      
+
       await User.updateOne(
         { _id: req.params.id },
         {
           $push: {
-            images: { url: data.secure_url, uploadTime: req.body.uploadTime,public_id:data.public_id},
+            images: {
+              url: data.secure_url,
+              uploadTime: req.body.uploadTime,
+              public_id: data.public_id,
+            },
           },
         }
       );
@@ -301,7 +323,11 @@ const uploadPictures = async (req, res) => {
           { _id: req.params.id },
           {
             $push: {
-              images: { url: data.secure_url, uploadTime: req.body.uploadTime,public_id:data.public_id },
+              images: {
+                url: data.secure_url,
+                uploadTime: req.body.uploadTime,
+                public_id: data.public_id,
+              },
             },
           }
         );
@@ -322,25 +348,28 @@ const uploadPictures = async (req, res) => {
 
 const deletePhoto = async (req, res) => {
   try {
-    cloudinary.uploader.destroy("archimet/"+req.params.public_id, function (error, result) {
-      if (error) {
-        console.log(error);
+    cloudinary.uploader.destroy(
+      "archimet/" + req.params.public_id,
+      function (error, result) {
+        if (error) {
+          console.log(error);
+        }
+        console.log(result);
       }
-      console.log(result);
-    });
+    );
 
     console.log(req.params);
-    
+
     await User.updateOne(
       { _id: req.params.id },
       {
         $pull: {
-          images: { public_id:"archimet/"+req.params.public_id },
+          images: { public_id: "archimet/" + req.params.public_id },
         },
       }
     );
 
-    res.redirect("back")
+    res.redirect("back");
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -402,7 +431,7 @@ const createToken = (userID) => {
 export {
   resetPasswordMail,
   createCompany,
-  createUser,
+  addUser,
   loginUser,
   logOut,
   uploadPictures,

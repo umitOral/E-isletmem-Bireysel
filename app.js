@@ -60,7 +60,7 @@ app.use("/admin", authMiddleware.checkUser);
 app.use("/", pageRoute);
 app.use("/api",authMiddleware.checkUser, api);
 app.use("/admin", authMiddleware.authenticateToken, adminRoutes);
-app.use("/superAdmin",authMiddleware.authenticateToken,superAdminRoutes);
+app.use("/superAdmin",authMiddleware.authenticateToken,authMiddleware.checkUser,superAdminRoutes);
 //error handlers
 app.use(customErrorHandler)
 

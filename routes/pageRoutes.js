@@ -1,7 +1,8 @@
 import express from 'express';
 import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getServicesPage,getForgotPasswordPage} from '../controller/pageController.js';
 import {createCompany,loginUser,resetPasswordMail} from '../controller/userController.js';
-import {sendMail} from '../controller/mailControllers.js';
+import {sendMail,contactEmail} from '../controller/mailControllers.js';
+
 
 
 const router =express.Router()
@@ -24,7 +25,8 @@ router.route("/login").post(loginUser)
 router.route("/forgotPassword").get(getForgotPasswordPage)
 router.route("/forgotPassword").post(resetPasswordMail)
 
-router.route("/newPassword/:token").get(resetPasswordPage)
+
+router.route("/contactEmail").post(contactEmail)
 
 
 

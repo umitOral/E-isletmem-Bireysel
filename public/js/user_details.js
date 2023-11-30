@@ -1,3 +1,6 @@
+import { Request } from "./requests.js";
+const request = new Request();
+
 const showContentsBtn = document.querySelectorAll(".show-content");
 const contents = document.querySelectorAll(".userInformationsContent");
 
@@ -23,14 +26,13 @@ const modalPayment = document.querySelector(".modal_payment");
 const modalImage = document.querySelector(".modal_image");
 const modalProccess = document.querySelector(".modal_proccess");
 
-import { Request } from "./requests.js";
-const request = new Request("http://127.0.0.1:3000/api/users");
+
 
 eventListeners();
 
 function eventListeners() {
-  proccessType.addEventListener("change", addUıProccesType);
-  selected_proccess_type_div.addEventListener("click", removeUıProccesType);
+  
+  
   editUserButton.addEventListener("click", editUser);
   editBtn.addEventListener("click", showInformationsModal);
   addImageButton.addEventListener("click", showAddImageModal);
@@ -46,8 +48,6 @@ cancelModal.forEach((element) => {
 
 deleteImageBtn.forEach((element) => {
   element.addEventListener("click", () => {
-    
-    
     const photoid=element.dataset.photoid
     request
       .deletewithUrl("./"+photoid+ "/deletePhoto")
@@ -58,9 +58,6 @@ deleteImageBtn.forEach((element) => {
 
 const userName = document.getElementById("user-name");
 const usersurName = document.getElementById("user-surname");
-
-
-
 
 function editUser() {
   const name = userName.value || userName.placeholder;
@@ -149,51 +146,14 @@ saveModal.forEach((element) => {
     modalUser.classList.remove("showed_modal");
     modalSession.classList.remove("showed_modal");
     modalPayment.classList.remove("showed_modal");
+    loader.classList.toggle("showed");
   };
 });
 
 // add-session -------------------------
 
-function removeUıProccesType(e) {
-  if (e.target.classList == "fa-solid fa-x") {
-    e.target.parentElement.remove();
-  }
-}
 
-function addUıProccesType() {
-  // const node = document.createElement("div")
-  const nodeinput = document.createElement("input");
-  nodeinput.value =
-    proccessType.options[proccessType.options.selectedIndex].textContent.trim();
-  nodeinput.setAttribute("name", "services");
-  nodeinput.setAttribute("disabled", "");
-  nodeinput.setAttribute(
-    "value",
-    proccessType.options[proccessType.options.selectedIndex].textContent.trim()
-  );
 
-  const deleteButton = document.createElement("i");
-  deleteButton.classList.add("fa-solid");
-  deleteButton.classList.add("fa-x");
 
-  // node.appendChild(nodeinput)
-  // node.appendChild(deleteButton)
-  selected_proccess_type_div.appendChild(nodeinput);
-}
 
-// upload images preview   -----------
-function getImagePreview(e) {
-  var imageSrc = URL.createObjectURL(e.target.files[0]);
-  const object1 = e.target.files;
-  let imageDiv = document.querySelector(".uploaded_images_preview");
 
-  console.log(imageDiv);
-
-  const imagesArray = Object.values(object1);
-
-  imagesArray.forEach((element) => {
-    let newimage = document.createElement("img");
-    newimage.src = URL.createObjectURL(element);
-    imageDiv.appendChild(newimage);
-  });
-}

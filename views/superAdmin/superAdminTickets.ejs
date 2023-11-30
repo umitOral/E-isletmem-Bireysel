@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/users.css">
+</head>
+
+<body>
+    <%- include("../partials/aside.ejs") %>
+        <section id="content">
+            <!---------- left aside ------------->
+            
+            <%- include('../partials/header.ejs') %>
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <div class="header">
+                        <h1> BAYİLER</h1>
+                    </div>
+                    <div class="print">
+
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Export As &nbsp; &#10140</label>
+                            <label for="" class="to_pdf" onclick="window.print()">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+                            <label for="" class="to_json">JSON<span class="material-symbols-sharp"></span></label>
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
+                        </div>
+
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table >
+                            <thead>
+                                
+                                
+                                <th>Durum<span class="material-symbols-sharp">north</span></th>
+                                <th>mesaj<span class="material-symbols-sharp">north</span></th>
+                                <th>mail<span class="material-symbols-sharp">north</span></th>
+                                <th>telefon<span class="material-symbols-sharp">north</span></th>
+                                
+                                
+                               
+                                
+                            </thead>
+                            <tbody id="userList">
+                                <% tickets.forEach(ticket=> { %>
+                                    <tr>
+                                        
+                                        <td>
+                                            <%= ticket.ticketStatus %>
+                                        </td>
+                                        <td>
+                                            <%= ticket.messages %>
+                                        </td>
+                                        <td>
+                                            <%= ticket.email %>
+                                        </td>
+                                        <td>
+                                            <%= ticket.phone %>
+                                        </td>
+                                        <td style="display:none">
+                                            <%= ticket._id %>
+                                        </td>
+                                        
+                                        
+
+                                        <td class="add_customer_btn">Cevapla</td>
+                                        <td><a style="display: block; background-color: red; padding: 1rem;" href="./superAdmin/companies/closeTicket/<%= ticket._id %>">Kapat</a></td>
+                                    </tr>
+                                    <% }) %>
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+                    
+                    
+                    
+
+                </main>
+                <div class="add_customer modal">
+                    <h2>Yeni Cevap Gönder</h2>
+                    
+                    <form action="./tickets/answerTicket/" method="POST" id="register-form">
+                        
+                        <div class="inputs ">
+                            <span>Cevap</span>
+                            <textarea name="notes" id="notes" cols="70" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="save_button" id="add-user">Kaydet</button>
+                        <button class="cancel_button">Vazgeç</button>
+                    </form>
+                </div>
+                
+            </section>
+
+
+        
+        <script type="module" src="../js/requests.js"></script>
+        <script type="module" src="../js/users.js"></script>
+        <script src="/js/sidebar.js"></script>
+
+
+
+</body>
+
+</html>

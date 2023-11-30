@@ -455,6 +455,9 @@ const registerMail = `
 
 </html>
     `;
+const contactEmailHTML = `
+Mesajınızı başarıyla aldık.en kısa sürede dönüş sağlayacağız.
+`;
 
 const resetPasswordMailHtml = function (url) {
     return (`
@@ -467,4 +470,4 @@ const resetPasswordMailHtml = function (url) {
 } 
 
 
-export { registerMail,resetPasswordMailHtml};
+export { registerMail,resetPasswordMailHtml,contactEmailHTML};
