@@ -6,21 +6,28 @@ import { orderSuccesEmail } from "./mailControllers.js";
 import Iyzipay from "iyzipay";
 import { v4 as uuidv4 } from "uuid";
 
-const updateCompanyPassword = async (req, res, next) => {
+const updateCompanyPassword = async (req, res) => {
   try {
     console.log(req.body);
 
     if (req.body.password !== req.body.password2) {
-      return next(new Error("şifreler aynı değil"), 400);
+      res.status(400).json({
+        succes:false,
+        message:"şifreler aynı değil"
+      })
+    }
+    else{
+      const company = await Company.findOne({ _id: req.params.id });
+      company.password = req.body.password;
+      company.save();
+      
+      res.json({
+        succes: true,
+        message: "bilgiler başarıyla değiştirildi.",
+      });
     }
 
-    const company = await Company.findOne({ _id: req.params.id });
-    company.password = req.body.password;
-    company.save();
-    res.json({
-      succes: true,
-      message: "bilgiler başarıyla değiştirildi.",
-    });
+   
   } catch (error) {
     res.status(500).json({
       succes: false,

@@ -43,8 +43,16 @@
   border-radius: var(--card-border-radius);
   padding: 2rem 0.2rem;
 }
+.left_section i{
+  font-weight: 200;
+}
 .left_section .user-img {
   align-self: center;
+}
+.left_section .user-img i {
+  padding:1rem;
+  background-color: var(--color-success);
+  border-radius: 50%;
 }
 .left_section span {
   font-weight: 600;
@@ -71,8 +79,10 @@
 }
 
 .left_section .show-content.active{
-  border: 1px solid rgba(56, 54, 54, 0.576);
-  background-color: var(--color-danger);
+  border: 2px solid var(--color-main);
+  background-color: #04d9d916;
+  color: black;
+  
 }
 .left_section .show-content:hover{
   border: 1px solid rgba(56, 54, 54, 0.576);

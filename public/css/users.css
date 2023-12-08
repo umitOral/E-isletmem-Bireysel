@@ -55,99 +55,15 @@ div.search input[type="search"] {
 }
 
 .add_customer_btn {
-  background-color: #a6b0fa;
+  background-color: var(--color-success);
   border: 1px dashed var(--color-dark-variant);
   padding: 0.5rem;
   border-radius: var(--border-radius-1);
   cursor: pointer;
 }
 
-/* -----------------print section---------- */
-.print {
-  display: flex;
-  justify-content: end;
-  margin-top: 0.5rem;
-}
 
-.print-icon {
-  background-color: #41f1b6;
-  padding: 0.75rem;
-  font-size: 2rem;
-  border-radius: 50%;
 
-  transition: 0.2s all ease-in-out;
-}
-
-.print-selection {
-  width: 13rem;
-  background-color: red;
-  border-radius: var(--border-radius-2);
-  display: none;
-  font-size: 1.1rem;
-  box-shadow: 0.5rem 0.5rem 0.5rem var(--color-light);
-  position: absolute;
-  top: 35px;
-  right: 10px;
-}
-
-.print-selection:hover {
-  display: block;
-}
-
-.print-selection label {
-  background-color: #f6f6f9;
-  display: flex;
-  justify-content: space-around;
-  padding: 1rem 0.5rem;
-  transition: 1 all ease-in-out;
-}
-
-.print-selection label:hover {
-  transform: scale(1.05);
-  background-color: #fff;
-}
-
-.print-selection label:first-child {
-  border-top-right-radius: var(--border-radius-2);
-  border-top-left-radius: var(--border-radius-2);
-  background-color: var(--color-primary);
-}
-
-.print-icon:hover + .print-selection {
-  display: block;
-}
-
-/* -----------------print section end -------------- */
-
-.pagination {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  color: var(--color-dark-variant);
-}
-.pagination-describe {
-  margin-top: 0.5rem;
-  display: flex;
-
-  justify-content: center;
-  color: var(--color-dark-variant);
-}
-
-.pagination span {
-  border: 1px solid var(--color-dark-variant2);
-  padding: 0.6rem;
-  text-align: center;
-  font-size: 1rem;
-  border-radius: var(--border-radius-1);
-}
-.pagination span.page-active {
-  background-color: var(--color-dark-variant2);
-}
-
-.pagination span:hover {
-  background-color: var(--color-info-light);
-}
 
 main header a {
   padding: 1.5rem;

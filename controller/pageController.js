@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
-import Orders from "../models/OrderModel.js";
+import Order from "../models/OrderModel.js";
 import { Ticket } from "../models/ticketModel.js";
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
@@ -189,12 +189,9 @@ const getPricesPage = (req, res) => {
 const getservicesPage = async (req, res) => {
   try {
     let company = res.locals.user;
-    
 
     const services = await company.services;
-    
- 
-    
+
     res.status(200).render("services", {
       services,
 
@@ -364,26 +361,36 @@ const getPersonelsPage = async (req, res) => {
   }
 };
 
-const getSessionsPage = async (req, res) => {
+const getAppointmentsPage = async (req, res) => {
   try {
     const doctors = await User.find({
       role: "doctor",
       company: res.locals.user._id,
       activeOrNot: true,
     });
+
+    let services = await Company.findById({ _id: res.locals.user._id });
+    const activeServices=[]
+    services.services.forEach(element => {
+      if (element.activeorNot===true) {
+        activeServices.push(element)
+      }
+     });
     // sort({ registerDate: 1 })
 
-    const users = await User.find({ role: "customer" });
+    const users = await User.find({ role: "customer",company:res.locals.user._id});
+
     const sessions = await Sessions.find({})
       .sort({ time: 1 })
       .populate(["user", "doctor"]);
 
-    res.status(200).render("sessions", {
-      link: "sessions",
+    
+    res.status(200).render("appointments", {
+      link: "appointments",
       doctors,
       users,
       sessions,
-      services,
+      services:activeServices
     });
   } catch (error) {
     res.status(500).json({
@@ -471,7 +478,7 @@ const companyPaymentPage = (req, res) => {
 };
 const companyPaymentsListPage = async (req, res) => {
   try {
-    const orders = await Orders.find({});
+    const orders = await Order.find({});
     console.log(orders);
     res.status(200).render("companyPaymentsList", {
       link: "companyPaymentsList",
@@ -548,12 +555,11 @@ const getSinglePage = async (req, res) => {
       singleUser,
       sessions,
       payments,
-      link: "user_details",
+      link: "users",
     });
   } catch (error) {
     res.status(500).json({
       succes: false,
-
       message: error,
     });
   }
@@ -576,7 +582,7 @@ export {
   getServicesPage,
   getUsersPage,
   getAboutUsPage,
-  getSessionsPage,
+  getAppointmentsPage,
   getSinglePage,
   getservicesPage,
   getPersonelsPage,

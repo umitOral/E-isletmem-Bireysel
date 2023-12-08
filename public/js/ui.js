@@ -1,26 +1,35 @@
 export class UI {
-    constructor() {
-        this.table = document.getElementById("userList")
+  constructor() {
+    this.table = document.getElementById("userList");
+  }
 
+  showModal(response, messageBox) {
+    console.log("başarılı")
+    
+    // messageBox.className = "information-modal";
+
+    if (response.succes == false) {
+      messageBox.classList.add("failure");
+      messageBox.innerHTML = `
+            <span>${response.message}</span><i class="fa-solid fa-circle-xmark"></i>
+        `;
+    } else {
+      messageBox.classList.add("success");
+      messageBox.innerHTML = `
+            <span>${response.message}</span><i class="fa-solid fa-circle-check"></i>
+        `;
     }
-    createResponseModal(message,succes_or_not) {
-        
-        const responseModal=document.querySelector(".response_modal")
-        const newResponse=document.createElement("div")
-        newResponse.classList="response_"+succes_or_not
-        newResponse.innerHTML+=`
-            <span>${message}</span><i class="ph ph-x"></i>
-        `
-        
-        responseModal.appendChild(newResponse)
-        setTimeout(() => {
-            newResponse.remove()
-        }, 4000);
-        
-    }
-    showAllUsersToUI(users) {
-        users.forEach((element, index) => {
-            this.table.innerHTML += `
+
+    
+
+    setTimeout(() => {
+      messageBox.className="information-modal"
+    }, 2000);
+  }
+
+  showAllUsersToUI(users) {
+    users.forEach((element, index) => {
+      this.table.innerHTML += `
             <tr>
                 <td><input type="checkbox" class="item_id" option_id="1"></td>
                 
@@ -32,38 +41,46 @@ export class UI {
                     <p class="continue">8/10</p>
                 </td>
             
-                <td><a href="/admin/users/${element._id}" id="details">Detay</a></td>
+                <td><a href="/admin/users/${
+                  element._id
+                }" id="details">Detay</a></td>
                 <td><a href="#" id="delete-user" style="cursor:pointer; ">Sil</td>
             </tr>
-            `
-        });
+            `;
+    });
+  }
+  selectedDatetoUI(activeDate) {
+    const eventDate = document.querySelector(".selected-date");
+    const eventDay = document.querySelector(".event-day");
+    eventDate.innerHTML=new Date(activeDate.date).toLocaleDateString([],{month: 'long',year:"numeric"})
+    eventDay.innerHTML=new Date(activeDate.date).toLocaleDateString([],{weekday: 'long'})
+  }
+  changeHeadCalendar(activeDate) {
+    
+    console.log(activeDate)
+    const headCalendar = document.querySelector(".head-calendar")
+    console.log(headCalendar)
+    headCalendar.innerHTML+=new Date(activeDate.date).toLocaleDateString([],{month: 'long',year:"numeric"})
+  }
+
+  showAllPaymensToUI(data) {
+    const paymentTablesChildren = document.querySelectorAll("table tbody tr");
+    const paymentTable = document.querySelector("table tbody");
+
+    const totalIncome = document.querySelector(".total-income");
+    const totalExpenses = document.querySelector(".total-expenses");
+    const totalCash = document.querySelector(".total-cash");
+    const totalCreditCard = document.querySelector(".total-crediTCard");
+    const netCash = document.querySelector(".netCash");
+
+    console.log(data);
+
+    for (const iterator of paymentTablesChildren) {
+      iterator.remove();
     }
-    selectedDatetoUI (selectedDate) {
-        
-        const eventDate = document.querySelector(".event-date")
-        eventDate.innerHTML=selectedDate
-    }
 
-    showAllPaymensToUI(data) {
-        const paymentTablesChildren = document.querySelectorAll("table tbody tr")
-        const paymentTable = document.querySelector("table tbody")
-
-        const totalIncome = document.querySelector(".total-income")
-        const totalExpenses = document.querySelector(".total-expenses")
-        const totalCash = document.querySelector(".total-cash")
-        const totalCreditCard = document.querySelector(".total-crediTCard")
-        const netCash = document.querySelector(".netCash")
-
-        console.log(data)
-
-
-        for (const iterator of paymentTablesChildren) {
-
-            iterator.remove()
-        }
-
-        data.payments.forEach((payment, index) => {
-            paymentTable.innerHTML += `
+    data.payments.forEach((payment, index) => {
+      paymentTable.innerHTML += `
             <tr>
                                             
                     
@@ -77,7 +94,9 @@ export class UI {
                     </span>
                         <div class="edit_payment_small_modal">
                     
-                            <a href="./payments/${payment._id}/deletePayment">Sil</a>
+                            <a href="./payments/${
+                              payment._id
+                            }/deletePayment">Sil</a>
                             
                             <button class="">Düzenle</button>
                             
@@ -88,55 +107,57 @@ export class UI {
                     </td> 
 
                 </tr>
-            `
-        });
+            `;
+    });
 
-        totalIncome.innerHTML = data.totalIncome
-        totalCash.innerHTML = data.totalCash
-        totalCreditCard.innerHTML = data.totalCreditCard
-        totalExpenses.innerHTML = data.totalExpenses
+    totalIncome.innerHTML = data.totalIncome;
+    totalCash.innerHTML = data.totalCash;
+    totalCreditCard.innerHTML = data.totalCreditCard;
+    totalExpenses.innerHTML = data.totalExpenses;
 
+    netCash.innerHTML = data.netCash;
+  }
 
-        netCash.innerHTML = data.netCash
+  showAllSessionToUI(allTimesforAllDoctors, AllDoctor) {
+    const allDoctorEvents = document.querySelector(".events-all-doctors");
 
+    while (allDoctorEvents.firstChild) {
+      allDoctorEvents.firstChild.remove();
     }
 
+    console.log(allTimesforAllDoctors);
+    allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
+      const singleDoctorArea = document.createElement("div");
+      singleDoctorArea.className = "single-doctor-area";
+      singleDoctorArea.setAttribute("data-doctorid", AllDoctor[index]._id);
 
-    showAllSessionToUI(allTimesforAllDoctors,AllDoctor) {
-        
-        const allDoctorEvents = document.querySelector(".events-all-doctors")
-
-        while (allDoctorEvents.firstChild) {
-            allDoctorEvents.firstChild.remove()
-        }
-
-        
-        console.log(allTimesforAllDoctors)
-        allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
-
-            const singleDoctorArea = document.createElement("div")
-            singleDoctorArea.className = "single-doctor-area"
-            singleDoctorArea.setAttribute("data-doctorid",AllDoctor[index]._id)
-
-            singleDoctorArea.innerHTML += `
+      singleDoctorArea.innerHTML += `
             <div class="doctor-name" value="">
                 ${AllDoctor[index].name}
             </div>
-            `
-            // singleDoctorArea.dataset=AllDoctor[index]._id
-            const singleDoctorEvents = document.createElement("div")
-            singleDoctorEvents.className = "single-doctor-events"
+            `;
+      // singleDoctorArea.dataset=AllDoctor[index]._id
+      const singleDoctorEvents = document.createElement("div");
+      singleDoctorEvents.className = "single-doctor-events";
 
-            allDoctorEvents.appendChild(singleDoctorArea)
+      allDoctorEvents.appendChild(singleDoctorArea);
 
-            timesForSingleDoctor.forEach((element, index) => {
-                if (element._id) {
-                    singleDoctorEvents.innerHTML += `
-                    <div class="event full" data-session="${element._id}" data-timevalue="${element.timeValue}" data-timeindex="${element.timeIndex}">
+      timesForSingleDoctor.forEach((element, index) => {
+        if (element._id) {
+          singleDoctorEvents.innerHTML += `
+                    <div class="event full" data-session="${
+                      element._id
+                    }" data-timevalue="${element.timeValue}" data-timeindex="${
+            element.timeIndex
+          }">
 
                         <div class="center">
                         <div>
-                        <span>${new Date(element.startHour).toLocaleTimeString().slice(0,5)}-</span><span>${new Date(element.endHour).toLocaleTimeString().slice(0,5)}</span>
+                        <span>${new Date(element.startHour)
+                          .toLocaleTimeString()
+                          .slice(0, 5)}-</span><span>${new Date(element.endHour)
+            .toLocaleTimeString()
+            .slice(0, 5)}</span>
 
                         </div>
 
@@ -161,16 +182,22 @@ export class UI {
 
                         </div>
                     </div>
-                    `
-                    singleDoctorArea.appendChild(singleDoctorEvents)
-                } else {
-                    singleDoctorEvents.innerHTML += `
+                    `;
+          singleDoctorArea.appendChild(singleDoctorEvents);
+        } else {
+          singleDoctorEvents.innerHTML += `
                          
-                    <div class="event" data-time="${index}" data-startHour="${element.startHour}" data-endHour="${element.endHour}">
+                    <div class="event" data-time="${index}" data-startHour="${
+            element.startHour
+          }" data-endHour="${element.endHour}">
                                              
                         <div>
-                        <span>${new Date(element.startHour).toLocaleTimeString().slice(0,5)} </span>
-                        <span>${new Date(element.endHour).toLocaleTimeString().slice(0,5)} </span>
+                        <span>${new Date(element.startHour)
+                          .toLocaleTimeString()
+                          .slice(0, 5)} </span>
+                        <span>${new Date(element.endHour)
+                          .toLocaleTimeString()
+                          .slice(0, 5)} </span>
                         
                         
                         </div>
@@ -185,43 +212,32 @@ export class UI {
 
                     </div>
                     
-                    `
-                    singleDoctorArea.appendChild(singleDoctorEvents)
-                }
+                    `;
+          singleDoctorArea.appendChild(singleDoctorEvents);
+        }
+      });
+    });
+  }
 
+  deleteAllSessionFromUI() {
+    const events = document.querySelectorAll(".event");
 
-            });
+    events.forEach((element) => {
+      element.remove();
+    });
+  }
+  deletePaymentFromUI(payment) {
+    payment.remove();
+  }
 
-        });
-    }
+  deleteUserFromUI(element) {
+    element.remove();
+  }
+  createEditModal() {}
 
-    deleteAllSessionFromUI() {
-        const events = document.querySelectorAll(".event")
-
-
-        events.forEach(element => {
-            element.remove()
-        });
-
-    }
-    deletePaymentFromUI(payment) {
-        payment.remove()
-
-    }
-
-    deleteUserFromUI(element) {
-        element.remove()
-    }
-    createEditModal() {
-
-
-
-    }
-
-
-    addUsertoUI(newUser) {
-        console.log(newUser)
-        this.table.innerHTML += `
+  addUsertoUI(newUser) {
+    console.log(newUser);
+    this.table.innerHTML += `
         <tr>
             <td><input type="checkbox" class="item_id" option_id="1"></td>
             
@@ -235,46 +251,48 @@ export class UI {
                 <p class="continue">8/10</p>
             </td>
         
-            <td><a href="/admin/users/${newUser.data._id}" id="details">Detay</a></td>
+            <td><a href="/admin/users/${
+              newUser.data._id
+            }" id="details">Detay</a></td>
             <td><a href="#" id="delete-user" style="cursor:pointer; ">Sil</td>
         </tr>
-        `
+        `;
+  }
+
+  createChart(response) {
+    const sexStaticsLabels = ["Kadın", "Erkek"];
+    const sexStaticsValues = response.sexStatics;
+
+    console.log(response);
+
+    if (response.sexStatics[0] == 0 && response.sexStatics[0] == 0) {
+      document.querySelector(
+        ".filter-info"
+      ).innerHTML = `Bu tarih aralığında yeni kullanıcı kaydı bulunamadı `;
+    } else {
+      document.querySelector(".filter-info").innerHTML = ``;
+
+      new Chart("sex_statics", {
+        type: "pie",
+        data: {
+          labels: sexStaticsLabels,
+          datasets: [
+            {
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+              ],
+              data: sexStaticsValues,
+            },
+          ],
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Kadın-Erkek Oranı",
+          },
+        },
+      });
     }
-
-    createChart(response) {
-        
-        const sexStaticsLabels = ["Kadın", "Erkek"];
-        const sexStaticsValues = response.sexStatics;
-    
-        console.log(response)
-
-        if (response.sexStatics[0]==0 &&response.sexStatics[0]==0) {
-            document.querySelector(".filter-info").innerHTML=`Bu tarih aralığında yeni kullanıcı kaydı bulunamadı `
-        } else {
-            document.querySelector(".filter-info").innerHTML=``
-
-            new Chart("sex_statics", {
-                type: "pie",
-                data: {
-                    labels: sexStaticsLabels,
-                    datasets: [{
-    
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'
-                        ],
-                        data: sexStaticsValues
-                    }]
-                },
-                options: {
-                    title: {
-                        display: true,
-                        text: "Kadın-Erkek Oranı"
-                    }
-                }
-            });
-        }
-        
-    }
-
+  }
 }
-

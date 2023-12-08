@@ -1,5 +1,6 @@
 
-console.log(    "dada")
+import {UI} from './ui.js'
+const ui=new UI()
 
 
 const showContentsBtns = document.querySelectorAll(".show-content")
@@ -25,9 +26,6 @@ import { Request } from "./requests.js";
 const request = new Request()
 
 
-
-
-
 eventListeners()
 
 function eventListeners() {
@@ -50,10 +48,6 @@ cancelModal.forEach(element => {
 
 
 
-
-
-
-
 function changePassword(e) {
     e.preventDefault();
 
@@ -64,13 +58,11 @@ function changePassword(e) {
         
     })
         .then(response => {
-            
-            messageBox.textContent=response.message
-            messageBox.style.display="block"
-            
-            setTimeout(() => {
-                messageBox.style.display="none"
-            }, 3000);
+           
+           ui.showModal(response,messageBox)
+           changePassworForm.password.value=""
+           changePassworForm.password2.value=""
+
         })
         .catch(err => console.log("hata:"+err))
 
@@ -94,15 +86,10 @@ function changeInformations(e) {
         
     })
         .then(response => {
-            console.log(response)
+            
             modalUser.classList.remove("showed_modal")
-            messageBox.textContent=response.message
-            messageBox.style.display="block"
-            
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
-            
+            ui.showModal(response,messageBox)
+        
         })
         .catch(err => console.log("hata:"+err))
 

@@ -5,10 +5,13 @@ const request = new Request();
 import { UI } from "./ui.js";
 const ui = new UI();
 
+
+
 const payButton = document.querySelector(".save_button");
 const formData = document.querySelector("form");
 const loader = document.querySelector(".loader_wrapper.hidden");
 const selectButtons = document.querySelectorAll(".select_packet");
+const messageBox = document.querySelectorAll(".information-modal");
 
 const paymentValue = document.querySelector(".total");
 console.log(paymentValue.textContent)
@@ -49,11 +52,9 @@ function addPaymentRequest(e) {
       console.log(response);
 
       loader.classList.remove("showed");
-      if (response.result.status === "success") {
-        ui.createResponseModal(response.message, "success");
-      } else {
-        ui.createResponseModal(response.result.errorMessage, "failure");
-      }
+      
+      ui.showModal(response.message, messageBox);
+      
       formData.cardUserName.value = "";
       formData.cardNumber.value = "";
       formData.expireMonth.value = "";
@@ -72,3 +73,5 @@ function addPaymentRequest(e) {
       ui.createResponseModal(err);
     });
 }
+
+

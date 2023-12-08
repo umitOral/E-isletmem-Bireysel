@@ -1,13 +1,14 @@
 import { Request } from "./requests.js";
 const request = new Request();
+import { Tables } from "./inner_modules/tables.js";
+const tables = new Tables();
 
 const showContentsBtn = document.querySelectorAll(".show-content");
 const contents = document.querySelectorAll(".userInformationsContent");
 
-const proccessType = document.querySelector(".proccess_type");
-const selected_proccess_type_div = document.querySelector(
-  ".selected_proccess_type"
-);
+const tableElements = document.querySelectorAll("table");
+
+
 const editBtn = document.querySelector(".edit-informations-btn");
 const editUserButton = document.getElementById("edit-user");
 const addImageButton = document.querySelector("button.add");
@@ -43,6 +44,16 @@ cancelModal.forEach((element) => {
   element.addEventListener("click", () => {
     console.log(element.parentElement.parentElement);
     element.parentElement.parentElement.classList.remove("showed_modal");
+  });
+});
+
+tableElements.forEach((table) => {
+  table.querySelectorAll("thead th").forEach((head,columnIndex) => {
+    head.addEventListener("click",()=>{
+      
+      tables.sortingStart(table,columnIndex)
+      
+    })
   });
 });
 
@@ -113,10 +124,7 @@ imagesSmall.forEach((element) => {
 });
 
 // user details modal -----------------
-const editInformation = document.getElementById("edit_informations");
 
-const addImage = document.getElementById("add_image");
-const addProccess = document.getElementById("add_proccess");
 
 const saveModal = document.querySelectorAll(".modal .save_button");
 
@@ -149,8 +157,6 @@ saveModal.forEach((element) => {
     loader.classList.toggle("showed");
   };
 });
-
-// add-session -------------------------
 
 
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,getSessionsPage,getPersonelsStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getservicesPage,getPersonelsPage,getPaymentsPage} from '../controller/pageController.js';
+import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,getAppointmentsPage,getPersonelsStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getservicesPage,getPersonelsPage,getPaymentsPage} from '../controller/pageController.js';
 import {logOut,addUser,deletePhoto,uploadPictures,editInformations,findUser,findPersonels,deactivateUser,activateUser} from '../controller/userController.js';
 import {createPersonel} from '../controller/personelsController.js';
 
@@ -43,7 +43,7 @@ router.route("/personels").get(getPersonelsPage)
 router.route("/personels/search").get(findPersonels)
 router.route("/personels/createPersonel").post(createPersonel)
 
-router.route("/sessions").get(getSessionsPage)
+router.route("/appointments").get(getAppointmentsPage)
 
 router.route("/statics/payment-statics/").get(getPaymentStaticsPage)
 router.route("/statics/users-statics/").get(getUsersStaticsPage)
