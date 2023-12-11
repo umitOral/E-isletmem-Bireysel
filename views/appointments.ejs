@@ -76,7 +76,7 @@
                 </main>
                 <div class="modal modal_add_session ">
 
-                    <form action="./sessions/createsession" method="POST" id="add-session-form">
+                    <form action="" onsubmit="return false" method="POST" id="add-session-form">
                         <h2>Randevu Ekle</h2>
                         
                         <div class="add-event-body">
@@ -123,18 +123,18 @@
                             </div>
 
                             <div class="inputs">Doktor:
-                                <input type="text" id="" class="doctor-name" readonly>
+                                <input type="text" id="" name="doctorName" class="doctor-name" readonly>
                             </div>
                             <div class="inputs" style="display: none;">DoktorID:
                                 <input type="text" name="doctor" id="" class="doctor-id">
                             </div>
                             <div class="inputs">Tarih:
-                                <input type="date" name="date" placeholder="Tarih" class="event-date-from" readonly>
+                                <input type="date" name="date" class="event-date-from">
                             </div>
 
 
                             <div class="inputs">Not:
-                                <input type="text" name="description" cplaceholder="notlar">
+                                <input type="text" name="description" placeholder="notlar">
                             </div>
 
                             <button type="submit" class="save_button">Seans Ekle +</button>
@@ -221,6 +221,7 @@
                     </form>
 
                 </div>
+                <div class="information-modal">AAAA</div>
         </section>
 
         <script type="module" src="/js/requests.js"></script>

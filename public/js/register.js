@@ -38,7 +38,6 @@ form.addEventListener("submit", (e) => {
       authorizedName: form.authorizedName.value,
       email: form.email.value,
       phone: form.phone.value,
-      aaaa:"aaa",
       password: form.password.value,
       password2: form.password2.value,
     },

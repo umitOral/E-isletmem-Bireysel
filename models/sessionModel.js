@@ -32,7 +32,7 @@ const sessionSchema = new Schema(
 
     services: [
       {
-        type: Schema.Types.ObjectId
+        type: String
       },
     ],
     state: {

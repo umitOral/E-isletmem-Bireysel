@@ -549,7 +549,7 @@ const getSinglePage = async (req, res) => {
   try {
     const singleUser = await User.findById(req.params.id);
     const payments = await Payment.find({ fromUser: req.params.id });
-    const sessions = await Sessions.find({}).populate(["doctor"]);
+    const sessions = await Sessions.find({user:req.params.id}).populate(["doctor"]);
 
     res.status(200).render("user-details", {
       singleUser,

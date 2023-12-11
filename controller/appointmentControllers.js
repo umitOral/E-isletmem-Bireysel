@@ -1,33 +1,40 @@
 import Session from '../models/sessionModel.js';
 
-const createSession = async (req, res) => {
+const createAppointment = async (req, res) => {
     try {
+        console.log(req.body)
+        console.log("burası")
         
-        req.body.endHour = new Date(req.body.date+" "+req.body.endHour);
-        req.body.startHour = new Date(req.body.date+" "+req.body.startHour);
+        req.body.startHour = new Date(`${req.body.date},${req.body.startHour}`);
+        req.body.endHour = new Date(`${req.body.date},${req.body.endHour}`);
+        
         req.body.date = new Date(req.body.date);
-        
+
+        console.log(req.body.endHour)
 
         const session=await Session.create(req.body)
         
-        res.redirect("back")
+        res.status(200).json({
+            success:true,
+            message:"randevu başarıyla eklenmiştir"
+        })
         
     }
     catch (error) {
         res.status(500).json({
-            succes: false,
+            success: false,
             message: "create session error"
         })
     }
 }
 
-const deleteSession = async (req, res) => {
+const deleteAppointment = async (req, res) => {
     try {
 
         const session=await Session.findByIdAndDelete(req.params.id)
         res.json({
             succes:true,
-            message:"session deleted"
+            message:"Seans Başarıyla Silindi"
         })
         
     }
@@ -38,7 +45,7 @@ const deleteSession = async (req, res) => {
         })
     }
 }
-const updateStateSession = async (req, res) => {
+const updateStateAppointment = async (req, res) => {
     try {
 
         const session=await Session.findByIdAndUpdate(req.params.id,{
@@ -54,11 +61,11 @@ const updateStateSession = async (req, res) => {
     catch (error) {
         res.status(500).json({
             succes: false,
-            message: "create session error"
+            message: "Sunucuda bir hata yaşandı lütfen tekrar deneyiniz"
         })
     }
 }
-const updateSession = async (req, res) => {
+const updateAppointment= async (req, res) => {
     try {
         console.log(req.body)
         const session=await Session.findByIdAndUpdate(req.params.id,req.body)
@@ -78,4 +85,4 @@ const updateSession = async (req, res) => {
 }
 
 
-export { createSession,deleteSession,updateStateSession,updateSession}
+export { createAppointment,deleteAppointment,updateStateAppointment,updateAppointment}

@@ -7,7 +7,7 @@ import {addService,editService,findServices,activateService,deactivateService} f
 import {addPayment,deletePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
 import {getSexStaticsWithFilter,getPaymentStaticsWithFilter,getNewUserStaticswithFilter} from '../controller/staticsController.js';
 import {updateCompanyPassword,updateCompanyInformations,addCompanyPayment} from '../controller/companyControllers.js';
-import sesssionRoutes from './sessionRoutes.js';
+import appointmentsRoutes from './appointmentsRoutes.js';
 
 const router=express.Router()
 
@@ -68,6 +68,6 @@ router.route("/settings/").get(getSettingsPage)
 router.route("/settings/:id/updateCompanyPassword").post(updateCompanyPassword)
 router.route("/settings/:id/updateCompanyInformations").post(updateCompanyInformations)
 
-router.use("/sessions",sesssionRoutes)
+router.use("/appointments",appointmentsRoutes)
 
 export default router

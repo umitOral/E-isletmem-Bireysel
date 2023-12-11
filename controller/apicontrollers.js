@@ -90,16 +90,17 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
    
     console.log(req.params)
     const sessionsAllDoctor = [];
-    const date = new Date(`${req.params.date}`);
+    const date = new Date(req.params.date+',Z00:00:00');
     console.log(date)
     for (const i of doctors) {
+
       const sessionsofdoctor = await Session.find({
         date: date,
         doctor: i,
       })
         .populate(["user", "doctor"])
         .sort({ startHour: 1 });
-        console.log(sessionsofdoctor)
+        
       sessionsAllDoctor.push({
         doctorName: i.name,
         sessionsofdoctor: sessionsofdoctor,

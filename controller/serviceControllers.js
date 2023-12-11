@@ -152,12 +152,12 @@ const editService = async (req, res) => {
     
 
     res.status(200).json({
-      succes:true,
+      success:true,
       message:"hizmet adı başarıyla değiştirildi."
     });
   } catch (error) {
     res.status(500).json({
-      succes: false,
+      success: false,
       message: "Sunucuda bir sorun oluştu,tekrar deneyiniz",
     });
   }

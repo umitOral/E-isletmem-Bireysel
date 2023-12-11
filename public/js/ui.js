@@ -8,7 +8,7 @@ export class UI {
     
     // messageBox.className = "information-modal";
 
-    if (response.succes == false) {
+    if (response.success == false) {
       messageBox.classList.add("failure");
       messageBox.innerHTML = `
             <span>${response.message}</span><i class="fa-solid fa-circle-xmark"></i>
@@ -49,11 +49,11 @@ export class UI {
             `;
     });
   }
-  selectedDatetoUI(activeDate) {
-    const eventDate = document.querySelector(".selected-date");
+  selectedDatetoUI(selectedDate) {
+    const eventDate = document.querySelector(".event-date");
     const eventDay = document.querySelector(".event-day");
-    eventDate.innerHTML=new Date(activeDate.date).toLocaleDateString([],{month: 'long',year:"numeric"})
-    eventDay.innerHTML=new Date(activeDate.date).toLocaleDateString([],{weekday: 'long'})
+    eventDate.innerHTML=selectedDate
+    eventDay.innerHTML=new Date(selectedDate).toLocaleDateString([],{weekday:"long"})
   }
   changeHeadCalendar(activeDate) {
     
@@ -119,13 +119,15 @@ export class UI {
   }
 
   showAllSessionToUI(allTimesforAllDoctors, AllDoctor) {
+
+    console.log(allTimesforAllDoctors)
     const allDoctorEvents = document.querySelector(".events-all-doctors");
 
     while (allDoctorEvents.firstChild) {
       allDoctorEvents.firstChild.remove();
     }
 
-    console.log(allTimesforAllDoctors);
+   
     allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
       const singleDoctorArea = document.createElement("div");
       singleDoctorArea.className = "single-doctor-area";
