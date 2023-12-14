@@ -91,6 +91,7 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
     console.log(req.params)
     const sessionsAllDoctor = [];
     const date = new Date(req.params.date+',Z00:00:00');
+    console.log(req.params.date)
     console.log(date)
     for (const i of doctors) {
 

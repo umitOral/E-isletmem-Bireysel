@@ -2,7 +2,13 @@
 
 /* ROOT VARİABLES */
 :root {
+  
   --color-main: #04d9d9;
+  --color-main-lighter: #5FD9D9;
+  --color-main-lighter2: #94F2F2;
+  --color-main-lighter2: #94F2F2;
+  --color-main-lighter3: #B6F2F2;
+  --color-main-gray: #F2F2F2;
 
   
   --color-primary: #7380ec;
@@ -1057,7 +1063,7 @@ header .head {
   }
   section#content {
     position: relative;
-    background-color: rgb(153, 148, 148);
+    
 
     width: calc(100% - 62px);
     left: 62px;

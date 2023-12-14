@@ -67,6 +67,7 @@ const updateStateAppointment = async (req, res) => {
 }
 const updateAppointment= async (req, res) => {
     try {
+        console.log("uptt")
         console.log(req.body)
         const session=await Session.findByIdAndUpdate(req.params.id,req.body)
         
@@ -83,6 +84,24 @@ const updateAppointment= async (req, res) => {
         })
     }
 }
+const getAppointment= async (req, res) => {
+    try {
+        
+        const session=await Session.findById(req.params.id).populate("user")
+        
+        res.json({
+            succes:true,
+            data:session
+        })
+        
+    }
+    catch (error) {
+        res.status(500).json({
+            succes: false,
+            message: "update session error"
+        })
+    }
+}
 
 
-export { createAppointment,deleteAppointment,updateStateAppointment,updateAppointment}
+export { getAppointment,createAppointment,deleteAppointment,updateStateAppointment,updateAppointment}

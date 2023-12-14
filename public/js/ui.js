@@ -19,13 +19,28 @@ export class UI {
             <span>${response.message}</span><i class="fa-solid fa-circle-check"></i>
         `;
     }
-
-    
-
     setTimeout(() => {
-      messageBox.className="information-modal"
-    }, 2000);
+      messageBox.classList.remove("failure");
+      messageBox.classList.remove("success");
+    }, 1500);
   }
+
+  
+  showAlert(message) {
+   
+    const messageBox = document.querySelector(".information-modal");
+
+    messageBox.classList.add("failure");
+
+    messageBox.innerHTML = `
+            <span>${message}</span><i class="fa-solid fa-circle-xmark"></i>
+        `
+    setTimeout(() => {
+      messageBox.classList.remove("failure");
+    }, 1500);
+  }
+
+  
 
   showAllUsersToUI(users) {
     users.forEach((element, index) => {
@@ -50,10 +65,9 @@ export class UI {
     });
   }
   selectedDatetoUI(selectedDate) {
-    const eventDate = document.querySelector(".event-date");
-    const eventDay = document.querySelector(".event-day");
-    eventDate.innerHTML=selectedDate
-    eventDay.innerHTML=new Date(selectedDate).toLocaleDateString([],{weekday:"long"})
+    const eventDate = document.querySelector(".appointment-list");
+    eventDate.textContent = new Date(selectedDate).toLocaleDateString([],{weekday:"long",day:"2-digit",month:"2-digit",year:"2-digit"});
+
   }
   changeHeadCalendar(activeDate) {
     
@@ -147,11 +161,7 @@ export class UI {
       timesForSingleDoctor.forEach((element, index) => {
         if (element._id) {
           singleDoctorEvents.innerHTML += `
-                    <div class="event full" data-session="${
-                      element._id
-                    }" data-timevalue="${element.timeValue}" data-timeindex="${
-            element.timeIndex
-          }">
+                    <div class="event full" data-session="${element._id}" data-userName="${element.user.name}" style="height:${(element.timeIndexes[1]-element.timeIndexes[0]+1)*75}px">
 
                         <div class="center">
                         <div>
@@ -191,7 +201,7 @@ export class UI {
                          
                     <div class="event" data-time="${index}" data-startHour="${
             element.startHour
-          }" data-endHour="${element.endHour}">
+          }" data-endHour="${element.endHour}" style="height:75px">
                                              
                         <div>
                         <span>${new Date(element.startHour)

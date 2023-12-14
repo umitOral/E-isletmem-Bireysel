@@ -5,7 +5,7 @@ import { UI } from "./ui.js";
 const ui = new UI();
 
 const calendar = document.querySelector(".calendar"),
-  date = document.querySelector(".date1"),
+  calendarHead = document.querySelector(".calendar-head"),
   daysContainer = document.querySelector(".days"),
   prev = document.querySelector(".prev"),
   next = document.querySelector(".next"),
@@ -16,7 +16,7 @@ const calendar = document.querySelector(".calendar"),
 const messageBox = document.querySelector(".information-modal");
 
 const eventDay = document.querySelector(".event-day");
-const eventDate = document.querySelector(".event-date");
+const appointmentListDate = document.querySelector(".appointment-list");
 
 const addEventSubmit = document.querySelector(".add-event-btn");
 const addEventType = document.querySelector(".proccess_type");
@@ -27,30 +27,39 @@ let today = new Date();
 let activeDay;
 let month = today.getMonth();
 let year = today.getFullYear();
+let selectedDate = today.toDateString();
+console.log(selectedDate);
 
-const months = [
-  "ocak",
-  "şubat",
-  "mart",
-  "nisan",
-  "mayıs",
-  "haziran",
-  "temmuz",
-  "ağustos",
-  "eylül",
-  "ekim",
-  "kasım",
-  "aralık",
-];
+showDatesAtPage();
+getAllSessions();
 
-// window.addEventListener("load", () => {
-//   eventDay.textContent = today.toLocaleDateString("locale", {
-//     weekday: "long",
-//   });
-//   eventDate.textContent = today.toLocaleDateString();
-// });
+function showDatesAtPage(params) {
+  if (params) {
+    calendarHead.textContent = new Date(params).toLocaleDateString("locale", {
+      month: "long",
+      year: "numeric",
+    });
+    appointmentListDate.textContent = new Date(params).toLocaleDateString([], {
+      weekday: "long",
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    });
+  } else {
+    calendarHead.textContent = today.toLocaleDateString([], {
+      month: "long",
+      year: "numeric",
+    });
+    appointmentListDate.textContent = today.toLocaleDateString([], {
+      weekday: "long",
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    });
+  }
+}
 
-function getAllSessions(selectedDate) {
+function getAllSessions() {
   request
     .getwithUrl("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
     .then((response) => {
@@ -104,20 +113,22 @@ function getAllSessions(selectedDate) {
 
       ui.showAllSessionToUI(allTimesofSingleDoctor, AllDoctor);
 
-      changeState(selectedDate);
+      changeState();
     })
 
     .catch((err) => console.log(err));
 }
 
-function changeState(selectedDate) {
+function changeState() {
   const sessionOptionsModalOptions = document.querySelectorAll(
     ".session-options-modal span"
   );
+
   sessionOptionsModalOptions.forEach((element) => {
     element.addEventListener("click", (e) => {
       console.log(e.target);
       if (e.target.classList.contains("delete-session")) {
+        console.log("burası");
         request
           .deleteSession(
             "./appointments/" +
@@ -128,7 +139,8 @@ function changeState(selectedDate) {
           .then((response) => {
             console.log(response);
             ui.showModal(response, messageBox);
-            getAllSessions(selectedDate);
+            console.log("silme başarılı");
+            getAllSessions();
           })
           .catch((err) => console.log(err));
       }
@@ -147,7 +159,7 @@ function changeState(selectedDate) {
           )
           .then((response) => {
             console.log(response);
-            getAllSessions(selectedDate);
+            getAllSessions();
           })
           .catch((err) => console.log(err));
       }
@@ -167,7 +179,7 @@ function initCalender() {
 
   const nextDays = 7 - lastDay.getDay();
 
-  date.innerHTML = months[month] + " " + year;
+
 
   let days = "";
 
@@ -223,7 +235,7 @@ function prevMonth() {
     month = 11;
     year--;
   }
-  console.log(month + "" + year);
+
   initCalender();
 }
 
@@ -233,7 +245,7 @@ function nextMonth() {
     month = 0;
     year++;
   }
-  console.log(month + "" + year);
+
   initCalender();
 }
 
@@ -247,13 +259,6 @@ todayBtn.addEventListener("click", () => {
   year = today.getFullYear();
   initCalender();
 });
-
-// todayBtn.addEventListener("click", () => {
-//   today = new Date();
-//   month = today.getMonth();
-//   year = today.getFullYear();
-//   initCalender();
-// });
 
 dateInput.addEventListener("input", (e) => {
   // allow only numbers
@@ -287,19 +292,19 @@ gotoBtn.addEventListener("click", function goToDate() {
 // todo section --------------------------------------
 
 const closeAddSessionBtns = document.querySelectorAll(".cancel_button");
-const addEventTitle = document.querySelector(".event-name");
 
-const addEventTo = document.querySelector(".event-time-to");
 const modalAddSession = document.querySelector(".modal_add_session");
-const modalUpdateSession = document.querySelector(".modal_update_session");
+
 const doctorIDs = document.querySelectorAll(".doctor-id");
+
 const timeindexes = document.querySelectorAll(".timeIndex");
 
-const timeValues = document.querySelectorAll(".timeValue");
-const startHour = document.querySelectorAll(".startHour");
+const startHour = document.querySelector(".startHour");
 const endHour = document.querySelectorAll(".endHour");
 const doctorNames = document.querySelectorAll(".doctor-name");
 const dates = document.querySelectorAll(".event-date-from");
+const userUpdate = document.querySelector("#user_update");
+const sessionID = document.querySelector(".sessionID");
 
 closeAddSessionBtns.forEach((element) => {
   element.addEventListener("click", () => {
@@ -318,12 +323,7 @@ function addListener() {
 
       const activeDate = new Date(year, month, activeDay);
 
-      if (month.toString().length == 1) {
-        month = month + 1;
-        month = month;
-      }
-
-      const selectedDate = year + "-" + (month + 1) + "-" + activeDay;
+      selectedDate = year + "-" + (month + 1) + "-" + activeDay;
       console.log(selectedDate);
       ui.selectedDatetoUI(selectedDate);
       ui.deleteAllSessionFromUI();
@@ -373,7 +373,7 @@ function convertTime(time) {
   let timeArr = time.split(":");
 
   let timeHour = timeArr[0];
-  let timeMinute = timeArr[1];
+  let timeMinute = timeArr[1];  
   time = timeHour + ":" + timeMinute;
 
   return time;
@@ -393,9 +393,13 @@ addSessionBtn.addEventListener("click", function (e) {
     }
   });
 
-  modalAddSession.classList.add("showed_modal");
+  if (checkedElements.length === 0) {
+    ui.showAlert("lütfen randevu saati seçiniz");
+  } else {
+    modalAddSession.classList.add("showed_modal");
 
-  showAddEventModal(checkedElements, addSessionForm);
+    showAddEventModal(checkedElements);
+  }
 });
 
 const rightSection = document.querySelector(".right");
@@ -424,7 +428,6 @@ function sessionEditButtonHandled(e) {
 }
 
 function showAddEventModal(e) {
-  console.log(e);
   timeindexes[0].value = e[0].parentElement.parentElement.dataset.time;
   timeindexes[1].value =
     e[e.length - 1].parentElement.parentElement.dataset.time;
@@ -435,21 +438,14 @@ function showAddEventModal(e) {
   doctorNames[0].value =
     e[0].parentElement.parentElement.parentElement.previousSibling.previousSibling.textContent.trim();
 
-  timeValues[0].value = new Date(e[0].parentElement.dataset.hour);
-
-  startHour[0].value = new Date(
+  startHour.value = new Date(
     e[0].parentElement.parentElement.dataset.starthour
   ).toLocaleTimeString();
 
   endHour[0].value = new Date(
     e[e.length - 1].parentElement.parentElement.dataset.endhour
   ).toLocaleTimeString();
-  console.log(e[0].parentElement.parentElement.dataset.endhour);
-  console.log(
-    new Date(
-      e[0].parentElement.parentElement.dataset.starthour
-    ).toLocaleDateString()
-  );
+
   dates[0].valueAsDate = new Date(
     e[0].parentElement.parentElement.dataset.starthour
   );
@@ -457,49 +453,109 @@ function showAddEventModal(e) {
   modalAddSession.classList.add("showed_modal");
 }
 
+
+const modalUpdateSession = document.querySelector(".modal_update_session");
+let selectedValues = [];
+
 function showEditModal(e) {
-  modalUpdateSession.children[1].setAttribute(
-    "action",
-    "./sessions/" +
-      e.target.parentElement.parentElement.parentElement.dataset.session +
-      "/updateAppointment"
-  );
+  const sessionID = modalUpdateSession.querySelector(".sessionID");
+  const description = modalUpdateSession.querySelector(".description");
+  const user = modalUpdateSession.querySelector(".user");
+  
+  request
+    .getwithUrl(
+      "./appointments/" +
+        e.target.parentElement.parentElement.parentElement.dataset.session +
+        "/getAppointment"
+    )
+    .then((response) => {
+      console.log(response);
+      
+      sessionID.value=response.data._id
+      description.value=response.data.description
+      userUpdate.value=response.data.user._id
+      console.log(response.data.user._id)
+      selectedValues.forEach(element => {
+        element.remove()
+      });
+      response.data.services.map(element=>selectedValues.push(element))
+
+      //add response services to UI ************************************************
+
+      selectedValues.forEach(element => {
+        const proccessDiv = document.createElement("div");
+      const nodeinput = document.createElement("input");
+      
+      
+      nodeinput.setAttribute("name", "services");
+      nodeinput.setAttribute("disabled", "");
+      nodeinput.setAttribute("type", "text");
+      nodeinput.setAttribute("class", "selected_proccess");
+      nodeinput.setAttribute(
+        "value",element
+      );
+  
+      const deleteButton = document.createElement("i");
+  
+      deleteButton.classList.add("ph");
+      deleteButton.classList.add("ph-x");
+  
+      proccessDiv.appendChild(nodeinput);
+      proccessDiv.appendChild(deleteButton);
+      selected_proccess_type_update.appendChild(proccessDiv);
+      });
+      
+
+      const selectedProcess = document.querySelectorAll(
+        ".selected_proccess_type_update div i"
+      );
+      console.log(selectedProcess)
+      selectedProcess.forEach((element) => {
+        element.addEventListener("click", (e) => {
+          
+          selectedValues.pop(element.previousElementSibling.value)
+          element.parentElement.remove();
+          console.log(selectedValues)
+        });
+      });
+      
+      
+      
+    })
+    .catch((err) => console.log(err));
+  
+   
+
+    
+
   modalUpdateSession.classList.toggle("showed_modal");
-
-  timeindexes[1].value =
-    e.target.parentElement.parentElement.parentElement.dataset.timeindex;
-
-  doctorIDs[1].value =
-    e.target.parentElement.parentElement.parentElement.parentElement.parentElement.dataset.doctorid;
-  doctorNames[1].value =
-    e.target.parentElement.parentElement.parentElement.parentElement.previousSibling.previousSibling.textContent.trim();
-  timeValues[1].value = new Date(
-    e.target.parentElement.parentElement.parentElement.dataset.timevalue
-  );
-  startHour[1].value = new Date(
-    e.target.parentElement.parentElement.parentElement.dataset.timevalue
-  ).toLocaleTimeString();
-  addEventFromTos[1].valueAsDate = new Date(year, month - 1, activeDay + 1);
 }
 
 // **********************************************************************add session modal actions
 
-const proccessType = document.querySelector(".proccess_type");
+const proccessType = document.querySelector(".proccess_type_add");
+const proccessTypeUpdate = document.querySelector(".proccess_type_update");
+console.log(proccessTypeUpdate)
 const modalAddSessionSave = document.querySelector(".save_button");
-const selected_proccess_type = document.querySelector(
-  ".selected_proccess_type"
+const modalUpdateSessionSave = document.querySelector(".save_update_button");
+console.log(modalAddSessionSave);
+const selected_proccess_type_add = document.querySelector(
+  ".selected_proccess_type_add"
+);
+const selected_proccess_type_update = document.querySelector(
+  ".selected_proccess_type_update"
 );
 
 modalAddSessionSave.addEventListener("click", (e) => {
-  
   const selectedDate = year + "-" + (month + 1) + "-" + activeDay;
-  console.log("burası");
-  console.log(selectedDate);
 
   const services = [];
-  addSessionForm.services.forEach((element) => {
+
+  addSessionForm.querySelectorAll(".selected_proccess").forEach((element) => {
     services.push(element.value);
   });
+
+  console.log(services);
 
   let data = {
     services: services,
@@ -523,35 +579,143 @@ modalAddSessionSave.addEventListener("click", (e) => {
   modalAddSession.classList.remove("showed_modal");
 });
 
+
 proccessType.addEventListener("change", () => {
-  console.log("başarılı");
-  const proccessDiv = document.createElement("div");
-  const nodeinput = document.createElement("input");
-  nodeinput.value =
-    proccessType.options[proccessType.options.selectedIndex].textContent.trim();
-  nodeinput.setAttribute("name", "services");
-  nodeinput.setAttribute("disabled", "");
-  nodeinput.setAttribute("type", "text");
-  nodeinput.setAttribute(
-    "value",
-    proccessType.options[proccessType.options.selectedIndex].textContent.trim()
-  );
+  console.log("hizmet seçildi");
+  let selectedValues = [];
+  if (
+    !selectedValues.includes(
+      proccessType.options[
+        proccessType.options.selectedIndex
+      ].textContent.trim()
+    )
+  ) {
+    selectedValues.push(
+      proccessType.options[
+        proccessType.options.selectedIndex
+      ].textContent.trim()
+    );
+    const proccessDiv = document.createElement("div");
+    const nodeinput = document.createElement("input");
+    nodeinput.value =
+      proccessType.options[
+        proccessType.options.selectedIndex
+      ].textContent.trim();
+    nodeinput.setAttribute("name", "services");
+    nodeinput.setAttribute("disabled", "");
+    nodeinput.setAttribute("type", "text");
+    nodeinput.setAttribute("class", "selected_proccess");
+    nodeinput.setAttribute(
+      "value",
+      proccessType.options[
+        proccessType.options.selectedIndex
+      ].textContent.trim()
+    );
 
-  const deleteButton = document.createElement("i");
+    const deleteButton = document.createElement("i");
 
-  deleteButton.classList.add("ph");
-  deleteButton.classList.add("ph-x");
+    deleteButton.classList.add("ph");
+    deleteButton.classList.add("ph-x");
 
-  proccessDiv.appendChild(nodeinput);
-  proccessDiv.appendChild(deleteButton);
-  selected_proccess_type.appendChild(proccessDiv);
+    proccessDiv.appendChild(nodeinput);
+    proccessDiv.appendChild(deleteButton);
+    selected_proccess_type_add.appendChild(proccessDiv);
+  } else {
+    console.log("hizmet zatern var");
+  }
 
   const selectedProcess = document.querySelectorAll(
-    ".selected_proccess_type div i"
+    ".selected_proccess_type_add div i"
   );
   selectedProcess.forEach((element) => {
     element.addEventListener("click", (e) => {
+      
+      selectedValues.pop(element.previousElementSibling.value)
       element.parentElement.remove();
+      console.log(selectedValues)
     });
   });
+  
+});
+
+
+proccessTypeUpdate.addEventListener("change", () => {
+  console.log("hizmet seçildi");
+  
+  if (
+    !selectedValues.includes(
+      proccessTypeUpdate.options[
+        proccessTypeUpdate.options.selectedIndex
+      ].textContent.trim()
+    )
+  ) {
+    selectedValues.push(
+      proccessTypeUpdate.options[
+        proccessTypeUpdate.options.selectedIndex
+      ].textContent.trim()
+    );
+    const proccessDiv = document.createElement("div");
+    const nodeinput = document.createElement("input");
+    nodeinput.value =
+    proccessTypeUpdate.options[
+      proccessTypeUpdate.options.selectedIndex
+      ].textContent.trim();
+    nodeinput.setAttribute("name", "services");
+    nodeinput.setAttribute("disabled", "");
+    nodeinput.setAttribute("type", "text");
+    nodeinput.setAttribute("class", "selected_proccess");
+    nodeinput.setAttribute(
+      "value",
+      proccessTypeUpdate.options[
+        proccessTypeUpdate.options.selectedIndex
+      ].textContent.trim()
+    );
+
+    const deleteButton = document.createElement("i");
+
+    deleteButton.classList.add("ph");
+    deleteButton.classList.add("ph-x");
+
+    proccessDiv.appendChild(nodeinput);
+    proccessDiv.appendChild(deleteButton);
+    selected_proccess_type_update.appendChild(proccessDiv);
+  } else {
+    console.log("hizmet zaten var");
+  }
+
+  const selectedProcess = document.querySelectorAll(
+    ".selected_proccess_type_update div i"
+  );
+  selectedProcess.forEach((element) => {
+    element.addEventListener("click", (e) => {
+      
+      selectedValues.pop(element.previousElementSibling.value)
+      element.parentElement.remove();
+      console.log(selectedValues)
+    });
+  });
+  console.log(selectedValues)
+});
+
+modalUpdateSessionSave.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  let data = {
+    description: e.target.parentElement.parentElement.description.value,
+    services:selectedValues,
+    user:userUpdate.options[userUpdate.options.selectedIndex].value
+  };
+  request
+    .postWithUrl(
+      "./appointments/" +
+        e.target.parentElement.parentElement.sessionID.value +
+        "/updateAppointment",
+      data
+    )
+    .then((response) => {
+      ui.showModal(response, messageBox);
+      modalUpdateSession.classList.toggle("showed_modal");
+      getAllSessions()
+    })
+    .catch((err) => console.log(err));
 });
