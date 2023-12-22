@@ -6,7 +6,7 @@ import Payment from '../models/paymentsModel.js';
 const addPayment = async (req, res) => {
     try {
 
-        req.body.company = res.locals.user._id
+        req.body.company = res.locals.company._id
         req.body.date = new Date()
         console.log(req.body)
         const payment = await Payment.create(req.body)
@@ -25,7 +25,7 @@ const addPayment = async (req, res) => {
 const addExpense = async (req, res) => {
     try {
 
-        req.body.company = res.locals.user._id
+        req.body.company = res.locals.company._id
         req.body.date = new Date()
         req.body.value=(req.body.value)*(-1)
 
@@ -95,7 +95,7 @@ const getSearchedPayments = async (req, res) => {
         
 
         const payments = await Payment.find({
-            company: res.locals.user._id, createdAt: {
+            company: res.locals.company._id, createdAt: {
                 $gte: startDate,
                 $lte: endDate
             }

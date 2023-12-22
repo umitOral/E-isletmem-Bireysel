@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import Company from "../models/companyModel.js";
+import Employee from "../models/EmployeesModel.js";
 import { passwordResetMail } from "../controller/mailControllers.js";
 
 import bcrypt from "bcrypt";
@@ -11,47 +12,47 @@ import { CustomError } from "../helpers/error/CustomError.js";
 
 const createCompany = async (req, res, next) => {
   try {
+    console.log("burasıx");
     const data = req.body;
-    const newDate=new Date()
-    req.body.subscribeEndDate=new Date(newDate.setMonth(newDate.getMonth()+1)).toISOString()
-    
+    const newDate = new Date();
+    req.body.subscribeEndDate = new Date(
+      newDate.setMonth(newDate.getMonth() + 1)
+    ).toISOString();
+
     const processes = process.env.SERVICES.split(",");
-    
-    req.body.services=[]
+
+    req.body.services = [];
 
     processes.forEach((process, index) => {
       req.body.services.push({
-        serviceName:process,
-        servicePrice:99,
-        activeorNot:false
-    })
-    console.log(process)
-    })
-
-    console.log(req.body);
+        serviceName: process,
+        servicePrice: 99,
+        activeorNot: false,
+      });
+    });
 
     if (data.password !== data.password2) {
       return next(new Error("Girdiğiniz şifreler farklıdır", 400));
     }
+    console.log(data)
     const company = await Company.create(data);
-
-    res.json({
-      succes: true,
-      message: "Kaydınız başarıyla gerçekleşti.",
-      data: company,
-    });
-
+    data.role = "Admin";
+    data.company = company._id;
+    console.log(data)
+    const employee = await Employee.create(data);
     next();
   } catch (error) {
     return next(error);
   }
 };
+
+
 const deactivateUser = async (req, res) => {
   try {
     console.log("başarılı");
 
     await User.findByIdAndUpdate(req.params.id, { activeOrNot: false });
-    res.redirect("../../personels");
+    res.redirect("../../employess");
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -62,7 +63,7 @@ const deactivateUser = async (req, res) => {
 const activateUser = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.params.id, { activeOrNot: true });
-    res.redirect("../../personels");
+    res.redirect("../../employees");
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -78,7 +79,7 @@ const findUser = async (req, res) => {
       const searchObject = {};
       const regex = new RegExp(req.query.user, "i");
       searchObject["name"] = regex;
-      searchObject["company"] = res.locals.user._id;
+      searchObject["company"] = res.locals.company._id;
       searchObject["role"] = "customer";
 
       // searchObject["title"] = regex
@@ -98,7 +99,7 @@ const findUser = async (req, res) => {
       .where("role")
       .equals("customer")
       .where("company")
-      .equals(res.locals.user._id);
+      .equals(res.locals.company._id);
     const lastpage = Math.round(total / limit);
     const pagination = {};
     pagination["page"] = page;
@@ -136,7 +137,7 @@ const findUser = async (req, res) => {
     });
   }
 };
-const findPersonels = async (req, res) => {
+const findEmployees = async (req, res) => {
   try {
     //search
     let query = User.find();
@@ -144,7 +145,7 @@ const findPersonels = async (req, res) => {
       const searchObject = {};
       const regex = new RegExp(req.query.user, "i");
       searchObject["name"] = regex;
-      searchObject["company"] = res.locals.user._id;
+      searchObject["company"] = res.locals.company._id;
       searchObject["role"] = "doctor";
 
       // searchObject["title"] = regex
@@ -164,7 +165,7 @@ const findPersonels = async (req, res) => {
       .where("role")
       .equals("doctor")
       .where("company")
-      .equals(res.locals.user._id);
+      .equals(res.locals.company._id);
     const lastpage = Math.round(total / limit);
     const pagination = {};
     pagination["page"] = page;
@@ -188,7 +189,7 @@ const findPersonels = async (req, res) => {
     const data = await query;
 
     res.status(200).render("search-results", {
-      header: "Personeller",
+      header: "Çalışanlar",
       data,
       total,
       count: data.length,
@@ -206,7 +207,7 @@ const findPersonels = async (req, res) => {
 const addUser = async (req, res) => {
   try {
     const data = req.body;
-    data.company = res.locals.user._id;
+    data.company = res.locals.company._id;
 
     const user = await User.create(data);
 
@@ -247,28 +248,30 @@ const editInformations = async (req, res) => {
 const loginUser = async (req, res, next) => {
   try {
     let same = false;
-    const company = await Company.findOne({ email: req.body.email });
 
-    if (company) {
-      same = await bcrypt.compare(req.body.password, company.password);
+    
+    const employee = await Employee.findOne({ email: req.body.email });
+    
+    if (employee) {
+      const company = await Company.findOne({ _id: employee.company }); 
+      same = await bcrypt.compare(req.body.password, employee.password);
+      console.log(company)
+      if (same) {
+        const token = createToken(company._id, employee._id);
+        res.cookie("jsonwebtoken", token, {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24,
+        });
+
+        res.status(401).json({
+          success: true,
+          message: "Giriş Başarılı,yönlendiriliyorsunuz ...",
+        });
+      } else {
+        return next(new Error("Kullanıcı adı veya şifresi yanlış", 400));
+      }
     } else {
-      return next(new Error("Kayıtlı kullanıcı Bulunamadı", 400));
-    }
-
-    if (same) {
-      console.log("burası");
-      const token = createToken(company._id);
-      res.cookie("jsonwebtoken", token, {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24,
-      });
-
-      res.status(401).json({
-        success: true,
-        message: "Giriş Başarılı,yönlendiriliyorsunuz ...",
-      });
-    } else {
-      return next(new Error("Kullanıcı adı veya şifresi yanlış", 400));
+      return next(new Error("Kayıtlı kullanıcı bulunamadı", 400));
     }
   } catch (error) {
     res.status(500).json({
@@ -421,9 +424,8 @@ const resetPasswordMail = async (req, res, next) => {
   }
 };
 
-const createToken = (userID) => {
-  console.log(process.env.LOGIN_EXPIRES);
-  return jwt.sign({ userID }, process.env.JWT_SECRET, {
+const createToken = (companyID, employeeID) => {
+  return jwt.sign({ companyID, employeeID }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
@@ -438,7 +440,7 @@ export {
   editInformations,
   findUser,
   deactivateUser,
-  findPersonels,
+  findEmployees,
   activateUser,
   deletePhoto,
 };

@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 
 const addService = async (req, res) => {
   try {
-    console.log(res.locals.user._id);
+    console.log(res.locals.company._id);
 
-    await Company.findByIdAndUpdate(res.locals.user._id, {
+    await Company.findByIdAndUpdate(res.locals.company._id, {
       $push: {
         services: {
           serviceId: uuidv4(),
@@ -77,7 +77,7 @@ const findServices = async (req, res) => {
       const searchObject = {};
       const regex = new RegExp(req.query.user, "i");
       searchObject["serviceName"] = regex;
-      searchObject["company"] = res.locals.user._id;
+      searchObject["company"] = res.locals.company._id;
       // searchObject["title"] = regex
       query = query.where(searchObject);
     }
@@ -93,7 +93,7 @@ const findServices = async (req, res) => {
 
     const total = await Service.count()
       .where("company")
-      .equals(res.locals.user._id);
+      .equals(res.locals.company._id);
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
     pagination["page"] = page;

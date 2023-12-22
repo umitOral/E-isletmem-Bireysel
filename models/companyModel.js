@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 const Schema = mongoose.Schema;
 const companySchema = new Schema(
   {
-    authorizedName: { type: String, require: true },
+    brandName: { type: String, require: true },
     companyName: { type: String, require: false },
     email: { type: String, require: true, index: { unique: true } },
 
@@ -21,25 +21,27 @@ const companySchema = new Schema(
     registerDate: { type: Date, default: Date.now },
     notes: { type: String, require: false },
     debtStatus: { type: Number, require: 0 },
-    doctors: [
+    employees: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Employee",
       },
     ],
     workHours: {
       type: Object,
       workStart: {
         type: String,
-        default: "8:00",
       },
       workEnd: {
         type: String,
-        default: "8:00",
       },
       workPeriod: {
         type: Number,
-        default: 15,
+      },
+      default: {
+        workStart: "08:00",
+        workEnd: "18:00",
+        workPeriod: 15,
       },
     },
 
@@ -64,8 +66,8 @@ const companySchema = new Schema(
         },
         servicePrice: { type: Number },
         activeorNot: { type: Boolean, default: true },
-      }
-    ]
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -18,7 +18,7 @@
 
                 <main>
                     <div class="header">
-                        <h1> Personeller</h1>
+                        <h1> Kullanıcılar</h1>
                     </div>
 
                     <div class="search">
@@ -29,7 +29,7 @@
                             </div>
 
                         </form>
-                        <div class="add_customer_btn">Yeni Personel Ekle +</div>
+                        <div class="add_customer_btn">Yeni Kullanıcı Ekle +</div>
                     </div>
                     <div class="print">
 
@@ -51,6 +51,8 @@
 
                                 <th>İsim<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Soyisim <i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Rol <i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Mail <i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Aktiflik <i class="fa-solid fa-arrow-up"></i></th>
                                 <th> </th>
                                 <th> </th>
@@ -59,31 +61,37 @@
 
                             </thead>
                             <tbody id="userList">
-                                <% users.forEach(user=> { %>
+                                <% employees.forEach(employee=> { %>
                                     <tr>
 
                                         <td>
-                                            <%= user.name %>
+                                            <%= employee.name %>
                                         </td>
                                         <td>
-                                            <%= user.surname %>
+                                            <%= employee.surname %>
+                                        </td>   
+                                        <td>
+                                            <%= employee.role %>
+                                        </td>
+                                        <td>
+                                            <%= employee.email %>
                                         </td>
 
                                         <td>
-                                            <% if(user.activeOrNot ){ %>
+                                            <% if(employee.activeOrNot ){ %>
                                                 <span class="continue">Aktif</span>
                                                 <% } else{ %>
                                                     <span class="finish">Deaktif </span>
                                                     <% } %>
 
                                         </td>
-                                        <% if(user.activeOrNot){ %>
-                                            <td><a href="./users/<%= user._id %>/deactivateUser">Deaktive Et</a></td>
+                                        <% if(employee.activeOrNot){ %>
+                                            <td><a href="./users/<%= employee._id %>/deactivateUser">Deaktive Et</a></td>
                                             <% } else{ %>
-                                                <td><a href="./users/<%= user._id %>/activateUser">Aktif Et</a></td>
+                                                <td><a href="./users/<%= employee._id %>/activateUser">Aktif Et</a></td>
                                                 <% } %>
 
-                                                    <td><a href="./users/<%= user._id %>">Detaylar</a></td>
+                                                    <td><a href="./employees/<%= employee._id %>">Detaylar</a></td>
                                     </tr>
                                     <% }) %>
 
@@ -138,17 +146,46 @@
 
                 </main>
                 <div class="add_customer modal">
-                    <h2>Yeni Personel Ekle</h2>
-                    <form action="./personels/createPersonel" method="POST" id="register-form">
+                    <h2>Yeni Kullanıcı Ekle</h2>
+                    <form action="./employees/createEmployee" method="POST" id="register-form">
                         <div class="inputs ">
-                            <span>İsim</span>
+                            <span>İsim<bold>*</bold></span>
                             <input type="text" name="name" id="user-name" required
-                                placeholder="Lütfen bir kullanıcı adı giriniz">
+                                placeholder="İsim giriniz">
                         </div>
 
-                        <div class="inputs ">
+                        <div class="inputs requisite">
                             <span>Soyisim</span>
-                            <input type="text" name="surname" id="surname">
+                            <input type="text" name="surname" id="surname" required placeholder="Soyisim giriniz">
+                        </div>
+                        <div class="inputs ">
+                            <span>Şifre</span>
+                            <input type="text" name="password" id="password" required placeholder="Şifre Belirleyin">
+                        </div>
+                        <div class="inputs ">
+                            <span>Mail</span>
+                            <input type="email" name="email" id="email" required placeholder="geçerli mail giriniz">
+                        </div>
+                        <div class="inputs ">
+                            <span>Görev</span>
+                            <select name="role" id="role" required>
+                                <option value="" selected hidden disable>Lütfen seçiniz</option>
+                               <% roles.forEach((role,index) => { %>
+                                    <option value="<%= rolesValues[index] %>"><%= rolesValues[index] %></option>
+                               <% }) %>
+                            </select>
+                        </div>
+                        <div class="options">
+                            <span>Cinsiyet:</span>
+                            <div>
+                                <input type="radio" id="sex-women" name="sex" value="female" >
+                                &nbsp; <label for="sex-women">Kadın</label>
+
+                                <input type="radio" id="sex-man" name="sex" value="male">
+                                &nbsp; <label for="sex-man">Erkek</label>
+
+                            </div>
+
                         </div>
 
                         <div class="inputs ">
@@ -164,19 +201,13 @@
                             <span>Telefon</span>
                             <input type="number" name="phone" id="phone">
                         </div>
-                        <div class="inputs ">
-                            <span>Mail</span>
-                            <input type="email" name="email" id="email">
-                        </div>
+                        
 
                         <div class="inputs ">
                             <span>Fatura Bilgisi:</span>
                             <textarea name="billingAddress" id="billingAddress" cols="70" rows="2"></textarea>
                         </div>
-                        <div class="inputs ">
-                            <span>Açıklama</span>
-                            <textarea name="notes" id="notes" cols="70" rows="2"></textarea>
-                        </div>
+                        
                         <button type="submit" class="save_button" id="add-user">Kaydet</button>
                         <button class="cancel_button">Vazgeç</button>
                     </form>

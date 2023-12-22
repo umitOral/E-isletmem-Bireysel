@@ -22,7 +22,7 @@ const customErrorHandler = (err, req, res, next) => {
 
   console.log(err.name)
   res.status(customError.status || 500).json({
-    succes: false,
+    success: false,
     message: customError.message || "internal Server error",
     data:err
   });

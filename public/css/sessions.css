@@ -196,7 +196,7 @@
   height: 100%;
   margin-top: 1rem;
 
-  overflow-x: hidden;
+  
   overflow-y: auto;
 }
 
@@ -226,7 +226,7 @@
   
   flex-direction: column;
 }
-.single-doctor-events .event .options {
+.single-doctor-events .event .options-appointments {
   
   position: relative;
 }
@@ -343,15 +343,23 @@ tr {
 }
 
 .session-options-modal{
+  
   display: flex;
   flex-direction: column;
+  display: none;
  width: 100px;
  position: absolute;
  border-radius: var(--border-radius-1);
  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
  background-color: white;
- display: none;
+
+ 
+  
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 999;
 }
+
 .session-options-modal a {
   display: block;
    width: 100px;
@@ -364,6 +372,8 @@ tr {
   z-index: 999;
   display: block;
   display: flex;
+  top: 15px;
+  left: -87px;
 }
 
 .selected_proccess_type_add,.selected_proccess_type_update{

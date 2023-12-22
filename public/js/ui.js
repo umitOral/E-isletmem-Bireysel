@@ -4,8 +4,8 @@ export class UI {
   }
 
   showModal(response, messageBox) {
-    console.log("başarılı")
-    
+    console.log("başarılı");
+
     // messageBox.className = "information-modal";
 
     if (response.success == false) {
@@ -25,22 +25,18 @@ export class UI {
     }, 1500);
   }
 
-  
   showAlert(message) {
-   
     const messageBox = document.querySelector(".information-modal");
 
     messageBox.classList.add("failure");
 
     messageBox.innerHTML = `
             <span>${message}</span><i class="fa-solid fa-circle-xmark"></i>
-        `
+        `;
     setTimeout(() => {
       messageBox.classList.remove("failure");
     }, 1500);
   }
-
-  
 
   showAllUsersToUI(users) {
     users.forEach((element, index) => {
@@ -66,15 +62,21 @@ export class UI {
   }
   selectedDatetoUI(selectedDate) {
     const eventDate = document.querySelector(".appointment-list");
-    eventDate.textContent = new Date(selectedDate).toLocaleDateString([],{weekday:"long",day:"2-digit",month:"2-digit",year:"2-digit"});
-
+    eventDate.textContent = new Date(selectedDate).toLocaleDateString([], {
+      weekday: "long",
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    });
   }
   changeHeadCalendar(activeDate) {
-    
-    console.log(activeDate)
-    const headCalendar = document.querySelector(".head-calendar")
-    console.log(headCalendar)
-    headCalendar.innerHTML+=new Date(activeDate.date).toLocaleDateString([],{month: 'long',year:"numeric"})
+    console.log(activeDate);
+    const headCalendar = document.querySelector(".head-calendar");
+    console.log(headCalendar);
+    headCalendar.innerHTML += new Date(activeDate.date).toLocaleDateString([], {
+      month: "long",
+      year: "numeric",
+    });
   }
 
   showAllPaymensToUI(data) {
@@ -133,15 +135,13 @@ export class UI {
   }
 
   showAllSessionToUI(allTimesforAllDoctors, AllDoctor) {
-
-    console.log(allTimesforAllDoctors)
+    console.log(allTimesforAllDoctors);
     const allDoctorEvents = document.querySelector(".events-all-doctors");
 
     while (allDoctorEvents.firstChild) {
       allDoctorEvents.firstChild.remove();
     }
 
-   
     allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
       const singleDoctorArea = document.createElement("div");
       singleDoctorArea.className = "single-doctor-area";
@@ -161,7 +161,11 @@ export class UI {
       timesForSingleDoctor.forEach((element, index) => {
         if (element._id) {
           singleDoctorEvents.innerHTML += `
-                    <div class="event full" data-session="${element._id}" data-userName="${element.user.name}" style="height:${(element.timeIndexes[1]-element.timeIndexes[0]+1)*75}px">
+                    <div class="event full" data-session="${
+                      element._id
+                    }" data-userName="${element.user.name}" style="height:${
+            (element.timeIndexes[1] - element.timeIndexes[0] + 1) * 75
+          }px">
 
                         <div class="center">
                         <div>
@@ -177,7 +181,7 @@ export class UI {
                             <span class="buttons">${element.state}</span>
 
                         </div>
-                        <div class="options" >
+                        <div class="options-appointments" >
                             <span class="material-symbols-sharp edit-session">
                                 more_vert
                             </span>
@@ -192,7 +196,8 @@ export class UI {
                             </div>
 
 
-                        </div>
+                          </div>
+                          
                     </div>
                     `;
           singleDoctorArea.appendChild(singleDoctorEvents);

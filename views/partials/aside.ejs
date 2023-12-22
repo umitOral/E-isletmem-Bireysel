@@ -3,7 +3,8 @@
         <i class="ph-bold ph-caret-left"></i>
     </div>
     <div class="head">
-        <img src="/photos/logo.png" alt="">
+        <a href="/admin"><img src="/photos/logo.png" alt=""></a>
+        
     </div>
     <div class="nav">
         <div class="menu">
@@ -15,77 +16,118 @@
                             <span class="text">Anasayfa</span>
                     </a>
                 </li>
+
+
+
+
                 <li>
                     <a href="/admin/users" <% if (link==="users" ) { %>class="active"<% } %>>
                             <i class="icon ph-bold ph-users"></i>
                             <span class="text">Hastalar</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/admin/personels" <% if (link==="personels" ) { %>class="active"<% } %>>
-                            <i class="icon ph-bold ph-stethoscope"></i>
-                            <span class="text">Personel</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/appointments" <% if (link==="appointments" ) { %>class="active"<% } %>>
-                            <i class="icon ph-bold ph-calendar-check"></i>
-                            <span class="text">Seanslar</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/services" <% if (link==="services" ) { %>class="active"<% } %>>
-                            <i class="icon ph-bold ph-eyedropper"></i>
-                            <span class="text">Hizmetler</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/payments" <% if (link==="payments" ) { %>class="active"<% } %>>
-                            <i class="icon ph-bold ph-currency-circle-dollar"></i>
-                            <span class="text">Kasa</span>
-                    </a>
-                </li>
-
-
-                <li>
-                    <a href="#" <% if (link==="statics" ) { %>
-                        class="active"
-                        <% } %>>
-                            <i class="icon ph-bold ph-chart-bar"></i>
-                            <span class="text">İstatistik</span>
-                            <i class="arrow ph-bold ph-caret-down"></i>
-                    </a>
-                    <ul class="sub-menu">
+                <% if(locals.employee.role.includes("doktor")||locals.employee.role.includes("resepsiyon")){ %>
+                    <li onclick="alert('yetkili değilsiniz');return false" class="deactivate"  title="Sadece Yönetici">
+                        <a href="/admin/employees" <% if (link==="employees" ) { %>class="active"<% } %>>
+                                <i class="icon ph-bold ph-stethoscope"></i>
+                                <span class="text">Kullanıcılar</span>
+                                
+                                
+                                <i class="ph ph-star"></i>
+                        </a>
+                    </li>
+                    <% } else{ %>
                         <li>
-                            <a href="/admin/statics/payment-statics">
-                                <span class="text">Kasa İstatistikleri</span>
+                            <a href="/admin/employees" <% if (link==="employees" ) { %>class="active"<% } %>>
+                                    <i class="icon ph-bold ph-stethoscope"></i>
+                                    <span class="text">Kullanıcılar</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="/admin/statics/users-statics">
-                                <span class="text">Kullanıcı İstatistikleri</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/statics/personels-statics">
-                                <span class="text">Personel İstatistikleri</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/statics/appointments-statics">
-                                <span class="text">Randevu İstatistikleri</span>
-                            </a>
+                        <% } %>
 
-                        </li>
+                            <li>
+                                <a href="/admin/appointments" <% if (link==="appointments" ) { %>class="active"<% } %>>
+                                        <i class="icon ph-bold ph-calendar-check"></i>
+                                        <span class="text">Seanslar</span>
+                                </a>
+                            </li>
+                            <% if(locals.employee.role.includes("doktor")||locals.employee.role.includes("resepsiyon")){ %>
+                                <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
+                                    <a href="/admin/services" <% if (link==="services" ) { %>class="active"<% } %>>
+                                            <i class="icon ph-bold ph-eyedropper"></i>
+                                            <span class="text">Hizmetler</span>
+                                    </a>
+                                </li>
+                                <% } else{ %>
+                                    <li>
+                                        <a href="/admin/services" <% if (link==="services" ) { %>class="active"<% } %>>
+                                                <i class="icon ph-bold ph-eyedropper"></i>
+                                                <span class="text">Hizmetler</span>
+                                        </a>
+                                    </li>   
+                                    <% } %>
 
-                    </ul>
-                </li>
+
+                                        <% if(locals.employee.role.includes("doktor")){ %>
+                                            <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
+                                                <a href="/admin/payments" <% if (link==="payments" ) { %>class="active"
+                                                    <% } %>>
+                                                        <i class="icon ph-bold ph-currency-circle-dollar"></i>
+                                                        <span class="text">Kasa</span>
+                                                </a>
+                                            </li>
+                                            <% } else{ %>
+                                                <li>
+                                                    <a href="/admin/payments" <% if (link==="payments" ) {
+                                                        %>class="active"<% } %>>
+                                                            <i class="icon ph-bold ph-currency-circle-dollar"></i>
+                                                            <span class="text">Kasa</span>
+                                                    </a>
+                                                </li>
+                                                <% } %>
+
+
+
+                                                    <li>
+                                                        <a href="#" <% if (link==="statics" ) { %>
+                                                            class="active"
+                                                            <% } %>>
+                                                                <i class="icon ph-bold ph-chart-bar"></i>
+                                                                <span class="text">İstatistik</span>
+                                                                <i class="arrow ph-bold ph-caret-down"></i>
+                                                        </a>
+                                                        <ul class="sub-menu">
+                                                            <li>
+                                                                <a href="/admin/statics/payment-statics">
+                                                                    <span class="text">Kasa İstatistikleri</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="/admin/statics/users-statics">
+                                                                    <span class="text">Kullanıcı İstatistikleri</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="/admin/statics/employees-statics">
+                                                                    <span class="text">Kullanıcı İstatistikleri</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="/admin/statics/appointments-statics">
+                                                                    <span class="text">Randevu İstatistikleri</span>
+                                                                </a>
+
+                                                            </li>
+
+                                                        </ul>
+                                                    </li>
             </ul>
         </div>
         <div class="menu">
             <p class="title">Ayarlar</p>
             <ul>
-                <li>
+                <% if(locals.employee.role.includes("doktor")||locals.employee.role.includes("resepsiyon")){ %>
+                    <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                     <a href="#" <% if (link==="settings" ) { %>
                         class="active"
                         <% } %>>
@@ -99,6 +141,24 @@
                                 <span class="text">Şirket Bilgileri</span>
                             </a>
                         </li>
+                <% } else{ %>
+                    <li>
+                    <a href="#" <% if (link==="settings" ) { %>
+                        class="active"
+                        <% } %>>
+                            <i class="icon ph-bold ph-gear"></i>
+                            <span class="text">AYARLAR</span>
+                            <i class="arrow ph-bold ph-caret-down"></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a href="/admin/settings">
+                                <span class="text">Şirket Bilgileri</span>
+                            </a>
+                        </li>
+                    <% } %>
+
+                
 
 
                     </ul>
@@ -109,39 +169,71 @@
     <div class="menu">
         <p class="title">Hesap</p>
         <ul>
-            <li>
-                <a href="#" <% if (link==="companyPaymentPage" ) { %>
-                    class="active"
-                    <% } %>>
-                        <i class="icon ph ph-cardholder"></i>
-                        <span class="text">Abonelik-Ödeme</span>
-                        <i class="arrow ph-bold ph-caret-down"></i>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="/admin/companyPaymentsList">
-                            <span class="text">Abonelikler</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/companyPaymentPage">
-                            <span class="text">Ödeme Yap</span>
-                        </a>
-                    </li>
+            <% if(locals.employee.role.includes("doktor")||locals.employee.role.includes("resepsiyon")){ %>
+                <li  onclick="alert('yetkili değilsiniz');return false" class="deactivate">
+                    <a href="#" <% if (link==="companyPaymentPage" ) { %>
+                        class="active"
+                        <% } %>>
+                            <i class="icon ph ph-cardholder"></i>
+                            <span class="text">Abonelik-Ödeme</span>
+                            <i class="arrow ph-bold ph-caret-down"></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a href="/admin/companyPaymentsList">
+                                <span class="text">Abonelikler</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/companyPaymentPage">
+                                <span class="text">Ödeme Yap</span>
+                            </a>
+                        </li>
 
 
-                </ul>
-                <a href="/admin/tickets">
-                    <i class="icon ph-bold ph-info"></i>
-                    <span class="text">Yardım Al</span>
-                </a>
-            </li>
-            <li>
-                <a href="/admin/logout">
-                    <i class="icon ph-bold ph-sign-out"></i>
-                    <span class="text">Çıkış</span>
-                </a>
-            </li>
+                    </ul>
+
+                </li>
+                <% } else{ %>
+                    <li>
+                        <a href="#" <% if (link==="companyPaymentPage" ) { %>
+                            class="active"
+                            <% } %>>
+                                <i class="icon ph ph-cardholder"></i>
+                                <span class="text">Abonelik-Ödeme</span>
+                                <i class="arrow ph-bold ph-caret-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/admin/companyPaymentsList">
+                                    <span class="text">Abonelikler</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/companyPaymentPage">
+                                    <span class="text">Ödeme Yap</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+                    <% } %>
+
+                        <li>
+                            <a href="/admin/tickets">
+                                <i class="icon ph-bold ph-info"></i>
+                                <span class="text">Yardım Al</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/admin/logout">
+                                <i class="icon ph-bold ph-sign-out"></i>
+                                <span class="text">Çıkış</span>
+                            </a>
+                        </li>
         </ul>
     </div>
 </div>

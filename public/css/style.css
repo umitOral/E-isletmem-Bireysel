@@ -47,7 +47,7 @@
   box-sizing: border-box;
 }
 tbody tr {
-  border-bottom: 1px solid var(--color-border-color);
+  /* border-bottom: 1px solid var(--color-border-color); */
 }
 
 html {
@@ -87,7 +87,9 @@ input {
 .loader {
   width: 100px;
 }
-
+.container-login form input::placeholder {
+  color: rgba(128, 128, 128, 0.511);
+}
 .response_modal {
   position: fixed;
   top: 15%;
@@ -149,6 +151,8 @@ button {
 }
 .add {
   background-color: var(--color-success);
+  width: max-content;
+  padding: 0.5rem 2rem;
 }
 
 hr {
@@ -339,6 +343,7 @@ header div div i {
 
 .sidebar {
   position: fixed;
+ 
   width: 256px;
   height: 100%;
   display: flex;
@@ -350,6 +355,7 @@ header div div i {
   transition: all 0.3s;
   z-index: 999;
 }
+
 .sidebar .head {
   border-bottom: 1px solid #f6f6f6;
 }
@@ -387,6 +393,20 @@ header div div i {
   list-style: none;
   margin-bottom: 5px;
 }
+.menu ul li.deactivate {
+  border-radius: 8px;
+  background-color: var(--color-background);
+  
+  
+}
+.menu ul li.deactivate a {
+  cursor: default;
+  
+  
+}
+.unauthorize{
+  font-size: 1rem;
+}
 .menu ul li a {
   display: flex;
   align-items: center;
@@ -404,6 +424,7 @@ header div div i {
   background-color: #04d9d916;
   color: black;
 }
+
 .menu ul li > a:hover,
 .menu ul li.active > a {
   color: #000;
@@ -742,11 +763,15 @@ tbody td {
   text-align: center;
   position: relative;
 }
+
+tbody td.details:hover{
+  background-color: rgba(128, 128, 128, 0.144);
+}
 table tbody tr:last-child td {
   border: none;
 }
 table tbody tr:hover {
-  background-color: var(--color-light);
+  background-color: rgba(216, 213, 213, 0.1);
 }
 table thead {
   font-weight: 600;
@@ -924,18 +949,34 @@ table thead {
 
   margin-bottom: 1rem;
 }
-.modal .options {
+.options {
+  display: flex;
+  flex-direction: column;
+}
+.options-appointments {
   display: flex;
   flex-direction: column;
 }
 
-.modal .options div {
+.options div {
   display: flex;
+  
   padding: 0.5rem;
   cursor: pointer;
+  z-index: 999;
 }
 
-.modal .options div label {
+*::-webkit-scrollbar {
+	background-color: transparent;
+	width: 12px;
+}
+*::-webkit-scrollbar-thumb {
+	border-radius: 99px;
+	background-color: #ddd;
+	border: 4px solid #fff;
+}
+
+.options div label {
   border: 1px solid rgba(128, 128, 128, 0.394);
   border-radius: var(--border-radius-1);
   padding: 0.5rem;

@@ -75,7 +75,7 @@ const addCompanyPayment = async (req, res) => {
     console.log(req.body);
 
     const id = uuidv4();
-    const company = await Company.findOne({ _id: res.locals.user._id });
+    const company = await Company.findOne({ _id: res.locals.company._id });
 
     const {
       cardUserName,

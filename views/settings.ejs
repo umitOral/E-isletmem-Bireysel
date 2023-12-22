@@ -25,7 +25,7 @@
 
                         <div class="left_section">
                             <div class="user-img"><i class="ph-bold ph-user"></i></div>
-                            <input type="text" class="userID" data-user="<%= user._id %>" hidden>
+                            <input type="text" class="userID" data-user="<%= company._id %>" hidden>
 
                             <div class="show-content informations">Genel Bilgiler<i
                                     class="fa-solid fa-pen-to-square edit"></i>
@@ -50,48 +50,48 @@
                                     <h2>Genel Bilgiler</h2>
                                     <hr>
                                     <div class="inputs ">
-                                        <span>Yetkili İsmi:</span>
-                                        <input type="text" name="authorizedName" id="name"
-                                            value="<%= user.authorizedName %>" readonly>
+                                        <span>Marka:</span>
+                                        <input type="text" name="brandName" id="name"
+                                            value="<%= company.brandName %>" readonly>
                                     </div>
                                     <div class="inputs ">
                                         <span>Şirket İsmi:</span>
                                         <input type="text" name="companyName" id="surname"
-                                            value="<%= user.companyName %>" readonly>
+                                            value="<%= company.companyName %>" readonly>
                                     </div>
 
 
                                     <div class="inputs ">
                                         <span>Mail</span>
-                                        <input type="email" name="email" id="" value="<%= user.email %>" readonly>
+                                        <input type="email" name="email" id="" value="<%= company.email %>" readonly>
                                     </div>
                                     <div class="inputs ">
                                         <span>Telefon:</span>
-                                        <input type="text" name="phone" id="" value="<%= user.phone %>" readonly>
+                                        <input type="text" name="phone" id="" value="<%= company.phone %>" readonly>
                                     </div>
 
                                     <div class="inputs">
                                         <span>Adres:</span>
-                                        <input type="text" name="address" value="<%= user.address %>" readonly>
+                                        <input type="text" name="address" value="<%= company.address %>" readonly>
                                     </div>
                                     <div class="inputs">
                                         <span>Fatura Adresi:</span>
-                                        <input type="text" name="billingAddress" value="<%= user.billingAddress %>"
+                                        <input type="text" name="billingAddress" value="<%= company.billingAddress %>"
                                             readonly>
                                     </div>
                                     <div class="inputs">
                                         <span>Başlangıç Saati:</span>
-                                        <input type="text" name="workHours" value="<%= user.workHours.workStart %>"
+                                        <input type="text" name="workHours" value="<%=locals.company.workHours.workStart %>"
                                             readonly>
                                     </div>
                                     <div class="inputs">
                                         <span>Bitiş Saati:</span>
-                                        <input type="text" name="workHours" value="<%= user.workHours.workEnd %>"
+                                        <input type="text" name="workHours" value="<%= locals.company.workHours.workEnd%>"
                                             readonly>
                                     </div>
                                     <div class="inputs">
                                         <span>Seans Süresi:</span>
-                                        <input type="text" name="workHours" value="<%= user.workHours.workPeriod %>"
+                                        <input type="text" name="workHours" value="<%=locals.company.workHours.workPeriod%>"
                                             readonly>
                                     </div>
 
@@ -105,7 +105,7 @@
                                     <h2>Sms ayarları</h2>
                                 </div>
                                 <div class="userInformationsContent payments">
-                                    <form action="./settings/<%= user._id %>/updateCompany" method="POST"
+                                    <form action="./settings/<%= company._id %>/updateCompany" method="POST"
                                         id="change-password-form" enctype="multipart/form-data">
                                         <h2>Şifre ayarları</h2>
                                         <hr>
@@ -138,43 +138,43 @@
 
                     <h2>Genel Bilgileri Düzenle</h2>
 
-                    <form action="./settings/<%= user._id %>/updateCompanyInformations" method="POST"
+                    <form action="./settings/<%= company._id %>/updateCompanyInformations" method="POST"
                         enctype="multipart/form-data" id="informations-form">
                         <div class="inputs ">
-                            <span>Yetkili Adı:</span>
-                            <input type="text" name="authorizedName" id="" value="<%= user.authorizedName %>">
+                            <span>Marka:</span>
+                            <input type="text" name="brandName" id="" value="<%= company.brandName %>">
                         </div>
                         <div class="inputs ">
                             <span>Şirket Adı:</span>
-                            <input type="text" name="companyName" id="" value="<%= user.companyName %>">
+                            <input type="text" name="companyName" id="" value="<%= company.companyName %>">
                         </div>
 
 
                         <div class="inputs ">
                             <span>Email</span>
-                            <input type="text" name="email" id="" value="<%= user.email %>"
-                                placeholder="<%= user.address %>">
+                            <input type="text" name="email" id="" value="<%= company.email %>"
+                                placeholder="<%= company.address %>">
                         </div>
                         <div class="inputs ">
                             <span>Telefon</span>
-                            <input type="text" name="phone" id="" value="<%= user.phone %>">
+                            <input type="text" name="phone" id="" value="<%= company.phone %>">
                         </div>
                         <div class="inputs ">
                             <span>Adres</span>
-                            <input type="text" name="address" id="" value="<%= user.address %>"
-                                placeholder="<%= user.address %>">
+                            <input type="text" name="address" id="" value="<%= company.address %>"
+                                placeholder="<%= company.address %>">
                         </div>
                         <div class="inputs ">
                             <span>Fatura Adresi:</span>
                             <textarea name="billingAddress" id="" cols="70"
-                                rows="2"><%= user.billingAddress %></textarea>
+                                rows="2"><%= company.billingAddress %></textarea>
                         </div>
 
                         <div class="inputs ">
                             <span>Başlangıç Saati:</span>
-                            <input type="time" name="workStart" id="" value="<%= user.workHours.workStart  %>">
+                            <input type="time" name="workStart" id="" value="<%= locals.company.workHours.workStart%>">
                             <span>Bitiş Saati:</span>
-                            <input type="time" name="workEnd" id="" value="<%= user.workHours.workEnd %>">
+                            <input type="time" name="workEnd" id="" value="<%=locals.company.workHours.workEnd %>">
                             <span>Seans aralığı:</span>
                             <select name="workPeriod" id="" >
                                 <option value="10">10dk</option>

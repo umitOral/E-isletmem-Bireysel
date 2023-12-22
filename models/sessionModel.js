@@ -27,7 +27,7 @@ const sessionSchema = new Schema(
 
     doctor: {
       type: Schema.Types.ObjectId,
-      ref: "User"
+      ref: "Employee"
     },
 
     services: [

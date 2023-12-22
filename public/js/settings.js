@@ -73,7 +73,7 @@ function changeInformations(e) {
 
     request.postWithUrl("./settings/"+userID+"/updateCompanyInformations", {
         
-        authorizedName:informationForm.authorizedName.value,
+        brandName:informationForm.brandName.value,
         companyName:informationForm.companyName.value,
         email:informationForm.email.value,
         phone:informationForm.phone.value,

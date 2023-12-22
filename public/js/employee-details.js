@@ -1,10 +1,13 @@
 import { Request } from "./requests.js";
 const request = new Request();
+import { UI } from "./ui.js";
+const ui = new UI();
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
 
 const showContentsBtn = document.querySelectorAll(".show-content");
 const contents = document.querySelectorAll(".userInformationsContent");
+const messageBox = document.querySelector(".information-modal");
 
 const tableElements = document.querySelectorAll("table");
 
@@ -24,7 +27,7 @@ const cancelModal = document.querySelectorAll(".modal .cancel_button");
 const modalUser = document.querySelector(".modal_user");
 const modalSession = document.querySelector(".modal_session");
 const modalPayment = document.querySelector(".modal_payment");
-const modalImage = document.querySelector(".modal_image");
+
 const modalProccess = document.querySelector(".modal_proccess");
 
 
@@ -36,7 +39,6 @@ function eventListeners() {
   
   editUserButton.addEventListener("click", editUser);
   editBtn.addEventListener("click", showInformationsModal);
-  addImageButton.addEventListener("click", showAddImageModal);
   
   
 }
@@ -58,32 +60,38 @@ tableElements.forEach((table) => {
   });
 });
 
-deleteImageBtn.forEach((element) => {
-  element.addEventListener("click", () => {
-    const photoid=element.dataset.photoid
-    request
-      .deletewithUrl("./"+photoid+ "/deletePhoto")
-      .then((response) => console.log(response))
-      .catch(err=>console.log(err));
-  });
-});
 
 const userName = document.getElementById("user-name");
 const usersurName = document.getElementById("user-surname");
 
-function editUser() {
-  const name = userName.value || userName.placeholder;
-  const surName = usersurName.value || usersurName.placeholder;
-
+function editUser(e) {
+  e.preventDefault();
+  
+  const form=document.querySelector("#user-edit-form")
   request
-    .put(userID, {
-      name: name,
-      surname: surName,
+    .postWithUrl(form.action, {
+      name:form.name.value,
+      surname:form.surname.value,
+      role:form.role.value,
+      email:form.email.value,
+      sex:form.sex.value,
+      address:form.address.value,
+      phone:form.phone.value,
+      activeOrNot:form.activeOrNot.value,
+      birtdhDate:form.birtdhDate.value,
+      
     })
-    .then((response) => console.log(response))
+    .then((response) => {
+      console.log(response)
+      ui.showModal(response,messageBox)
+      modalUser.classList.remove("showed_modal")
+      setTimeout(() => {
+        window.location.reload()
+      }, 800);
+    })
     .catch((err) => console.log(err));
 
-  e.preventDefault();
+  
 }
 
 showContentsBtn.forEach((element, index) => {
@@ -130,14 +138,10 @@ imagesSmall.forEach((element) => {
 const saveModal = document.querySelectorAll(".modal .save_button");
 
 function showInformationsModal() {
-  console.log("dada");
+  
   modalUser.classList.add("showed_modal");
 }
 
-function showAddImageModal(e) {
-  console.log("dada");
-  modalImage.classList.add("showed_modal");
-}
 
 cancelModal.forEach((element) => {
   element.addEventListener("click", (e) => {
@@ -145,7 +149,7 @@ cancelModal.forEach((element) => {
     modalUser.classList.remove("showed_modal");
     modalSession.classList.remove("showed_modal");
     modalPayment.classList.remove("showed_modal");
-    modalImage.classList.remove("showed_modal");
+    
     modalUser.classList.remove("showed_modal");
     modalProccess.classList.remove("showed_modal");
     console.log("dada");

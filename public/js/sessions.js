@@ -61,7 +61,7 @@ function showDatesAtPage(params) {
 
 function getAllSessions() {
   request
-    .getwithUrl("/api/getSingleDaySingleDoctorSessions/" + selectedDate)
+    .getwithUrl("/api/getSingleDayAllDoctorSessions/" + selectedDate)
     .then((response) => {
       console.log(response);
       const sessionsAllDoctor = response.sessionsAllDoctor;
@@ -535,10 +535,10 @@ function showEditModal(e) {
 
 const proccessType = document.querySelector(".proccess_type_add");
 const proccessTypeUpdate = document.querySelector(".proccess_type_update");
-console.log(proccessTypeUpdate)
+
 const modalAddSessionSave = document.querySelector(".save_button");
 const modalUpdateSessionSave = document.querySelector(".save_update_button");
-console.log(modalAddSessionSave);
+
 const selected_proccess_type_add = document.querySelector(
   ".selected_proccess_type_add"
 );

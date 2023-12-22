@@ -35,7 +35,7 @@ form.addEventListener("submit", (e) => {
     e.preventDefault()
   request.createCompany(
     {
-      authorizedName: form.authorizedName.value,
+      
       email: form.email.value,
       phone: form.phone.value,
       password: form.password.value,

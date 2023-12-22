@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import Employee from "../models/EmployeesModel.js";
 import Session from "../models/sessionModel.js";
 import Company from "../models/companyModel.js";
 import jwt from "jsonwebtoken";
@@ -6,7 +7,7 @@ import { CustomError } from "../helpers/error/CustomError.js";
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({ _id: { $ne: res.locals.user._id } });
+    const users = await User.find({ _id: { $ne: res.locals.company._id } });
 
     res.status(200).json({
       users: users,
@@ -64,35 +65,19 @@ const newPassword = async (req, res, next) => {
   }
 };
 
-const getSingleDaySessions = async (req, res) => {
-  try {
-    const sessions = await Session.find({ date: req.params.date })
-      .populate(["user", "doctor"])
-      .sort({ time: 1 });
-    console.log(req.params.date);
-    res.status(200).json({
-      sessions: sessions,
-    });
-  } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "api hatası",
-    });
-  }
-};
 
-const getSingleDaySingleDoctorSessions = async (req, res) => {
+
+const getSingleDayAllDoctorSessions = async (req, res) => {
   try {
-    
-    const doctors = await User.find({id:res.locals.user_id,role:"doctor",activeOrNot:true});
-    const workHours = res.locals.user.workHours;
+   
+    const doctors = await Employee.find({company:res.locals.company._id,role:"doktor",activeOrNot:true});
+    const workHours = res.locals.company.workHours;
     
    
-    console.log(req.params)
+   
     const sessionsAllDoctor = [];
     const date = new Date(req.params.date+',Z00:00:00');
-    console.log(req.params.date)
-    console.log(date)
+    
     for (const i of doctors) {
 
       const sessionsofdoctor = await Session.find({
@@ -123,7 +108,6 @@ const getSingleDaySingleDoctorSessions = async (req, res) => {
 
 export {
   getAllUsers,
-  getSingleDaySessions,
-  getSingleDaySingleDoctorSessions,
+  getSingleDayAllDoctorSessions,
   newPassword
 };

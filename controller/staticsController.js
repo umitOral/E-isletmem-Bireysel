@@ -18,7 +18,7 @@ const getSexStaticsWithFilter = async (req, res) => {
         
         const manCount = await User.count({
             sex: "erkek",
-            company: res.locals.user._id,
+            company: res.locals.company._id,
             registerDate: {
                 $gte: startDate,
                 $lte: endDate
@@ -28,7 +28,7 @@ const getSexStaticsWithFilter = async (req, res) => {
 
         const womanCount = await User.count({
             sex: "kadın",
-            company: res.locals.user._id,
+            company: res.locals.company._id,
             registerDate: {
                 $gte: startDate,
                 $lte: endDate
@@ -78,7 +78,7 @@ const getPaymentStaticsWithFilter = async (req, res) => {
 
         const cashCount = await Payment.count({
             cashOrCard: "Nakit",
-            company: res.locals.user._id,
+            company: res.locals.company._id,
             createdAt: {
                 $gte: startDate,
                 $lte: endDate
@@ -86,7 +86,7 @@ const getPaymentStaticsWithFilter = async (req, res) => {
         })
         const creditCardCount = await Payment.count({
             cashOrCard: "Kredi Kartı",
-            company: res.locals.user._id,
+            company: res.locals.company._id,
             createdAt: {
                 $gte: startDate,
                 $lte: endDate

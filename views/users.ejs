@@ -75,7 +75,7 @@
                                         <td><span class="continue">
                                                 <%= user.phone %>
                                             </span> </td>
-                                        <td><a href="./users/<%= user._id %>">Detay</a></td>
+                                        <td class="details"><a href="./users/<%= user._id %>">Detay</a></td>
 
                                     </tr>
                                     <% }) %>
@@ -132,20 +132,24 @@
                         <div class="inputs ">
                             <span>İsim</span>
                             <input type="text" name="name" id="user-name" required
-                                placeholder="Lütfen bir kullanıcı adı giriniz">
+                                placeholder="İsim giriniz">
                         </div>
 
                         <div class="inputs ">
                             <span>Soyisim</span>
-                            <input type="text" name="surname" id="surname">
+                            <input type="text" name="surname" id="surname" placeholder="soyisim giriniz" required>
+                        </div>
+                        <div class="inputs ">
+                            <span>Telefon</span>
+                            <input placeholder="başında '0' olmadan girin" type="tel" name="phone" id="phone" required pattern="[0-9]{10}" maxlength="10">
                         </div>
                         <div class="options">
                             <span>Cinsiyet:</span>
                             <div>
-                                <input type="radio" id="sex-women" name="sex" value="kadın" checked="checked">
+                                <input type="radio" id="sex-women" name="sex" value="female" checked="checked">
                                   <label for="sex-women">Kadın</label>
 
-                                <input type="radio" id="sex-man" name="sex" value="erkek">
+                                <input type="radio" id="sex-man" name="sex" value="male">
                                   <label for="sex-man">Erkek</label>
 
                             </div>
@@ -160,10 +164,7 @@
                             <input type="text" name="address" id="address">
 
                         </div>
-                        <div class="inputs ">
-                            <span>Telefon</span>
-                            <input type="number" name="phone" id="phone">
-                        </div>
+                        
                         <div class="inputs ">
                             <span>Mail</span>
                             <input type="email" name="email" id="email">

@@ -1,4 +1,6 @@
 import User from "../models/userModel.js";
+import Employee from "../models/EmployeesModel.js";
+import ROLES_LIST from "../config/roles_list.js";
 
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
@@ -188,7 +190,7 @@ const getPricesPage = (req, res) => {
 };
 const getservicesPage = async (req, res) => {
   try {
-    let company = res.locals.user;
+    let company = res.locals.company;
 
     const services = await company.services;
 
@@ -248,7 +250,7 @@ const getUsersPage = async (req, res) => {
     if (req.query) {
       const searchObject = {};
 
-      searchObject["company"] = res.locals.user._id;
+      searchObject["company"] = res.locals.company._id;
       searchObject["role"] = "customer";
       query = query.where(searchObject);
     }
@@ -264,7 +266,7 @@ const getUsersPage = async (req, res) => {
       .where("role")
       .equals("customer")
       .where("company")
-      .equals(res.locals.user._id);
+      .equals(res.locals.company._id);
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
     pagination["page"] = page;
@@ -301,14 +303,14 @@ const getUsersPage = async (req, res) => {
     });
   }
 };
-const getPersonelsPage = async (req, res) => {
+const getEmployeesPage = async (req, res) => {
   try {
-    let query = User.find({});
+    let query = Employee.find({});
+   let roles= Object.keys(ROLES_LIST)
+   let rolesValues=Object.values(ROLES_LIST)
     if (req.query) {
       const searchObject = {};
-
-      searchObject["company"] = res.locals.user._id;
-      searchObject["role"] = "doctor";
+      searchObject["company"] = res.locals.company._id;
       query = query.where(searchObject);
     }
 
@@ -319,16 +321,15 @@ const getPersonelsPage = async (req, res) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const total = await User.count()
-      .where("role")
-      .equals("doctor")
+    const total = await Employee.count()
+     
       .where("company")
-      .equals(res.locals.user._id);
+      .equals(res.locals.company._id);
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
     pagination["page"] = page;
     pagination["lastpage"] = lastpage;
-    console.log(lastpage);
+   
 
     if (startIndex > 0) {
       pagination.previous = {
@@ -343,15 +344,22 @@ const getPersonelsPage = async (req, res) => {
       };
     }
 
-    query = query.skip(startIndex).limit(limit);
-    const users = await query;
+   
+    
 
-    res.status(200).render("personels", {
+    query = query.skip(startIndex).limit(limit);
+    const employees = await query;
+    
+
+    res.status(200).render("employees", {
       pagination,
       total,
-      count: users.length,
-      users,
-      link: "personels",
+      count: employees.length,
+      employees,
+      roles:roles,
+      rolesValues,
+      link: "employees",
+      
     });
   } catch (error) {
     res.status(500).json({
@@ -365,11 +373,11 @@ const getAppointmentsPage = async (req, res) => {
   try {
     const doctors = await User.find({
       role: "doctor",
-      company: res.locals.user._id,
+      company: res.locals.company._id,
       activeOrNot: true,
     });
 
-    let services = await Company.findById({ _id: res.locals.user._id });
+    let services = await Company.findById({ _id: res.locals.company._id });
     const activeServices=[]
     services.services.forEach(element => {
       if (element.activeorNot===true) {
@@ -378,7 +386,7 @@ const getAppointmentsPage = async (req, res) => {
      });
     // sort({ registerDate: 1 })
 
-    const users = await User.find({ role: "customer",company:res.locals.user._id});
+    const users = await User.find({ role: "customer",company:res.locals.company._id});
 
     const sessions = await Sessions.find({})
       .sort({ time: 1 })
@@ -424,9 +432,9 @@ const getUsersStaticsPage = async (req, res) => {
     });
   }
 };
-const getPersonelsStaticsPage = async (req, res) => {
+const getEmployeessStaticsPage = async (req, res) => {
   try {
-    res.status(200).render("statics/personels-statics.ejs", {
+    res.status(200).render("statics/employees-statics.ejs", {
       link: "statics",
     });
   } catch (error) {
@@ -450,10 +458,11 @@ const getAppointmentsStaticsPage = async (req, res) => {
 };
 const getSettingsPage = (req, res) => {
   try {
-    const user = res.locals.user;
+    const company = res.locals.company;
+    
     res.status(200).render("settings", {
       link: "settings",
-      user,
+      company,
     });
   } catch (error) {
     res.status(500).json({
@@ -464,7 +473,7 @@ const getSettingsPage = (req, res) => {
 };
 const companyPaymentPage = (req, res) => {
   try {
-    const user = res.locals.user;
+    const user = res.locals.company;
     res.status(200).render("companyPaymentPage", {
       link: "companyPaymentPage",
       user,
@@ -497,9 +506,9 @@ const getPaymentsPage = async (req, res) => {
     // console.log(todayDate.toLocaleString())
     // console.log(tomorrowDate.toLocaleString())
 
-    const users = await User.find({ company: res.locals.user._id });
+    const users = await User.find({ company: res.locals.company._id });
     const payments = await Payment.find({
-      company: res.locals.user._id,
+      company: res.locals.company._id,
       createdAt: {
         $gte: todayDate,
         $lte: tomorrowDate,
@@ -549,13 +558,43 @@ const getSinglePage = async (req, res) => {
   try {
     const singleUser = await User.findById(req.params.id);
     const payments = await Payment.find({ fromUser: req.params.id });
-    const sessions = await Sessions.find({user:req.params.id}).populate(["doctor"]);
-
+    const sessions = await Sessions.find({user:req.params.id}).populate("doctor");
+    console.log(sessions)
     res.status(200).render("user-details", {
       singleUser,
       sessions,
       payments,
       link: "users",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: error,
+    });
+  }
+};
+const getSingleEmployeePage = async (req, res) => {
+  try {
+    const singleUser = await Employee.findById(req.params.id);
+    const roles=Object.keys(ROLES_LIST)
+    let rolesValue=[]
+    console.log(typeof(ROLES_LIST))
+
+    for (const key in ROLES_LIST) {
+      if (Object.hasOwnProperty.call(ROLES_LIST, key)) {
+        const element = ROLES_LIST[key];
+        rolesValue.push(element)
+      }
+    }
+    
+    const sessions = await Sessions.find({user:req.params.id}).populate(["doctor"]);
+    
+    res.status(200).render("employee-details", {
+      singleUser,
+      sessions,
+      roles:roles,
+      rolesValue,
+      link: "employees",
     });
   } catch (error) {
     res.status(500).json({
@@ -570,7 +609,7 @@ export {
   getSuperAdminPage,
   getSettingsPage,
   getAppointmentsStaticsPage,
-  getPersonelsStaticsPage,
+  getEmployeessStaticsPage,
   getUsersStaticsPage,
   getPaymentStaticsPage,
   getPaymentsPage,
@@ -585,7 +624,7 @@ export {
   getAppointmentsPage,
   getSinglePage,
   getservicesPage,
-  getPersonelsPage,
+  getEmployeesPage,
   resetPasswordPage,
   companyPaymentPage,
   getTermOfUsePage,
@@ -595,4 +634,5 @@ export {
   getPricesPage,
   getSuperAdminTicketsPage,
   companyPaymentsListPage,
+  getSingleEmployeePage
 };

@@ -15,9 +15,6 @@ const sendMail = async (req, res) => {
   try {
     
     const html = registerMail
-    
-    
-
     const transporter = createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -37,7 +34,7 @@ const sendMail = async (req, res) => {
     transporter.verify().then(console.log).catch(console.error);
 
     console.log("message sent:" + info.messageId);
-    res.render("login",{
+    res.json({
         message:"kaydınız başarıyla oluşturuldu"
     })
 

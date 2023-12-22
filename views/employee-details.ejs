@@ -5,7 +5,9 @@
     <%- include('partials/head.ejs') %>
 
         <link rel="stylesheet" href="/css/user-details.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <!-- js ----------- -->
         <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
@@ -15,7 +17,7 @@
     <%- include("partials/aside.ejs") %>
         <section id="content">
             <!---------- left aside ------------->
-            
+
             <%- include('partials/header.ejs') %>
 
                 <!----------- end of sidebar ----------->
@@ -41,12 +43,8 @@
                             <div class="show-content payment">Tahsilatlar
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <div class="show-content images">Resimler
-                                <i class="fa-solid fa-pen-to-square edit"></i>
-                            </div>
-                            <div class="show-content procces">İşlemler
-                                <i class="fa-solid fa-pen-to-square edit"></i>
-                            </div>
+
+
 
 
                         </div>
@@ -62,17 +60,65 @@
                                     <hr>
                                     <div class="inputs ">
                                         <span>İsim</span>
-                                        <input type="text" name="" id="name" value="<%= singleUser.name %>" readonly>
+                                        <input type="text" name="name" id="name" value="<%= singleUser.name %>" readonly>
                                     </div>
                                     <div class="inputs ">
                                         <span>Soyisim</span>
-                                        <input type="text" name="" id="surname" value="<%= singleUser.surname %>"
+                                        <input type="text" name="surname" id="surname" value="<%= singleUser.surname %>"
                                             readonly>
                                     </div>
+                                    
                                     <div class="inputs ">
-                                        <span>Cinsiyet</span>
-                                        <input type="text" name="" id="" value="<%= singleUser.sex %>" readonly>
+                                        <span>Görev</span>
+                                        
+                                        <input type="text" name="role" id="user-surname"
+                                            value="<%= singleUser.role %>">
                                     </div>
+                                    <div class="options">
+                                        <span>Aktiflik:</span>
+                                        
+                                        <% if(singleUser.activeOrNot==true){ %>
+                                            <div>
+                                                <input type="radio" id="activeOrNot-true" name="activeOrNot" checked >
+                                                <label for="">Aktif</label>
+                                                
+                                                
+                                                
+                                            </div>
+                                          <% } else{ %>  
+                                            <div>
+                
+                                                <input type="radio" id="activeOrNot-false" name="activeOrNot" value="false" checked="checked" >
+                                                &nbsp; <label for="activeOrNot-false">Deaktif</label>
+                
+                                            </div>
+                                         <% } %>
+                                        
+                                       
+            
+                                    </div>
+                                    <div class="options">
+                                        <span>Cinsiyet:</span>
+                                        <% if(singleUser.sex==="male"){ %>
+                                            <div>
+                                               
+                                                <input type="radio" id="sex-man" name="sex" value="male" checked="checked">
+                                                &nbsp; <label for="sex-man">Erkek</label>
+                
+                                            </div>
+                                          <% } else{ %>  
+                                            <div>
+                                                <input type="radio" id="sex-women" name="sex" value="female" checked="checked">
+                                                &nbsp; <label for="sex-women">Kadın</label>
+                
+                                            </div>
+                                         <% } %>
+                                        
+                                       
+            
+                                    </div>
+                                    
+                                   
                                     <div class="inputs ">
                                         <span>Doğum Tarihi</span>
                                         <input type="date" name="" id="" value="<%= singleUser.birthDate %>" readonly>
@@ -86,16 +132,8 @@
                                         <span>Adres:</span>
                                         <input type="text" value="<%= singleUser.address %>" readonly>
                                     </div>
-                                    <div class="inputs">
-                                        <span>Şirket:</span>
-                                        <input type="text" value="<%= singleUser.userCompany %>" readonly>
-                                    </div>
-                                    <div class="inputs ">
-                                        <span>Fatura Adresi:</span>
-                                        <input type="text" name="" id="" value="<%= singleUser.billingAddress %>"
-                                            readonly>
-
-                                    </div>
+                                    
+                                    
                                     <div class="inputs ">
                                         <span>Telefon</span>
                                         <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
@@ -103,9 +141,10 @@
 
 
                                     <div class="inputs ">
-                                        <span>Açıklama</span>
-                                        <input type="text" name="" id="" value="<%= singleUser.notes %>" readonly>
+                                        <span>Kayıt Tarihi:</span>
+                                        <input type="text" name="" id="" value="<%= new Date(singleUser.registerDate).toLocaleDateString() %>" readonly>
                                     </div>
+                                   
                                     <span class="edit-informations-btn">Düzenle</span>
 
 
@@ -115,7 +154,7 @@
                                     <hr>
 
                                     <div class="table user-table">
-                                        <table >
+                                        <table>
                                             <thead>
 
                                                 <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
@@ -131,17 +170,21 @@
                                                     <td>
                                                         <%= new Date(session.date).toLocaleDateString() %>
                                                     </td>
-                                                    
+
                                                     <td>
-                                                        <%= new Date(session.startHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}) %>-
-                                                        <%= new Date(session.endHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}) %>
+                                                        <%= new
+                                                            Date(session.startHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
+                                                            %>-
+                                                            <%= new
+                                                                Date(session.endHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
+                                                                %>
                                                     </td>
-                                                    
+
                                                     <td>
-                                                        <%= session.doctor.name%>
+                                                        <%= session.doctor.name %>
                                                     </td>
                                                     <td>
-                                                        <%= session.services %>
+                                                        <%= session.services%>
                                                     </td>
                                                     <td>
                                                         <%= session.description %>
@@ -167,7 +210,7 @@
                                     <h2>Ödemeler</h2>
 
                                     <div class="table user-table">
-                                        <table >
+                                        <table>
                                             <thead>
                                                 <th>Id</th>
                                                 <th>Tarih</th>
@@ -176,73 +219,22 @@
 
                                             </thead>
 
-                                            <% payments.forEach(payment=> { %>
-                                                <tr>
-
-                                                    <td>
-                                                        <%= new Date(payment.createdAt).toLocaleDateString() %>
-                                                    </td>
-                                                    <td>
-                                                        <%= payment.cashOrCard %>
-                                                    </td>
-                                                    <td>
-                                                        <%= payment.value %>
-                                                    </td>
 
 
 
-
-                                                    <td><a href="#">Düzenle</a></td>
-                                                </tr>
-                                                <% }) %>
-
-
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>Toplam:</td>
-                                                        <td> xxxxx</td>
-                                                    </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Toplam:</td>
+                                                <td> xxxxx</td>
+                                            </tr>
 
                                         </table>
 
                                     </div>
 
                                 </div>
-                                <div class="userInformationsContent  images ">
-                                    <h2>Resimler</h2>
-                                    <button class="button add">Resim Ekle</button>
-                                    <hr>
-                                    
-                                    
-                                    
-                                    <div class="all-images">
-                                        <div class="small_images">
-                                            <% singleUser.images.forEach(element=> { %>
-    
-                                                <img src=" <%= element.url %>" alt="aaa">
-                                                <div class="small_images_options">
-                                                    <span>
-                                                        <%=element.uploadTime %> .Ay
-                                                    </span>
-                                                    
-                                                    
-                                                        <a href="./<%= singleUser.id %>/<%= element.public_id.split("/")[1] %>/deletePhoto" data-photoid="<%= element._id %>">Sil</a>
-                                                    
-                                                </div>
-    
-    
-                                                <% }) %>
-                                        </div>
-                                        <div id="big_image_wrapper">
-                                            <img src="" alt="" class="imageBig">
-    
-                                        </div>
 
-                                    </div>
-                                    
-
-                                </div>
                                 <div class="userInformationsContent procces">
                                     <h2>İşlemler</h2>
                                     <div class="operation_name"> <b>Saç Ekimi:</b></div>
@@ -275,7 +267,7 @@
 
                     <h2>Genel Bilgileri Düzenle</h2>
 
-                    <form action="./<%= singleUser._id %>/editInformations" method="POST" enctype="multipart/form-data">
+                    <form action="./<%= singleUser._id %>/editInformations" method="POST" enctype="multipart/form-data" id="user-edit-form">
                         <div class="inputs ">
                             <span>İsim</span>
                             <input type="text" name="name" id="user-name" value="<%= singleUser.name %>">
@@ -286,9 +278,71 @@
                             <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>">
                         </div>
                         <div class="inputs ">
-                            <span>Email</span>
-                            <input type="text" name="email" id="" value="<%= singleUser.email %>"
-                                placeholder="<%= singleUser.address %>">
+                            <span>Görev:</span>
+                            <select name="role" id="role">
+                                <option value="<%= singleUser.role %>"checked disable hidden><%= singleUser.role %> </option>
+                                <% rolesValue.forEach(role => { %>
+                                    <option value="<%= role %>"><%=role %></option >
+                                <% }) %>
+                            </select>
+                            
+                        </div>
+                        
+                        <div class="options">
+                            <span>Aktiflik:</span>
+                            <% if(singleUser.activeOrNot==true){ %>
+                                <div>
+                                    <input type="radio" id="activeOrNot-true" name="activeOrNot" value="true" checked="checked">
+                                    &nbsp; <label for="activeOrNot-true">Aktif</label>
+    
+                                    <input type="radio" id="activeOrNot-false" name="activeOrNot" value="false" >
+                                    &nbsp; <label for="activeOrNot-false">Deaktif</label>
+    
+                                </div>
+                              <% } else{ %>  
+                                <div>
+                                    <input type="radio" id="activeOrNot-true" name="activeOrNot" value="true" >
+                                    &nbsp; <label for="activeOrNot-true">Aktif</label>
+    
+                                    <input type="radio" id="activeOrNot-false" name="activeOrNot" value="false" checked="checked" >
+                                    &nbsp; <label for="activeOrNot-false">Deaktif</label>
+    
+                                </div>
+                             <% } %>
+                            
+                           
+
+                        </div>
+                        <div class="options">
+                            <span>Cinsiyet:</span>
+                            <% if(singleUser.sex==="male"){ %>
+                                <div>
+                                    <input type="radio" id="sex-women-update" name="sex" value="female" >
+                                    &nbsp; <label for="sex-women-update">Kadın</label>
+    
+                                    <input type="radio" id="sex-man-update" name="sex" value="male" checked="checked">
+                                    &nbsp; <label for="sex-man-update">Erkek</label>
+    
+                                </div>
+                              <% } else{ %>  
+                                <div>
+                                    <input type="radio" id="sex-women-update" name="sex" value="female" checked="checked">
+                                    &nbsp; <label for="sex-women-update">Kadın</label>
+    
+                                    <input type="radio" id="sex-man-update" name="sex" value="male">
+                                    &nbsp; <label for="sex-man-update">Erkek</label>
+    
+                                </div>
+                             <% } %>
+
+                        </div>
+                        <div class="inputs ">
+                            <span>Doğum Tarihi:</span>
+                            <input type="date" name="birtdhDate" id="birtdhDate" value="<%= singleUser.birthDate %>" >
+                        </div>
+                        <div class="inputs ">
+                            <span>Email:</span>
+                            <input type="email" x="email" id="email" value="<%= singleUser.email %>" >
                         </div>
                         <div class="inputs ">
                             <span>Adres</span>
@@ -299,19 +353,9 @@
                             <span>Telefon</span>
                             <input type="number" name="phone" id="" value="<%= singleUser.phone %>">
                         </div>
-                        <div class="inputs ">
-                            <span>Şirket</span>
-                            <input type="text" name="userCompany" id="" value="<%= singleUser.userCompany %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Fatura Bilgisi:</span>
-                            <textarea name="billingAddress" id="" cols="70"
-                                rows="2"><%= singleUser.billingAddress %></textarea>
-                        </div>
-                        <div class="inputs ">
-                            <span>Açıklama</span>
-                            <textarea name="notes" id="" cols="70" rows="2"><%=singleUser.notes%></textarea>
-                        </div>
+                        
+                        
+                        
                         <button type="submit" id="edit-user">Kaydet</button>
                         <span class="cancel_button">Vazgeç</span>
                     </form>
@@ -407,27 +451,28 @@
                         <button class="cancel_button">Vazgeç</button>
                     </form>
                 </div>
-                
+
                 <div class="loader_wrapper hidden">
                     <img src="../../photos/loading.gif" alt="" class="loader">
                 </div>
 
-            </section>
+        </section>
 
 
         </main>
+        <div class="information-modal">AAAA</div>
         </div>
 
 
 
-
-        <script type="module" src="/js/requests.js"></script>
-        <script type="module" src="/js/user_details.js"></script>
-        <script type="module" src="/js/inner_modules/tables.js"></script>
         
+        <script type="module" src="/js/requests.js"></script>
+        <script type="module" src="/js/employee-details.js"></script>
+        <script type="module" src="/js/inner_modules/tables.js"></script>
+
         <script src="/js/sidebar.js"></script>
         <script>
-            
+
         </script>
 
 

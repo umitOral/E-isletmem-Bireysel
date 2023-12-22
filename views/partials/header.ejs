@@ -4,21 +4,23 @@
     </div>
     <div>
         <div>
-           Üyelik Bitiş: <%=(locals.user.subscribeEndDate).toLocaleDateString()%>
+           Üyelik Bitiş: <%=(new Date(locals.company.subscribeEndDate).toLocaleDateString())%>
         </div>
        
         <div>
             <i class="ph ph-buildings"></i>
             <span class="text">
-                <%= locals.user.companyName %>
+                <%= locals.company.brandName %>
             </span>
         </div>
         
         <div>
             <i class="ph ph-user-circle"></i>
-            <span class="text">
-                <%= locals.user.authorizedName %>
-            </span>
+            <span> <%= locals.employee.name %></span>/
+            <span> <%= locals.employee.role %></span>
+
+               
+           
         </div>
     </div>
 
