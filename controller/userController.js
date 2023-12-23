@@ -9,6 +9,8 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import { CustomError } from "../helpers/error/CustomError.js";
+import SERVICES_LIST from '../config/services_list.js'
+import Order from "../models/OrderModel.js";
 
 const createCompany = async (req, res, next) => {
   try {
@@ -19,11 +21,12 @@ const createCompany = async (req, res, next) => {
       newDate.setMonth(newDate.getMonth() + 1)
     ).toISOString();
 
-    const processes = process.env.SERVICES.split(",");
+    const processes =SERVICES_LIST
+    
 
     req.body.services = [];
 
-    processes.forEach((process, index) => {
+    processes.forEach(process => {
       req.body.services.push({
         serviceName: process,
         servicePrice: 99,
@@ -38,8 +41,15 @@ const createCompany = async (req, res, next) => {
     const company = await Company.create(data);
     data.role = "Admin";
     data.company = company._id;
-    console.log(data)
-    const employee = await Employee.create(data);
+    
+    await Employee.create(data);
+    let orderData={
+      company:company._id,
+      amount:0,
+      paymentDuration:30,
+      paymentTransactionId:0
+    }
+    await Order.create(orderData);
     next();
   } catch (error) {
     return next(error);
@@ -397,15 +407,18 @@ const logOut = (req, res) => {
 
 const resetPasswordMail = async (req, res, next) => {
   try {
-    const company = await Company.findOne({ email: req.body.email });
-
-    if (!company) {
+    
+    const employee = await Employee.findOne({ email: req.body.email });
+    
+    
+    if (!employee) {
       next(new CustomError("Kayıtlı kullanıcı Bulunamadı", 400));
     } else {
       const email = req.body.email;
-      const resetToken = company.createResetPasswordToken(company.email);
-
-      await company.save();
+      
+      const resetToken = employee.createResetPasswordToken(email); 
+      
+      await employee.save();
       const resetUrl = `${req.protocol}://${req.get(
         "host"
       )}/newPassword/${resetToken}`;

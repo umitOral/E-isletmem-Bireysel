@@ -29,10 +29,10 @@ saveButtons.forEach((button) => {
     }
     request.postWithUrl("./services/"+button.parentElement.dataset.servicesid+"/editService",data)
     .then((response)=>{
-        ui.showModal(response,messageBox)
+        ui.showModal(true,response.message)
         button.classList.remove("showed");
     })
-    .catch(err=>console.log(err));
+    .catch(err=>ui.showModal(false,err));
   });
 });
 

@@ -138,11 +138,11 @@ function changeState() {
           )
           .then((response) => {
             console.log(response);
-            ui.showModal(response, messageBox);
+            ui.showModal(true, response.message);
             console.log("silme başarılı");
             getAllSessions();
           })
-          .catch((err) => console.log(err));
+          .catch((err) =>  ui.showModal(false, err));
       }
 
       if (e.target.classList.contains("save-edit-button")) {
@@ -572,9 +572,9 @@ modalAddSessionSave.addEventListener("click", (e) => {
   };
   request
     .postWithUrl("./appointments/createAppointment", data)
-    .then((response) => ui.showModal(response, messageBox))
+    .then((response) =>{ui.showModal(true, response.message)})
     .then((response) => getAllSessions(selectedDate))
-    .then((response) => console.log("kaydedildi."))
+    
     .catch((err) => console.log(err));
   modalAddSession.classList.remove("showed_modal");
 });
@@ -713,7 +713,7 @@ modalUpdateSessionSave.addEventListener("click", (e) => {
       data
     )
     .then((response) => {
-      ui.showModal(response, messageBox);
+      ui.showModal(true, response.message);
       modalUpdateSession.classList.toggle("showed_modal");
       getAllSessions()
     })

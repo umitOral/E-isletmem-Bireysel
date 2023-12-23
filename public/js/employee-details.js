@@ -83,13 +83,13 @@ function editUser(e) {
     })
     .then((response) => {
       console.log(response)
-      ui.showModal(response,messageBox)
+      ui.showModal(true,response.message)
       modalUser.classList.remove("showed_modal")
       setTimeout(() => {
         window.location.reload()
       }, 800);
     })
-    .catch((err) => console.log(err));
+    .catch((err) =>ui.showModal(false,err) );
 
   
 }

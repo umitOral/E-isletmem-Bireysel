@@ -49,6 +49,9 @@
 tbody tr {
   /* border-bottom: 1px solid var(--color-border-color); */
 }
+input::placeholder {
+  opacity: 0.5;
+}
 
 html {
   font-size: 14px;

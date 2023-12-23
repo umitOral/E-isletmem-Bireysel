@@ -59,7 +59,7 @@ function changePassword(e) {
     })
         .then(response => {
            
-           ui.showModal(response,messageBox)
+           ui.showModal(true,response.messageBox)
            changePassworForm.password.value=""
            changePassworForm.password2.value=""
 
@@ -88,7 +88,7 @@ function changeInformations(e) {
         .then(response => {
             
             modalUser.classList.remove("showed_modal")
-            ui.showModal(response,messageBox)
+            ui.showModal(true,response.message)
         
         })
         .catch(err => console.log("hata:"+err))

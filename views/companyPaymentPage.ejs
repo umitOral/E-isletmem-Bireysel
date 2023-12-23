@@ -46,7 +46,7 @@
 
                         </div>
                         <div class="premium">
-                            <div class="plan_head" data-type="6aylık" data-paymentDuration="180">6 Aylık Ödeme</div>
+                            <div class="plan_head">6 Aylık Ödeme</div>
                             <span class="price">400TL/Ay</span>
                             <span>(Kazancınız <b>600TL</b>)</span>
                             <span>Toplam tutar: 2400TL</span>
@@ -60,7 +60,8 @@
                                     <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
                                 </ul>
                             </div>
-                            <div class="" data-price="2400" data-type="6aylık">
+                             
+                            <div class="" data-price="2400" data-type="6aylık" data-paymentDuration="180">
                                 <button class="select_packet">Seç</button>
                             </div>
 
@@ -89,24 +90,24 @@
 
                             <div class="inputs ">
                                 <span>Kart Numarası</span>
-                                <input type="text" name="cardNumber" id="surname" value="5528790000000008">
+                                <input type="text" name="cardNumber" id="cardNumber" value="" placeholder="5528790000000008" maxlength="16">
                             </div>
                             <div class="inputs ">
                                 <span>Kart Sahibi</span>
-                                <input type="text" name="cardUserName" id="surname" value="John Doe">
+                                <input type="text" name="cardUserName" id="cardUserName" value="" placeholder="John Doe" >
                             </div>
                             <div class="inputs dates">
                                 <div>
                                     <span>expireMonth</span>
-                                    <input type="text" name="expireMonth" id="surname" value="12">
+                                    <input type="number" name="expireMonth" id="expireMonth" value="" placeholder="12" max="12">
                                 </div>
                                 <div>
                                     <span>expireYear</span>
-                                    <input type="text" name="expireYear" id="surname" value="2030">
+                                    <input type="number" name="expireYear" id="expireYear" value="" placeholder="2030" maxlength="4">
                                 </div>
                                 <div>
                                     <span>cvc</span>
-                                    <input type="text" name="cvc" id="surname" value="123">
+                                    <input type="number" name="cvc" id="cvc" value="" placeholder="123" maxlength="3">
                                 </div>
                             </div>
                             
@@ -131,6 +132,7 @@
 
 
                 </main>
+                <div class="information-modal">AAA</div>
                 <div class="loader_wrapper hidden">
                     <img src="../photos/loading.gif" alt="" class="loader">
                 </div>

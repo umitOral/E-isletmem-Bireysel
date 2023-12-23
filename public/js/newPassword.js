@@ -16,7 +16,7 @@ loginForm.addEventListener("submit", (e) => {
     
   }
   request
-    .postWithUrl("/api/newPassword/"+tokenDiv.textContent.trim(),data)
+    .postWithUrl("/newPassword/"+tokenDiv.textContent.trim(),data)
     .then((response) => {
       console.log(response)
       messageModal.style.display="block"

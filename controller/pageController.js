@@ -20,6 +20,7 @@ const todayDate = new Date(year, month, day);
 const tomorrowDate = new Date(year, month, day + 1);
 
 const getIndexPage = (req, res) => {
+  
   try {
     res.status(200).render("front/index", {
       link: "indexAdmin",
@@ -32,6 +33,7 @@ const getIndexPage = (req, res) => {
   }
 };
 const resetPasswordPage = async (req, res) => {
+  
   try {
     res.status(200).render("front/newPassword", {
       token: req.params.token,
@@ -41,7 +43,7 @@ const resetPasswordPage = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       succes: false,
-      message: "api hatası",
+      message: "sunucu hatası",
     });
   }
 };
@@ -487,7 +489,7 @@ const companyPaymentPage = (req, res) => {
 };
 const companyPaymentsListPage = async (req, res) => {
   try {
-    const orders = await Order.find({});
+    const orders = await Order.find({company:res.locals.company});
     console.log(orders);
     res.status(200).render("companyPaymentsList", {
       link: "companyPaymentsList",
@@ -587,7 +589,7 @@ const getSingleEmployeePage = async (req, res) => {
       }
     }
     
-    const sessions = await Sessions.find({user:req.params.id}).populate(["doctor"]);
+    const sessions = await Sessions.find({doctor:req.params.id}).populate(["user"]);
     
     res.status(200).render("employee-details", {
       singleUser,

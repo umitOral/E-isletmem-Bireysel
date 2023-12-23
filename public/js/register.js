@@ -2,6 +2,7 @@ console.log("başarıl");
 
 import { Request } from "./requests.js";
 const request = new Request();
+
 const form = document.getElementById("register-form");
 console.log(form.authorizedName);
 

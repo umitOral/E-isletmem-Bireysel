@@ -1,4 +1,5 @@
 import Company from "../models/companyModel.js";
+import Employee from "../models/EmployeesModel.js";
 import Order from "../models/OrderModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { orderSuccesEmail } from "./mailControllers.js";
@@ -8,26 +9,24 @@ import { v4 as uuidv4 } from "uuid";
 
 const updateCompanyPassword = async (req, res) => {
   try {
-    console.log(req.body);
-
     if (req.body.password !== req.body.password2) {
       res.status(400).json({
-        succes:false,
-        message:"şifreler aynı değil"
-      })
-    }
-    else{
-      const company = await Company.findOne({ _id: req.params.id });
-      company.password = req.body.password;
-      company.save();
-      
+        succes: false,
+        message: "şifreler aynı değil",
+      });
+    } else {
+      const employee = await Employee.findOne({
+        email: res.locals.company.email,
+      });
+      console.log(res.locals.company);
+      employee.password = req.body.password;
+      employee.save();
+
       res.json({
         succes: true,
         message: "bilgiler başarıyla değiştirildi.",
       });
     }
-
-   
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -88,16 +87,16 @@ const addCompanyPayment = async (req, res) => {
     } = req.body;
 
     const iyzipay = new Iyzipay({
-      apiKey: process.env.IYZICO_API_KEY_TEST,
-      secretKey: process.env.IYZICO_SECRET_KEY_TEST,
-      uri: "https://sandbox-api.iyzipay.com",
+      apiKey: process.env.IYZICO_API_KEY,
+      secretKey: process.env.IYZICO_SECRET_KEY,
+      uri: process.env.IYZICO_URI,
     });
 
     var request = {
       locale: Iyzipay.LOCALE.TR,
       conversationId: uuidv4(),
-      price: req.body.price,
-      paidPrice: req.body.price,
+      price: 1,
+      paidPrice: 1,
       currency: Iyzipay.CURRENCY.TRY,
       installment: "1",
       basketId: "B67832",
@@ -148,75 +147,83 @@ const addCompanyPayment = async (req, res) => {
           category1: "Collectibles",
           category2: "Accessories",
           itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-          price: req.body.price,
+          price: 1,
         },
       ],
     };
 
-    iyzipay.payment.create(request, async function (err, result) {
+    iyzipay.payment.create(request, async function (err, result, next) {
       if (err) {
-        console.log(err);
+        return next(
+          new Error("bir sorunla karşılaışdı. tekrar deneyiniz."),
+          500
+        );
       }
-
-      await Order.create({
-        company: company._id,
-        amount: result.paidPrice,
-        paymentId: result.paymentId,
-        paymentTransactionId: result.paymentTransactionId,
-        paymentDuration:Number(req.body.paymentDuration)
-      })
-
-      let newDate=new Date()
-      let subscribeEndDate= company.subscribeEndDate
-      
-
-      if (subscribeEndDate && subscribeEndDate<newDate) {
-        console.log("abonelik süresi yok")
-        if (type==="aylık") {
-       
-          subscribeEndDate= new Date(newDate.setMonth(newDate.getMonth()+1)).toISOString()
-       }
-       if (type==="6aylık") {
-        subscribeEndDate= new Date(newDate.setMonth(newDate.getMonth()+6)).toISOString()
-
-       }
-       if (type==="yıllık") {
-        subscribeEndDate= new Date(newDate.setMonth(newDate.getMonth()+12)).toISOString()
-
-       }
-      }else{
-        console.log("abonelik süresi var")
-        let diffTime=parseInt((subscribeEndDate-newDate)/(24*60*60*1000),10)
-        console.log(diffTime)
-        if (type==="aylık") {
-         
-          subscribeEndDate= new Date(newDate.setDate(newDate.getDate()+diffTime+1+30)).toISOString()
-          
-       }
-       if (type==="6aylık") {
-        
-        subscribeEndDate= new Date(newDate.setDate(newDate.getDate()+diffTime+1+180)).toISOString()
-      }
-       if (type==="yıllık") {
-        subscribeEndDate= new Date(newDate.setDate(newDate.getDate()+diffTime+1+365)).toISOString()
-      }
-      }
-      
-
-      await Company.findByIdAndUpdate(company,{
-        subscribeEndDate:subscribeEndDate
-        
-      })
-        .then((response) => {
-          orderSuccesEmail(request);
-        })
-        .catch((err) => console.log(err));
 
       if (result.status === "success") {
+        await Order.create({
+          company: company._id,
+          amount: result.paidPrice,
+          paymentId: result.paymentId,
+          paymentTransactionId: result.paymentTransactionId,
+          paymentDuration: Number(req.body.paymentDuration),
+        });
+
+        let newDate = new Date();
+        let subscribeEndDate = company.subscribeEndDate;
+
+        if (subscribeEndDate && subscribeEndDate < newDate) {
+          console.log("abonelik süresi yok");
+          if (type === "aylık") {
+            subscribeEndDate = new Date(
+              newDate.setMonth(newDate.getMonth() + 1)
+            ).toISOString();
+          }
+          if (type === "6aylık") {
+            subscribeEndDate = new Date(
+              newDate.setMonth(newDate.getMonth() + 6)
+            ).toISOString();
+          }
+          if (type === "yıllık") {
+            subscribeEndDate = new Date(
+              newDate.setMonth(newDate.getMonth() + 12)
+            ).toISOString();
+          }
+        } else {
+          console.log("abonelik süresi var");
+          let diffTime = parseInt(
+            (subscribeEndDate - newDate) / (24 * 60 * 60 * 1000),
+            10
+          );
+          console.log(diffTime);
+          if (type === "aylık") {
+            subscribeEndDate = new Date(
+              newDate.setDate(newDate.getDate() + diffTime + 1 + 30)
+            ).toISOString();
+          }
+          if (type === "6aylık") {
+            subscribeEndDate = new Date(
+              newDate.setDate(newDate.getDate() + diffTime + 1 + 180)
+            ).toISOString();
+          }
+          if (type === "yıllık") {
+            subscribeEndDate = new Date(
+              newDate.setDate(newDate.getDate() + diffTime + 1 + 365)
+            ).toISOString();
+          }
+        }
+
+        await Company.findByIdAndUpdate(company, {
+          subscribeEndDate: subscribeEndDate,
+        })
+          .then((response) => {
+            orderSuccesEmail(request);
+          })
+          .catch((err) => console.log(err));
+
         res.status(200).json({
           success: true,
-          message: "işlem başarıyla gerçekleşti.",
-          result,
+          message: "Ödemeniz başarıyla gerçekleşti.",
         });
       } else {
         res.status(200).json({

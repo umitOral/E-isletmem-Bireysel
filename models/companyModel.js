@@ -30,19 +30,18 @@ const companySchema = new Schema(
     workHours: {
       type: Object,
       workStart: {
-        type: String,
+        type: String
       },
       workEnd: {
-        type: String,
+        type: String
       },
       workPeriod: {
-        type: Number,
-      },
-      default: {
-        workStart: "08:00",
-        workEnd: "18:00",
-        workPeriod: 15,
-      },
+        type: Number
+      },default:{
+        workStart:"08:00",
+        workEnd:"08:00",
+        workPeriod:15,
+      }
     },
 
     users: [
@@ -66,8 +65,8 @@ const companySchema = new Schema(
         },
         servicePrice: { type: Number },
         activeorNot: { type: Boolean, default: true },
-      },
-    ],
+      }
+    ]
   },
   { timestamps: true }
 );
@@ -80,16 +79,16 @@ companySchema.pre("save", function (next) {
   });
 });
 
-companySchema.methods.createResetPasswordToken = function (companyEmail) {
-  const resetToken = jwt.sign({ companyEmail }, process.env.JWT_SECRET, {
-    expiresIn: "60m",
-  });
+// companySchema.methods.createResetPasswordToken = function (companyEmail) {
+//   const resetToken = jwt.sign({ companyEmail }, process.env.JWT_SECRET, {
+//     expiresIn: "60m",
+//   });
+//   console.log(resetToken)
+//   this.passwordResetToken = resetToken;
+//   this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000; //10 minutes
 
-  this.passwordResetToken = resetToken;
-  this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000; //10 minutes
-
-  return resetToken;
-};
+//   return resetToken;
+// };
 
 const Company = mongoose.model("Company", companySchema);
 export default Company;

@@ -25,7 +25,7 @@ const getAllUsers = async (req, res) => {
 const newPassword = async (req, res, next) => {
   try {
     const token = req.params.token;
-
+    console.log("burası");
     if (req.body.password !== req.body.password2) {
       return next(new Error("şifreler aynı değil", 400));
     }
@@ -44,55 +44,53 @@ const newPassword = async (req, res, next) => {
           );
         }
         return next(err);
+      } else {
+        console.log(decoded);
       }
     });
 
-    const email=jwt.verify(token, process.env.JWT_SECRET).companyEmail
+    const email = jwt.verify(token, process.env.JWT_SECRET).employeeEmail;
 
-    const user = await Company.findOne({ email: email});
-      user.password=req.body.password
-      await user.save()
-
+    const employee = await Employee.findOne({ email: email });
+    employee.password = req.body.password;
+    await employee.save();
 
     res.status(200).json({
-        succes: true,
-        message:
-          "şifre sıfırlama başarılı.Giriş sayfasına yönlendiriliyorsunuz...",
-      });
+      succes: true,
+      message:
+        "şifre sıfırlama başarılı.Giriş sayfasına yönlendiriliyorsunuz...",
+    });
   } catch (error) {
-    return next(new CustomError(error))
-    
+    return next(new CustomError(error));
   }
 };
 
-
-
 const getSingleDayAllDoctorSessions = async (req, res) => {
   try {
-   
-    const doctors = await Employee.find({company:res.locals.company._id,role:"doktor",activeOrNot:true});
+    const doctors = await Employee.find({
+      company: res.locals.company._id,
+      role: "doktor",
+      activeOrNot: true,
+    });
     const workHours = res.locals.company.workHours;
-    
-   
-   
-    const sessionsAllDoctor = [];
-    const date = new Date(req.params.date+',Z00:00:00');
-    
-    for (const i of doctors) {
 
+    const sessionsAllDoctor = [];
+    const date = new Date(req.params.date + ",Z00:00:00");
+
+    for (const i of doctors) {
       const sessionsofdoctor = await Session.find({
         date: date,
         doctor: i,
       })
         .populate(["user", "doctor"])
         .sort({ startHour: 1 });
-        
+
       sessionsAllDoctor.push({
         doctorName: i.name,
         sessionsofdoctor: sessionsofdoctor,
       });
     }
-    
+
     res.status(200).json({
       workHours,
       doctors: doctors,
@@ -106,8 +104,4 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
   }
 };
 
-export {
-  getAllUsers,
-  getSingleDayAllDoctorSessions,
-  newPassword
-};
+export { getAllUsers, getSingleDayAllDoctorSessions, newPassword };

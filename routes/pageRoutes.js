@@ -2,6 +2,7 @@ import express from 'express';
 import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getServicesPage,getForgotPasswordPage} from '../controller/pageController.js';
 import {createCompany,loginUser,resetPasswordMail} from '../controller/userController.js';
 import {sendMail,contactEmail} from '../controller/mailControllers.js';
+import {newPassword} from '../controller/apicontrollers.js';
 
 
 
@@ -23,7 +24,9 @@ router.route("/register").post(createCompany,sendMail)
 router.route("/login").post(loginUser)
 
 router.route("/forgotPassword").get(getForgotPasswordPage)
+router.route("/newPassword/:token").get(resetPasswordPage)
 router.route("/forgotPassword").post(resetPasswordMail)
+router.route("/newPassword/:token").post(newPassword)
 
 
 router.route("/contactEmail").post(contactEmail)

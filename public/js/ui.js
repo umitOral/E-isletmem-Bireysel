@@ -3,20 +3,41 @@ export class UI {
     this.table = document.getElementById("userList");
   }
 
-  showModal(response, messageBox) {
-    console.log("başarılı");
+  showModal(success,message) {
+    
+    const messageBox = document.querySelector(".information-modal");
 
-    // messageBox.className = "information-modal";
-
-    if (response.success == false) {
+    if (success == false) {
       messageBox.classList.add("failure");
       messageBox.innerHTML = `
-            <span>${response.message}</span><i class="fa-solid fa-circle-xmark"></i>
+            <span>${message}</span><i class="fa-solid fa-circle-xmark"></i>
         `;
     } else {
       messageBox.classList.add("success");
       messageBox.innerHTML = `
-            <span>${response.message}</span><i class="fa-solid fa-circle-check"></i>
+            <span>${message}</span><i class="fa-solid fa-circle-check"></i>
+        `;
+    }
+    setTimeout(() => {
+      messageBox.classList.remove("failure");
+      messageBox.classList.remove("success");
+    }, 1500);
+  }
+
+  showModalWithoutResponse(success,message) {
+    const messageBox = document.querySelector(".information-modal");
+
+    
+
+    if (success == false) {
+      messageBox.classList.add("failure");
+      messageBox.innerHTML = `
+            <span>${message}</span><i class="fa-solid fa-circle-xmark"></i>
+        `;
+    } else {
+      messageBox.classList.add("success");
+      messageBox.innerHTML = `
+            <span>${message}</span><i class="fa-solid fa-circle-check"></i>
         `;
     }
     setTimeout(() => {
