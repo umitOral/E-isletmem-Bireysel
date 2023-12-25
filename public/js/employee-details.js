@@ -68,6 +68,7 @@ function editUser(e) {
   e.preventDefault();
   
   const form=document.querySelector("#user-edit-form")
+  console.log(form.action)
   request
     .postWithUrl(form.action, {
       name:form.name.value,

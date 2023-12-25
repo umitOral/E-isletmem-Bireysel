@@ -246,7 +246,7 @@ h1 {
 }
 
 h2 {
-  font-size: 1.4rem;
+  
 }
 
 h3 {
@@ -750,7 +750,7 @@ td.active {
 
 .table-wrapper {
   width: 100%;
-  overflow: auto;
+  /* overflow: auto; */
   margin-top: 1rem;
   background-color: var(--color-white);
   padding: 1rem 0.5rem;

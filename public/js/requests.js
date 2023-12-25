@@ -6,7 +6,6 @@ export class Request {
   async get() {
     const response = await fetch(this.url);
     const responseData = await response.json();
-
     return responseData;
   }
   async getwithUrl(url) {
@@ -49,6 +48,19 @@ export class Request {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-type": "application/json" },
+    });
+    const responseData = await response.json();
+
+    return responseData;
+  }
+  async postImageWithUrl(url, formData) {
+    console.log(url);
+    console.log(formData);
+    const response = await fetch(url, {
+      method: "POST",
+      
+      body:formData
+     
     });
     const responseData = await response.json();
 

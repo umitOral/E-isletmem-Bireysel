@@ -1,4 +1,12 @@
-
+:root {
+  
+    --color-main: #04d9d9;
+    --color-main-lighter: #5FD9D9;
+    --color-main-lighter2: #94F2F2;
+    --color-main-lighter2: #94F2F2;
+    --color-main-lighter3: #B6F2F2;
+    --color-main-gray: #F2F2F2;
+}
 .statics-wrapper{
     display: flex;
     flex-direction: column;
@@ -23,11 +31,14 @@
     margin-bottom: 0.5rem;
     padding: 0.5rem;
     border: 1px solid gray;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     cursor: pointer;
 }
+.statics-menu ul li.showed{
+   background-color: var(--color-main);
+}
 .statics-menu ul li:hover{
-    background-color: greenyellow;
+    border:3px solid  var(--color-main-lighter);
 }
 .statics{
     display: flex;

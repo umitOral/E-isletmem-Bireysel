@@ -6,6 +6,7 @@ const ui = new UI();
 
 
 const getSexStaticsBtn = document.querySelector(".sex-statics_btn")
+const getPaymentStaticsBtn = document.querySelector(".payments_btn")
 const getNewUsersStaticsBtn = document.querySelector(".new-users-statics_btn")
 const getSexStaticsFilterBtn = document.querySelector(".sex-statics-filter-button")
 const getNewUserSStaticsFilterBtn = document.querySelector(".new-users-statics-filter-button")
@@ -23,6 +24,7 @@ eventListeners()
 function eventListeners() {
 
     getSexStaticsBtn.addEventListener("click", getSexStaticswithFilter)
+    getPaymentStaticsBtn.addEventListener("click", getPaymentStaticsWithFilter)
     getNewUsersStaticsBtn.addEventListener("click", getNewUserStaticswithFilter)
     getSexStaticsFilterBtn.addEventListener("click", getSexStaticswithFilter)
     getNewUserSStaticsFilterBtn.addEventListener("click", getNewUserStaticswithFilter)
@@ -35,13 +37,24 @@ function eventListeners() {
 
 function getSexStaticswithFilter(e) {
     request.getwithUrl(`/admin/statics/getSexStaticsWithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
-        .then(response => ui.createChart(response))
+        .then(response => {
+            ui.showModal(true,response.message)
+            ui.createChart(response)})
+        .catch(err => console.log(err))
+    e.preventDefault()
+}
+
+function getPaymentStaticsWithFilter(e) {
+    request.getwithUrl(`/admin/statics/getPaymentStaticsWithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
+        .then(response => {
+            ui.showModal(true,response.message)
+            ui.createChart(response)})
         .catch(err => console.log(err))
     e.preventDefault()
 }
 
 function getNewUserStaticswithFilter(e) {
-    request.getwithUrl(`/admin/statics/getNewUserStaticswithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
+    request.getwithUrl(`../getNewUserStaticswithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
         .then(response =>ui.createChart(response) )
         .catch(err => console.log(err))
     e.preventDefault()
@@ -65,19 +78,19 @@ function dateRange() {
 
 //statics menu and showed buttons
 
-const everyStatics = document.querySelectorAll(".statics-menu ul li")
+const staticsBtn = document.querySelectorAll(".statics-menu ul li")
 const everyFilterButtons = document.querySelectorAll(".buttons")
 console.log(everyFilterButtons)
 
-everyStatics.forEach((element, index) => {
+staticsBtn.forEach((element, index) => {
 
     element.addEventListener("click", () => {
         
-        everyStatics.forEach(element => {
-            element.style.backgroundColor = "white"
+        staticsBtn.forEach(element => {
+            element.classList.remove("showed")
         });
         
-        element.style.backgroundColor = "green"
+        element.classList.add("showed")
         document.querySelector(".sub-header-statics h2").innerHTML=element.textContent
 
         everyFilterButtons.forEach(button => {

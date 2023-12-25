@@ -5,7 +5,7 @@ import Payment from '../models/paymentsModel.js';
 
 const getSexStaticsWithFilter = async (req, res) => {
     try {
-
+        console.log(req.query)
         let startDate = new Date(req.query.startDate)
         let endDate = new Date(req.query.endDate)
         startDate.setHours(0, 0, 0, 0)
@@ -15,9 +15,9 @@ const getSexStaticsWithFilter = async (req, res) => {
 
         // console.log("startDate::" + startDate)
         // console.log("enddate::" + endDate)
-        
+        console.log(res.locals)
         const manCount = await User.count({
-            sex: "erkek",
+            sex: "male",
             company: res.locals.company._id,
             registerDate: {
                 $gte: startDate,
@@ -27,7 +27,7 @@ const getSexStaticsWithFilter = async (req, res) => {
 
 
         const womanCount = await User.count({
-            sex: "kadın",
+            sex: "female",
             company: res.locals.company._id,
             registerDate: {
                 $gte: startDate,
@@ -36,8 +36,8 @@ const getSexStaticsWithFilter = async (req, res) => {
         })
         
         res.json({
-            link:"statics",
-            message: "sex_statics",
+            success:true,
+            message: "cinsiyet istatistikleri başarıyla çekildi",
             sexStatics: [womanCount, manCount]
         })
         
@@ -51,18 +51,17 @@ const getSexStaticsWithFilter = async (req, res) => {
 }
 const getNewUserStaticswithFilter = async (req, res) => {
     try {
-
-       
         
         res.json({
-            succes:"true"
+            succes:true,
+            message:"istatistikler başarıyla çekildi."
         })
         
 
     } catch (error) {
         res.status(500).json({
             succes: false,
-            message: "usercontroller error"
+            message: "statics error"
         })
     }
 }
@@ -95,6 +94,7 @@ const getPaymentStaticsWithFilter = async (req, res) => {
 
         res.status(200).json({
             succes: true,
+            message:"kasa istatistikleri çekildi",
             paymentstatics: [cashCount, creditCardCount]
         })
 

@@ -9,7 +9,7 @@ const createEmployees = async (req, res) => {
     data.company = res.locals.company._id;
 
     const employee = await Employee.create(data);
-
+    // TODO
     // await Company.updateOne(
     //   { _id: res.locals.company._id },
     //   {

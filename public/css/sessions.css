@@ -76,16 +76,14 @@
   text-align: center;
 }
 .days {
-  display: flex;
-
-  flex-wrap: wrap;
-  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto;
 }
 .days .day {
-  width: 14.28%;
+ 
   border: 1px solid rgba(128, 128, 128, 0.1);
   text-align: center;
-  height: 90px;
+  height: 70px;
   display: flex;
   flex-direction: column;
   justify-content: center;

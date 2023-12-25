@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import { CustomError } from "../helpers/error/CustomError.js";
-import SERVICES_LIST from '../config/services_list.js'
+import SERVICES_LIST from "../config/services_list.js";
 import Order from "../models/OrderModel.js";
 
 const createCompany = async (req, res, next) => {
@@ -21,12 +21,11 @@ const createCompany = async (req, res, next) => {
       newDate.setMonth(newDate.getMonth() + 1)
     ).toISOString();
 
-    const processes =SERVICES_LIST
-    
+    const processes = SERVICES_LIST;
 
     req.body.services = [];
 
-    processes.forEach(process => {
+    processes.forEach((process) => {
       req.body.services.push({
         serviceName: process,
         servicePrice: 99,
@@ -37,25 +36,24 @@ const createCompany = async (req, res, next) => {
     if (data.password !== data.password2) {
       return next(new Error("Girdiğiniz şifreler farklıdır", 400));
     }
-    console.log(data)
+    console.log(data);
     const company = await Company.create(data);
     data.role = "Admin";
     data.company = company._id;
-    
+
     await Employee.create(data);
-    let orderData={
-      company:company._id,
-      amount:0,
-      paymentDuration:30,
-      paymentTransactionId:0
-    }
+    let orderData = {
+      company: company._id,
+      amount: 0,
+      paymentDuration: 30,
+      paymentTransactionId: 0,
+    };
     await Order.create(orderData);
     next();
   } catch (error) {
     return next(error);
   }
 };
-
 
 const deactivateUser = async (req, res) => {
   try {
@@ -216,6 +214,7 @@ const findEmployees = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
+    console.log(req.body)
     const data = req.body;
     data.company = res.locals.company._id;
 
@@ -259,13 +258,12 @@ const loginUser = async (req, res, next) => {
   try {
     let same = false;
 
-    
     const employee = await Employee.findOne({ email: req.body.email });
-    
+
     if (employee) {
-      const company = await Company.findOne({ _id: employee.company }); 
+      const company = await Company.findOne({ _id: employee.company });
       same = await bcrypt.compare(req.body.password, employee.password);
-      console.log(company)
+      console.log(company);
       if (same) {
         const token = createToken(company._id, employee._id);
         res.cookie("jsonwebtoken", token, {
@@ -298,9 +296,10 @@ const uploadPictures = async (req, res) => {
         use_filename: true,
         folder: "archimet",
       });
-      console.log(result);
+
       return { secure_url: result.secure_url, public_id: result.public_id };
     };
+    console.log("burası");
 
     const files = req.files.upload_file;
 
@@ -329,7 +328,6 @@ const uploadPictures = async (req, res) => {
       console.log("ÇOKLU RESİM");
 
       for (const file of files) {
-        console.log(file);
         const path = file.tempFilePath;
         const data = await cloudinaryImageUploadMethod(path);
         await User.updateOne(
@@ -349,44 +347,65 @@ const uploadPictures = async (req, res) => {
       }
     }
 
-    res.redirect("back");
+    res.json({
+      succes: true,
+      message: "resim başarıyla eklendi",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      succes: "ekleme hatası",
+      succes: false,
       message: error,
     });
   }
 };
 
 const deletePhoto = async (req, res) => {
+  console.log("burası");
+  console.log(req.params);
   try {
+    
+//TODO
+// resim silmeye çalışan müşteri kendisi mi kontrol ediecek  @@SECURITY
+
     cloudinary.uploader.destroy(
       "archimet/" + req.params.public_id,
       function (error, result) {
         if (error) {
           console.log(error);
         }
-        console.log(result);
       }
     );
 
-    console.log(req.params);
-
-    await User.updateOne(
+    User.updateOne(
       { _id: req.params.id },
       {
         $pull: {
           images: { public_id: "archimet/" + req.params.public_id },
         },
       }
-    );
+    ).then(response=>console.log(response))
+    .catch(err=>console.log(err));
 
-    res.redirect("back");
+    
+
+    res.json({ success: true, message: "resim başarıyla silindi" });
   } catch (error) {
     res.status(500).json({
       succes: false,
       message: "delete photo error",
+    });
+  }
+};
+const getAllPhotos = async (req, res) => {
+  try {
+    const singleUser = await User.findById(req.params.id);
+    const photos = singleUser.images;
+    res.json({ success: true, message: "resimler çekildi", photos });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "resimler çekilirken bir hata oluştu",
     });
   }
 };
@@ -407,17 +426,15 @@ const logOut = (req, res) => {
 
 const resetPasswordMail = async (req, res, next) => {
   try {
-    
     const employee = await Employee.findOne({ email: req.body.email });
-    
-    
+
     if (!employee) {
       next(new CustomError("Kayıtlı kullanıcı Bulunamadı", 400));
     } else {
       const email = req.body.email;
-      
-      const resetToken = employee.createResetPasswordToken(email); 
-      
+
+      const resetToken = employee.createResetPasswordToken(email);
+
       await employee.save();
       const resetUrl = `${req.protocol}://${req.get(
         "host"
@@ -456,4 +473,5 @@ export {
   findEmployees,
   activateUser,
   deletePhoto,
+  getAllPhotos,
 };

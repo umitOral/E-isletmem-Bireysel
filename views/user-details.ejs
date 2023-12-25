@@ -5,7 +5,9 @@
     <%- include('partials/head.ejs') %>
 
         <link rel="stylesheet" href="/css/user-details.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <!-- js ----------- -->
         <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
@@ -15,13 +17,13 @@
     <%- include("partials/aside.ejs") %>
         <section id="content">
             <!---------- left aside ------------->
-            
+
             <%- include('partials/header.ejs') %>
 
                 <!----------- end of sidebar ----------->
 
                 <main>
-                    <div class="user-informations">
+                    <div class="user-informations" data-userıd="<%= singleUser._id %>">
 
                         <div class="left_section">
                             <div class="user-img"><i class="ph-bold ph-user"></i></div>
@@ -58,189 +60,235 @@
                             <div class="contents">
 
                                 <div class="userInformationsContent showed_content  generals">
-                                    <h2>Bilgiler</h2>
-                                    <hr>
-                                    <div class="inputs ">
-                                        <span>İsim</span>
-                                        <input type="text" name="" id="name" value="<%= singleUser.name %>" readonly>
-                                    </div>
-                                    <div class="inputs ">
-                                        <span>Soyisim</span>
-                                        <input type="text" name="" id="surname" value="<%= singleUser.surname %>"
-                                            readonly>
-                                    </div>
-                                    <div class="inputs ">
-                                        <span>Cinsiyet</span>
-                                        <input type="text" name="" id="" value="<%= singleUser.sex %>" readonly>
-                                    </div>
-                                    <div class="inputs ">
-                                        <span>Doğum Tarihi</span>
-                                        <input type="date" name="" id="" value="<%= singleUser.birthDate %>" readonly>
-                                    </div>
-                                    <div class="inputs ">
-                                        <span>Mail</span>
-                                        <input type="email" name="" id="" value="<%= singleUser.email %>" readonly>
+                                    <div>
+                                        <h2>Bilgiler</h2>
                                     </div>
 
-                                    <div class="inputs">
-                                        <span>Adres:</span>
-                                        <input type="text" value="<%= singleUser.address %>" readonly>
-                                    </div>
-                                    <div class="inputs">
-                                        <span>Şirket:</span>
-                                        <input type="text" value="<%= singleUser.userCompany %>" readonly>
-                                    </div>
-                                    <div class="inputs ">
-                                        <span>Fatura Adresi:</span>
-                                        <input type="text" name="" id="" value="<%= singleUser.billingAddress %>"
-                                            readonly>
+                                    <div class="contentBody">
+                                        <div class="inputs ">
+                                            <span>İsim</span>
+                                            <input type="text" name="" id="name" value="<%= singleUser.name %>"
+                                                readonly>
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Soyisim</span>
+                                            <input type="text" name="" id="surname" value="<%= singleUser.surname %>"
+                                                readonly>
+                                        </div>
+                                        <div class="options ">
+                                            <span>Cinsiyet</span>
+                                            <% if(singleUser.sex==="male"){ %>
+                                                <div>
+                                                   
+                                                    <input type="radio" id="sex-man" name="sex" value="male" checked="checked">
+                                                    &nbsp; <label for="sex-man">Erkek</label>
+                    
+                                                </div>
+                                              <% } else{ %>  
+                                                <div>
+                                                    <input type="radio" id="sex-women" name="sex" value="female" checked="checked">
+                                                    &nbsp; <label for="sex-women">Kadın</label>
+                    
+                                                </div>
+                                             <% } %>
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Doğum Tarihi</span>
+                                            <input type="date" name="" id="" value="<%= singleUser.birthDate %>"
+                                                readonly>
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Mail</span>
+                                            <input type="email" name="" id="" value="<%= singleUser.email %>" readonly>
+                                        </div>
 
-                                    </div>
-                                    <div class="inputs ">
-                                        <span>Telefon</span>
-                                        <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
-                                    </div>
+                                        <div class="inputs">
+                                            <span>Adres:</span>
+                                            <input type="text" value="<%= singleUser.address %>" readonly>
+                                        </div>
+                                        <div class="inputs">
+                                            <span>Şirket:</span>
+                                            <input type="text" value="<%= singleUser.userCompany %>" readonly>
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Fatura Adresi:</span>
+                                            <input type="text" name="" id="" value="<%= singleUser.billingAddress %>"
+                                                readonly>
+
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Telefon</span>
+                                            <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
+                                        </div>
 
 
-                                    <div class="inputs ">
-                                        <span>Açıklama</span>
-                                        <input type="text" name="" id="" value="<%= singleUser.notes %>" readonly>
+                                        <div class="inputs ">
+                                            <span>Açıklama</span>
+                                            <input type="text" name="" id="" value="<%= singleUser.notes %>" readonly>
+                                        </div>
                                     </div>
                                     <span class="edit-informations-btn">Düzenle</span>
 
 
                                 </div>
                                 <div class="userInformationsContent  sessions ">
-                                    <h2>Seanslar</h2>
-                                    <hr>
-
-                                    <div class="table user-table">
-                                        <table >
-                                            <thead>
-
-                                                <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
-                                                <th>Saat</th>
-                                                <th>Personel<i class="fa-solid fa-arrow-up"></i></th>
-                                                <th>İşlemler</td>
-                                                <th>Notlar</th>
-                                                <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></th>
-                                            </thead>
-                                            <% sessions.forEach(session=> { %>
-                                                <tr>
-
-                                                    <td>
-                                                        <%= new Date(session.date).toLocaleDateString() %>
-                                                    </td>
-                                                    
-                                                    <td>
-                                                        <%= new Date(session.startHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}) %>-
-                                                        <%= new Date(session.endHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}) %>
-                                                    </td>
-                                                    
-                                                    <td>
-                                                        <%= session.doctor.name%>
-                                                    </td>
-                                                    <td>
-                                                        <%= session.services %>
-                                                    </td>
-                                                    <td>
-                                                        <%= session.description %>
-                                                    </td>
-
-
-                                                    <td>
-                                                        <p class="finish">
-                                                            <%= session.state %>
-                                                        </p>
-                                                    </td>
-                                                    <td><a href="#">Düzenle</a></td>
-                                                </tr>
-                                                <% }) %>
-
-
-                                        </table>
-
+                                    <div>
+                                        <h2>Seanslar</h2>
                                     </div>
+                                    <div class="contentBody">
+
+                                        <div class="table-wrapper">
+                                            <table>
+                                                <thead>
+
+                                                    <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
+                                                    <th>Saat</th>
+                                                    <th>Personel<i class="fa-solid fa-arrow-up"></i></th>
+                                                    <th>İşlemler</td>
+                                                    <th>Notlar</th>
+                                                    <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></th>
+                                                </thead>
+                                                <tbody class="sessionTableBody">
+                                                    <% sessions.forEach(session=> { %>
+                                                        <tr>
+    
+                                                            <td>
+                                                                <%= new Date(session.date).toLocaleDateString() %>
+                                                            </td>
+    
+                                                            <td>
+                                                                <%= new
+                                                                    Date(session.startHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
+                                                                    %>-
+                                                                    <%= new
+                                                                        Date(session.endHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
+                                                                        %>
+                                                            </td>
+    
+                                                            <td>
+                                                                <%= session.doctor.name%>
+                                                            </td>
+                                                            <td>
+                                                                <%= session.services %>
+                                                            </td>
+                                                            <td>
+                                                                <%= session.description %>
+                                                            </td>
+    
+    
+                                                            <td>
+                                                                <p class="finish">
+                                                                    <%= session.state %>
+                                                                </p>
+                                                            </td>
+                                                            <td style="position: relative;">
+    
+                                                                <i class="fa-solid fa-ellipsis-vertical edit_modals"></i>
+    
+                                                                <div class="session-options-modal"
+                                                                    data-appointmentID="<%= session._id %>">
+                                                                    <span class="edit-session-btn">Düzenle</span>
+                                                                    <span class="delete-session">Sil</span>
+                                                                    <span class="change-state">Bitti</span>
+                                                                    <span class="change-state">Seansta</span>
+                                                                    <span class="change-state">Hasta Gelmedi</span>
+                                                                    <span class="change-state">Personel Gelmedi</span>
+                                                                </div>
+    
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                                </tbody>
+                                                
+
+
+                                            </table>
+
+                                        </div>
+                                    </div>
+
 
                                 </div>
                                 <div class="userInformationsContent payments">
-                                    <h2>Ödemeler</h2>
-
-                                    <div class="table user-table">
-                                        <table >
-                                            <thead>
-                                                <th>Id</th>
-                                                <th>Tarih</th>
-                                                <th>Tutar</th>
-                                                <th>K.Kartı/Nakit</td>
-
-                                            </thead>
-
-                                            <% payments.forEach(payment=> { %>
-                                                <tr>
-
-                                                    <td>
-                                                        <%= new Date(payment.createdAt).toLocaleDateString() %>
-                                                    </td>
-                                                    <td>
-                                                        <%= payment.cashOrCard %>
-                                                    </td>
-                                                    <td>
-                                                        <%= payment.value %>
-                                                    </td>
-
-
-
-
-                                                    <td><a href="#">Düzenle</a></td>
-                                                </tr>
-                                                <% }) %>
-
-
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>Toplam:</td>
-                                                        <td> xxxxx</td>
-                                                    </tr>
-
-                                        </table>
-
+                                    <div>
+                                        <h2>Ödemeler</h2>
                                     </div>
+                                    <div class="contenBody">
+                                        <div class="table user-table">
+                                            <table>
+                                                <thead>
+                                                    <th>Id</th>
+                                                    <th>Tarih</th>
+                                                    <th>Tutar</th>
+                                                    <th>K.Kartı/Nakit</td>
+
+                                                </thead>
+
+                                                <% payments.forEach(payment=> { %>
+                                                    <tr>
+
+                                                        <td>
+                                                            <%= new Date(payment.createdAt).toLocaleDateString() %>
+                                                        </td>
+                                                        <td>
+                                                            <%= payment.cashOrCard %>
+                                                        </td>
+                                                        <td>
+                                                            <%= payment.value %>
+                                                        </td>
+
+
+
+
+                                                        <td><a href="#">Düzenle</a></td>
+                                                    </tr>
+                                                    <% }) %>
+
+
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>Toplam:</td>
+                                                            <td> xxxxx</td>
+                                                        </tr>
+
+                                            </table>
+
+                                        </div>
+                                    </div>
+
 
                                 </div>
                                 <div class="userInformationsContent  images ">
-                                    <h2>Resimler</h2>
+                                    <div>
+                                        <h2>Resimler</h2>
+
+                                    </div>
                                     <button class="button add">Resim Ekle</button>
-                                    <hr>
-                                    
-                                    
-                                    
+
+
+
                                     <div class="all-images">
                                         <div class="small_images">
                                             <% singleUser.images.forEach(element=> { %>
-                                                
+                                                <!-- 
                                                 <img src=" <%= element.url %>" alt="aaa">
                                                 <div class="small_images_options">
                                                     <span>
                                                         <%=element.uploadTime %> .Ay
                                                     </span>
-                                                    
-                                                    
-                                                        <a href="./<%= singleUser.id %>/<%= element.public_id.split("/")[1] %>/deletePhoto" data-photoid="<%= element._id %>">Sil</a>
-                                                    
+                                                    <span data-photoid="<%= element._id %>" data-publicID="<%= (element.public_id).split("/")[1]%>">
+                                                        Sil
+                                                    </span>
                                                 </div>
-    
-    
-                                                <% }) %>
-                                        </div>
-                                        <div id="big_image_wrapper">
-                                            <img src="" alt="" class="imageBig">
-    
+                                                <% }) %> -->
                                         </div>
 
+
                                     </div>
-                                    
+
+
+
 
                                 </div>
                                 <div class="userInformationsContent procces">
@@ -270,7 +318,14 @@
                         </div>
 
                     </div>
+                    <div class="modalBigImage">
+                        <div class="image-container">
+                            <i class="fa-solid fa-x"></i>
+                            <img src="" alt="" class="imageBig">
+                        </div>
+                    </div>
                 </main>
+
                 <div class=" modal modal_user">
 
                     <h2>Genel Bilgileri Düzenle</h2>
@@ -289,6 +344,29 @@
                             <span>Email</span>
                             <input type="text" name="email" id="" value="<%= singleUser.email %>"
                                 placeholder="<%= singleUser.address %>">
+                        </div>
+                        <div class="options">
+                            <span>Cinsiyet:</span>
+                            <% if(singleUser.sex==="male"){ %>
+                                <div>
+                                    <input type="radio" id="sex-women-update" name="sex" value="female" >
+                                    &nbsp; <label for="sex-women-update">Kadın</label>
+    
+                                    <input type="radio" id="sex-man-update" name="sex" value="male" checked="checked">
+                                    &nbsp; <label for="sex-man-update">Erkek</label>
+    
+                                </div>
+                              <% } else{ %>  
+                                <div>
+                                    <input type="radio" id="sex-women-update" name="sex" value="female" checked="checked">
+                                    &nbsp; <label for="sex-women-update">Kadın</label>
+    
+                                    <input type="radio" id="sex-man-update" name="sex" value="male">
+                                    &nbsp; <label for="sex-man-update">Erkek</label>
+    
+                                </div>
+                             <% } %>
+
                         </div>
                         <div class="inputs ">
                             <span>Adres</span>
@@ -389,17 +467,18 @@
                 <div class="modal modal_image">
                     <h2>Resim Ekle</h2>
 
-                    <form action="./<%= singleUser._id %>/uploadpictures" method="POST" enctype="multipart/form-data">
+                    <form action="./<%= singleUser._id %>/uploadpictures" method="POST" enctype="multipart/form-data"
+                        id="add_picture_form">
 
                         <div class="inputs ">
                             <span>Resim seç</span>
-                            <input type="file" name="upload_file" src="" alt="" multiple required
-                                onchange="getImagePreview(event)">
+                            <input type="file" name="upload_file" id="upload_file" class="upload_file" src="" alt=""
+                                multiple required>
                         </div>
                         <div class="uploaded_images_preview"></div>
                         <div>
                             çekilme zamanı:
-                            <input type="text" name="uploadTime" required>
+                            <input type="number" name="uploadTime" id="uploadTime" required>
                         </div>
 
 
@@ -407,15 +486,16 @@
                         <button class="cancel_button">Vazgeç</button>
                     </form>
                 </div>
-                
+                <div class="information-modal"></div>
                 <div class="loader_wrapper hidden">
                     <img src="../../photos/loading.gif" alt="" class="loader">
                 </div>
 
-            </section>
+        </section>
 
 
-        </main>
+
+
         </div>
 
 
@@ -424,10 +504,10 @@
         <script type="module" src="/js/requests.js"></script>
         <script type="module" src="/js/user_details.js"></script>
         <script type="module" src="/js/inner_modules/tables.js"></script>
-        
+
         <script src="/js/sidebar.js"></script>
         <script>
-            
+
         </script>
 
 

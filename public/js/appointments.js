@@ -8,6 +8,7 @@ const calendar = document.querySelector(".calendar"),
   calendarHead = document.querySelector(".calendar-head"),
   daysContainer = document.querySelector(".days"),
   prev = document.querySelector(".prev"),
+  
   next = document.querySelector(".next"),
   todayBtn = document.querySelector(".today-btn"),
   gotoBtn = document.querySelector(".goto-btn"),
@@ -35,16 +36,17 @@ getAllSessions();
 
 function showDatesAtPage(params) {
   if (params) {
+    console.log(params)
     calendarHead.textContent = new Date(params).toLocaleDateString("locale", {
       month: "long",
       year: "numeric",
     });
-    appointmentListDate.textContent = new Date(params).toLocaleDateString([], {
-      weekday: "long",
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-    });
+    // appointmentListDate.textContent = new Date(params).toLocaleDateString([], {
+    //   weekday: "long",
+    //   day: "2-digit",
+    //   month: "2-digit",
+    //   year: "2-digit",
+    // });
   } else {
     calendarHead.textContent = today.toLocaleDateString([], {
       month: "long",
@@ -235,17 +237,22 @@ function prevMonth() {
     month = 11;
     year--;
   }
-
+  selectedDate = year + "-" + (month + 1) + "-" + activeDay;
+  console.log(selectedDate)
+  showDatesAtPage(selectedDate)
   initCalender();
 }
 
 function nextMonth() {
+  
   month++;
   if (month > 11) {
     month = 0;
     year++;
   }
 
+  selectedDate = year + "-" + (month + 1) + "-" + activeDay;
+  showDatesAtPage(selectedDate)
   initCalender();
 }
 
@@ -325,7 +332,7 @@ function addListener() {
 
       selectedDate = year + "-" + (month + 1) + "-" + activeDay;
       console.log(selectedDate);
-      ui.selectedDatetoUI(selectedDate);
+      ui.selectedDatetoAppointmentUI(selectedDate);
       ui.deleteAllSessionFromUI();
       getAllSessions(selectedDate);
 
@@ -351,10 +358,12 @@ function addListener() {
         nextMonth();
         setTimeout(() => {
           days.forEach((element) => {
+            
             if (
               !element.classList.contains("next-date") &&
               element.innerHTML === e.target.innerHTML
             ) {
+              console.log(element)
               element.classList.add("active");
             }
           });

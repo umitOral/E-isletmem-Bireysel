@@ -1,6 +1,6 @@
 import express from 'express';
 import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,getAppointmentsPage,getEmployeessStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getSingleEmployeePage,getservicesPage,getEmployeesPage,getPaymentsPage} from '../controller/pageController.js';
-import {logOut,addUser,deletePhoto,uploadPictures,editInformations,findUser,findEmployees,deactivateUser,activateUser} from '../controller/userController.js';
+import {logOut,addUser,deletePhoto,uploadPictures,getAllPhotos,editInformations,findUser,findEmployees,deactivateUser,activateUser} from '../controller/userController.js';
 import {createEmployees,editInformationsEmployees} from '../controller/employeesController.js';
 
 import {addService,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
@@ -23,8 +23,10 @@ router.route("/users/:id").get(getSinglePage)
 router.route("/users/:id/deactivateUser").get(deactivateUser)
 router.route("/users/:id/activateUser").get(activateUser)
 router.route("/users/:id/uploadpictures").post(uploadPictures)
-router.route("/users/:id/:public_id/deletePhoto").get(deletePhoto)
+router.route("/users/:id/getAllPhotos").get(getAllPhotos)
+router.route("/users/:id/deletePhoto/:public_id").get(deletePhoto)
 router.route("/users/:id/editInformations").post(editInformations)
+router.route("/addUser").post(addUser)
 
 
 router.route("/payments").get(getPaymentsPage)
@@ -38,7 +40,6 @@ router.route("/payments/addExpense").post(addExpense)
 router.route("/companyPaymentPage").get(companyPaymentPage)
 router.route("/companyPaymentsList").get(companyPaymentsListPage)
 router.route("/addCompanyPayment").post(addCompanyPayment)
-
 
 router.route("/employees").get(getEmployeesPage)
 router.route("/employees/:id").get(verifyRoles(ROLES_LIST.ADMIN),getSingleEmployeePage)
@@ -58,7 +59,7 @@ router.route("/statics/getNewUserStaticswithFilter").get(getNewUserStaticswithFi
 router.route("/statics/getPaymentStaticsWithFilter").get(getPaymentStaticsWithFilter)
 
 router.route("/logout").get(logOut)
-router.route("/addUser").post(addUser)
+
 
 router.route("/services/").get(getservicesPage)
 router.route("/services/search").get(findServices)

@@ -54,7 +54,8 @@ const updateStateAppointment = async (req, res) => {
         
         res.json({
             succes:true,
-            message:"state değişti"
+            message:"Seans durumu değişti",
+            data:req.query.state
         })
         
     }

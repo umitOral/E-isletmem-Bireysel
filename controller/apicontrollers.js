@@ -21,6 +21,22 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
+const getAllSessions = async (req, res) => {
+  try {
+    const sessions= await Session.find({user:req.params.userID}).populate(["doctor"])
+
+    res.status(200).json({
+      succes: true,
+      sessions: sessions,
+      message: "seanslar başarıyla çekildi",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "api hatası",
+    });
+  }
+};
 
 const newPassword = async (req, res, next) => {
   try {
@@ -104,4 +120,4 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
   }
 };
 
-export { getAllUsers, getSingleDayAllDoctorSessions, newPassword };
+export { getAllUsers, getSingleDayAllDoctorSessions, newPassword,getAllSessions};

@@ -3,7 +3,7 @@
 
 <head>
     <%- include('../partials/head.ejs') %>
-        
+
         <link rel="stylesheet" href="../../css/statics.css">
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
@@ -13,7 +13,7 @@
 
 <body>
     <%- include('../partials/aside.ejs') %>
-    
+
         <section id="content">
             <!---------- left aside ------------->
             <%- include('../partials/header.ejs') %>
@@ -21,19 +21,21 @@
                 <!----------- end of sidebar ----------->
 
                 <main>
-                    
-                    
-                    
+
+
+
                     <h1> Kullanıcı İstatistikleri</h1>
                     <div class="statics-wrapper">
                         <div class="statics-menu">
                             <ul>
-                                <li class="sex-statics_btn"><span>Yeni Hastalar</span></li>
+                                <li class="sex-statics_btn"><span>Cinsiyet Dağılımı</span></li>
                                 <li class="new-users-statics_btn"><span>Yeni hasta Oranı</span></li>
-                                
+
                             </ul>
                         </div>
-                        <div class="sub-header-statics"><h2></h2></div>
+                        <div class="sub-header-statics">
+                            <h2></h2>
+                        </div>
                         <div class="statics-area">
 
                             <form action="">
@@ -47,9 +49,10 @@
                                 </div>
 
                                 <span class="buttons sex-statics-filter-button" style="display:none">Listele</span>
-                                <span class="buttons new-users-statics-filter-button" style="display:none">Listele</span>
-                                
-                                
+                                <span class="buttons new-users-statics-filter-button"
+                                    style="display:none">Listele</span>
+
+
                             </form>
                             <hr>
                             <p class="filter-info"></p>
@@ -62,7 +65,8 @@
 
 
                 </main>
-            </section>
+        </section>
+        <div class="information-modal"></div>
 
 
 

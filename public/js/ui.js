@@ -81,7 +81,7 @@ export class UI {
             `;
     });
   }
-  selectedDatetoUI(selectedDate) {
+  selectedDatetoAppointmentUI(selectedDate) {
     const eventDate = document.querySelector(".appointment-list");
     eventDate.textContent = new Date(selectedDate).toLocaleDateString([], {
       weekday: "long",
