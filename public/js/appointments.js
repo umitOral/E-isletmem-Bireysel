@@ -4,6 +4,7 @@ const request = new Request();
 import { UI } from "./ui.js";
 const ui = new UI();
 
+const loader = document.querySelector(".loader_wrapper.hidden");
 const calendar = document.querySelector(".calendar"),
   calendarHead = document.querySelector(".calendar-head"),
   daysContainer = document.querySelector(".days"),
@@ -62,18 +63,20 @@ function showDatesAtPage(params) {
 }
 
 function getAllSessions() {
+  
   request
     .getwithUrl("/api/getSingleDayAllDoctorSessions/" + selectedDate)
     .then((response) => {
       console.log(response);
-      const sessionsAllDoctor = response.sessionsAllDoctor;
+      const allDoctorAllSessions = response.allDoctorAllSessions;
       const AllDoctor = response.doctors;
       const workHours = response.workHours;
+      
       //array
 
-      let allTimesofSingleDoctor = [];
-
-      sessionsAllDoctor.forEach((singleDoctorData) => {
+      let allTimesAllDoctor = [];
+      
+      allDoctorAllSessions.forEach((singleDoctorData) => {
         const times = [];
         const workStartTime = workHours.workStart;
         const workFinishTime = workHours.workEnd;
@@ -101,24 +104,41 @@ function getAllSessions() {
 
           return date;
         }
+        
+        
 
-        singleDoctorData.sessionsofdoctor.forEach((element, index) => {
+       singleDoctorData.sessionsofdoctorforactualDay.forEach((element, index) => {
+         
           times.splice(
             element.timeIndexes[0],
             element.timeIndexes[1] - element.timeIndexes[0] + 1,
             element
           );
         });
-
-        allTimesofSingleDoctor.push(times);
+        
+        allTimesAllDoctor.push(times);
       });
-
-      ui.showAllSessionToUI(allTimesofSingleDoctor, AllDoctor);
+      console.log(allTimesAllDoctor)
+      
+      ui.showAllSessionToUI(allTimesAllDoctor, AllDoctor);
+      
 
       changeState();
     })
 
     .catch((err) => console.log(err));
+}
+
+async function dayFullOrNight() {
+
+  let responseData={}
+ await  request.getwithUrl("/api/getDaysFullorNot/" + selectedDate)
+    .then((response) => {
+      responseData=response.sessionsFullorNot
+  })
+  .catch(err=>console.log(err))
+
+  return responseData
 }
 
 function changeState() {
@@ -170,7 +190,11 @@ function changeState() {
 }
 initCalender();
 // calendar  ---------------------------------
-function initCalender() {
+async function initCalender() {
+  loader.classList.toggle("showed");
+  const fullorNot= await  dayFullOrNight()
+  console.log(fullorNot)
+
   const firstDay = new Date(year, month, 1); //mevcut ayın ilk gün tarihi
   const lastDay = new Date(year, month + 1, 0); //mevcut ayın son gün tarihi
   const prevLastDay = new Date(year, month, 0); //önceki ayın son gün tarihini
@@ -181,7 +205,7 @@ function initCalender() {
 
   const nextDays = 7 - lastDay.getDay();
 
-
+  
 
   let days = "";
 
@@ -194,7 +218,7 @@ function initCalender() {
   // current day and remaining day ----------------------------------------------------------------
 
   for (let i = 1; i <= lastDate; i++) {
-    let event = false;
+    let full = false;
 
     if (
       i === new Date().getDate() &&
@@ -203,20 +227,28 @@ function initCalender() {
     ) {
       activeDay = i;
 
-      if (event) {
+      if (fullorNot[i-1]===true) {
         days += `
-                <div class="day today event active">${i}</div> `;
+                <div class="day today active">${i}
+                <div class="full-day"></div>
+                </div> `;
       } else {
         days += `
-                <div class="day today active">${i}</div> `;
+                <div class="day today active">${i}
+                <div class="empty-day"></div>
+                </div> `;
       }
     } else {
-      if (event) {
+      if (fullorNot[i-1]===true) {
         days += `
-                <div class="day event">${i}</div> `;
+                <div class="day">${i}
+                <div class="full-day"></div>
+                </div> `;
       } else {
         days += `
-                <div class="day">${i}</div> `;
+                <div class="day">${i}
+                <div class="empty-day"></div>
+                </div> `;
       }
     }
   }
@@ -228,6 +260,7 @@ function initCalender() {
   }
 
   daysContainer.innerHTML = days;
+  loader.classList.toggle("showed");
   addListener();
 }
 
@@ -325,17 +358,17 @@ function addListener() {
   days.forEach((element) => {
     element.addEventListener("click", (e) => {
       // set current day active
-
-      let activeDay = e.target.innerHTML.trim();
+      
+      let activeDay = e.target.textContent.trim();
 
       const activeDate = new Date(year, month, activeDay);
 
       selectedDate = year + "-" + (month + 1) + "-" + activeDay;
-      console.log(selectedDate);
+      
       ui.selectedDatetoAppointmentUI(selectedDate);
       ui.deleteAllSessionFromUI();
       getAllSessions(selectedDate);
-
+      
       days.forEach((element) => {
         element.classList.remove("active");
       });

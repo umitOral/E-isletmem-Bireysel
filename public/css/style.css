@@ -9,7 +9,9 @@
   --color-main-lighter2: #94F2F2;
   --color-main-lighter3: #B6F2F2;
   --color-main-gray: #F2F2F2;
-
+  --hue: 223;
+	--bg: hsl(var(--hue),10%,90%);
+	--fg: hsl(var(--hue),10%,10%);
   
   --color-primary: #7380ec;
   --color-danger: #ff7782;
@@ -79,10 +81,10 @@ input {
   left: 0;
   width: 100vw;
   height: 100vh;
-  /* background-color: #fff; */
+  background-color: #ffffff79;
   z-index: 999;
   display: flex;
-
+flex-direction: column;
   justify-content: center;
   align-items: center;
   transition: opacity 0.75s;
@@ -137,14 +139,7 @@ input {
   background-color: red;
 }
 
-@keyframes loading {
-  from {
-    transform: rotate(0turn);
-  }
-  to {
-    transform: rotate(1turn);
-  }
-}
+
 button {
   border: 1px solid rgba(128, 128, 128, 0.394);
   border-radius: var(--border-radius-1);
@@ -1073,7 +1068,63 @@ header .head {
 }
 
 /* -----------------print section end -------------- */
+/* ------------------------loader */
 
+
+.pl {
+	display: block;
+	width: 6.25em;
+	height: 6.25em;
+}
+.pl__ring, .pl__ball {
+	animation: ring 2s ease-out infinite;
+}
+.pl__ball {
+	animation-name: ball;
+}
+
+/* Dark theme  */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: hsl(var(--hue),10%,10%);
+		--fg: hsl(var(--hue),10%,90%);
+	}
+}
+
+/* Animation */
+@keyframes ring {
+	from {
+		stroke-dasharray: 0 257 0 0 1 0 0 258;
+	}
+	25% {
+		stroke-dasharray: 0 0 0 0 257 0 258 0;
+	}
+	50%, to {
+		stroke-dasharray: 0 0 0 0 0 515 0 0;
+	}
+}
+@keyframes ball {
+	from, 50% {
+		animation-timing-function: ease-in;
+		stroke-dashoffset: 1;
+	}
+	64% {
+		animation-timing-function: ease-in;
+		stroke-dashoffset: -109;
+	}
+	78% {
+		animation-timing-function: ease-in;
+		stroke-dashoffset: -145;
+	}
+	92% {
+		animation-timing-function: ease-in;
+		stroke-dashoffset: -157;
+	}
+	57%, 71%, 85%, 99%, to {
+		animation-timing-function: ease-out;
+		stroke-dashoffset: -163;
+	}
+}
 
 /* mobile ------------------------------------------------------------------------------------ */
 @media (max-width: 768px) {

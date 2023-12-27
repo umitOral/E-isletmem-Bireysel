@@ -6,6 +6,8 @@
   --color-main-lighter2: #94F2F2;
   --color-main-lighter3: #B6F2F2;
   --color-main-gray: #F2F2F2;
+  --color-danger: #ff7782;
+  --color-success: #41f1b6;
 }
 .main-sessions {
   display: flex;
@@ -86,7 +88,8 @@
   height: 70px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  border-radius: 5px;
   align-items: center;
   cursor: pointer;
 }
@@ -204,6 +207,7 @@
 
   border: 1px solid rgba(255, 0, 0, 0.107);
   border-radius: 0.5rem;
+  height: max-content;
 }
 
 .doctor-name {
@@ -254,6 +258,21 @@
 .full {
   background-color: rgba(216, 112, 147, 0.2) !important;
   justify-content: space-between;
+}
+
+.full-day{
+ background-color: var(--color-danger);
+ height: 10%;
+ width: 80%;
+ margin-bottom: 5px;
+ border-radius: 5px;
+}
+.empty-day{
+ background-color: var(--color-success);
+ height: 10%;
+ width: 80%;
+ margin-bottom: 5px;
+ border-radius: 5px;
 }
 
 .main-sessions .right .events .event.active {

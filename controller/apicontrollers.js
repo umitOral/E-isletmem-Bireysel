@@ -23,7 +23,9 @@ const getAllUsers = async (req, res) => {
 };
 const getAllSessions = async (req, res) => {
   try {
-    const sessions= await Session.find({user:req.params.userID}).populate(["doctor"])
+    const sessions = await Session.find({ user: req.params.userID }).populate([
+      "doctor",
+    ]);
 
     res.status(200).json({
       succes: true,
@@ -88,29 +90,110 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
       role: "doktor",
       activeOrNot: true,
     });
-    const workHours = res.locals.company.workHours;
 
-    const sessionsAllDoctor = [];
+    // test codes
+    const workHours = res.locals.company.workHours;
+    const allDoctorAllSessions = [];
+
+    const actualDate = new Date(req.params.date + ",Z00:00:00");
     const date = new Date(req.params.date + ",Z00:00:00");
 
-    for (const i of doctors) {
-      const sessionsofdoctor = await Session.find({
-        date: date,
-        doctor: i,
-      })
-        .populate(["user", "doctor"])
-        .sort({ startHour: 1 });
+    let firstDay = date.getDate();
+    let lastDay = new Date(new Date(date.setMonth(date.getMonth() + 1)).setDate(0)).getDate();
+    console.log(firstDay);
+    console.log(lastDay);
 
-      sessionsAllDoctor.push({
-        doctorName: i.name,
-        sessionsofdoctor: sessionsofdoctor,
-      });
+    for (const i in doctors) {
+      if (Object.hasOwnProperty.call(doctors, i)) {
+        const element = doctors[i];
+
+        const sessionsofdoctorforactualDay = await Session.find({
+          date: actualDate,
+          doctor: element,
+        })
+          .populate(["user", "doctor"])
+          .sort({ startHour: 1 });
+        
+        allDoctorAllSessions.push({
+          doctorName: doctors[i].name,
+          sessionsofdoctorforactualDay
+        });
+      }
     }
+   
+
+    console.log(allDoctorAllSessions)
+
 
     res.status(200).json({
       workHours,
       doctors: doctors,
-      sessionsAllDoctor: sessionsAllDoctor,
+      // sessionsAllDoctor: sessionsAllDoctor,
+      allDoctorAllSessions: allDoctorAllSessions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "api hatası",
+    });
+  }
+};
+const getDaysFullorNot = async (req, res) => {
+  try {
+
+    const doctors = await Employee.find({
+      company: res.locals.company._id,
+      role: "doktor",
+      activeOrNot: true,
+    });
+
+    const workHours = res.locals.company.workHours;
+    const actualDate = new Date(req.params.date + ",Z00:00:00");
+    const date = new Date(req.params.date + ",Z00:00:00");
+
+    
+    let lastDay = new Date(new Date(date.setMonth(date.getMonth() + 1)).setDate(0)).getDate();
+    console.log(actualDate);
+    console.log(lastDay);
+
+    let sessionsFullorNot= []
+   
+    for (let index = 1; index <= lastDay; index++) {
+        let daysCount=0
+      for (const i in doctors) {
+        if (Object.hasOwnProperty.call(doctors, i)) {
+          const element = doctors[i];
+
+          const sessionsofdoctorforsingleDay = await Session.find({
+            date: new Date(actualDate.setDate(index)),
+            doctor: doctors[i],
+          }).sort({ startHour: 1 });
+          
+          sessionsofdoctorforsingleDay.forEach((element) => {
+            daysCount +=
+              element.timeIndexes[1] - element.timeIndexes[0] + 1;
+          });
+
+        }
+      }
+     let fullorNot=false
+     if (daysCount ===(Number(workHours.workEnd.split(":")[0]) -Number(workHours.workStart.split(":")[0])) *(60 / workHours.workPeriod)*doctors.length
+     ) {
+      fullorNot=true
+     } else {
+      fullorNot=false
+     }
+
+      sessionsFullorNot.push(
+        fullorNot
+      );
+    
+
+    }
+
+
+    res.status(200).json({
+      sessionsFullorNot:sessionsFullorNot
     });
   } catch (error) {
     res.status(500).json({
@@ -120,4 +203,10 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
   }
 };
 
-export { getAllUsers, getSingleDayAllDoctorSessions, newPassword,getAllSessions};
+export {
+  getAllUsers,
+  getSingleDayAllDoctorSessions,
+  newPassword,
+  getAllSessions,
+  getDaysFullorNot
+};
