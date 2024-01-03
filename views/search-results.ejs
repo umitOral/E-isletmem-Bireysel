@@ -26,9 +26,9 @@
                     <div class="search">
                         <form autocomplete="off" action="./search?page=1&limit=3">
                             <div class="autocomplete inputs">
-                                <input id="myInput" type="text" name="user" placeholder="Hasta Seç">
+                                <input id="myInput" type="text" name="user" placeholder="Hasta Seç" value="<%= defaultSearchValue %>">
                                 
-                                <input type="submit" value="Getir">
+                                <input type="submit" value="Ara">
                             </div>
 
                         </form>
@@ -87,7 +87,7 @@
                     <div class="pagination">
                         
                             <% if (pagination.previous ) { %>
-                                <a href="./search?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span >Önceki Sayfa<<</span></a>
+                                <a href="./search?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span >Önceki Sayfa<<<</a>
                             <% } %>
                             
                             <% if (pagination.page>1) { %>
@@ -110,7 +110,7 @@
                 </main>
                 <div class="add_customer modal">
                     <h2>Yeni Hasta Ekle</h2>
-                    <form action="../addUser" method="POST" id="register-form">
+                    <form action="../users/createUser" method="POST" id="register-form">
                         <div class="inputs ">
                             <span>İsim</span>
                             <input type="text" name="name" id="user-name" required
@@ -168,7 +168,7 @@
                     </form>
                 </div>
             </section>
-
+            <div class="information-modal">AAA</div>
 
        
         <script type="module" src="/js/requests.js"></script>

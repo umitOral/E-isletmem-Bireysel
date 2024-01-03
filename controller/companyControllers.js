@@ -3,6 +3,7 @@ import Employee from "../models/EmployeesModel.js";
 import Order from "../models/OrderModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { orderSuccesEmail } from "./mailControllers.js";
+import axios from "axios";
 
 import Iyzipay from "iyzipay";
 import { v4 as uuidv4 } from "uuid";
@@ -240,9 +241,45 @@ const addCompanyPayment = async (req, res) => {
   }
 };
 
+const getInstallment = async (req, res) => {
+  try {
+    console.log("heyehey");
+    console.log(req.body);
+
+    const headers = new AxiosHeaders(`
+      Host: www.bing.com
+      User-Agent: curl/7.54.0
+      Accept: */*`);
+
+    axios
+      .post("https://api.iyzipay.com/payment/iyzipos/installment", {
+        price: req.body.price,
+        binNumber: req.body.cardInformations,
+        locale: Iyzipay.LOCALE.TR,
+        conversationId: uuidv4(),
+      })
+      .then(function (response) {
+        console.log(response);
+        res.json({
+          success: true,
+          message: response,
+        });
+      })
+      .catch(function (error) {
+        console.log(error.status);
+      });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "ödeme işlemi sırasında sistemsel bir hata oluştu.",
+    });
+  }
+};
+
 export {
   updateCompanyPassword,
   deleteCompany,
   updateCompanyInformations,
   addCompanyPayment,
+  getInstallment,
 };

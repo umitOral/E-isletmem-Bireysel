@@ -18,7 +18,6 @@ const userSchema = new Schema({
     userCompany: { type: String, default:""},
     address: { type: String, require: false },
     billingAddress: { type: String, require: false },
-    registerDate: { type: Date, default: new Date()},
     notes: { type: String, require: false },
     debtStatus: { type: Number, require: 0 },
     images: [{
@@ -33,6 +32,9 @@ const userSchema = new Schema({
     }
 
 
+},
+{
+    timestamps:true
 })
 
 userSchema.pre('save', function (next) {

@@ -52,9 +52,8 @@ function addPaymentRequest(e) {
         .postWithUrl("./addCompanyPayment", data)
         .then((response) => {
           console.log(response);
-         
+
           if (response.success === false) {
-            
             ui.showModal(false, response.result.errorMessage);
             loader.classList.remove("showed");
           } else {
@@ -88,3 +87,18 @@ function addPaymentRequest(e) {
     }
   }
 }
+
+formData.cardNumber.addEventListener("input", () => {
+  let data = {
+    cardInformations:formData.cardNumber.value,
+    price: 2400,
+  };
+  if (formData.cardNumber.value.length === 6) {
+    request
+      .postWithUrl("./getInstallment", data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(err=>{console.log(err)});
+  }
+});

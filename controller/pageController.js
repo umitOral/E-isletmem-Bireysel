@@ -373,11 +373,7 @@ const getEmployeesPage = async (req, res) => {
 
 const getAppointmentsPage = async (req, res) => {
   try {
-    const doctors = await User.find({
-      role: "doctor",
-      company: res.locals.company._id,
-      activeOrNot: true,
-    });
+    
 
     let services = await Company.findById({ _id: res.locals.company._id });
     const activeServices=[]
@@ -390,16 +386,11 @@ const getAppointmentsPage = async (req, res) => {
 
     const users = await User.find({ role: "customer",company:res.locals.company._id});
 
-    const sessions = await Sessions.find({})
-      .sort({ time: 1 })
-      .populate(["user", "doctor"]);
 
     
     res.status(200).render("appointments", {
       link: "appointments",
-      doctors,
       users,
-      sessions,
       services:activeServices
     });
   } catch (error) {

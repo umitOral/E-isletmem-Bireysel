@@ -80,8 +80,7 @@
                                         <% if(singleUser.activeOrNot==true){ %>
                                             <div>
                                                 <input type="radio" id="activeOrNot-true" name="activeOrNot" checked >
-                                                <label for="">Aktif</label>
-                                                
+                                                <label for="activeOrNot-true">Aktif</label>
                                                 
                                                 
                                             </div>
@@ -292,20 +291,20 @@
                             <span>Aktiflik:</span>
                             <% if(singleUser.activeOrNot==true){ %>
                                 <div>
-                                    <input type="radio" id="activeOrNot-true" name="activeOrNot" value="true" checked="checked">
-                                    &nbsp; <label for="activeOrNot-true">Aktif</label>
+                                    <input type="radio" id="activeOrNotUpdate-true" name="activeOrNot" value="true" checked="checked">
+                                    &nbsp; <label for="activeOrNotUpdate-true">Aktif</label>
     
-                                    <input type="radio" id="activeOrNot-false" name="activeOrNot" value="false" >
-                                    &nbsp; <label for="activeOrNot-false">Deaktif</label>
+                                    <input type="radio" id="activeOrNotUpdate-false" name="activeOrNot" value="false" >
+                                    &nbsp; <label for="activeOrNotUpdate-false">Pasif</label>
     
                                 </div>
                               <% } else{ %>  
                                 <div>
-                                    <input type="radio" id="activeOrNot-true" name="activeOrNot" value="true" >
-                                    &nbsp; <label for="activeOrNot-true">Aktif</label>
+                                    <input type="radio" id="activeOrNotUpdate-true" name="activeOrNot" value="true" >
+                                    &nbsp; <label for="activeOrNotUpdate-true">Aktif</label>
     
-                                    <input type="radio" id="activeOrNot-false" name="activeOrNot" value="false" checked="checked" >
-                                    &nbsp; <label for="activeOrNot-false">Deaktif</label>
+                                    <input type="radio" id="activeOrNotUpdate-false" name="activeOrNot" value="false" checked="checked" >
+                                    &nbsp; <label for="activeOrNotUpdate-false">Deaktif</label>
     
                                 </div>
                              <% } %>

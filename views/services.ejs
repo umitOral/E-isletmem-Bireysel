@@ -64,7 +64,7 @@
                                         </td>
                                         <td>
                                             <div class="inputs" data-servicesID="<%= service._id %>">
-                                                <input type="text" class="price_inputs" value="<%= service.servicePrice %>">
+                                                <input type="number" class="price_inputs" value="<%= service.servicePrice %>">
                                                 <i class="ph ph-floppy-disk input_save_buttons"></i>
                                             </div>
                                         </td>
@@ -72,12 +72,12 @@
                                             <% if(service.activeorNot===true){ %>
                                                 <span class="continue">Aktif</span>
                                                 <% } else{ %>
-                                                    <span class="finish">Deaktif</span>
+                                                    <span class="finish">Pasif</span>
                                                     <% } %>
 
                                         </td>
                                         <% if(service.activeorNot){ %>
-                                            <td><a href="./services/<%= service._id %>/deactivateService">Deaktive Et</a></td>
+                                            <td><a href="./services/<%= service._id %>/deactivateService">Pasif Et</a></td>
                                             <% } else{ %>
                                                 <td><a href="./services/<%= service._id %>/activateService">Aktif Et</a></td>
                                                 <% } %>

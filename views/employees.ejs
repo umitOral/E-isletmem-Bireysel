@@ -81,14 +81,14 @@
                                             <% if(employee.activeOrNot ){ %>
                                                 <span class="continue">Aktif</span>
                                                 <% } else{ %>
-                                                    <span class="finish">Deaktif </span>
+                                                    <span class="finish">Pasif </span>
                                                     <% } %>
 
                                         </td>
                                         <% if(employee.activeOrNot){ %>
-                                            <td><a href="./users/<%= employee._id %>/deactivateUser">Deaktive Et</a></td>
+                                            <td><a href="./users/<%= employee._id %>/deactivateEmployee">Pasif Et</a></td>
                                             <% } else{ %>
-                                                <td><a href="./users/<%= employee._id %>/activateUser">Aktif Et</a></td>
+                                                <td><a href="./users/<%= employee._id %>/activateEmployee">Aktif Et</a></td>
                                                 <% } %>
 
                                                     <td><a href="./employees/<%= employee._id %>">Detaylar</a></td>
@@ -110,7 +110,7 @@
                         <% if (pagination.previous ) { %>
                             <a
                                 href="./personels?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
-                                    Sayfa<<< /span></a>
+                                    Sayfa<<< </a>
                             <% } %>
 
                                 <% if (pagination.page>1) { %>
@@ -213,13 +213,13 @@
                     </form>
                 </div>
         </section>
-
+        <div class="information-modal">AAAA</div>
 
         <script src="/js/sidebar.js"></script>
         <script type="module" src="../js/main.js"></script>
 
-        <script type="module" src="../js/requests.js"></script>
-        <script type="module" src="../js/users.js"></script>
+       
+        <script type="module" src="../js/employees.js"></script>
       
 
         <script type="module" src="../js/inner_modules/tables.js"></script>

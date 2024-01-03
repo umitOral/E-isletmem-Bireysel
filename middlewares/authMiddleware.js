@@ -56,13 +56,27 @@ const authenticateToken = async (req, res, next) => {
 
 const verifyRoles = (...roles) => {
   return async (req, res, next) => {
-    console.log("burası"+roles)
-    console.log(res.locals.employee.role)
+    console.log("burası" + roles);
+    console.log(res.locals.employee.role);
     if (!roles.includes(res.locals.employee.role)) {
       next(new Error("Buraya giriş yetkiniz bulunmamaktadır.", 401));
     }
-    next()
+    next();
   };
 };
 
-export { authenticateToken, checkUser, verifyRoles };
+const verifyactiveOrNot = () => {
+  return async (req, res, next) => {
+    
+    const employee = await Employee.findOne({email:req.body.email})
+    console.log(employee.activeOrNot)
+    if (!employee.activeOrNot) {
+      next(new Error("Hesabınız Pasiftir. Lütfen Mağaza yetkiliniz ile iletişime geçiniz.", 401));
+    }
+    next();
+  };
+};
+
+
+
+export { authenticateToken, checkUser, verifyRoles, verifyactiveOrNot };

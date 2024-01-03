@@ -55,12 +55,12 @@ const createCompany = async (req, res, next) => {
   }
 };
 
-const deactivateUser = async (req, res) => {
+const deactivateEmployee = async (req, res) => {
   try {
     console.log("başarılı");
 
-    await User.findByIdAndUpdate(req.params.id, { activeOrNot: false });
-    res.redirect("../../employess");
+    await Employee.findByIdAndUpdate(req.params.id, { activeOrNot: false });
+    res.redirect("back");
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -68,14 +68,14 @@ const deactivateUser = async (req, res) => {
     });
   }
 };
-const activateUser = async (req, res) => {
+const activateEmployee = async (req, res) => {
   try {
-    await User.findByIdAndUpdate(req.params.id, { activeOrNot: true });
-    res.redirect("../../employees");
+    await Employee.findByIdAndUpdate(req.params.id, { activeOrNot: true });
+    res.redirect("back");
   } catch (error) {
     res.status(500).json({
       succes: false,
-      message: "usercontroller delete error",
+      message: "usercontroller activate error",
     });
   }
 };
@@ -137,6 +137,7 @@ const findUser = async (req, res) => {
       count: data.length,
       pagination: pagination,
       link: "users",
+      defaultSearchValue:req.query.user
     });
   } catch (error) {
     res.status(500).json({
@@ -212,20 +213,32 @@ const findEmployees = async (req, res) => {
   }
 };
 
-const addUser = async (req, res) => {
+const createUser = async (req, res) => {
   try {
-    console.log(req.body)
-    const data = req.body;
-    data.company = res.locals.company._id;
+    const userEmail = req.body.email;
+    req.body.company=res.locals.company
+    const searchEmail = await User.findOne({ email: userEmail });
+    console.log(userEmail)
+    if (searchEmail) {  
+      res.json({
+        success: false,
+        message: "bu mail adresi kullanılmaktadır.",
+      });
+    } else {
 
-    const user = await User.create(data);
+      await User.create(req.body);
+      res.json({
+        success: true,
+        message: "Kulllanıcı başarıyla kaydedildi.",
+      });
+    }
 
-    res.redirect("./users");
-    console.log(user);
+
+
   } catch (error) {
     res.status(500).json({
       succes: false,
-      message: "usercontroller error",
+      message: "bir sorunla karşılaşıldı. Tekrar deneyin",
     });
   }
 };
@@ -400,8 +413,23 @@ const deletePhoto = async (req, res) => {
 const getAllPhotos = async (req, res) => {
   try {
     const singleUser = await User.findById(req.params.id);
-    const photos = singleUser.images;
-    res.json({ success: true, message: "resimler çekildi", photos });
+    
+   
+   
+    const photos=singleUser.images.sort(compare)
+    function compare(a, b) {
+      if (a.uploadTime>b.uploadTime) {
+        return 1
+      }
+      if(a.uploadTime<b.uploadTime){
+        return -1
+      }
+      return 0
+    }
+    console.log(photos)
+
+    res.json({ success: true, message: "resimler çekildi",photos});
+
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -463,15 +491,15 @@ const createToken = (companyID, employeeID) => {
 export {
   resetPasswordMail,
   createCompany,
-  addUser,
+  createUser,
   loginUser,
   logOut,
   uploadPictures,
   editInformations,
   findUser,
-  deactivateUser,
+  deactivateEmployee,
   findEmployees,
-  activateUser,
+  activateEmployee,
   deletePhoto,
   getAllPhotos,
 };

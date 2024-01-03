@@ -6,6 +6,7 @@ const tables = new Tables();
 import { UI } from "./ui.js";
 const ui = new UI();
 
+const imageInput = document.querySelector(".upload_file");
 const showContentsBtn = document.querySelectorAll(".show-content");
 const contents = document.querySelectorAll(".userInformationsContent");
 
@@ -19,18 +20,17 @@ const loader = document.querySelector(".loader_wrapper.hidden");
 const addImageSaveButton = document.querySelector("#add-img-save-button");
 
 const cancelModal = document.querySelectorAll(".modal .cancel_button");
+const cancelAddPhoto = document.querySelector(".cancel_add_pic");
 
 // modals
 const allModals = document.querySelectorAll(".modal");
-console.log(allModals);
+
 const modalUser = document.querySelector(".modal_user");
 const modalSession = document.querySelector(".modal_session");
 const modalPayment = document.querySelector(".modal_payment");
 const modalImage = document.querySelector(".modal_image");
 const modalProccess = document.querySelector(".modal_proccess");
 const userID = document.querySelector(".user-informations").dataset.userıd;
-
-console.log(userID);
 
 eventListeners();
 
@@ -42,12 +42,18 @@ function eventListeners() {
 }
 
 cancelModal.forEach((element) => {
-  element.addEventListener("click", () => {
-    console.log("hey");
-    console.log(element.parentElement.parentElement);
+  
+  element.addEventListener("click", (e) => {
     element.parentElement.parentElement.classList.remove("showed_modal");
+    
   });
 });
+
+cancelAddPhoto.addEventListener("click",()=>{
+  imageInput.value=""
+  addPictureForm.uploadTime.value=""
+  uploadFiles = [];
+})
 
 tableElements.forEach((table) => {
   table.querySelectorAll("thead th").forEach((head, columnIndex) => {
@@ -61,18 +67,24 @@ function deleteButtonFunction(selector) {
   
   let deleteImageBtn = document.querySelectorAll(".delete-photo");
 
+ 
+   
+
+
   deleteImageBtn.forEach((element) => {
     element.addEventListener("click", (e) => {
       const publicID = element.dataset.publicid;
-      
-      request
-        .deletewithUrl("./" + userID + "/deletePhoto/" + publicID)
-        .then((response) => {
-          ui.showModal(true, response.message);
-          getAllImages();
-          
-        })
-        .catch((err) => ui.showModal(false, err));
+      if (confirm("silinecek onaylıyor musunuz?")) {
+
+        request
+          .deletewithUrl("./" + userID + "/deletePhoto/" + publicID)
+          .then((response) => {
+            ui.showModal(true, response.message);
+            getAllImages();
+            
+          })
+          .catch((err) => ui.showModal(false, err));
+      }
     });
   });
 }
@@ -98,7 +110,7 @@ function editUser() {
   e.preventDefault();
 }
 
-const imageInput = document.querySelector(".upload_file");
+
 
 imageInput.addEventListener("change", handleFiles);
 
@@ -108,6 +120,8 @@ function handleFiles(e) {
   const selectedFiles = e.target.files;
   for (const iterator of selectedFiles) {
     uploadFiles.push(iterator);
+    console.log(iterator)
+    
   }
   
 }
@@ -117,7 +131,7 @@ function addPicture(e) {
   uploadFiles.forEach((element) => {
     formData.append("upload_file", element);
   });
-
+  console.log(uploadFiles)
   loader.classList.toggle("showed");
 
   formData.append("uploadTime", addPictureForm.uploadTime.value);
@@ -132,6 +146,8 @@ function addPicture(e) {
       modalImage.classList.remove("showed_modal");
       ui.showModal(true, response.message);
       uploadFiles = [];
+      imageInput.value=""
+      addPictureForm.uploadTime.value=""
       getAllImages();
     })
     .catch((err) => {
@@ -143,7 +159,7 @@ function addPicture(e) {
 }
 
 async function getAllImages() {
-  console.log("aşama1");
+  
   const allImages = document.querySelector(".small_images");
 
   while (allImages.firstChild) {
@@ -255,18 +271,7 @@ saveModal.forEach((element) => {
   };
 });
 
-cancelModal.forEach((element) => {
-  element.addEventListener("click", (e) => {
-    e.preventDefault();
-    modalUser.classList.remove("showed_modal");
-    modalSession.classList.remove("showed_modal");
-    modalPayment.classList.remove("showed_modal");
-    modalImage.classList.remove("showed_modal");
-    modalUser.classList.remove("showed_modal");
-    modalProccess.classList.remove("showed_modal");
-    console.log("dada");
-  });
-});
+
 
 // options modals
 const sessionsSection = document.querySelector(

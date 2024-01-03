@@ -1,12 +1,12 @@
 import express from 'express';
 import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,getAppointmentsPage,getEmployeessStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getSingleEmployeePage,getservicesPage,getEmployeesPage,getPaymentsPage} from '../controller/pageController.js';
-import {logOut,addUser,deletePhoto,uploadPictures,getAllPhotos,editInformations,findUser,findEmployees,deactivateUser,activateUser} from '../controller/userController.js';
+import {logOut,createUser,deletePhoto,uploadPictures,getAllPhotos,editInformations,findUser,findEmployees,deactivateEmployee,activateEmployee} from '../controller/userController.js';
 import {createEmployees,editInformationsEmployees} from '../controller/employeesController.js';
 
 import {addService,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
 import {addPayment,deletePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
 import {getSexStaticsWithFilter,getPaymentStaticsWithFilter,getNewUserStaticswithFilter} from '../controller/staticsController.js';
-import {updateCompanyPassword,updateCompanyInformations,addCompanyPayment} from '../controller/companyControllers.js';
+import {updateCompanyPassword,updateCompanyInformations,addCompanyPayment,getInstallment} from '../controller/companyControllers.js';
 import {verifyRoles} from '../middlewares/authMiddleware.js';
 import ROLES_LIST from '../config/roles_list.js'
 import appointmentsRoutes from './appointmentsRoutes.js';
@@ -20,13 +20,13 @@ router.route("/users").get(getUsersPage)
 
 router.route("/users/search").get(findUser)
 router.route("/users/:id").get(getSinglePage)
-router.route("/users/:id/deactivateUser").get(deactivateUser)
-router.route("/users/:id/activateUser").get(activateUser)
+router.route("/users/:id/deactivateEmployee").get(deactivateEmployee)
+router.route("/users/:id/activateEmployee").get(activateEmployee)
 router.route("/users/:id/uploadpictures").post(uploadPictures)
 router.route("/users/:id/getAllPhotos").get(getAllPhotos)
 router.route("/users/:id/deletePhoto/:public_id").get(deletePhoto)
 router.route("/users/:id/editInformations").post(editInformations)
-router.route("/addUser").post(addUser)
+router.route("/users/createUser").post(createUser)
 
 
 router.route("/payments").get(getPaymentsPage)
@@ -39,6 +39,7 @@ router.route("/payments/addExpense").post(addExpense)
 
 router.route("/companyPaymentPage").get(companyPaymentPage)
 router.route("/companyPaymentsList").get(companyPaymentsListPage)
+router.route("/getInstallment").post(getInstallment)
 router.route("/addCompanyPayment").post(addCompanyPayment)
 
 router.route("/employees").get(getEmployeesPage)

@@ -1,15 +1,29 @@
 import User from "../models/userModel.js";
 import Employee from "../models/EmployeesModel.js";
 import Company from "../models/companyModel.js";
+import { CustomError } from "../helpers/error/CustomError.js";
 
-const createEmployees = async (req, res) => {
+const createEmployees = async (req, res, next) => {
   try {
+    
+    const userEmail = req.body.email;
+    req.body.company=res.locals.company
+    const searchEmail = await Employee.findOne({ email: userEmail });
+    console.log(userEmail)
+    if (searchEmail) {  
+      res.json({
+        success: false,
+        message: "bu mail adresi kullanılmaktadır.",
+      });
+    } else {
 
-    const data = req.body;
-    data.company = res.locals.company._id;
+      await Employee.create(req.body);
+      res.json({
+        success: true,
+        message: "Kulllanıcı başarıyla kaydedildi.",
+      });
+    }
 
-    const employee = await Employee.create(data);
-    // TODO
     // await Company.updateOne(
     //   { _id: res.locals.company._id },
     //   {
@@ -18,12 +32,11 @@ const createEmployees = async (req, res) => {
     //     },
     //   }
     // );
-    
-    res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
+    console.log(error)
+    res.json({
+      success: false,
+      message: "bir sorunla karşılaşıldı. Tekrar deneyin",
     });
   }
 };

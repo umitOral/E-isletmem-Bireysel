@@ -12,8 +12,15 @@ const getSexStaticsFilterBtn = document.querySelector(".sex-statics-filter-butto
 const getNewUserSStaticsFilterBtn = document.querySelector(".new-users-statics-filter-button")
 
 
+
+
 const startDate = document.querySelector(".start-date")
 const endDate = document.querySelector(".end-date")
+
+ startDate.valueAsDate=new Date()
+ endDate.valueAsDate=new Date(new Date().setDate(new Date().getDate()+1))
+//  endDate.valueAsDate=new Date().setDate()
+console.log()
 
 
 
@@ -23,11 +30,21 @@ eventListeners()
 
 function eventListeners() {
 
-    getSexStaticsBtn.addEventListener("click", getSexStaticswithFilter)
-    getPaymentStaticsBtn.addEventListener("click", getPaymentStaticsWithFilter)
-    getNewUsersStaticsBtn.addEventListener("click", getNewUserStaticswithFilter)
-    getSexStaticsFilterBtn.addEventListener("click", getSexStaticswithFilter)
-    getNewUserSStaticsFilterBtn.addEventListener("click", getNewUserStaticswithFilter)
+   
+    if (getPaymentStaticsBtn) {
+        getPaymentStaticsBtn.addEventListener("click", getPaymentStaticsWithFilter)
+    }
+    if (getNewUsersStaticsBtn) {
+        getNewUsersStaticsBtn.addEventListener("click", getNewUserStaticswithFilter)
+    }
+    if (getSexStaticsFilterBtn) {
+        getSexStaticsFilterBtn.addEventListener("click", getSexStaticswithFilter)
+
+    }
+    if (getNewUserSStaticsFilterBtn) {
+        getNewUserSStaticsFilterBtn.addEventListener("click", getNewUserStaticswithFilter)    }
+    
+    
     startDate.addEventListener("change", dateRange)
 }
 
@@ -44,6 +61,15 @@ function getSexStaticswithFilter(e) {
     e.preventDefault()
 }
 
+
+function getNewUserStaticswithFilter(e) {
+    request.getwithUrl(`../getNewUserStaticswithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
+        .then(response =>ui.createChart(response) )
+        .catch(err => console.log(err))
+    e.preventDefault()
+}
+
+
 function getPaymentStaticsWithFilter(e) {
     request.getwithUrl(`/admin/statics/getPaymentStaticsWithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
         .then(response => {
@@ -53,12 +79,6 @@ function getPaymentStaticsWithFilter(e) {
     e.preventDefault()
 }
 
-function getNewUserStaticswithFilter(e) {
-    request.getwithUrl(`../getNewUserStaticswithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
-        .then(response =>ui.createChart(response) )
-        .catch(err => console.log(err))
-    e.preventDefault()
-}
 
 
 function startingDate() {
@@ -71,6 +91,7 @@ function startingDate() {
 startingDate()
 
 function dateRange() {
+    
     const value = startDate.value
     endDate.setAttribute("min", value)
 

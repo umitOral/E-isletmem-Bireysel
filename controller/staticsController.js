@@ -51,9 +51,16 @@ const getSexStaticsWithFilter = async (req, res) => {
 }
 const getNewUserStaticswithFilter = async (req, res) => {
     try {
-        
+        const users = await User.count({
+            company: res.locals.company._id,
+            registerDate: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        })
         res.json({
             succes:true,
+            data:users,
             message:"istatistikler başarıyla çekildi."
         })
         

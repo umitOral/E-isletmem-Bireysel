@@ -21,7 +21,7 @@ export class UI {
     setTimeout(() => {
       messageBox.classList.remove("failure");
       messageBox.classList.remove("success");
-    }, 1500);
+    }, 2000);
   }
 
   showModalWithoutResponse(success,message) {
@@ -300,16 +300,19 @@ export class UI {
   createChart(response) {
     const sexStaticsLabels = ["Kadın", "Erkek"];
     const sexStaticsValues = response.sexStatics;
-
-    console.log(response);
-
+    const staticsArea=document.querySelector(".statics")
+    const filterInfo=document.querySelector(".filter-info")
+    const canvas=`<canvas id="sex_statics" style="width:100%;max-width:800px"></canvas>`
+    
+    filterInfo.classList.remove("showed")
+    
+    
     if (response.sexStatics[0] == 0 && response.sexStatics[0] == 0) {
-      document.querySelector(
-        ".filter-info"
-      ).innerHTML = `Bu tarih aralığında yeni kullanıcı kaydı bulunamadı `;
+      filterInfo.classList.add("showed")
+      staticsArea.innerHTML=""
     } else {
-      document.querySelector(".filter-info").innerHTML = ``;
-
+     
+      staticsArea.innerHTML=canvas
       new Chart("sex_statics", {
         type: "pie",
         data: {

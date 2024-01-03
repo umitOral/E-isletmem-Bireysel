@@ -96,7 +96,7 @@
                         <% if (pagination.previous ) { %>
                             <a
                                 href="./users?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
-                                    Sayfa<<< /span></a>
+                                    Sayfa<<<</a>
                             <% } %>
 
                                 <% if (pagination.page>1) { %>
@@ -128,7 +128,7 @@
                 </main>
                 <div class="add_customer modal">
                     <h2>Yeni Hasta Ekle</h2>
-                    <form action="./addUser" method="POST" id="register-form">
+                    <form action="./users/createUser" method="POST" id="register-form">
                         <div class="inputs ">
                             <span>İsim</span>
                             <input type="text" name="name" id="user-name" required
@@ -185,10 +185,11 @@
 
 
                 </seciton>
+                <div class="information-modal">AAAA</div>
 
 
 
-                <script type="module" src="../js/requests.js"></script>
+               
                 <script type="module" src="../js/users.js"></script>
                 <script type="module" src="../js/main.js"></script>
 

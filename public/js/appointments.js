@@ -9,7 +9,6 @@ const calendar = document.querySelector(".calendar"),
   calendarHead = document.querySelector(".calendar-head"),
   daysContainer = document.querySelector(".days"),
   prev = document.querySelector(".prev"),
-  
   next = document.querySelector(".next"),
   todayBtn = document.querySelector(".today-btn"),
   gotoBtn = document.querySelector(".goto-btn"),
@@ -37,7 +36,7 @@ getAllSessions();
 
 function showDatesAtPage(params) {
   if (params) {
-    console.log(params)
+    console.log(params);
     calendarHead.textContent = new Date(params).toLocaleDateString("locale", {
       month: "long",
       year: "numeric",
@@ -63,7 +62,6 @@ function showDatesAtPage(params) {
 }
 
 function getAllSessions() {
-  
   request
     .getwithUrl("/api/getSingleDayAllDoctorSessions/" + selectedDate)
     .then((response) => {
@@ -71,11 +69,11 @@ function getAllSessions() {
       const allDoctorAllSessions = response.allDoctorAllSessions;
       const AllDoctor = response.doctors;
       const workHours = response.workHours;
-      
+
       //array
 
       let allTimesAllDoctor = [];
-      
+
       allDoctorAllSessions.forEach((singleDoctorData) => {
         const times = [];
         const workStartTime = workHours.workStart;
@@ -104,24 +102,22 @@ function getAllSessions() {
 
           return date;
         }
-        
-        
 
-       singleDoctorData.sessionsofdoctorforactualDay.forEach((element, index) => {
-         
-          times.splice(
-            element.timeIndexes[0],
-            element.timeIndexes[1] - element.timeIndexes[0] + 1,
-            element
-          );
-        });
-        
+        singleDoctorData.sessionsofdoctorforactualDay.forEach(
+          (element, index) => {
+            times.splice(
+              element.timeIndexes[0],
+              element.timeIndexes[1] - element.timeIndexes[0] + 1,
+              element
+            );
+          }
+        );
+
         allTimesAllDoctor.push(times);
       });
-      console.log(allTimesAllDoctor)
-      
+      console.log(allTimesAllDoctor);
+
       ui.showAllSessionToUI(allTimesAllDoctor, AllDoctor);
-      
 
       changeState();
     })
@@ -130,15 +126,15 @@ function getAllSessions() {
 }
 
 async function dayFullOrNight() {
-
-  let responseData={}
- await  request.getwithUrl("/api/getDaysFullorNot/" + selectedDate)
+  let responseData = {};
+  await request
+    .getwithUrl("/api/getDaysFullorNot/" + selectedDate)
     .then((response) => {
-      responseData=response.sessionsFullorNot
-  })
-  .catch(err=>console.log(err))
+      responseData = response.sessionsFullorNot;
+    })
+    .catch((err) => console.log(err));
 
-  return responseData
+  return responseData;
 }
 
 function changeState() {
@@ -164,7 +160,7 @@ function changeState() {
             console.log("silme başarılı");
             getAllSessions();
           })
-          .catch((err) =>  ui.showModal(false, err));
+          .catch((err) => ui.showModal(false, err));
       }
 
       if (e.target.classList.contains("save-edit-button")) {
@@ -192,8 +188,8 @@ initCalender();
 // calendar  ---------------------------------
 async function initCalender() {
   loader.classList.toggle("showed");
-  const fullorNot= await  dayFullOrNight()
-  console.log(fullorNot)
+  const fullorNot = await dayFullOrNight();
+  console.log(fullorNot);
 
   const firstDay = new Date(year, month, 1); //mevcut ayın ilk gün tarihi
   const lastDay = new Date(year, month + 1, 0); //mevcut ayın son gün tarihi
@@ -204,8 +200,6 @@ async function initCalender() {
   const day = firstDay.getDay() - 1; // ilk gün değiştirilmiş hali
 
   const nextDays = 7 - lastDay.getDay();
-
-  
 
   let days = "";
 
@@ -227,7 +221,7 @@ async function initCalender() {
     ) {
       activeDay = i;
 
-      if (fullorNot[i-1]===true) {
+      if (fullorNot[i - 1] === true) {
         days += `
                 <div class="day today active">${i}
                 <div class="full-day"></div>
@@ -239,7 +233,7 @@ async function initCalender() {
                 </div> `;
       }
     } else {
-      if (fullorNot[i-1]===true) {
+      if (fullorNot[i - 1] === true) {
         days += `
                 <div class="day">${i}
                 <div class="full-day"></div>
@@ -271,13 +265,12 @@ function prevMonth() {
     year--;
   }
   selectedDate = year + "-" + (month + 1) + "-" + activeDay;
-  console.log(selectedDate)
-  showDatesAtPage(selectedDate)
+  console.log(selectedDate);
+  showDatesAtPage(selectedDate);
   initCalender();
 }
 
 function nextMonth() {
-  
   month++;
   if (month > 11) {
     month = 0;
@@ -285,7 +278,7 @@ function nextMonth() {
   }
 
   selectedDate = year + "-" + (month + 1) + "-" + activeDay;
-  showDatesAtPage(selectedDate)
+  showDatesAtPage(selectedDate);
   initCalender();
 }
 
@@ -358,17 +351,17 @@ function addListener() {
   days.forEach((element) => {
     element.addEventListener("click", (e) => {
       // set current day active
-      
+
       let activeDay = e.target.textContent.trim();
 
       const activeDate = new Date(year, month, activeDay);
 
       selectedDate = year + "-" + (month + 1) + "-" + activeDay;
-      
+
       ui.selectedDatetoAppointmentUI(selectedDate);
       ui.deleteAllSessionFromUI();
       getAllSessions(selectedDate);
-      
+
       days.forEach((element) => {
         element.classList.remove("active");
       });
@@ -391,12 +384,11 @@ function addListener() {
         nextMonth();
         setTimeout(() => {
           days.forEach((element) => {
-            
             if (
               !element.classList.contains("next-date") &&
               element.innerHTML === e.target.innerHTML
             ) {
-              console.log(element)
+              console.log(element);
               element.classList.add("active");
             }
           });
@@ -415,7 +407,7 @@ function convertTime(time) {
   let timeArr = time.split(":");
 
   let timeHour = timeArr[0];
-  let timeMinute = timeArr[1];  
+  let timeMinute = timeArr[1];
   time = timeHour + ":" + timeMinute;
 
   return time;
@@ -497,13 +489,24 @@ function showAddEventModal(e) {
 
 
 const modalUpdateSession = document.querySelector(".modal_update_session");
-let selectedValues = [];
+
+let selectedValuesUpdate = [];
 
 function showEditModal(e) {
+  
   const sessionID = modalUpdateSession.querySelector(".sessionID");
   const description = modalUpdateSession.querySelector(".description");
   const user = modalUpdateSession.querySelector(".user");
-  
+
+  while (selected_proccess_type_update.firstChild) {
+    selected_proccess_type_update.firstChild.remove()
+  }
+ 
+  while (selectedValuesUpdate.length>0) {
+    selectedValuesUpdate.pop()
+  }
+ 
+
   request
     .getwithUrl(
       "./appointments/" +
@@ -511,64 +514,51 @@ function showEditModal(e) {
         "/getAppointment"
     )
     .then((response) => {
-      console.log(response);
       
-      sessionID.value=response.data._id
-      description.value=response.data.description
-      userUpdate.value=response.data.user._id
-      console.log(response.data.user._id)
-      selectedValues.forEach(element => {
-        element.remove()
-      });
-      response.data.services.map(element=>selectedValues.push(element))
 
+      sessionID.setAttribute("value",response.data._id);
+      description.value = response.data.description;
+      userUpdate.value = response.data.user._id;
+
+     
+      response.data.services.map((element) =>
+        selectedValuesUpdate.push(element)
+      );
+      console.log(selectedValuesUpdate)
       //add response services to UI ************************************************
 
-      selectedValues.forEach(element => {
+      selectedValuesUpdate.forEach((element) => {
         const proccessDiv = document.createElement("div");
-      const nodeinput = document.createElement("input");
-      
-      
-      nodeinput.setAttribute("name", "services");
-      nodeinput.setAttribute("disabled", "");
-      nodeinput.setAttribute("type", "text");
-      nodeinput.setAttribute("class", "selected_proccess");
-      nodeinput.setAttribute(
-        "value",element
-      );
-  
-      const deleteButton = document.createElement("i");
-  
-      deleteButton.classList.add("ph");
-      deleteButton.classList.add("ph-x");
-  
-      proccessDiv.appendChild(nodeinput);
-      proccessDiv.appendChild(deleteButton);
-      selected_proccess_type_update.appendChild(proccessDiv);
+        const nodeinput = document.createElement("input");
+
+        nodeinput.setAttribute("name", "services");
+        nodeinput.setAttribute("disabled", "");
+        nodeinput.setAttribute("type", "text");
+        nodeinput.setAttribute("class", "selected_proccess");
+        nodeinput.setAttribute("value", element);
+
+        const deleteButton = document.createElement("i");
+
+        deleteButton.classList.add("ph");
+        deleteButton.classList.add("ph-x");
+
+        proccessDiv.appendChild(nodeinput);
+        proccessDiv.appendChild(deleteButton);
+        selected_proccess_type_update.appendChild(proccessDiv);
       });
-      
 
       const selectedProcess = document.querySelectorAll(
         ".selected_proccess_type_update div i"
       );
-      console.log(selectedProcess)
+      console.log(selectedProcess);
       selectedProcess.forEach((element) => {
         element.addEventListener("click", (e) => {
-          
-          selectedValues.pop(element.previousElementSibling.value)
+          selectedValuesUpdate.pop(element.previousElementSibling.value);
           element.parentElement.remove();
-          console.log(selectedValues)
         });
       });
-      
-      
-      
     })
     .catch((err) => console.log(err));
-  
-   
-
-    
 
   modalUpdateSession.classList.toggle("showed_modal");
 }
@@ -614,17 +604,22 @@ modalAddSessionSave.addEventListener("click", (e) => {
   };
   request
     .postWithUrl("./appointments/createAppointment", data)
-    .then((response) =>{ui.showModal(true, response.message)})
+    .then((response) => {
+      ui.showModal(true, response.message);
+      while (selected_proccess_type_add.firstChild) {
+        selected_proccess_type_add.firstChild.remove();
+      }
+    })
     .then((response) => getAllSessions(selectedDate))
-    
+
     .catch((err) => console.log(err));
   modalAddSession.classList.remove("showed_modal");
 });
 
-
+let selectedValues = [];
 proccessType.addEventListener("change", () => {
   console.log("hizmet seçildi");
-  let selectedValues = [];
+
   if (
     !selectedValues.includes(
       proccessType.options[
@@ -637,6 +632,7 @@ proccessType.addEventListener("change", () => {
         proccessType.options.selectedIndex
       ].textContent.trim()
     );
+
     const proccessDiv = document.createElement("div");
     const nodeinput = document.createElement("input");
     nodeinput.value =
@@ -663,7 +659,7 @@ proccessType.addEventListener("change", () => {
     proccessDiv.appendChild(deleteButton);
     selected_proccess_type_add.appendChild(proccessDiv);
   } else {
-    console.log("hizmet zatern var");
+    console.log("hizmet zaten var");
   }
 
   const selectedProcess = document.querySelectorAll(
@@ -671,27 +667,23 @@ proccessType.addEventListener("change", () => {
   );
   selectedProcess.forEach((element) => {
     element.addEventListener("click", (e) => {
-      
-      selectedValues.pop(element.previousElementSibling.value)
+      selectedValues.pop(element.previousElementSibling.value);
       element.parentElement.remove();
-      console.log(selectedValues)
     });
   });
-  
 });
 
 
-proccessTypeUpdate.addEventListener("change", () => {
-  console.log("hizmet seçildi");
-  
+proccessTypeUpdate.addEventListener("change", (e) => {
+
   if (
-    !selectedValues.includes(
+    !selectedValuesUpdate.includes(
       proccessTypeUpdate.options[
         proccessTypeUpdate.options.selectedIndex
       ].textContent.trim()
     )
   ) {
-    selectedValues.push(
+    selectedValuesUpdate.push(
       proccessTypeUpdate.options[
         proccessTypeUpdate.options.selectedIndex
       ].textContent.trim()
@@ -699,8 +691,8 @@ proccessTypeUpdate.addEventListener("change", () => {
     const proccessDiv = document.createElement("div");
     const nodeinput = document.createElement("input");
     nodeinput.value =
-    proccessTypeUpdate.options[
-      proccessTypeUpdate.options.selectedIndex
+      proccessTypeUpdate.options[
+        proccessTypeUpdate.options.selectedIndex
       ].textContent.trim();
     nodeinput.setAttribute("name", "services");
     nodeinput.setAttribute("disabled", "");
@@ -720,6 +712,9 @@ proccessTypeUpdate.addEventListener("change", () => {
 
     proccessDiv.appendChild(nodeinput);
     proccessDiv.appendChild(deleteButton);
+
+    
+
     selected_proccess_type_update.appendChild(proccessDiv);
   } else {
     console.log("hizmet zaten var");
@@ -730,13 +725,10 @@ proccessTypeUpdate.addEventListener("change", () => {
   );
   selectedProcess.forEach((element) => {
     element.addEventListener("click", (e) => {
-      
-      selectedValues.pop(element.previousElementSibling.value)
+      selectedValuesUpdate.pop(element.previousElementSibling.value);
       element.parentElement.remove();
-      console.log(selectedValues)
     });
   });
-  console.log(selectedValues)
 });
 
 modalUpdateSessionSave.addEventListener("click", (e) => {
@@ -744,8 +736,8 @@ modalUpdateSessionSave.addEventListener("click", (e) => {
 
   let data = {
     description: e.target.parentElement.parentElement.description.value,
-    services:selectedValues,
-    user:userUpdate.options[userUpdate.options.selectedIndex].value
+    services: selectedValuesUpdate,
+    user: userUpdate.options[userUpdate.options.selectedIndex].value,
   };
   request
     .postWithUrl(
@@ -757,7 +749,7 @@ modalUpdateSessionSave.addEventListener("click", (e) => {
     .then((response) => {
       ui.showModal(true, response.message);
       modalUpdateSession.classList.toggle("showed_modal");
-      getAllSessions()
+      getAllSessions();
     })
     .catch((err) => console.log(err));
 });

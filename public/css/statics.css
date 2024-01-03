@@ -35,17 +35,24 @@
     cursor: pointer;
 }
 .statics-menu ul li.showed{
-   background-color: var(--color-main);
+    border: 2px solid var(--color-main);
+    background-color: #04d9d916;
+    color: black;
 }
 .statics-menu ul li:hover{
-    border:3px solid  var(--color-main-lighter);
+    border:2px solid  var(--color-main-lighter);
 }
 .statics{
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
 }
-
+.filter-info{
+    display: none;
+}
+.filter-info.showed{
+    display: block;
+}
 .statics-area form {
     display: flex;
     flex-wrap: wrap;
@@ -78,6 +85,7 @@ input[type="date"]{
     border-radius: 4px;
     
 }
+
 hr {
     margin: 1rem 0;
     border: 0;
