@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const OrderSchema = new Schema(
   {
+    status:{
+      type:String,
+      default:"pending"
+    },
     company: {
       type: Schema.Types.ObjectId,
       ref: "Company",
@@ -12,15 +16,28 @@ const OrderSchema = new Schema(
       type: Number,
       require: true,
     },
-    paymentId: {
-      type: String,
-    },
     paymentDuration:{
       type:Number
     },
     paymentTransactionId: {
       type: String,
     },
+    systemTime: {
+      type: String,
+    },
+    conversationId: {
+      type: String,
+    },
+    token: {
+      type: String,
+    },
+    authorization: {
+      type: String,
+    },
+    randmKey: {
+      type: String,
+    }
+    
   },
     
   { timestamps: true,

@@ -3,9 +3,12 @@ import Employee from "../models/EmployeesModel.js";
 import Order from "../models/OrderModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { orderSuccesEmail } from "./mailControllers.js";
+import { iyziPayDeneme } from "./iyzipayController.js";
 import axios from "axios";
+import CryptoJS from "crypto-js";
 
 import Iyzipay from "iyzipay";
+
 import { v4 as uuidv4 } from "uuid";
 
 const updateCompanyPassword = async (req, res) => {
@@ -19,7 +22,7 @@ const updateCompanyPassword = async (req, res) => {
       const employee = await Employee.findOne({
         email: res.locals.company.email,
       });
-      console.log(res.locals.company);
+
       employee.password = req.body.password;
       employee.save();
 
@@ -37,7 +40,7 @@ const updateCompanyPassword = async (req, res) => {
 };
 const updateCompanyInformations = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     req.body.workHours = {
       workStart: req.body.workStart,
       workEnd: req.body.workEnd,
@@ -72,202 +75,93 @@ const deleteCompany = async (req, res) => {
 };
 const addCompanyPayment = async (req, res) => {
   try {
+    // TODO
+    // iyziPayDeneme(req)
     console.log(req.body);
-
     const id = uuidv4();
     const company = await Company.findOne({ _id: res.locals.company._id });
 
-    const {
-      cardUserName,
-      cardNumber,
-      expireMonth,
-      expireYear,
-      cvc,
-      price,
-      type,
-    } = req.body;
-
-    const iyzipay = new Iyzipay({
-      apiKey: process.env.IYZICO_API_KEY,
-      secretKey: process.env.IYZICO_SECRET_KEY,
-      uri: process.env.IYZICO_URI,
-    });
-
-    var request = {
-      locale: Iyzipay.LOCALE.TR,
-      conversationId: uuidv4(),
-      price: 1,
-      paidPrice: 1,
-      currency: Iyzipay.CURRENCY.TRY,
-      installment: "1",
+    const { price, paymentDuration } = req.body;
+    console.log(price);
+    let data = {
+      locale: "tr",
+      conversationId: id,
+      price: price,
       basketId: "B67832",
-      paymentChannel: Iyzipay.PAYMENT_CHANNEL.WEB,
-      paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,
-      paymentCard: {
-        cardHolderName: cardUserName,
-        cardNumber: cardNumber,
-        expireMonth: expireMonth,
-        expireYear: expireYear,
-        cvc: cvc,
-        registerCard: req.body.registerCard || "0",
-      },
+      paymentGroup: "PRODUCT",
       buyer: {
         id: "BY789",
         name: "John",
         surname: "Doe",
-        gsmNumber: "+905350000000",
-        email: company.email,
         identityNumber: "74300864791",
-        lastLoginDate: "2015-10-05 12:43:35",
+        email: "email@email.com",
+        gsmNumber: "+905350000000",
         registrationDate: "2013-04-21 15:12:09",
+        lastLoginDate: "2015-10-05 12:43:35",
         registrationAddress:
           "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-        ip: "85.34.78.112",
         city: "Istanbul",
         country: "Turkey",
-        zipCode: "34742",
+        zipCode: "34732",
+        ip: "85.34.78.112",
       },
       shippingAddress: {
+        address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+        zipCode: "34742",
         contactName: "Jane Doe",
         city: "Istanbul",
         country: "Turkey",
-        address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-        zipCode: "34742",
       },
       billingAddress: {
+        address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+        zipCode: "34742",
         contactName: "Jane Doe",
         city: "Istanbul",
         country: "Turkey",
-        address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-        zipCode: "34742",
       },
       basketItems: [
         {
           id: "BI101",
+          price: price,
           name: "Binocular",
           category1: "Collectibles",
           category2: "Accessories",
-          itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-          price: 1,
+          itemType: "PHYSICAL",
         },
       ],
+      enabledInstallments: [1, 2, 3, 6, 9],
+      callbackUrl: " http://localhost:3004/companyPaymentResultPage",
+      currency: "TRY",
+      paidPrice: price,
     };
 
-    iyzipay.payment.create(request, async function (err, result, next) {
+    var iyzipay = new Iyzipay({
+      apiKey: process.env.IYZICO_API_KEY,
+      secretKey: process.env.IYZICO_SECRET_KEY,
+      uri: "https://api.iyzipay.com",
+    });
+
+    iyzipay.checkoutFormInitialize.create(data, async function (err, result) {
       if (err) {
-        return next(
-          new Error("bir sorunla karşılaışdı. tekrar deneyiniz."),
-          500
-        );
-      }
-
-      if (result.status === "success") {
-        await Order.create({
-          company: company._id,
-          amount: result.paidPrice,
-          paymentId: result.paymentId,
-          paymentTransactionId: result.paymentTransactionId,
-          paymentDuration: Number(req.body.paymentDuration),
-        });
-
-        let newDate = new Date();
-        let subscribeEndDate = company.subscribeEndDate;
-
-        if (subscribeEndDate && subscribeEndDate < newDate) {
-          console.log("abonelik süresi yok");
-          if (type === "aylık") {
-            subscribeEndDate = new Date(
-              newDate.setMonth(newDate.getMonth() + 1)
-            ).toISOString();
-          }
-          if (type === "6aylık") {
-            subscribeEndDate = new Date(
-              newDate.setMonth(newDate.getMonth() + 6)
-            ).toISOString();
-          }
-          if (type === "yıllık") {
-            subscribeEndDate = new Date(
-              newDate.setMonth(newDate.getMonth() + 12)
-            ).toISOString();
-          }
-        } else {
-          console.log("abonelik süresi var");
-          let diffTime = parseInt(
-            (subscribeEndDate - newDate) / (24 * 60 * 60 * 1000),
-            10
-          );
-          console.log(diffTime);
-          if (type === "aylık") {
-            subscribeEndDate = new Date(
-              newDate.setDate(newDate.getDate() + diffTime + 1 + 30)
-            ).toISOString();
-          }
-          if (type === "6aylık") {
-            subscribeEndDate = new Date(
-              newDate.setDate(newDate.getDate() + diffTime + 1 + 180)
-            ).toISOString();
-          }
-          if (type === "yıllık") {
-            subscribeEndDate = new Date(
-              newDate.setDate(newDate.getDate() + diffTime + 1 + 365)
-            ).toISOString();
-          }
-        }
-
-        await Company.findByIdAndUpdate(company, {
-          subscribeEndDate: subscribeEndDate,
-        })
-          .then((response) => {
-            orderSuccesEmail(request);
-          })
-          .catch((err) => console.log(err));
-
-        res.status(200).json({
-          success: true,
-          message: "Ödemeniz başarıyla gerçekleşti.",
-        });
+        console.log(err);
       } else {
-        res.status(200).json({
-          success: false,
-          result,
-        });
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "ödeme işlemi sırasında sistemsel bir hata oluştu.",
-    });
-  }
-};
-
-const getInstallment = async (req, res) => {
-  try {
-    console.log("heyehey");
-    console.log(req.body);
-
-    const headers = new AxiosHeaders(`
-      Host: www.bing.com
-      User-Agent: curl/7.54.0
-      Accept: */*`);
-
-    axios
-      .post("https://api.iyzipay.com/payment/iyzipos/installment", {
-        price: req.body.price,
-        binNumber: req.body.cardInformations,
-        locale: Iyzipay.LOCALE.TR,
-        conversationId: uuidv4(),
-      })
-      .then(function (response) {
-        console.log(response);
+       
+        let data = {
+          company: res.locals.company,
+          amount: price,
+          paymentDuration: paymentDuration,
+          systemTime: result.systemTime,
+          conversationId: result.conversationId,
+          token: result.token,
+        };
+        await Order.create(data);
         res.json({
           success: true,
-          message: response,
+          message: "ödeme sayfasına yönlendiriliyorsunuz.",
+          data: result.paymentPageUrl,
         });
-      })
-      .catch(function (error) {
-        console.log(error.status);
-      });
+      }
+    });
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -275,11 +169,74 @@ const getInstallment = async (req, res) => {
     });
   }
 };
+
+const companyPaymentResult = async (req, res) => {
+  try {
+    console.log("burası");
+    
+    const order = await Order.findOne({ token: req.body.token });
+    
+
+    var iyzipay = new Iyzipay({
+      apiKey: process.env.IYZICO_API_KEY,
+      secretKey: process.env.IYZICO_SECRET_KEY,
+      uri: "https://api.iyzipay.com",
+    });
+
+    iyzipay.checkoutForm.retrieve(
+      {
+        locale: Iyzipay.LOCALE.TR,
+        conversationId: order.conversationId,
+        token: order.token,
+      },
+      async (err, result) => {
+        if (err) {
+          // console.log(err);
+        } else {
+          await Order.findOneAndUpdate(
+            { conversationId: order.conversationId },
+            {
+              status: "success",
+            }
+          );
+          addSubscription(order);
+          res.status(200).render("front/companyPaymentResultPage", {
+            success: true,
+            link: "companyPaymentResultPage",
+            message: "ödemeniz başarıyla alınmıştır.",
+          });
+        }
+      }
+    );
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: error,
+    });
+  }
+};
+
+async function addSubscription(order) {
+  let company= await Company.findById(order.company)
+  
+  console.log(order.paymentDuration)
+  let today = new Date();
+  let diffTime = Math.ceil(((company.subscribeEndDate - today))/(1000*60 * 60 * 24));
+  console.log(diffTime);
+  console.log(new Date().setDate(company.subscribeEndDate.getDate() + order.paymentDuration+diffTime));
+  if (company.subscribeEndDate > today) {
+    company.subscribeEndDate = new Date().setDate(company.subscribeEndDate.getDate() + order.paymentDuration+diffTime);
+    await company.save()
+  } else {
+    company.subscribeEndDate =new Date().setDate( today.getDate() + order.paymentDuration);
+    await company.save()
+  }
+}
 
 export {
   updateCompanyPassword,
   deleteCompany,
   updateCompanyInformations,
   addCompanyPayment,
-  getInstallment,
+  companyPaymentResult,
 };

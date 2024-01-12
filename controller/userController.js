@@ -38,7 +38,7 @@ const createCompany = async (req, res, next) => {
     }
     console.log(data);
     const company = await Company.create(data);
-    data.role = "Admin";
+    data.role = "yönetici";
     data.company = company._id;
 
     await Employee.create(data);

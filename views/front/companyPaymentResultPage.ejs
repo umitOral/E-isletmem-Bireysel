@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <title>E-işletmem-Ödeme</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="assets/css/fontawesome.css">
+  <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
+
+  <script src="//code.jivosite.com/widget/evvUheNYIv" async></script>
+
+
+  <!--
+
+TemplateMo 574 Mexant
+
+https://templatemo.com/tm-574-mexant
+
+-->
+</head>
+
+<body>
+
+
+  <!-- ***** Header Area Start ***** -->
+  <%- include('../partials/header-front.ejs') %>
+    <!-- ***** Header Area End ***** -->
+
+    <section>
+      <div class="page-heading">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="header-text">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- ***** Main Banner Area End ***** -->
+
+    <section class="map">
+      <div class="container">
+        <div class="row">
+          <div class="div-dec"></div>
+          <div class="col-lg-10 offset-lg-1">
+            <div class="row">
+              
+              <div class="col-lg-12">
+                <div class="info-item">
+
+                  <% if(locals.success===true){ %>
+                    <i class="fa-solid fa-money-check"></i>
+                    <h4><%= locals.message %></h4>
+                    <h4>Yönlendiriliyorsunuz...</h4>
+                  <% } else{ %>  
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <h4><%= locals.message %></h4>
+                 <% } %>
+
+                 
+                  
+                </div>
+              </div>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+   
+
+        <section class="contact-us-form">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6 offset-lg-3">
+
+              </div>
+              <div class="col-lg-10 offset-lg-1">
+
+                
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="loader_wrapper hidden">
+          <svg class="pl" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                  <linearGradient id="pl-grad1" x1="1" y1="0.5" x2="0" y2="0.5">
+                      <stop offset="0%" stop-color="hsl(313,90%,55%)" />
+                      <stop offset="100%" stop-color="hsl(223,90%,55%)" />
+                  </linearGradient>
+                  <linearGradient id="pl-grad2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="hsl(313,90%,55%)" />
+                      <stop offset="100%" stop-color="hsl(223,90%,55%)" />
+                  </linearGradient>
+              </defs>
+              
+              <circle class="pl__ring" cx="100" cy="100" r="82" fill="none" stroke="url(#pl-grad1)" stroke-width="36" stroke-dasharray="0 257 1 257" stroke-dashoffset="0.01" stroke-linecap="round" transform="rotate(-90,100,100)" />
+              <line class="pl__ball" stroke="url(#pl-grad2)" x1="100" y1="18" x2="100.01" y2="182" stroke-width="36" stroke-dasharray="1 165" stroke-linecap="round" />
+              
+          </svg>
+          <text class="">Yükleniyor..</text>
+          
+
+      </div>>
+
+
+
+        <%- include('../partials/front-footer.ejs') %>
+
+          <!-- Scripts -->
+          <!-- Bootstrap core JavaScript -->
+
+          <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+          <script src="assets/js/isotope.min.js"></script>
+          <script>
+           
+           setTimeout(() => {
+            window.location.assign("/admin/companyPaymentsList")
+           }, 2000);
+
+          </script>
+
+
+
+
+</body>
+
+</html>

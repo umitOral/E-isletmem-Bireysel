@@ -51,7 +51,8 @@ modalCustomerCancel.addEventListener("click", closeModalAddCostumer);
 function showModalAddCostumer() {
   modalCustomerAdd.classList.add("showed_modal");
 }
-function closeModalAddCostumer() {
+function closeModalAddCostumer(e) {
+  e.preventDefault()
   modalCustomerAdd.classList.remove("showed_modal");
 }
 

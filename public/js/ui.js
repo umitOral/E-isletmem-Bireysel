@@ -24,6 +24,9 @@ export class UI {
     }, 2000);
   }
 
+
+
+
   showModalWithoutResponse(success,message) {
     const messageBox = document.querySelector(".information-modal");
 

@@ -40,7 +40,7 @@
                                     <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
                                 </ul>
                             </div>
-                            <div class="" data-price="500" data-type="aylık" data-paymentDuration="30">
+                            <div class="" data-price="1.00" data-type="aylık" data-paymentDuration="30">
                                 <button class="select_packet">Seç</button>
                             </div>
 
@@ -61,7 +61,7 @@
                                 </ul>
                             </div>
                              
-                            <div class="" data-price="2400" data-type="6aylık" data-paymentDuration="180">
+                            <div class="" data-price="2" data-type="6aylık" data-paymentDuration="180">
                                 <button class="select_packet">Seç</button>
                             </div>
 
@@ -81,7 +81,7 @@
                                     <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
                                 </ul>
                             </div>
-                            <div class="" data-price="3600" data-type="yıllık" data-paymentDuration="365">
+                            <div class="" data-price="3" data-type="yıllık" data-paymentDuration="365">
                                 <button class="select_packet">Seç</button>
                             </div>
 
@@ -90,24 +90,24 @@
 
                             <div class="inputs ">
                                 <span>Kart Numarası</span>
-                                <input type="text" name="cardNumber" id="cardNumber" value="" placeholder="5528790000000008" maxlength="16">
+                                <input type="text" name="cardNumber" id="cardNumber" value="5528790000000008" placeholder="5528790000000008" maxlength="16">
                             </div>
                             <div class="inputs ">
                                 <span>Kart Sahibi</span>
-                                <input type="text" name="cardUserName" id="cardUserName" value="" placeholder="John Doe" >
+                                <input type="text" name="cardUserName" id="cardUserName" value="John Doe" placeholder="John Doe" >
                             </div>
                             <div class="inputs dates">
                                 <div>
                                     <span>expireMonth</span>
-                                    <input type="number" name="expireMonth" id="expireMonth" value="" placeholder="12" max="12">
+                                    <input type="number" name="expireMonth" id="expireMonth" value="12" placeholder="12" max="12">
                                 </div>
                                 <div>
                                     <span>expireYear</span>
-                                    <input type="number" name="expireYear" id="expireYear" value="" placeholder="2030" maxlength="4">
+                                    <input type="number" name="expireYear" id="expireYear" value="2030" placeholder="2030" maxlength="4">
                                 </div>
                                 <div>
                                     <span>cvc</span>
-                                    <input type="number" name="cvc" id="cvc" value="" placeholder="123" maxlength="3">
+                                    <input type="number" name="cvc" id="cvc" value="123" placeholder="123" maxlength="3">
                                 </div>
                             </div>
                             
@@ -119,8 +119,10 @@
 
 
                             <button type="submit" class="save_button" id="add-user">Ödeme Yap</button>
+                            
 
                         </form>
+                        <button type="" class="" id="pay-button">Ödeme Yap</button>
                         <div style="font-size: 1.5rem;">
                             <span>Toplam Tutar:</span>
                             <span class="total">0</span><span>TL</span>
@@ -128,6 +130,9 @@
                         <div class="installement">
                             
                         </div>
+                    </div>
+                    <div id="iyzipay-checkout-form" class="popup">
+                        
                     </div>
 
 
@@ -149,7 +154,7 @@
         <script type="module" src="/js/companyPayment.js"></script>
         <script type="module" src="../js/requests.js"></script>
 
-
+       
         <script src="/js/sidebar.js"></script>
 
 

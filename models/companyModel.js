@@ -39,7 +39,7 @@ const companySchema = new Schema(
         type: Number
       },default:{
         workStart:"08:00",
-        workEnd:"08:00",
+        workEnd:"18:00",
         workPeriod:15,
       }
     },

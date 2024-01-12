@@ -85,6 +85,8 @@ const newPassword = async (req, res, next) => {
 
 const getSingleDayAllDoctorSessions = async (req, res) => {
   try {
+
+    console.log("burası")
     const doctors = await Employee.find({
       company: res.locals.company._id,
       role: "doktor",

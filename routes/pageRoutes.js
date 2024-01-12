@@ -1,6 +1,7 @@
 import express from 'express';
 import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getServicesPage,getForgotPasswordPage} from '../controller/pageController.js';
 import {createCompany,loginUser,resetPasswordMail} from '../controller/userController.js';
+import {companyPaymentResult} from '../controller/companyControllers.js';
 import {sendMail,contactEmail} from '../controller/mailControllers.js';
 import {newPassword} from '../controller/apicontrollers.js';
 import * as authMiddleware from '../middlewares/authMiddleware.js'
@@ -28,6 +29,8 @@ router.route("/forgotPassword").get(getForgotPasswordPage)
 router.route("/newPassword/:token").get(resetPasswordPage)
 router.route("/forgotPassword").post(resetPasswordMail)
 router.route("/newPassword/:token").post(newPassword)
+
+router.route("/companyPaymentResultPage").post(companyPaymentResult)
 
 
 router.route("/contactEmail").post(contactEmail)

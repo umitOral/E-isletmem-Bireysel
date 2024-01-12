@@ -16,16 +16,16 @@ const sendMail = async (req, res) => {
     
     const html = registerMail
     const transporter = createTransport({
-      host: "smtp.gmail.com",
+      host: "smtpout.secureserver.net",
       port: 587,
       auth: {
-        user: process.env.MAIL_ADRESS,
-        pass: process.env.MAIL_PASSWORD,
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     const info = await transporter.sendMail({
-      from: `E-işletmem <${process.env.MAIL_ADRESS}>`,
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: req.body.email,
       subject: "Başarıyla Kayıt oldunuz",
       html: html,
@@ -49,16 +49,16 @@ const passwordResetMail = async (email,url) => {
     
 
     const transporter = createTransport({
-      host: "smtp.gmail.com",
+      host: "smtpout.secureserver.net",
       port: 587,
       auth: {
-        user: process.env.MAIL_ADRESS,
-        pass: process.env.MAIL_PASSWORD,
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     const info = await transporter.sendMail({
-      from: `E-işletmem <${process.env.MAIL_ADRESS}>`,
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: email,
       subject: "Parola Sıfırlama",
       html: html,
@@ -78,16 +78,16 @@ const orderSuccesEmail=async(request)=>{
 
 
     const transporter = createTransport({
-      host: "smtp.gmail.com",
+      host: "smtpout.secureserver.net",
       port: 587,
       auth: {
-        user: process.env.MAIL_ADRESS,
-        pass: process.env.MAIL_PASSWORD,
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     const info = await transporter.sendMail({
-      from: `E-işletmem <${process.env.MAIL_ADRESS}>`,
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: "umit.oralmat10@gmail.com",
       subject: "Ödemeniz alındı",
       html: request.price+"'lik ödemeniz başarıyla gerçekleşti",
@@ -118,16 +118,16 @@ const contactEmail=async(req,res)=>{
     console.log("mail başarılı")
 
     const transporter = createTransport({
-      host: "smtp.gmail.com",
+      host: "smtpout.secureserver.net",
       port: 587,
       auth: {
-        user: process.env.MAIL_ADRESS,
-        pass: process.env.MAIL_PASSWORD,
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     const info = await transporter.sendMail({
-      from: `E-işletmem <${process.env.MAIL_ADRESS}>`,
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: req.body.email,
       subject: "Mesajınızı Aldık",
       html: html,

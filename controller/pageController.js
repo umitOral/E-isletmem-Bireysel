@@ -20,7 +20,6 @@ const todayDate = new Date(year, month, day);
 const tomorrowDate = new Date(year, month, day + 1);
 
 const getIndexPage = (req, res) => {
-  
   try {
     res.status(200).render("front/index", {
       link: "indexAdmin",
@@ -33,7 +32,6 @@ const getIndexPage = (req, res) => {
   }
 };
 const resetPasswordPage = async (req, res) => {
-  
   try {
     res.status(200).render("front/newPassword", {
       token: req.params.token,
@@ -62,7 +60,7 @@ const getForgotPasswordPage = async (req, res, next) => {
 const getSuperAdminPage = async (req, res) => {
   try {
     let companies = await Company.find({});
-    console.log("başarılı");
+    
 
     res.status(200).render("superAdmin/superAdminMain", {
       companies,
@@ -79,7 +77,7 @@ const getSuperAdminPage = async (req, res) => {
 const getSuperAdminTicketsPage = async (req, res) => {
   try {
     let tickets = await Ticket.find({});
-    console.log("başarılı");
+   
 
     res.status(200).render("superAdmin/superAdminTickets", {
       tickets,
@@ -273,7 +271,7 @@ const getUsersPage = async (req, res) => {
     const pagination = {};
     pagination["page"] = page;
     pagination["lastpage"] = lastpage;
-    console.log(lastpage);
+   
 
     if (startIndex > 0) {
       pagination.previous = {
@@ -308,8 +306,8 @@ const getUsersPage = async (req, res) => {
 const getEmployeesPage = async (req, res) => {
   try {
     let query = Employee.find({});
-   let roles= Object.keys(ROLES_LIST)
-   let rolesValues=Object.values(ROLES_LIST)
+    let roles = Object.keys(ROLES_LIST);
+    let rolesValues = Object.values(ROLES_LIST);
     if (req.query) {
       const searchObject = {};
       searchObject["company"] = res.locals.company._id;
@@ -324,14 +322,13 @@ const getEmployeesPage = async (req, res) => {
     const endIndex = page * limit;
 
     const total = await Employee.count()
-     
+
       .where("company")
       .equals(res.locals.company._id);
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
     pagination["page"] = page;
     pagination["lastpage"] = lastpage;
-   
 
     if (startIndex > 0) {
       pagination.previous = {
@@ -346,22 +343,17 @@ const getEmployeesPage = async (req, res) => {
       };
     }
 
-   
-    
-
     query = query.skip(startIndex).limit(limit);
     const employees = await query;
-    
 
     res.status(200).render("employees", {
       pagination,
       total,
       count: employees.length,
       employees,
-      roles:roles,
+      roles: roles,
       rolesValues,
       link: "employees",
-      
     });
   } catch (error) {
     res.status(500).json({
@@ -373,25 +365,24 @@ const getEmployeesPage = async (req, res) => {
 
 const getAppointmentsPage = async (req, res) => {
   try {
-    
-
     let services = await Company.findById({ _id: res.locals.company._id });
-    const activeServices=[]
-    services.services.forEach(element => {
-      if (element.activeorNot===true) {
-        activeServices.push(element)
+    const activeServices = [];
+    services.services.forEach((element) => {
+      if (element.activeorNot === true) {
+        activeServices.push(element);
       }
-     });
+    });
     // sort({ registerDate: 1 })
 
-    const users = await User.find({ role: "customer",company:res.locals.company._id});
+    const users = await User.find({
+      role: "customer",
+      company: res.locals.company._id,
+    });
 
-
-    
     res.status(200).render("appointments", {
       link: "appointments",
       users,
-      services:activeServices
+      services: activeServices,
     });
   } catch (error) {
     res.status(500).json({
@@ -452,7 +443,7 @@ const getAppointmentsStaticsPage = async (req, res) => {
 const getSettingsPage = (req, res) => {
   try {
     const company = res.locals.company;
-    
+
     res.status(200).render("settings", {
       link: "settings",
       company,
@@ -478,10 +469,12 @@ const companyPaymentPage = (req, res) => {
     });
   }
 };
+
+
 const companyPaymentsListPage = async (req, res) => {
   try {
-    const orders = await Order.find({company:res.locals.company});
-    console.log(orders);
+    const orders = await Order.find({ company: res.locals.company });
+    
     res.status(200).render("companyPaymentsList", {
       link: "companyPaymentsList",
       orders,
@@ -495,9 +488,7 @@ const companyPaymentsListPage = async (req, res) => {
 };
 const getPaymentsPage = async (req, res) => {
   try {
-    // console.log(now.toLocaleString())
-    // console.log(todayDate.toLocaleString())
-    // console.log(tomorrowDate.toLocaleString())
+   
 
     const users = await User.find({ company: res.locals.company._id });
     const payments = await Payment.find({
@@ -507,7 +498,7 @@ const getPaymentsPage = async (req, res) => {
         $lte: tomorrowDate,
       },
     }).populate("fromUser", "name");
-    // console.log(payments)
+ 
 
     let totalIncome = 0;
     let totalExpenses = 0;
@@ -551,8 +542,10 @@ const getSinglePage = async (req, res) => {
   try {
     const singleUser = await User.findById(req.params.id);
     const payments = await Payment.find({ fromUser: req.params.id });
-    const sessions = await Sessions.find({user:req.params.id}).populate("doctor");
-    
+    const sessions = await Sessions.find({ user: req.params.id }).populate(
+      "doctor"
+    );
+
     res.status(200).render("user-details", {
       singleUser,
       sessions,
@@ -569,23 +562,25 @@ const getSinglePage = async (req, res) => {
 const getSingleEmployeePage = async (req, res) => {
   try {
     const singleUser = await Employee.findById(req.params.id);
-    const roles=Object.keys(ROLES_LIST)
-    let rolesValue=[]
-    console.log(typeof(ROLES_LIST))
+    const roles = Object.keys(ROLES_LIST);
+    let rolesValue = [];
+    
 
     for (const key in ROLES_LIST) {
       if (Object.hasOwnProperty.call(ROLES_LIST, key)) {
         const element = ROLES_LIST[key];
-        rolesValue.push(element)
+        rolesValue.push(element);
       }
     }
-    
-    const sessions = await Sessions.find({doctor:req.params.id}).populate(["user"]);
-    
+
+    const sessions = await Sessions.find({ doctor: req.params.id }).populate([
+      "user",
+    ]);
+
     res.status(200).render("employee-details", {
       singleUser,
       sessions,
-      roles:roles,
+      roles: roles,
       rolesValue,
       link: "employees",
     });
@@ -598,6 +593,7 @@ const getSingleEmployeePage = async (req, res) => {
 };
 
 export {
+ 
   getForgotPasswordPage,
   getSuperAdminPage,
   getSettingsPage,
@@ -627,5 +623,5 @@ export {
   getPricesPage,
   getSuperAdminTicketsPage,
   companyPaymentsListPage,
-  getSingleEmployeePage
+  getSingleEmployeePage,
 };

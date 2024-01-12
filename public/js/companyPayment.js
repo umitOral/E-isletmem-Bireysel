@@ -46,59 +46,41 @@ function addPaymentRequest(e) {
   if (paymentValue.innerHTML === "0") {
     ui.showModalWithoutResponse(false, "Lütfen  paket seçiniz");
   } else {
-    if ((data.cardNumber, data.cardNumber !== "")) {
-      loader.classList.toggle("showed");
-      request
-        .postWithUrl("./addCompanyPayment", data)
-        .then((response) => {
-          console.log(response);
+    
+    request
+      .postWithUrl("./addCompanyPayment", data)
+      .then((response) => {
+        console.log(response);
 
-          if (response.success === false) {
-            ui.showModal(false, response.result.errorMessage);
-            loader.classList.remove("showed");
-          } else {
-            loader.classList.remove("showed");
+        if (response.success === false) {
+          ui.showModal(false, response.result.errorMessage);
+        } else {
+          ui.showModal(true, response.message);
+          var URL = response.data;
 
-            ui.showModal(true, response.message);
+         
+          window.open(response.data, "_blank");
+          
+        }
+      })
 
-            formData.cardUserName.value = "";
-            formData.cardNumber.value = "";
-            formData.expireMonth.value = "";
-            formData.expireYear.value = "";
-            formData.cvc.value = "";
-
-            const closeModal = document.querySelectorAll(
-              ".response_modal div i"
-            );
-            closeModal.forEach((element) => {
-              element.addEventListener("click", function (e) {
-                console.log("sil");
-                e.target.parentElement.remove();
-              });
-            });
-          }
-        })
-
-        .catch((err) => {
-          ui.showModal(false, err);
-        });
-    } else {
-      ui.showModalWithoutResponse(false, "Lütfen Kart bilgilerinizi girin");
-    }
+      .catch((err) => {
+        ui.showModal(false, err);
+      });
   }
 }
 
-formData.cardNumber.addEventListener("input", () => {
-  let data = {
-    cardInformations:formData.cardNumber.value,
-    price: 2400,
-  };
-  if (formData.cardNumber.value.length === 6) {
-    request
-      .postWithUrl("./getInstallment", data)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch(err=>{console.log(err)});
-  }
-});
+// formData.cardNumber.addEventListener("input", () => {
+//   let data = {
+//     cardInformations:formData.cardNumber.value,
+//     price: 2400,
+//   };
+//   if (formData.cardNumber.value.length === 6) {
+//     request
+//       .postWithUrl("./getInstallment", data)
+//       .then((response) => {
+//         console.log(response);
+//       })
+//       .catch(err=>{console.log(err)});
+//   }
+// });

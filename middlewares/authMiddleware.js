@@ -5,6 +5,7 @@ import Employee from "../models/EmployeesModel.js";
 
 const checkUser = async (req, res, next) => {
   const token = req.cookies.jsonwebtoken;
+  
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
@@ -69,11 +70,16 @@ const verifyactiveOrNot = () => {
   return async (req, res, next) => {
     
     const employee = await Employee.findOne({email:req.body.email})
-    console.log(employee.activeOrNot)
-    if (!employee.activeOrNot) {
-      next(new Error("Hesabınız Pasiftir. Lütfen Mağaza yetkiliniz ile iletişime geçiniz.", 401));
+    
+    if (employee) {
+      if (!employee.activeOrNot) {
+        next(new Error("Hesabınız Pasiftir. Lütfen Mağaza yetkiliniz ile iletişime geçiniz.", 401));
+      }
+      next();
+    } else {
+      next(new Error("Kullanıcı bulunamadı", 401));
     }
-    next();
+    
   };
 };
 

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const connect = async() => {
   await mongoose
     .connect(process.env.DB_URI, {
-      dbName: "e-isletmem_dev",
+      dbName: "e-isletmem_dev" || process.env.DB_NAME,
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

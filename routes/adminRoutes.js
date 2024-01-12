@@ -6,7 +6,7 @@ import {createEmployees,editInformationsEmployees} from '../controller/employees
 import {addService,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
 import {addPayment,deletePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
 import {getSexStaticsWithFilter,getPaymentStaticsWithFilter,getNewUserStaticswithFilter} from '../controller/staticsController.js';
-import {updateCompanyPassword,updateCompanyInformations,addCompanyPayment,getInstallment} from '../controller/companyControllers.js';
+import {updateCompanyPassword,updateCompanyInformations,addCompanyPayment} from '../controller/companyControllers.js';
 import {verifyRoles} from '../middlewares/authMiddleware.js';
 import ROLES_LIST from '../config/roles_list.js'
 import appointmentsRoutes from './appointmentsRoutes.js';
@@ -39,8 +39,9 @@ router.route("/payments/addExpense").post(addExpense)
 
 router.route("/companyPaymentPage").get(companyPaymentPage)
 router.route("/companyPaymentsList").get(companyPaymentsListPage)
-router.route("/getInstallment").post(getInstallment)
+
 router.route("/addCompanyPayment").post(addCompanyPayment)
+
 
 router.route("/employees").get(getEmployeesPage)
 router.route("/employees/:id").get(verifyRoles(ROLES_LIST.ADMIN),getSingleEmployeePage)
