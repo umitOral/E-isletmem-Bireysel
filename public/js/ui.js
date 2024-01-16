@@ -85,6 +85,8 @@ export class UI {
     });
   }
   selectedDatetoAppointmentUI(selectedDate) {
+    console.log(  "burasu")
+    console.log(selectedDate)
     const eventDate = document.querySelector(".appointment-list");
     eventDate.textContent = new Date(selectedDate).toLocaleDateString([], {
       weekday: "long",
@@ -234,15 +236,22 @@ export class UI {
                                              
                         <div>
                         <span>${new Date(element.startHour)
-                          .toLocaleTimeString()
-                          .slice(0, 5)} </span>
+                          .toLocaleTimeString([],{
+                            hour:"2-digit",
+                            minute:"2-digit"
+                          })
+                          } </span>
                         <span>${new Date(element.endHour)
-                          .toLocaleTimeString()
-                          .slice(0, 5)} </span>
+                          .toLocaleTimeString([],{
+                            hour:"2-digit",
+                            minute:"2-digit"
+                          })
+                          } </span>
                         
                         
                         </div>
                         <span>  Boş</span>
+                        
                         <div>
                         <input type="checkbox" name="aaa" id="">
                         </div>
