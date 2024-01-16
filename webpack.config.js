@@ -12,21 +12,20 @@ const module={
         path: path.resolve(__dirname+"/public", 'bundles'), 
         filename: 'appointments.js'
     },
-    mode: "development",
     
     module: {
-        rules: [
-            {
-              test: /\.js$/,
-              exclude: /(node_modules)/,
-              use: {
-                loader: 'babel-loader',
-                options: {
-                  presets: ["@babel/preset-env"]
-                }
-              }
+      rules: [
+        {
+          test: /\.m?js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: ['@babel/preset-env']
             }
-          ]
+          }
+        }
+      ]
     }
 };
 
