@@ -65,7 +65,7 @@ function getAllSessions() {
   request
     .getwithUrl("/api/getSingleDayAllDoctorSessions/" + selectedDate)
     .then((response) => {
-      console.log(response);
+      
       const allDoctorAllSessions = response.allDoctorAllSessions;
       const AllDoctor = response.doctors;
       const workHours = response.workHours;
@@ -353,8 +353,8 @@ function addListener() {
       // set current day active
 
       let activeDay = e.target.textContent.trim();
-
-      const activeDate = new Date(year, month, activeDay);
+     
+   
 
       selectedDate = year + "-" + (month + 1) + "-" + activeDay;
 

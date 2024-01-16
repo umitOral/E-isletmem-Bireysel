@@ -88,7 +88,7 @@ export class UI {
     console.log(  "burasu")
     console.log(selectedDate)
     const eventDate = document.querySelector(".appointment-list");
-    eventDate.textContent = new Date(selectedDate).toLocaleDateString([], {
+    eventDate.textContent = new Date(selectedDate.replace(/-/g, "/")).toLocaleDateString([], {
       weekday: "long",
       day: "2-digit",
       month: "2-digit",
