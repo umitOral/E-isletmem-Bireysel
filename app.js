@@ -14,7 +14,6 @@ import api from "./routes/api.js";
 import {customErrorHandler} from "./middlewares/error/customErrorHandler.js";
 
 import * as authMiddleware from "./middlewares/authMiddleware.js";
-
 //dotenv config
 dotenv.config();
 

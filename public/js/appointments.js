@@ -360,7 +360,7 @@ function addListener() {
 
       ui.selectedDatetoAppointmentUI(selectedDate);
       ui.deleteAllSessionFromUI();
-      getAllSessions(selectedDate);
+      getAllSessions();
 
       days.forEach((element) => {
         element.classList.remove("active");
@@ -392,7 +392,7 @@ function addListener() {
               element.classList.add("active");
             }
           });
-        }, 100);
+        }, 1000);
       }
       // remaining current month days
       else {
