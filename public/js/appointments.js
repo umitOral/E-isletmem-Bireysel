@@ -63,7 +63,7 @@ function showDatesAtPage(params) {
 
 function getAllSessions() {
   request
-    .getwithUrl("/api/getSingleDayAllDoctorSessions/" + selectedDate)
+    .getwithUrl("/api/getSingleDayAllDoctorSessions/" + selectedDate.replaceAll("/","-"))
     .then((response) => {
       
       const allDoctorAllSessions = response.allDoctorAllSessions;
@@ -356,7 +356,7 @@ function addListener() {
      
    
 
-      selectedDate = year + "-" + (month + 1) + "-" + activeDay;
+      selectedDate = year + "/" + (month + 1) + "/" + activeDay;
 
       ui.selectedDatetoAppointmentUI(selectedDate);
       ui.deleteAllSessionFromUI();
