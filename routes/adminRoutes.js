@@ -1,6 +1,6 @@
 import express from 'express';
 import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,getAppointmentsPage,getEmployeessStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getSingleEmployeePage,getservicesPage,getEmployeesPage,getPaymentsPage} from '../controller/pageController.js';
-import {logOut,createUser,deletePhoto,uploadPictures,getAllPhotos,editInformations,findUser,findEmployees,deactivateEmployee,activateEmployee} from '../controller/userController.js';
+import {logOut,createUser,deletePhoto,addOrder,uploadPictures,getAllPhotos,getUsersOpenOrders,getUsersAllOrders,editInformations,findUser,findEmployees,deactivateEmployee,activateEmployee} from '../controller/userController.js';
 import {createEmployees,editInformationsEmployees} from '../controller/employeesController.js';
 
 import {addService,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
@@ -23,7 +23,10 @@ router.route("/users/:id").get(getSinglePage)
 router.route("/users/:id/deactivateEmployee").get(deactivateEmployee)
 router.route("/users/:id/activateEmployee").get(activateEmployee)
 router.route("/users/:id/uploadpictures").post(uploadPictures)
+router.route("/users/:id/addorder").post(addOrder)
 router.route("/users/:id/getAllPhotos").get(getAllPhotos)
+router.route("/users/:id/getUsersAllOrders").get(getUsersAllOrders)
+router.route("/users/:id/getUsersOpenOrders").get(getUsersOpenOrders)
 router.route("/users/:id/deletePhoto/:public_id").get(deletePhoto)
 router.route("/users/:id/editInformations").post(editInformations)
 router.route("/users/createUser").post(createUser)

@@ -63,9 +63,10 @@ function showDatesAtPage(params) {
 
 function getAllSessions() {
   request
-    .getwithUrl("/api/getSingleDayAllDoctorSessions/" + selectedDate.replaceAll("/","-"))
+    .getwithUrl(
+      "/api/getSingleDayAllDoctorSessions/" + selectedDate.replaceAll("/", "-")
+    )
     .then((response) => {
-      
       const allDoctorAllSessions = response.allDoctorAllSessions;
       const AllDoctor = response.doctors;
       const workHours = response.workHours;
@@ -120,9 +121,23 @@ function getAllSessions() {
       ui.showAllSessionToUI(allTimesAllDoctor, AllDoctor);
 
       changeState();
+      getSessions()
     })
 
     .catch((err) => console.log(err));
+}
+
+async function getSessions() {
+  const userSelect=document.querySelector("#user-select")
+  userSelect.addEventListener("change",()=>{
+    let userID=userSelect.options[userSelect.selectedIndex].value
+    request.getwithUrl("./users/"+userID+"/getUsersOpenOrders")
+    .then(response=>{
+      console.log(response)
+      ui.addOrderstoUI(response.data)
+    })
+    .catch(err=>console.log(err))
+  })
 }
 
 async function dayFullOrNight() {
@@ -353,8 +368,6 @@ function addListener() {
       // set current day active
 
       let activeDay = e.target.textContent.trim();
-     
-   
 
       selectedDate = year + "/" + (month + 1) + "/" + activeDay;
 
@@ -487,25 +500,22 @@ function showAddEventModal(e) {
   modalAddSession.classList.add("showed_modal");
 }
 
-
 const modalUpdateSession = document.querySelector(".modal_update_session");
 
 let selectedValuesUpdate = [];
 
 function showEditModal(e) {
-  
   const sessionID = modalUpdateSession.querySelector(".sessionID");
   const description = modalUpdateSession.querySelector(".description");
   const user = modalUpdateSession.querySelector(".user");
 
   while (selected_proccess_type_update.firstChild) {
-    selected_proccess_type_update.firstChild.remove()
+    selected_proccess_type_update.firstChild.remove();
   }
- 
-  while (selectedValuesUpdate.length>0) {
-    selectedValuesUpdate.pop()
+
+  while (selectedValuesUpdate.length > 0) {
+    selectedValuesUpdate.pop();
   }
- 
 
   request
     .getwithUrl(
@@ -514,17 +524,14 @@ function showEditModal(e) {
         "/getAppointment"
     )
     .then((response) => {
-      
-
-      sessionID.setAttribute("value",response.data._id);
+      sessionID.setAttribute("value", response.data._id);
       description.value = response.data.description;
       userUpdate.value = response.data.user._id;
 
-     
       response.data.services.map((element) =>
         selectedValuesUpdate.push(element)
       );
-      console.log(selectedValuesUpdate)
+      console.log(selectedValuesUpdate);
       //add response services to UI ************************************************
 
       selectedValuesUpdate.forEach((element) => {
@@ -587,10 +594,8 @@ modalAddSessionSave.addEventListener("click", (e) => {
     services.push(element.value);
   });
 
-  console.log(services);
-
   let data = {
-    services: services,
+    services: selectedValues,
     user: addSessionForm.user.value,
     timeIndexes: [
       addSessionForm.timeIndexes[0].value,
@@ -620,19 +625,27 @@ let selectedValues = [];
 proccessType.addEventListener("change", () => {
   console.log("hizmet seçildi");
 
-  if (
-    !selectedValues.includes(
+  let index = selectedValues.findIndex(
+    (item)=>
+    item.productName ===
       proccessType.options[
         proccessType.options.selectedIndex
       ].textContent.trim()
-    )
-  ) {
-    selectedValues.push(
-      proccessType.options[
-        proccessType.options.selectedIndex
-      ].textContent.trim()
-    );
+  );
 
+
+  if (index === -1) {
+    console.log("hizmet eklendi");
+    selectedValues.push({
+      productName:
+        proccessType.options[
+          proccessType.options.selectedIndex
+        ].textContent.trim(),
+      productPrice:
+        proccessType.options[proccessType.options.selectedIndex].dataset.price,
+      productStatus: "open",
+    });
+    console.log(selectedValues);
     const proccessDiv = document.createElement("div");
     const nodeinput = document.createElement("input");
     nodeinput.value =
@@ -673,9 +686,7 @@ proccessType.addEventListener("change", () => {
   });
 });
 
-
 proccessTypeUpdate.addEventListener("change", (e) => {
-
   if (
     !selectedValuesUpdate.includes(
       proccessTypeUpdate.options[
@@ -712,8 +723,6 @@ proccessTypeUpdate.addEventListener("change", (e) => {
 
     proccessDiv.appendChild(nodeinput);
     proccessDiv.appendChild(deleteButton);
-
-    
 
     selected_proccess_type_update.appendChild(proccessDiv);
   } else {

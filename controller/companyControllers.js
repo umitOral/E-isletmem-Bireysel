@@ -1,6 +1,6 @@
 import Company from "../models/companyModel.js";
 import Employee from "../models/EmployeesModel.js";
-import Order from "../models/OrderModel.js";
+import Subscription from "../models/subscriptionModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { orderSuccesEmail } from "./mailControllers.js";
 import { iyziPayDeneme } from "./iyzipayController.js";
@@ -154,7 +154,7 @@ const addCompanyPayment = async (req, res) => {
           conversationId: result.conversationId,
           token: result.token,
         };
-        await Order.create(data);
+        await Subscription.create(data);
         res.json({
           success: true,
           message: "ödeme sayfasına yönlendiriliyorsunuz.",
@@ -174,7 +174,7 @@ const companyPaymentResult = async (req, res) => {
   try {
     console.log("burası");
     
-    const order = await Order.findOne({ token: req.body.token });
+    const subscription = await Subscription.findOne({ token: req.body.token });
     
 
     var iyzipay = new Iyzipay({
@@ -186,20 +186,20 @@ const companyPaymentResult = async (req, res) => {
     iyzipay.checkoutForm.retrieve(
       {
         locale: Iyzipay.LOCALE.TR,
-        conversationId: order.conversationId,
-        token: order.token,
+        conversationId: subscription.conversationId,
+        token: subscription.token,
       },
       async (err, result) => {
         if (err) {
           // console.log(err);
         } else {
-          await Order.findOneAndUpdate(
-            { conversationId: order.conversationId },
+          await Subscription.findOneAndUpdate(
+            { conversationId: subscription.conversationId },
             {
               status: "success",
             }
           );
-          addSubscription(order);
+          addSubscription(subscription);
           res.status(200).render("front/companyPaymentResultPage", {
             success: true,
             link: "companyPaymentResultPage",
@@ -216,19 +216,19 @@ const companyPaymentResult = async (req, res) => {
   }
 };
 
-async function addSubscription(order) {
-  let company= await Company.findById(order.company)
+async function addSubscription(subscription) {
+  let company= await Company.findById(subscription.company)
   
-  console.log(order.paymentDuration)
+  console.log(subscription.paymentDuration)
   let today = new Date();
   let diffTime = Math.ceil(((company.subscribeEndDate - today))/(1000*60 * 60 * 24));
   console.log(diffTime);
-  console.log(new Date().setDate(company.subscribeEndDate.getDate() + order.paymentDuration+diffTime));
+  console.log(new Date().setDate(company.subscribeEndDate.getDate() + subscription.paymentDuration+diffTime));
   if (company.subscribeEndDate > today) {
-    company.subscribeEndDate = new Date().setDate(company.subscribeEndDate.getDate() + order.paymentDuration+diffTime);
+    company.subscribeEndDate = new Date().setDate(company.subscribeEndDate.getDate() + subscription.paymentDuration+diffTime);
     await company.save()
   } else {
-    company.subscribeEndDate =new Date().setDate( today.getDate() + order.paymentDuration);
+    company.subscribeEndDate =new Date().setDate( today.getDate() + subscription.paymentDuration);
     await company.save()
   }
 }

@@ -5,7 +5,7 @@ import ROLES_LIST from "../config/roles_list.js";
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
-import Order from "../models/OrderModel.js";
+import Subscription from "../models/subscriptionModel.js";
 import { Ticket } from "../models/ticketModel.js";
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
@@ -473,11 +473,11 @@ const companyPaymentPage = (req, res) => {
 
 const companyPaymentsListPage = async (req, res) => {
   try {
-    const orders = await Order.find({ company: res.locals.company });
+    const subscriptions = await Subscription.find({ company: res.locals.company });
     
     res.status(200).render("companyPaymentsList", {
       link: "companyPaymentsList",
-      orders,
+      subscriptions,
     });
   } catch (error) {
     res.status(500).json({

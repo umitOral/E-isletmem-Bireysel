@@ -78,29 +78,9 @@
                         <h2>Randevu Ekle</h2>
 
                         <div class="add-event-body">
-                            <div class="inputs">
-                                <span>İşlem Tipi:</span>
-
-                                <select class="proccess_type_add">
-                                    <option value="" selected disabled hidden>
-                                        Hizmet Seçiniz
-                                    </option>
-                                    <% services.forEach((service,index)=> { %>
-                                        <option value="<%= index %>">
-                                            <%= service.serviceName %>
-                                        </option>
-
-                                        <% }) %>
-                                </select>
-
-                                <div class="selected_proccess_type_add">
-
-                                </div>
-
-                            </div>
                             <div class="inputs">Hasta:
-                                <select name="user" class="" id="" required>
-
+                                <select name="user" class="" id="user-select" required>
+                                    <option value="" selected hidden disable>Hasta seçiniz</option>
                                     <% users.forEach(user=> { %>
                                         <option value="<%= user._id %>">
                                             <%= user.name+" "%><%= user.surname %>
@@ -109,6 +89,20 @@
                                 </select>
 
                             </div>
+                            <div class="inputs">
+                                <span>İşlem Tipi:</span>
+
+                                <select class="proccess_type_add" id="proccess_type_add">
+                                    
+    
+                                </select>
+
+                                <div class="selected_proccess_type_add">
+
+                                </div>
+
+                            </div>
+                           
 
                             <div class="inputs" hidden>timeIndex:
                                 <input type="text" name="timeIndexes" id="" class="timeIndex">
@@ -161,12 +155,7 @@
                                     <option value="" selected disabled hidden>
                                         Hizmet Seçiniz
                                     </option>
-                                    <% services.forEach((service,index)=> { %>
-                                        <option value="<%= index %>">
-                                            <%= service.serviceName %>
-                                        </option>
-
-                                        <% }) %>
+                                   
                                 </select>
 
                                 <div class="selected_proccess_type_update">
@@ -233,7 +222,8 @@
         </div>
 
        
-        <script type="module" src="../bundles/appointments.js"></script>
+        <script type="module" src="/js/appointments.js"></script>
+        <!-- <script type="module" src="../bundles/appointments.js"></script> -->
 
         <script src="/js/sidebar.js"></script>
 

@@ -29,10 +29,13 @@ const sessionSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Employee"
     },
+    
 
     services: [
       {
-        type: String
+        productName: {type:String},
+      productPrice: {type:String},
+      productStatus: {type:String}
       },
     ],
     state: {

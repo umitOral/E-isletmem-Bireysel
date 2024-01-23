@@ -1,6 +1,8 @@
 import User from "../models/userModel.js";
 import Company from "../models/companyModel.js";
+import Order from "../models/OrderModel.js";
 import Employee from "../models/EmployeesModel.js";
+import ORDER_STATUS_LIST from "../config/order_status_list.js";
 import { passwordResetMail } from "../controller/mailControllers.js";
 
 import bcrypt from "bcrypt";
@@ -10,7 +12,7 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import { CustomError } from "../helpers/error/CustomError.js";
 import SERVICES_LIST from "../config/services_list.js";
-import Order from "../models/OrderModel.js";
+import Subscription from "../models/subscriptionModel.js";
 
 const createCompany = async (req, res, next) => {
   try {
@@ -42,13 +44,13 @@ const createCompany = async (req, res, next) => {
     data.company = company._id;
 
     await Employee.create(data);
-    let orderData = {
+    let subscriptionData = {
       company: company._id,
       amount: 0,
       paymentDuration: 30,
       paymentTransactionId: 0,
     };
-    await Order.create(orderData);
+    await Subscription.create(subscriptionData);
     next();
   } catch (error) {
     return next(error);
@@ -137,7 +139,7 @@ const findUser = async (req, res) => {
       count: data.length,
       pagination: pagination,
       link: "users",
-      defaultSearchValue:req.query.user
+      defaultSearchValue: req.query.user,
     });
   } catch (error) {
     res.status(500).json({
@@ -216,25 +218,21 @@ const findEmployees = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const userEmail = req.body.email;
-    req.body.company=res.locals.company
+    req.body.company = res.locals.company;
     const searchEmail = await User.findOne({ email: userEmail });
-    console.log(userEmail)
-    if (searchEmail) {  
+    console.log(userEmail);
+    if (searchEmail && !searchEmail === "") {
       res.json({
         success: false,
         message: "bu mail adresi kullanılmaktadır.",
       });
     } else {
-
       await User.create(req.body);
       res.json({
         success: true,
         message: "Kulllanıcı başarıyla kaydedildi.",
       });
     }
-
-
-
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -372,14 +370,38 @@ const uploadPictures = async (req, res) => {
     });
   }
 };
+const addOrder = async (req, res) => {
+  try {
+    console.log(req.body)
+    console.log(req.params)
+    
+    req.body.status=ORDER_STATUS_LIST[0]
+    req.body.company=res.locals.company
+    req.body.user=req.params.id
+    req.body.price=req.body.products.map(element=>element.productPrice).reduce((a,b)=>a+b)
+    
+    
+    await Order.create(req.body)
+  
+    res.json({
+      succes: true,
+      message: "işlem başarıyla eklendi",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      succes: false,
+      message: "işlem eklenirken bir hata oluştu.",
+    });
+  }
+};
 
 const deletePhoto = async (req, res) => {
   console.log("burası");
   console.log(req.params);
   try {
-    
-//TODO
-// resim silmeye çalışan müşteri kendisi mi kontrol ediecek  @@SECURITY
+    //TODO
+    // resim silmeye çalışan müşteri kendisi mi kontrol ediecek  @@SECURITY
 
     cloudinary.uploader.destroy(
       "archimet/" + req.params.public_id,
@@ -397,10 +419,9 @@ const deletePhoto = async (req, res) => {
           images: { public_id: "archimet/" + req.params.public_id },
         },
       }
-    ).then(response=>console.log(response))
-    .catch(err=>console.log(err));
-
-    
+    )
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
 
     res.json({ success: true, message: "resim başarıyla silindi" });
   } catch (error) {
@@ -410,26 +431,60 @@ const deletePhoto = async (req, res) => {
     });
   }
 };
+const getUsersOpenOrders = async (req, res) => {
+
+  try {
+    console.log("heylooo")
+    const orders = await Order.find({
+      user:req.params.id,
+      status:"open"
+    });
+
+    let data=orders.map(element=>element.products).flat(1)
+    
+    res.json({ success: true, message: "işlemler çekildi", data:data });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "resimler çekilirken bir hata oluştu",
+    });
+  }
+};
+const getUsersAllOrders = async (req, res) => {
+
+  try {
+    console.log("burası")
+    const orders = await Order.find({
+      user:req.params.id
+    });
+
+    
+  
+    res.json({ success: true, message: "işlemler çekildi", data:orders });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "resimler çekilirken bir hata oluştu",
+    });
+  }
+};
 const getAllPhotos = async (req, res) => {
   try {
     const singleUser = await User.findById(req.params.id);
-    
-   
-   
-    const photos=singleUser.images.sort(compare)
+
+    const photos = singleUser.images.sort(compare);
     function compare(a, b) {
-      if (a.uploadTime>b.uploadTime) {
-        return 1
+      if (a.uploadTime > b.uploadTime) {
+        return 1;
       }
-      if(a.uploadTime<b.uploadTime){
-        return -1
+      if (a.uploadTime < b.uploadTime) {
+        return -1;
       }
-      return 0
+      return 0;
     }
-    console.log(photos)
+    console.log(photos);
 
-    res.json({ success: true, message: "resimler çekildi",photos});
-
+    res.json({ success: true, message: "resimler çekildi", photos });
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -502,4 +557,7 @@ export {
   activateEmployee,
   deletePhoto,
   getAllPhotos,
+  addOrder,
+  getUsersAllOrders,
+  getUsersOpenOrders
 };

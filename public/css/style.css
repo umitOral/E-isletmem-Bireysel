@@ -48,8 +48,8 @@
   list-style: none;
   box-sizing: border-box;
 }
-tbody tr {
-  /* border-bottom: 1px solid var(--color-border-color); */
+.table-wrapper table tbody tr:nth-child(even) {
+ background-color: rgba(128, 128, 128, 0.05);
 }
 input::placeholder {
   opacity: 0.5;

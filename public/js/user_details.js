@@ -1,9 +1,9 @@
 import { Request } from "./requests.js";
 const request = new Request();
-import { Tables } from "./inner_modules/tables.js";
-const tables = new Tables();
+
 
 import { UI } from "./ui.js";
+
 const ui = new UI();
 
 const imageInput = document.querySelector(".upload_file");
@@ -29,7 +29,7 @@ const modalUser = document.querySelector(".modal_user");
 const modalSession = document.querySelector(".modal_session");
 const modalPayment = document.querySelector(".modal_payment");
 const modalImage = document.querySelector(".modal_image");
-const modalProccess = document.querySelector(".modal_proccess");
+const modalOrders = document.querySelector(".modal_orders");
 const userID = document.querySelector(".user-informations").dataset.userıd;
 
 eventListeners();
@@ -42,46 +42,31 @@ function eventListeners() {
 }
 
 cancelModal.forEach((element) => {
-  
   element.addEventListener("click", (e) => {
     element.parentElement.parentElement.classList.remove("showed_modal");
-    
   });
 });
 
-cancelAddPhoto.addEventListener("click",()=>{
-  imageInput.value=""
-  addPictureForm.uploadTime.value=""
+cancelAddPhoto.addEventListener("click", () => {
+  imageInput.value = "";
+  addPictureForm.uploadTime.value = "";
   uploadFiles = [];
-})
-
-tableElements.forEach((table) => {
-  table.querySelectorAll("thead th").forEach((head, columnIndex) => {
-    head.addEventListener("click", () => {
-      tables.sortingStart(table, columnIndex);
-    });
-  });
 });
+
+
 
 function deleteButtonFunction(selector) {
-  
   let deleteImageBtn = document.querySelectorAll(".delete-photo");
-
- 
-   
-
 
   deleteImageBtn.forEach((element) => {
     element.addEventListener("click", (e) => {
       const publicID = element.dataset.publicid;
       if (confirm("silinecek onaylıyor musunuz?")) {
-
         request
           .deletewithUrl("./" + userID + "/deletePhoto/" + publicID)
           .then((response) => {
             ui.showModal(true, response.message);
             getAllImages();
-            
           })
           .catch((err) => ui.showModal(false, err));
       }
@@ -110,8 +95,6 @@ function editUser() {
   e.preventDefault();
 }
 
-
-
 imageInput.addEventListener("change", handleFiles);
 
 let uploadFiles = [];
@@ -120,10 +103,8 @@ function handleFiles(e) {
   const selectedFiles = e.target.files;
   for (const iterator of selectedFiles) {
     uploadFiles.push(iterator);
-    console.log(iterator)
-    
+    console.log(iterator);
   }
-  
 }
 
 function addPicture(e) {
@@ -131,7 +112,7 @@ function addPicture(e) {
   uploadFiles.forEach((element) => {
     formData.append("upload_file", element);
   });
-  console.log(uploadFiles)
+  console.log(uploadFiles);
   loader.classList.toggle("showed");
 
   formData.append("uploadTime", addPictureForm.uploadTime.value);
@@ -146,8 +127,8 @@ function addPicture(e) {
       modalImage.classList.remove("showed_modal");
       ui.showModal(true, response.message);
       uploadFiles = [];
-      imageInput.value=""
-      addPictureForm.uploadTime.value=""
+      imageInput.value = "";
+      addPictureForm.uploadTime.value = "";
       getAllImages();
     })
     .catch((err) => {
@@ -159,7 +140,6 @@ function addPicture(e) {
 }
 
 async function getAllImages() {
-  
   const allImages = document.querySelector(".small_images");
 
   while (allImages.firstChild) {
@@ -270,8 +250,6 @@ saveModal.forEach((element) => {
     modalPayment.classList.remove("showed_modal");
   };
 });
-
-
 
 // options modals
 const sessionsSection = document.querySelector(
@@ -418,3 +396,137 @@ function getAllSessisons() {
       console.log(err);
     });
 }
+
+// add order section
+
+const proccessType = document.querySelector(".proccess_type_add");
+
+const selected_proccess_type_add = document.querySelector(
+  ".selected_proccess_type_add"
+);
+
+let selectedValues = [];
+proccessType.addEventListener("change", () => {
+  console.log("hizmet seçildi");
+  console.log(selectedValues);
+
+  let index = selectedValues.findIndex(
+    (item) =>
+      item.productName ===
+      proccessType.options[
+        proccessType.options.selectedIndex
+      ].textContent.trim()
+  );
+  console.log(index);
+  if (index === -1) {
+    selectedValues.push({
+      productName:
+        proccessType.options[
+          proccessType.options.selectedIndex
+        ].textContent.trim(),
+      productPrice: Number(
+        proccessType.options[proccessType.options.selectedIndex].dataset.price
+      ),
+    });
+
+    const proccessDiv = document.createElement("div");
+    const nodeinput = document.createElement("input");
+    nodeinput.value =
+      proccessType.options[
+        proccessType.options.selectedIndex
+      ].textContent.trim();
+    nodeinput.setAttribute("name", "services");
+    nodeinput.setAttribute("disabled", "");
+    nodeinput.setAttribute("type", "text");
+    nodeinput.setAttribute("class", "selected_proccess");
+    nodeinput.setAttribute(
+      "value",
+      proccessType.options[proccessType.options.selectedIndex].value
+    );
+
+    const priceInput = document.createElement("input");
+    priceInput.setAttribute("disabled", "");
+    priceInput.value =
+      proccessType.options[proccessType.options.selectedIndex].dataset.price;
+
+    const deleteButton = document.createElement("i");
+
+    deleteButton.classList.add("ph");
+    deleteButton.classList.add("ph-x");
+
+    proccessDiv.appendChild(nodeinput);
+    proccessDiv.appendChild(priceInput);
+    proccessDiv.appendChild(deleteButton);
+    selected_proccess_type_add.appendChild(proccessDiv);
+  } else {
+    console.log("hizmet zaten var");
+  }
+
+  // calculate total price
+  calculateTotalPrice()
+  function calculateTotalPrice() {
+    const totalValue = selectedValues
+      .map((element) => element.productPrice)
+      .reduce((a, b) => a + b);
+    const totalPrice = document.querySelector(".total");
+    totalPrice.value = totalValue;
+  }
+
+  // remove selected proccess
+  const selectedProcessDeleteIcon = document.querySelectorAll(
+    ".selected_proccess_type_add div i"
+  );
+  selectedProcessDeleteIcon.forEach((element) => {
+    element.addEventListener("click", (e) => {
+      selectedValues.pop(element.previousElementSibling.value);
+      element.parentElement.remove();
+      calculateTotalPrice()
+    });
+  });
+});
+
+// get proceses from db
+
+const showOrderBtn = document.querySelector(".show-content.orders");
+const orderTable = document.querySelector(".order-table");
+
+showOrderBtn.addEventListener("click", getAllOrders);
+function getAllOrders() {
+  request
+    .getwithUrl("./" + userID + "/getUsersAllOrders")
+    .then((response) => {
+      console.log(response);
+      ui.showModal(response.success, response.message);
+      ui.addResponseToTable(orderTable, response.data);
+    })
+    .catch((err) => {
+      ui.showModal(false, err.message);
+    });
+}
+
+// order modal processes
+
+const orderModalBtn = document.querySelector("#order_btn");
+console.log(orderModalBtn);
+
+orderModalBtn.addEventListener("click", () => {
+  modalOrders.classList.toggle("showed_modal");
+});
+
+// add order section
+
+const addOrderBtn = document.querySelector("#add-order");
+
+addOrderBtn.addEventListener("click", () => {
+  let data = {
+    products: selectedValues,
+  };
+  request
+    .postWithUrl("./" + userID + "/addorder", data)
+    .then((response) => {
+      ui.showModal(response.succes, response.message);
+      modalOrders.classList.toggle("showed_modal");
+      getAllOrders();
+    })
+    .catch((err) => console.log(err));
+});

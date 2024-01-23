@@ -53,20 +53,20 @@
 
                             </thead>
                             <tbody id="userList">
-                                <% orders.forEach(order=> { %>
+                                <% subscriptions.forEach(subscription=> { %>
                                     <tr>
 
                                         <td>
-                                            <%= order.createdAt.toLocaleDateString() %>
+                                            <%= subscription.createdAt.toLocaleDateString()%>
                                         </td>
                                         <td>
-                                            <%= order.amount %>TL
+                                            <%= subscription.amount %>TL
                                         </td>
                                         <td>
-                                            <%= order.conversationId %>
+                                            <%= subscription.conversationId %>
                                         </td>
                                         <td>
-                                            <span><%= order.paymentDuration %>Gün</span>
+                                            <span><%= subscription.paymentDuration %>Gün</span>
                                         </td>
                                         
                                     </tr>

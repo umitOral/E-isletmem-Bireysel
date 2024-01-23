@@ -34,7 +34,7 @@
 
                     </div>
                     <div class="add-payments-button">
-                        <button class="buttons payments-add-button">Kasa Ekle+</button>
+                        <button class="buttons payments-add-button">Ödeme Ekle+</button>
                         <button class="buttons expenses-add-button">Masraf Ekle-</button>
                     </div>
 
@@ -135,6 +135,7 @@
                         <h2>Ödeme Ekle</h2>
                         <form action="./payments/addPayment" method="POST">
                             <select name="fromUser" id="fromUser" class="inputs" required>
+                                <option value="" selected disable hidden> Hasta seçiniz</option>
                                 <% users.forEach(user=> { %>
                                     <option value="<%= user._id %>">
                                         <%= user.name %>

@@ -1,18 +1,33 @@
 import Session from '../models/sessionModel.js';
+// import Order from '../models/OrderModel.js';
+import ORDER_STATUS_LIST from '../config/order_status_list.js'
 
 const createAppointment = async (req, res) => {
     try {
         console.log(req.body)
-        console.log("burası")
+      
         
         req.body.startHour = new Date(`${req.body.date},${req.body.startHour}`);
         req.body.endHour = new Date(`${req.body.date},${req.body.endHour}`);
         
         req.body.date = new Date(req.body.date);
 
-        console.log(req.body.endHour)
+    //     const totalPrice = req.body.services
+    //   .map((element) => element.productPrice)
+    //   .reduce((a, b) => a + b);
+    
 
-        const session=await Session.create(req.body)
+    //      let orderdata={
+    //         status:ORDER_STATUS_LIST[0],
+    //         company:res.locals.company,
+    //         price:totalPrice,
+    //         user:req.body.user,
+    //         products:req.body.services
+    //     }
+    //     const order=await Order.create(orderdata)
+       
+
+        await Session.create(req.body);
         
         res.status(200).json({
             success:true,

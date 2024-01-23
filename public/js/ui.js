@@ -3,8 +3,7 @@ export class UI {
     this.table = document.getElementById("userList");
   }
 
-  showModal(success,message) {
-    
+  showModal(success, message) {
     const messageBox = document.querySelector(".information-modal");
 
     if (success == false) {
@@ -24,13 +23,61 @@ export class UI {
     }, 2000);
   }
 
+  addResponseToTable(table, data) {
+    const rows = table.querySelectorAll("tbody tr");
+    const tableBody = table.querySelector("tbody");
 
+    rows.forEach((element) => {
+      element.remove();
+    });
 
+    console.log(data);
+    for (const index in data) {
+      const element = data[index];
 
-  showModalWithoutResponse(success,message) {
-    const messageBox = document.querySelector(".information-modal");
+      
+      
+      tableBody.innerHTML += `
+          <tr>
+              <td>${new Date(element.createdAt).toLocaleDateString()}</td>
+              <td>${element.status}</td>
+              <td>
+              <table class="processes-table">
+                  <thead>
+                      
+                  </thead>
+                  <tbody>
+                  </tbody>
+                
+              </table>
+              </td>
+              <td>${element.price}TL</td>
+              <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+          </tr>
+          `;
 
     
+    }
+
+    const proccesesTables = table.querySelectorAll(".processes-table tbody");
+    
+    for (const key in data) {
+      
+      data[key].products.forEach(element => {
+        proccesesTables[key].innerHTML += `
+        <tr>
+          <td>${element.productName}</td>
+          <td>${element.productPrice}TL</td>
+          
+        </tr>
+        `;
+      });
+     
+    }
+  }
+
+  showModalWithoutResponse(success, message) {
+    const messageBox = document.querySelector(".information-modal");
 
     if (success == false) {
       messageBox.classList.add("failure");
@@ -85,8 +132,8 @@ export class UI {
     });
   }
   selectedDatetoAppointmentUI(selectedDate) {
-    console.log(  "burasu")
-    console.log(selectedDate)
+    console.log("burasu");
+    console.log(selectedDate);
     const eventDate = document.querySelector(".appointment-list");
     eventDate.textContent = new Date(selectedDate).toLocaleDateString([], {
       weekday: "long",
@@ -235,18 +282,20 @@ export class UI {
           }" data-endHour="${element.endHour}" style="height:75px">
                                              
                         <div>
-                        <span>${new Date(element.startHour)
-                          .toLocaleTimeString([],{
-                            hour:"2-digit",
-                            minute:"2-digit"
-                          })
-                          } </span>
-                        <span>${new Date(element.endHour)
-                          .toLocaleTimeString([],{
-                            hour:"2-digit",
-                            minute:"2-digit"
-                          })
-                          } </span>
+                        <span>${new Date(element.startHour).toLocaleTimeString(
+                          [],
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )} </span> -
+                        <span>${new Date(element.endHour).toLocaleTimeString(
+                          [],
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )} </span>
                         
                         
                         </div>
@@ -275,6 +324,30 @@ export class UI {
     events.forEach((element) => {
       element.remove();
     });
+  }
+  addOrderstoUI(data) {
+    const userSelect=document.querySelector("#user-select")
+    const orderSelect=document.getElementById("proccess_type_add")
+    console.log(orderSelect.options.length)
+   
+     for (let index = orderSelect.options.length-1; index >=0 ; index--) {
+      console.log(orderSelect.options[index])
+      orderSelect.options[index].remove()
+     }
+   
+    
+    data.forEach(element => {
+      let opt=document.createElement("option")
+      opt.setAttribute("data-price",element.productPrice)
+      opt.setAttribute("data-id",element._id)
+      
+      opt.value=element.productName
+      opt.textContent=element.productName
+      orderSelect.add(opt)
+      
+      
+    });
+   
   }
   deletePaymentFromUI(payment) {
     payment.remove();
@@ -312,19 +385,17 @@ export class UI {
   createChart(response) {
     const sexStaticsLabels = ["Kadın", "Erkek"];
     const sexStaticsValues = response.sexStatics;
-    const staticsArea=document.querySelector(".statics")
-    const filterInfo=document.querySelector(".filter-info")
-    const canvas=`<canvas id="sex_statics" style="width:100%;max-width:800px"></canvas>`
-    
-    filterInfo.classList.remove("showed")
-    
-    
+    const staticsArea = document.querySelector(".statics");
+    const filterInfo = document.querySelector(".filter-info");
+    const canvas = `<canvas id="sex_statics" style="width:100%;max-width:800px"></canvas>`;
+
+    filterInfo.classList.remove("showed");
+
     if (response.sexStatics[0] == 0 && response.sexStatics[0] == 0) {
-      filterInfo.classList.add("showed")
-      staticsArea.innerHTML=""
+      filterInfo.classList.add("showed");
+      staticsArea.innerHTML = "";
     } else {
-     
-      staticsArea.innerHTML=canvas
+      staticsArea.innerHTML = canvas;
       new Chart("sex_statics", {
         type: "pie",
         data: {

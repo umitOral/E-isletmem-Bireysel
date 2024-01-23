@@ -37,7 +37,34 @@
   display: flex;
   gap: 1rem;
 }
-
+.selected_proccess_type_add {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+.selected_proccess_type_add div{
+  
+  align-items: center;
+  border:1px solid gray;
+  border-radius: 0.5rem;
+  padding: 0;
+  width: max-content;
+  padding: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+.selected_proccess_type_add div input{
+ border: none; 
+}
+.selected_proccess_type_add div i{
+ border: 1px solid gray; 
+ background-color: var(--color-danger);
+ border-radius: 3px;
+ padding: 0.5rem;
+}
+.processes-table tbody tr td{
+  text-align: left;
+  width: 0;
+}
 .left_section {
   display: flex;
   gap: 0.5rem;
