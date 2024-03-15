@@ -65,6 +65,7 @@ const companySchema = new Schema(
         },
         servicePrice: { type: Number },
         activeorNot: { type: Boolean, default: true },
+        serviceData:[]
       }
     ]
   },

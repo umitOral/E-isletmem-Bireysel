@@ -11,13 +11,17 @@ import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 
 let now = new Date();
-now.setHours(0, 0, 0, 0);
 let day = now.getDate();
 let month = now.getMonth();
 let year = now.getFullYear();
 
-const todayDate = new Date(year, month, day);
-const tomorrowDate = new Date(year, month, day + 1);
+
+
+
+const firstDate = new Date(year, month, day);
+const secondDate = new Date(year, month, day);
+secondDate.setHours(23,59,59,999)
+
 
 const getIndexPage = (req, res) => {
   try {
@@ -191,8 +195,9 @@ const getPricesPage = (req, res) => {
 const getservicesPage = async (req, res) => {
   try {
     let company = res.locals.company;
-
+    
     const services = await company.services;
+    
 
     res.status(200).render("services", {
       services,
@@ -488,18 +493,19 @@ const companyPaymentsListPage = async (req, res) => {
 };
 const getPaymentsPage = async (req, res) => {
   try {
-   
-
+    
+    
     const users = await User.find({ company: res.locals.company._id });
     const payments = await Payment.find({
       company: res.locals.company._id,
       createdAt: {
-        $gte: todayDate,
-        $lte: tomorrowDate,
+        $gte: firstDate,
+        $lte: secondDate,
       },
-    }).populate("fromUser", "name");
- 
-
+    }).populate("fromUser", ["name","surname"]);
+    console.log(firstDate)
+    console.log(secondDate)
+    
     let totalIncome = 0;
     let totalExpenses = 0;
     let totalCash = 0;
@@ -507,19 +513,19 @@ const getPaymentsPage = async (req, res) => {
     let netCash = 0;
 
     payments.forEach((payment) => {
-      if (payment.value > 0) {
-        totalIncome += payment.value;
+      if (payment.totalPrice > 0) {
+        totalIncome += payment.totalPrice;
         if (payment.cashOrCard === "Nakit") {
-          totalCash += payment.value;
+          totalCash += payment.totalPrice;
         } else {
-          totalCreditCard += payment.value;
+          totalCreditCard += payment.totalPrice;
         }
       } else {
-        totalExpenses += payment.value;
+        totalExpenses += payment.totalPrice;
       }
     });
 
-    netCash = totalCash - -totalExpenses;
+    netCash = totalCash - (totalExpenses*-1);
 
     res.status(200).render("payments", {
       link: "payments",
@@ -538,14 +544,15 @@ const getPaymentsPage = async (req, res) => {
     });
   }
 };
-const getSinglePage = async (req, res) => {
+const getUserPage = async (req, res) => {
   try {
+    
     const singleUser = await User.findById(req.params.id);
     const payments = await Payment.find({ fromUser: req.params.id });
     const sessions = await Sessions.find({ user: req.params.id }).populate(
-      "doctor"
+      ["operations","doctor"]
     );
-
+      
     res.status(200).render("user-details", {
       singleUser,
       sessions,
@@ -553,6 +560,7 @@ const getSinglePage = async (req, res) => {
       link: "users",
     });
   } catch (error) {
+    
     res.status(500).json({
       succes: false,
       message: error,
@@ -611,7 +619,7 @@ export {
   getUsersPage,
   getAboutUsPage,
   getAppointmentsPage,
-  getSinglePage,
+  getUserPage,
   getservicesPage,
   getEmployeesPage,
   resetPasswordPage,

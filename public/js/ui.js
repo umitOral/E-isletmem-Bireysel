@@ -23,6 +23,40 @@ export class UI {
     }, 2000);
   }
 
+  addPaymentsToTable(table, data) {
+    const rows = table.querySelectorAll("tbody tr");
+    const tableBody = table.querySelector("tbody");
+
+    rows.forEach((element) => {
+      element.remove();
+    });
+
+    console.log(data);
+
+    for (const index in data) {
+      const element = data[index];
+
+      tableBody.innerHTML += `
+          <tr>
+              <td hidden>${element._id}</td>
+              <td>${new Date(element.createdAt).toLocaleDateString()}</td>
+              <td>${element.cashOrCard}</td>
+              <td>${element.totalPrice}</td>
+              
+              
+              <td>
+              <select name="" class="operations-edit-select">
+                <option value="" selected>Düzenle</option>
+                <option value="delete">İşlem Sil</option>
+                <option value="add-data">Veri Ekle</option>
+                </select>
+              </td>
+              
+              
+          </tr>
+          `;
+    }
+  }
   addResponseToTable(table, data) {
     const rows = table.querySelectorAll("tbody tr");
     const tableBody = table.querySelector("tbody");
@@ -32,47 +66,41 @@ export class UI {
     });
 
     console.log(data);
+
     for (const index in data) {
       const element = data[index];
 
-      
-      
       tableBody.innerHTML += `
           <tr>
+              <td hidden>${element._id}</td>
               <td>${new Date(element.createdAt).toLocaleDateString()}</td>
-              <td>${element.status}</td>
-              <td>
-              <table class="processes-table">
-                  <thead>
-                      
-                  </thead>
-                  <tbody>
-                  </tbody>
-                
-              </table>
+              <td>${element.operationName}</td>
+              <td>${element.operationAppointmentStatus}</td>
+              <td>${element.appointmensCount}/${element.totalAppointmens}</td>
+              <td>${element.paidValue}/${element.operationPrice}</td>
+              <td>${(() => {
+                if (element.images.length !== 0) {
+                  return `
+                 <i class="fa-regular fa-images"></i>
+                  `;
+                } else {
+                  return `Resim Yok`;
+                }
+              })()}
+
               </td>
-              <td>${element.price}TL</td>
+              <td><i class="fa-solid fa-folder-plus"></i></td>
+              <td>
+              <select name="" class="operations-edit-select">
+                <option value="" selected>Düzenle</option>
+                <option value="delete">İşlem Sil</option>
+                <option value="add-data">Veri Ekle</option>
+                </select>
+              </td>
+              
               <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
           </tr>
           `;
-
-    
-    }
-
-    const proccesesTables = table.querySelectorAll(".processes-table tbody");
-    
-    for (const key in data) {
-      
-      data[key].products.forEach(element => {
-        proccesesTables[key].innerHTML += `
-        <tr>
-          <td>${element.productName}</td>
-          <td>${element.productPrice}TL</td>
-          
-        </tr>
-        `;
-      });
-     
     }
   }
 
@@ -167,28 +195,36 @@ export class UI {
     for (const iterator of paymentTablesChildren) {
       iterator.remove();
     }
-
+    if (data.payments.length===0) {
+      paymentTable.innerHTML="Bu tarih aralığında tahsilat bulunmamaktadır"
+    }else{
+      paymentTable.innerHTML=""
+    }
     data.payments.forEach((payment, index) => {
+      function fromUserCheck() {
+        if (payment.fromUser) {
+          return true
+        }else{
+          return false
+        }
+      }
+      
       paymentTable.innerHTML += `
             <tr>
-                                            
+                    <td>${new Date(payment.createdAt).toLocaleDateString()}//${new Date(payment.createdAt).toLocaleTimeString()}</td>
                     
-                    <td>${payment.createdAt.substr(0, 10)}</td>
-                    <td>${payment.createdAt.substring(11, 19)}</td>
                     <td>${payment.description}</td>
-                    <td>${payment.value}</td> 
-                    <td>${payment.cashOrCard}</td> 
+                    <td>${fromUserCheck()?payment.fromUser.name+" "+payment.fromUser.surname:""}</td> 
+                    <td>${payment.cashOrCard}</td>
+                    <td class="${payment.totalPrice<-1 ? "red_row" : "green_row"}">${payment.totalPrice}</td>
+                    <td></td>
                     <td><span class="material-symbols-sharp edit_payment">
                         more_vert
                     </span>
                         <div class="edit_payment_small_modal">
-                    
-                            <a href="./payments/${
-                              payment._id
-                            }/deletePayment">Sil</a>
-                            
-                            <button class="">Düzenle</button>
-                            
+                            <button  class="delete-payment" data-paymentid="${payment._id}">Sil</button>
+                            <button class="edit-payment-btn"
+                            data-paymentid="${payment._id}">Düzenle</button>
                         </div>
                         
                         
@@ -250,8 +286,12 @@ export class UI {
 
                         </div>
 
-                            <span>${element.user.name}</span>
-                            <span class="buttons">${element.state}</span>
+                            <span>${element.user.name} ${
+            element.user.surname
+          }</span>
+                            <span class="buttons">${
+                              element.appointmentState
+                            }</span>
 
                         </div>
                         <div class="options-appointments" >
@@ -325,30 +365,40 @@ export class UI {
       element.remove();
     });
   }
-  addOrderstoUI(data) {
-    const userSelect=document.querySelector("#user-select")
-    const orderSelect=document.getElementById("proccess_type_add")
-    console.log(orderSelect.options.length)
-   
-     for (let index = orderSelect.options.length-1; index >=0 ; index--) {
-      console.log(orderSelect.options[index])
-      orderSelect.options[index].remove()
-     }
-   
-    
-    data.forEach(element => {
-      let opt=document.createElement("option")
-      opt.setAttribute("data-price",element.productPrice)
-      opt.setAttribute("data-id",element._id)
-      
-      opt.value=element.productName
-      opt.textContent=element.productName
-      orderSelect.add(opt)
-      
-      
-    });
-   
+  addOperationstoUI(data) {
+    const userSelect = document.querySelector("#user-select");
+    const orderSelect = document.getElementById("proccess_type_add");
+    if (data.length === 0) {
+      let opt = document.createElement("option");
+      opt.setAttribute("selected", "");
+      opt.setAttribute("disable", "");
+      opt.setAttribute("hidden", "");
+      opt.textContent = "hastaya Ait İşlem Yok";
+      orderSelect.add(opt);
+    } else {
+      for (let index = orderSelect.options.length - 1; index >= 0; index--) {
+        console.log(orderSelect.options[index]);
+        orderSelect.options[index].remove();
+      }
+
+      let opt = document.createElement("option");
+      opt.setAttribute("selected", "");
+      opt.setAttribute("disable", "");
+      opt.setAttribute("hidden", "");
+      opt.textContent = "İşlem Seçiniz";
+      orderSelect.add(opt);
+
+      data.forEach((element) => {
+        let opt = document.createElement("option");
+        opt.setAttribute("data-price", element.operationPrice);
+        opt.setAttribute("data-id", element._id);
+        opt.textContent = element.operationName;
+        opt.value = element.operationName;
+        orderSelect.add(opt);
+      });
+    }
   }
+
   deletePaymentFromUI(payment) {
     payment.remove();
   }

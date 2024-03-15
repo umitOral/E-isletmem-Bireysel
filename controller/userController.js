@@ -1,7 +1,8 @@
 import User from "../models/userModel.js";
 import Company from "../models/companyModel.js";
-import Order from "../models/OrderModel.js";
+import Operation from "../models/OperationsModel.js";
 import Employee from "../models/EmployeesModel.js";
+import Payment from "../models/paymentsModel.js";
 import ORDER_STATUS_LIST from "../config/order_status_list.js";
 import { passwordResetMail } from "../controller/mailControllers.js";
 
@@ -302,6 +303,8 @@ const loginUser = async (req, res, next) => {
 
 const uploadPictures = async (req, res) => {
   try {
+    console.log("burası");
+    console.log(req.body);
     const cloudinaryImageUploadMethod = async (file) => {
       const result = await cloudinary.uploader.upload(file, {
         use_filename: true,
@@ -310,7 +313,6 @@ const uploadPictures = async (req, res) => {
 
       return { secure_url: result.secure_url, public_id: result.public_id };
     };
-    console.log("burası");
 
     const files = req.files.upload_file;
 
@@ -319,8 +321,8 @@ const uploadPictures = async (req, res) => {
       const path = files.tempFilePath;
       const data = await cloudinaryImageUploadMethod(path);
 
-      await User.updateOne(
-        { _id: req.params.id },
+      await Operation.updateOne(
+        { _id: req.body.operationID },
         {
           $push: {
             images: {
@@ -341,8 +343,8 @@ const uploadPictures = async (req, res) => {
       for (const file of files) {
         const path = file.tempFilePath;
         const data = await cloudinaryImageUploadMethod(path);
-        await User.updateOne(
-          { _id: req.params.id },
+        await Operation.updateOne(
+          { _id: req.body.operationID },
           {
             $push: {
               images: {
@@ -370,23 +372,107 @@ const uploadPictures = async (req, res) => {
     });
   }
 };
-const addOrder = async (req, res) => {
+const addDataToOperation = async (req, res) => {
   try {
-    console.log(req.body)
-    console.log(req.params)
+    console.log("addd data");
+    console.log(req.body);
+
+    await Operation.updateOne(
+      { _id: req.params.operationId },
+      {
+        $push: {
+          operationData: {
+            dataName: req.body.dataName,
+            data: req.body.data,
+          },
+        },
+      }
+    ).then(response=>{
+      res.json({
+        succes: true,
+        message: "resim başarıyla eklendi",
+      });
+    })
+
     
-    req.body.status=ORDER_STATUS_LIST[0]
-    req.body.company=res.locals.company
-    req.body.user=req.params.id
-    req.body.price=req.body.products.map(element=>element.productPrice).reduce((a,b)=>a+b)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      succes: false,
+      message: error,
+    });
+  }
+};
+const addOperation = async (req, res) => {
+  try {
     
+    console.log(req.body);
+
+    req.body.company = res.locals.company;
+    req.body.user = req.params.id;
+    req.body.doctor = {};
+
+    req.body.operationName = req.body.selectedValues.productName;
+    req.body.operationPrice = req.body.selectedValues.productPrice;
+
+    if (req.body.selectedValues.serviceDataName) {
+      req.body.operationData = {
+        dataName: req.body.selectedValues.serviceDataName,
+        data: req.body.selectedValues.serviceDataValue,
+      };
+    }
     
-    await Order.create(req.body)
-  
+    if (req.body.selectedValues.productPrice===0) {
+      req.body.paymentStatus ="ödendi"
+    }
+    
+
+    // req.body.price=req.body.products.map(element=>element.productPrice).reduce((a,b)=>a+b)
+
+    await Operation.create(req.body);
+
     res.json({
       succes: true,
       message: "işlem başarıyla eklendi",
     });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      succes: false,
+      message: "işlem eklenirken bir hata oluştu.",
+    });
+  }
+};
+const deleteOperation = async (req, res) => {
+  try {
+    console.log("delete operation");
+    console.log(req.params);
+
+    await Operation.findByIdAndDelete(req.params.operationId)
+      .then((response) => {
+        response.images.forEach(async (element) => {
+          await cloudinary.uploader.destroy(
+            element.public_id,
+            function (error, result) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log(result);
+                res.json({
+                  succes: true,
+                  message: "işlem başarıyla Silindi",
+                });
+              }
+            }
+          );
+        });
+      })
+      .catch((err) => {
+        res.json({
+          succes: true,
+          message: "işlem Silinirken bir Sorun oluştu tekrar deneyiniz.",
+        });
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -412,18 +498,23 @@ const deletePhoto = async (req, res) => {
       }
     );
 
-    User.updateOne(
-      { _id: req.params.id },
+    Operation.updateOne(
+      { _id: req.params.operationid },
       {
         $pull: {
-          images: { public_id: "archimet/" + req.params.public_id },
+          images: { _id: req.params.photoid },
         },
       }
     )
-      .then((response) => console.log(response))
-      .catch((err) => console.log(err));
-
-    res.json({ success: true, message: "resim başarıyla silindi" });
+      .then((response) =>
+        res.json({ success: true, message: "resim başarıyla silindi" })
+      )
+      .catch((err) =>
+        res.json({
+          success: false,
+          message: "resim silinirken bir sorun oluştu.",
+        })
+      );
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -431,18 +522,14 @@ const deletePhoto = async (req, res) => {
     });
   }
 };
-const getUsersOpenOrders = async (req, res) => {
-
+const getUsersOpenOperations = async (req, res) => {
   try {
-    console.log("heylooo")
-    const orders = await Order.find({
-      user:req.params.id,
-      status:"open"
+    const operations = await Operation.find({
+      user: req.params.id,
+      operationAppointmentStatus: "açık",
     });
 
-    let data=orders.map(element=>element.products).flat(1)
-    
-    res.json({ success: true, message: "işlemler çekildi", data:data });
+    res.json({ success: true, message: "işlemler çekildi", operations });
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -450,17 +537,36 @@ const getUsersOpenOrders = async (req, res) => {
     });
   }
 };
-const getUsersAllOrders = async (req, res) => {
-
+const getUsersHasPaymentOperations = async (req, res) => {
   try {
-    console.log("burası")
-    const orders = await Order.find({
-      user:req.params.id
+    const operations = await Operation.find({
+      user: req.params.id,
+      paymentStatus: "ödenmedi",
     });
+    
+    
 
     
-  
-    res.json({ success: true, message: "işlemler çekildi", data:orders });
+    res.json({
+      success: true,
+      message: "ödenmeyen işlemler çekildi",
+      operations,
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "resimler çekilirken bir hata oluştu",
+    });
+  }
+};
+const getUsersAllOperations = async (req, res) => {
+  try {
+    console.log("burası");
+    const operations = await Operation.find({
+      user: req.params.id,
+    });
+
+    res.json({ success: true, message: "işlemler çekildi", data: operations });
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -470,9 +576,11 @@ const getUsersAllOrders = async (req, res) => {
 };
 const getAllPhotos = async (req, res) => {
   try {
-    const singleUser = await User.findById(req.params.id);
+    console.log(req.params);
 
-    const photos = singleUser.images.sort(compare);
+    const operation = await Operation.findById(req.params.operationId);
+
+    const photos = operation.images.sort(compare);
     function compare(a, b) {
       if (a.uploadTime > b.uploadTime) {
         return 1;
@@ -489,6 +597,21 @@ const getAllPhotos = async (req, res) => {
     res.status(500).json({
       succes: false,
       message: "resimler çekilirken bir hata oluştu",
+    });
+  }
+};
+const getUsersAllPayments = async (req, res) => {
+  try {
+    console.log(req.params);
+
+    const payments = await Payment.find({fromUser:req.params.id});
+
+    
+    res.json({ success: true, message: "ödemeler çekildi", data:payments });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "Ödemeler çekilirken bir hata oluştu",
     });
   }
 };
@@ -556,8 +679,12 @@ export {
   findEmployees,
   activateEmployee,
   deletePhoto,
+  deleteOperation,
   getAllPhotos,
-  addOrder,
-  getUsersAllOrders,
-  getUsersOpenOrders
+  addOperation,
+  getUsersAllOperations,
+  getUsersOpenOperations,
+  getUsersHasPaymentOperations,
+  addDataToOperation,
+  getUsersAllPayments
 };

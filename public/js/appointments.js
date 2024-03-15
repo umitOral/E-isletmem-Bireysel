@@ -121,23 +121,24 @@ function getAllSessions() {
       ui.showAllSessionToUI(allTimesAllDoctor, AllDoctor);
 
       changeState();
-      getSessions()
+      getSessions();
     })
 
     .catch((err) => console.log(err));
 }
 
 async function getSessions() {
-  const userSelect=document.querySelector("#user-select")
-  userSelect.addEventListener("change",()=>{
-    let userID=userSelect.options[userSelect.selectedIndex].value
-    request.getwithUrl("./users/"+userID+"/getUsersOpenOrders")
-    .then(response=>{
-      console.log(response)
-      ui.addOrderstoUI(response.data)
-    })
-    .catch(err=>console.log(err))
-  })
+  const userSelect = document.querySelector("#user-select");
+  userSelect.addEventListener("change", () => {
+    let userID = userSelect.options[userSelect.selectedIndex].value;
+    request
+      .getwithUrl("./users/" + userID + "/getUsersOpenOperations")
+      .then((response) => {
+        console.log(response);
+        ui.addOperationstoUI(response.operations);
+      })
+      .catch((err) => console.log(err));
+  });
 }
 
 async function dayFullOrNight() {
@@ -161,7 +162,7 @@ function changeState() {
     element.addEventListener("click", (e) => {
       console.log(e.target);
       if (e.target.classList.contains("delete-session")) {
-        console.log("burası");
+        
         request
           .deleteSession(
             "./appointments/" +
@@ -595,7 +596,7 @@ modalAddSessionSave.addEventListener("click", (e) => {
   });
 
   let data = {
-    services: selectedValues,
+    operations: selectedValues,
     user: addSessionForm.user.value,
     timeIndexes: [
       addSessionForm.timeIndexes[0].value,
@@ -621,69 +622,72 @@ modalAddSessionSave.addEventListener("click", (e) => {
   modalAddSession.classList.remove("showed_modal");
 });
 
+// ///////////////////////////////////
+
 let selectedValues = [];
-proccessType.addEventListener("change", () => {
+proccessType.addEventListener("change", (e) => {
   console.log("hizmet seçildi");
 
-  let index = selectedValues.findIndex(
-    (item)=>
-    item.productName ===
-      proccessType.options[
-        proccessType.options.selectedIndex
-      ].textContent.trim()
+  selectedValues.push(
+    proccessType.options[proccessType.options.selectedIndex].dataset.id,
+  );
+  
+  const proccessDiv = document.createElement("div");
+  const nodeinput = document.createElement("input");
+  nodeinput.value =
+    proccessType.options[proccessType.options.selectedIndex].textContent.trim();
+  nodeinput.setAttribute("name", "services");
+  nodeinput.setAttribute("disabled", "");
+  nodeinput.setAttribute("type", "text");
+  nodeinput.setAttribute("class", "selected_proccess");
+  nodeinput.setAttribute(
+    "data-id",
+    proccessType.options[proccessType.options.selectedIndex].dataset.id
+  );
+  nodeinput.setAttribute(
+    "data-price",
+    proccessType.options[proccessType.options.selectedIndex].dataset.price
   );
 
+  nodeinput.setAttribute(
+    "value",
+    proccessType.options[proccessType.options.selectedIndex].textContent.trim()
+  );
 
-  if (index === -1) {
-    console.log("hizmet eklendi");
-    selectedValues.push({
-      productName:
-        proccessType.options[
-          proccessType.options.selectedIndex
-        ].textContent.trim(),
-      productPrice:
-        proccessType.options[proccessType.options.selectedIndex].dataset.price,
-      productStatus: "open",
-    });
-    console.log(selectedValues);
-    const proccessDiv = document.createElement("div");
-    const nodeinput = document.createElement("input");
-    nodeinput.value =
-      proccessType.options[
-        proccessType.options.selectedIndex
-      ].textContent.trim();
-    nodeinput.setAttribute("name", "services");
-    nodeinput.setAttribute("disabled", "");
-    nodeinput.setAttribute("type", "text");
-    nodeinput.setAttribute("class", "selected_proccess");
-    nodeinput.setAttribute(
-      "value",
-      proccessType.options[
-        proccessType.options.selectedIndex
-      ].textContent.trim()
+  proccessType.options[proccessType.options.selectedIndex].remove();
+
+  const deleteButton = document.createElement("i");
+
+  deleteButton.classList.add("ph");
+  deleteButton.classList.add("ph-x");
+
+  proccessDiv.appendChild(nodeinput);
+  proccessDiv.appendChild(deleteButton);
+  selected_proccess_type_add.appendChild(proccessDiv);
+});
+
+selected_proccess_type_add.addEventListener("click", (e) => {
+  if (e.target.classList.contains("ph-x")) {
+    
+
+    // add back to selectedbox
+    const orderSelect = document.getElementById("proccess_type_add");
+    let opt = document.createElement("option");
+    opt.setAttribute(
+      "data-price",
+      e.target.previousElementSibling.dataset.price
     );
+    opt.setAttribute("data-id", e.target.previousSibling.dataset.id);
+    
 
-    const deleteButton = document.createElement("i");
+    opt.value = e.target.previousElementSibling.value;
+    opt.textContent = e.target.previousElementSibling.value;
+    orderSelect.add(opt);
 
-    deleteButton.classList.add("ph");
-    deleteButton.classList.add("ph-x");
-
-    proccessDiv.appendChild(nodeinput);
-    proccessDiv.appendChild(deleteButton);
-    selected_proccess_type_add.appendChild(proccessDiv);
-  } else {
-    console.log("hizmet zaten var");
+    // remove selected options
+    selectedValues.pop(e.target.previousElementSibling.value);
+    e.target.parentElement.remove();
   }
-
-  const selectedProcess = document.querySelectorAll(
-    ".selected_proccess_type_add div i"
-  );
-  selectedProcess.forEach((element) => {
-    element.addEventListener("click", (e) => {
-      selectedValues.pop(element.previousElementSibling.value);
-      element.parentElement.remove();
-    });
-  });
 });
 
 proccessTypeUpdate.addEventListener("change", (e) => {

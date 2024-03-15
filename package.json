@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
+    "debug": "node --inspect app.js",
     "build": "webpack --watch",
     "build1": "webpack --mode production"
   },

@@ -8,9 +8,16 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="/css/zoom.css">
 
-        <!-- js ----------- -->
-        <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
+
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.css" />
+
+        <!-- scripts -->
+
+
+
 </head>
 
 <body>
@@ -171,7 +178,9 @@
                                                                 <%= session.doctor.name%>
                                                             </td>
                                                             <td>
-                                                                <%= session.services %>
+                                                                <% session.operations.forEach(element=> { %>
+                                                                    <%= element.operationName%>
+                                                                        <% }) %>
                                                             </td>
                                                             <td>
                                                                 <%= session.description %>
@@ -180,7 +189,7 @@
 
                                                             <td>
                                                                 <p class="finish">
-                                                                    <%= session.state %>
+                                                                    <%= session.appointmentState %>
                                                                 </p>
                                                             </td>
                                                             <td style="position: relative;">
@@ -217,43 +226,23 @@
                                         <h2>Ödemeler</h2>
                                     </div>
                                     <div class="contenBody">
-                                        <div class="table user-table">
+                                        <div class="table payment-table">
                                             <table>
                                                 <thead>
-                                                    <th>Id</th>
+
                                                     <th>Tarih</th>
-                                                    <th>Tutar</th>
                                                     <th>K.Kartı/Nakit</td>
-
+                                                    <th>Tutar</td>
                                                 </thead>
-
-                                                <% payments.forEach(payment=> { %>
+                                                <tbody></tbody>
+                                                <tfoot>
                                                     <tr>
-
-                                                        <td>
-                                                            <%= new Date(payment.createdAt).toLocaleDateString() %>
-                                                        </td>
-                                                        <td>
-                                                            <%= payment.cashOrCard %>
-                                                        </td>
-                                                        <td>
-                                                            <%= payment.value %>
-                                                        </td>
-
-
-
-
-                                                        <td><a href="#">Düzenle</a></td>
+                                                        <td></td>
+                                                        
+                                                        <td>Toplam:</td>
+                                                        <td> xxxxx</td>
                                                     </tr>
-                                                    <% }) %>
-
-
-                                                        <tr>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td>Toplam:</td>
-                                                            <td> xxxxx</td>
-                                                        </tr>
+                                                </tfoot>
 
                                             </table>
 
@@ -270,29 +259,6 @@
                                     <button class="button add">Resim Ekle</button>
 
 
-
-                                    <div class="all-images">
-                                        <div class="small_images">
-                                            <% singleUser.images.forEach(element=> { %>
-                                                <!-- 
-                                                <img src=" <%= element.url %>" alt="aaa">
-                                                <div class="small_images_options">
-                                                    <span>
-                                                        <%=element.uploadTime %> .Ay
-                                                    </span>
-                                                    <span data-photoid="<%= element._id %>" data-publicID="<%= (element.public_id).split("/")[1]%>">
-                                                        Sil
-                                                    </span>
-                                                </div>
-                                                <% }) %> -->
-                                        </div>
-
-
-                                    </div>
-
-
-
-
                                 </div>
                                 <div class="userInformationsContent procces">
                                     <div>
@@ -304,14 +270,16 @@
                                             <thead>
 
                                                 <th>Kayıt Tarihi<i class="fa-solid fa-arrow-up"></i></th>
-                                                <th>Durum<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>İşlemler</td>
-                                                <th>toplam Tutar<i class="fa-solid fa-arrow-up"></i></th>
-                                                <th><i class="fa-solid fa-arrow-up"></i></th>
+                                                <th>İşlem<i class="fa-solid fa-arrow-up"></i></td>
+                                                <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></td>
+                                                <th>Seanslar</td>
+                                                <th>Ödenen/Toplam<i class="fa-solid fa-arrow-up"></i></th>
+                                                
+                                                <th></th>
 
                                             </thead>
                                             <tbody id="">
-                                               
+
                                             </tbody>
 
 
@@ -326,12 +294,7 @@
                         </div>
 
                     </div>
-                    <div class="modalBigImage">
-                        <div class="image-container">
-                            <i class="fa-solid fa-x"></i>
-                            <img src="" alt="" class="imageBig">
-                        </div>
-                    </div>
+
                 </main>
 
                 <div class=" modal modal_user">
@@ -407,20 +370,27 @@
 
                     <h2>İşlem Ekle</h2>
 
-                    <form action="./<%= singleUser._id %>/addOrder" onsubmit="return false" method="POST"
+                    <form action="./<%= singleUser._id %>/addOperation" onsubmit="return false" method="POST"
                         enctype="multipart/form-data">
-
-
 
 
                         <div class="options">
                             <span>İşlem:</span>
                             <select class="proccess_type_add">
+                                <option value="" selected disabled hidden>İşlem seçiniz</option>
                                 <% locals.company.services.forEach(service=> { %>
                                     <% if (service.activeorNot===true) { %>
                                         <option value="<%= service.serviceName %>"
-                                            data-price="<%= service.servicePrice %>">
-                                            <%= service.serviceName %>
+                                            data-price="<%= service.servicePrice %>" <%
+                                            if(service.serviceData.length!==0){ %>
+                                            data-serviceData="<%= service.serviceData[0] %>"
+                                                <% } else{ %>
+
+                                                    <% } %>
+
+                                                        >
+
+                                                        <%= service.serviceName %>
                                         </option>
                                         <% } %>
 
@@ -430,94 +400,35 @@
                             <div class="selected_proccess_type_add">
 
                             </div>
+                            <div class="processes_datas inputs">
+
+                            </div>
 
                         </div>
 
                         <div class="inputs ">
-                            <span>TOPLAM</span>
-                            <input name="total" id="total" class="total" value="" readonly>
+                            <span>Seans Sayısı:</span>
+                            <input type="number" name="total" id="appointment-count" class="appointment-count"
+                                value="1">
                         </div>
+                        
 
                         <button type="submit" id="add-order">Kaydet</button>
                         <span class="cancel_button">Vazgeç</span>
                     </form>
                 </div>
-                <div class="modal modal_session">
-                    <h2>Seans Ekle</h2>
-                    <form action="">
-                        <div class="inputs ">
-                            <span>İsim</span>
-                            <input type="text" name="" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Soyisim</span>
-                            <input type="text" name="" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Tarih:</span>
-                            <input type="date" name="" id="">
-                        </div>
-                        <div class="inputs">
-                            <span>İşlem Tipi:</span>
-                            <select class="proccess_type">
-                                <option value="0">Yıkama</option>
-                                <option value="1">Saç Ekimi</option>
-                                <option value="2">Bakım</option>
-                                <option value="3">Cilt gerdirme</option>
-                            </select>
-                            <div class="selected_proccess_type">
-                                <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
-                            </div>
-                            <div class="inputs">Açıklama-Notlar:
-                                <textarea name="" id="" cols="10" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <button type="submit" class="save_button">Kaydet</button>
-                        <button class="cancel_button">Vazgeç</button>
-                    </form>
-                </div>
-                <div class="modal modal_payment">
-                    <h2>Ödeme Ekle</h2>
-                    <form action="">
-                        <div class="inputs ">
-                            <span>İsim</span>
-                            <input type="text" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Soyisim</span>
-                            <input type="text" name="" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Ödeme Miktarı:</span>
-                            <input type="number" name="" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Tarih:</span>
-                            <input type="date" name="" id="" value="2023-01-01">
-                        </div>
-                        <div class="payment_options ">
-                            <span>Tahsilat:</span>
-                            <div>
-                                <input type="radio" id="credit_card_ratio" name="payment" value="credit_card">
-                                  <label for="credit_card_ratio">Kredi Kartı</label>
-                            </div>
-                            <div>
-                                <input type="radio" id="cash_ratio" name="payment" value="cash">
-                                  <label for="cash_ratio">Nakit</label>
-                            </div>
 
-                        </div>
 
-                        <button type="submit" class="save_button">Kaydet</button>
-                        <button class="cancel_button">Vazgeç</button>
-                    </form>
-                </div>
                 <div class="modal modal_image">
                     <h2>Resim Ekle</h2>
 
                     <form action="./<%= singleUser._id %>/uploadpictures" method="POST" enctype="multipart/form-data"
                         id="add_picture_form">
 
+                        <div class="inputs " hidden>
+                            <span>İşlem id</span>
+                            <input type="text" name="operationId" id="operationId" class="operationId" value="aa">
+                        </div>
                         <div class="inputs ">
                             <span>Resim seç</span>
                             <input type="file" name="upload_file" id="upload_file" class="upload_file" src="" alt=""
@@ -534,7 +445,7 @@
                         <button type="button" class="cancel_add_pic cancel_button">Vazgeç</button>
                     </form>
                 </div>
-                <div class="information-modal"></div>   
+                <div class="information-modal"></div>
                 <div class="loader_wrapper hidden">
                     <svg class="pl" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
                         <defs>
@@ -565,7 +476,57 @@
 
 
 
+        <div class="modal modal_slider">
+            <div>
+                <div class="operation-image-informations">
+                    <span class="operation-name">Mezoterapi</span>
+                    <span class="operation-date">12.04.1992</span>
+                </div>
+                <i class="fa-solid fa-square-xmark"></i>
+            </div>
+
+            <div class="images-area">
+                <div class="small_images">
+
+                </div>
+
+
+                <!-- zoomist-container -->
+                <div class="zoomist-container slider">
+                    <!-- zoomist-wrapper is required -->
+                    <div class="zoomist-wrapper">
+                        <!-- zoomist-image is required -->
+                        <div class="zoomist-image">
+                            <!-- you can add anything you want to zoom here. -->
+                            <img src="/photos/images-preview.jpg" alt="cat" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
         </div>
+        <div class="modal add-data-modal">
+            <form action="" class="add-data-form">
+                <div>
+                    <h2>Veri Ekle</h2>
+                </div>
+                <div class="inputs">Veri Adı:
+                    <input type="text" class="data-name" name="data-name">
+                    Veri:
+                    <input type="text" class="data-value" name="data-value">
+                    <input type="hidden" class="operation-id" name="" value="">
+                </div>
+                <button type="submit" class="save_button" id="add-data-save-button">Kaydet</button>
+                <button type="button" class="cancel_button">Vazgeç</button>
+            </form>
+
+
+        </div>
+
 
 
 
@@ -575,10 +536,6 @@
         <script type="module" src="/js/inner_modules/tables.js"></script>
 
         <script src="/js/sidebar.js"></script>
-        <script>
-
-        </script>
-
 
 
 

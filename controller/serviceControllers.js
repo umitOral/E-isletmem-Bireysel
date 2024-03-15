@@ -12,6 +12,7 @@ const addService = async (req, res) => {
           serviceId: uuidv4(),
           serviceName: req.body.serviceName,
           servicePrice: req.body.servicePrice,
+          serviceData:req.body.serviceData
         },
       },
     });

@@ -52,6 +52,7 @@
                             <thead>
 
                                 <th>Hizmet<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Veri<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Fiyat<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Aktiflik<i class="fa-solid fa-arrow-up"></i></th>
                             </thead>
@@ -61,6 +62,11 @@
 
                                         <td>
                                             <%= service.serviceName %>
+                                        </td>
+                                        <td>
+                                            <% service.serviceData.forEach(element => { %>
+                                                <%= element %>
+                                            <% }) %>
                                         </td>
                                         <td>
                                             <div class="inputs" data-servicesID="<%= service._id %>">
@@ -97,7 +103,7 @@
                     
                     <div class="add_service modal">
                         <h2>Yeni Hizmet Ekle</h2>
-                        <form action="./services/addService" method="POST" id="register-form">
+                        <form action="./services/addService"  method="POST" id="register-form">
                             <div class="inputs ">
                                 <span>Hizmet Adı:</span>
                                 <input type="text" name="serviceName" id="user-name" required
@@ -108,11 +114,15 @@
                                 <span>Fiyat</span>
                                 <input type="number" name="servicePrice" id="surname" placeholder="hizmet için fiyat giriniz" required>
                             </div>
+                            <div class="inputs" >
+                                <span>Veri:</span>
+                                <input type="text" name="serviceData" id="serviceData" placeholder="örnek:greft Sayısı">
+                            </div>
 
 
 
                             <button type="submit" class="save_button" id="add-user">Kaydet</button>
-                            <button class="cancel_button">Vazgeç</button>
+                            <button class="cancel_button" >Vazgeç</button>
                         </form>
                     </div>
 

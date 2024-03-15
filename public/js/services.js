@@ -8,6 +8,7 @@ const ui = new UI();
 
 
 const saveButtons = document.querySelectorAll(".input_save_buttons");
+const cancelButtonModal = document.querySelectorAll(".cancel_button");
 
 const priceInputs = document.querySelectorAll(".price_inputs");
 const messageBox = document.querySelector(".information-modal")
@@ -51,7 +52,8 @@ modalServiceCancel.addEventListener("click", closeModalAddService)
 function showModalAddServices() {
     modalServiceAdd.classList.add("showed_modal")
 }
-function closeModalAddService() {
+function closeModalAddService(e) {
+  e.preventDefault()
     modalServiceAdd.classList.remove("showed_modal")
 }
 

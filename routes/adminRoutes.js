@@ -1,10 +1,10 @@
 import express from 'express';
-import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,getAppointmentsPage,getEmployeessStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getSinglePage,getSingleEmployeePage,getservicesPage,getEmployeesPage,getPaymentsPage} from '../controller/pageController.js';
-import {logOut,createUser,deletePhoto,addOrder,uploadPictures,getAllPhotos,getUsersOpenOrders,getUsersAllOrders,editInformations,findUser,findEmployees,deactivateEmployee,activateEmployee} from '../controller/userController.js';
+import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,getAppointmentsPage,getEmployeessStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getUserPage,getSingleEmployeePage,getservicesPage,getEmployeesPage,getPaymentsPage} from '../controller/pageController.js';
+import {logOut,createUser,deletePhoto,addOperation,deleteOperation,uploadPictures,getAllPhotos,getUsersAllPayments,addDataToOperation,getUsersOpenOperations,getUsersHasPaymentOperations,getUsersAllOperations,editInformations,findUser,findEmployees,deactivateEmployee,activateEmployee} from '../controller/userController.js';
 import {createEmployees,editInformationsEmployees} from '../controller/employeesController.js';
 
 import {addService,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
-import {addPayment,deletePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
+import {addPayment,deletePayment,getSinglePayment,getSearchedPayments,addExpense,editPayment} from '../controller/paymentsControllers.js';
 import {getSexStaticsWithFilter,getPaymentStaticsWithFilter,getNewUserStaticswithFilter} from '../controller/staticsController.js';
 import {updateCompanyPassword,updateCompanyInformations,addCompanyPayment} from '../controller/companyControllers.js';
 import {verifyRoles} from '../middlewares/authMiddleware.js';
@@ -19,21 +19,26 @@ router.route("/users").get(getUsersPage)
 
 
 router.route("/users/search").get(findUser)
-router.route("/users/:id").get(getSinglePage)
+router.route("/users/:id").get(getUserPage)
 router.route("/users/:id/deactivateEmployee").get(deactivateEmployee)
 router.route("/users/:id/activateEmployee").get(activateEmployee)
 router.route("/users/:id/uploadpictures").post(uploadPictures)
-router.route("/users/:id/addorder").post(addOrder)
-router.route("/users/:id/getAllPhotos").get(getAllPhotos)
-router.route("/users/:id/getUsersAllOrders").get(getUsersAllOrders)
-router.route("/users/:id/getUsersOpenOrders").get(getUsersOpenOrders)
-router.route("/users/:id/deletePhoto/:public_id").get(deletePhoto)
+router.route("/users/:id/addOperation").post(addOperation)
+router.route("/users/:id/deleteOperation/:operationId").get(deleteOperation)
+router.route("/users/:id/getAllPhotos/:operationId").get(getAllPhotos)
+router.route("/users/:id/getUsersAllPayments").get(getUsersAllPayments)
+router.route("/users/:id/addDataToOperation/:operationId").post(addDataToOperation)
+router.route("/users/:id/getUsersAllOperations").get(getUsersAllOperations)
+router.route("/users/:id/getUsersOpenOperations").get(getUsersOpenOperations)
+router.route("/users/:id/getUsersHasPaymentOperations").get(getUsersHasPaymentOperations)
+router.route("/users/:id/deletePhoto/:operationid/:photoid").get(deletePhoto)
 router.route("/users/:id/editInformations").post(editInformations)
 router.route("/users/createUser").post(createUser)
 
 
 router.route("/payments").get(getPaymentsPage)
 router.route("/payments/getSearchedPayments").get(getSearchedPayments)
+router.route("/payments/:id").get(getSinglePayment)
 router.route("/payments/:id/deletePayment").get(deletePayment)
 router.route("/payments/:id/editPayment").post(editPayment)
 router.route("/payments/addPayment").post(addPayment)

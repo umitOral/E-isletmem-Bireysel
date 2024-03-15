@@ -206,6 +206,17 @@ select {
   border-radius: var(--border-radius-1);
   padding: 0.5rem;
   color: var(--color-dark-variant);
+  cursor: pointer;
+}
+
+/*  */
+
+select *{
+  background-color: white;
+ 
+}
+select:hover{
+  background-color: rgba(128, 128, 128, 0.116);
 }
 
 body {
@@ -244,9 +255,7 @@ h1 {
   font-size: 1.8rem;
 }
 
-h2 {
-  
-}
+
 
 h3 {
   font-size: 0.87rem;
@@ -358,7 +367,7 @@ header div div i {
   padding: 0rem 1.5rem 1.5rem 1.5rem;
 
   transition: all 0.3s;
-  z-index: 999;
+  z-index: 997;
 }
 
 .sidebar .head {
@@ -369,9 +378,7 @@ header div div i {
   padding: 1rem;
 }
 
-.left_section .user-img {
-  
-}
+
 .user-img span {
   font-size: 1.8rem;
   font-weight: 600;
@@ -746,9 +753,6 @@ th.asc i{
 td {
   padding: 0.5rem;
 }
-td.active {
-  background-color: rgba(183, 182, 182, 0.1);
-}
 
 .table-wrapper {
   width: 100%;
@@ -760,8 +764,14 @@ td.active {
   border: 1px solid var(--color-border-color);
 }
 
+.red_row{
+  background-color: rgba(255, 109, 109, 1);
+}
+.green_row{
+  background-color: rgba(173, 255, 173, 1);
+}
 
-tbody td {
+tbody td,tfoot td {
   border-bottom: 1px solid var(--color-light);
   color: var(--color-dark-variant);
   height: 3rem;
@@ -916,7 +926,7 @@ table thead {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  z-index: 999;
+  z-index: 998;
   display: none;
 }
 
@@ -946,7 +956,7 @@ table thead {
 .modal span {
   font-weight: 500;
   display: block;
-  margin-top: 0.7rem;
+  
 }
 
 .modal h2 {
@@ -963,7 +973,7 @@ table thead {
   flex-direction: column;
 }
 
-.options div {
+.options>div {
   display: flex;
   
   padding: 0.5rem;

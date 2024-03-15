@@ -1,0 +1,15 @@
+.zoomist-container {
+  max-width: 100%;
+  
+}
+
+.zoomist-image {
+  height: 100%;
+}
+
+.zoomist-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}

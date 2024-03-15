@@ -10,13 +10,13 @@
         <div>
             <i class="ph ph-buildings"></i>
             <span class="text">
-                <%= locals.company.brandName %>
+                <%= locals.company.brandName || "İşletme Adı" %>
             </span>
         </div>
         
         <div>
             <i class="ph ph-user-circle"></i>
-            <span> <%= locals.employee.name %></span>/
+            <span> <%= locals.employee.name ||"kullanıcı adı" %></span>/
             <span> <%= locals.employee.role %></span>
 
                

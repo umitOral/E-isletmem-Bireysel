@@ -65,6 +65,15 @@
   text-align: left;
   width: 0;
 }
+.fa-regular.fa-images,.fa-solid.fa-folder-plus{
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.fa-regular.fa-images:hover,.fa-solid.fa-folder-plus:hover{
+  color: #000;
+}
+
+
 .left_section {
   display: flex;
   gap: 0.5rem;
@@ -291,17 +300,17 @@ img.imageBig{
   overflow-y: scroll;
 }
 
-.userInformationsContent.images .small_images img {
+ .small_images img {
   transition: all 0.2s ease-out;
   cursor: pointer;
   border-radius: 1.5rem;
 }
 
-.userInformationsContent.images .small_images img:hover {
+ .small_images img:hover {
   transform: scale(1.1);
 }
 
-.userInformationsContent.images .small_images img.focused {
+ .small_images img.focused {
   border: 3px solid rgb(231, 6, 6);
 }
 .small_images_options{
@@ -309,8 +318,14 @@ img.imageBig{
   justify-content: center;
   position: relative;
   gap: 1rem;
-  top: -30px;
+  top: -45px;
   font-size: 16px;
+  background-color: white;
+}
+.small_images_options span{
+ padding: 0.5rem;
+ border: 1px solid rgba(128, 128, 128, 0.402);
+ border-radius: 0.5rem;
 }
 .small_images_options a{
   background-color: var(--color-danger);
@@ -436,9 +451,51 @@ img.imageBig{
 /* add user modal ---- */
 
 .modal {
-  
   display: none;
 }
+.modal_slider {
+  height: 80%;
+ width: 100%;
+ padding: 1rem;
+}
+.operation-image-informations{
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.modal_slider>div:first-child {
+display: flex;
+margin-bottom: 0.5rem;
+}
+
+.modal_slider i.fa-solid.fa-square-xmark {
+  cursor: pointer;
+  color: red;
+  font-size: 2rem;
+}
+.modal_slider i.fa-solid.fa-square-xmark:hover {
+  color: rgb(171, 4, 4);
+  
+}
+
+.images-area {
+  display: flex;
+  height: 95%;
+}
+.images-area img{
+  width: 100%;
+  height: auto;
+}
+.images-area .small_images {
+  width: 20%;
+  height: 100%;
+  overflow-x: hidden;
+}
+.images-area .zoomist-container{
+  width: 75%;
+}
+
 
 
 .modal button {
@@ -474,8 +531,14 @@ img.imageBig{
 .modal span {
   font-weight: 500;
   display: block;
-  margin-top: 0.7rem;
+  
 }
+.small_images_options span:last-child{
+  background-color: red;
+  cursor: pointer;
+}
+
+
 
 .modal h2 {
   text-align: center;

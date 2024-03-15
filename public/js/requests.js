@@ -10,16 +10,10 @@ export class Request {
   }
   async getwithUrl(url) {
     const response = await fetch(url);
-
-    const responseData = await response.json();
-
-    return responseData;
-  }
-  async deletePayment(url) {
-    const response = await fetch(url);
     const responseData = await response.json();
     return responseData;
   }
+  
   async deleteSession(url) {
     const response = await fetch(url);
     const responseData = await response.json();

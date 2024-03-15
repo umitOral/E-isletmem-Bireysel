@@ -31,14 +31,11 @@ const sessionSchema = new Schema(
     },
     
 
-    services: [
-      {
-        productName: {type:String},
-      productPrice: {type:String},
-      productStatus: {type:String}
-      },
-    ],
-    state: {
+    operations: [{
+      type:Schema.Types.ObjectId,
+      ref:"Operation"
+    }],
+    appointmentState: {
       type: String,
       default: "Bekleniyor"
     },

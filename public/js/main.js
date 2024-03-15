@@ -11,8 +11,9 @@ const tableElements = document.querySelectorAll("table");
 
 tableElements.forEach((table) => {
   table.querySelectorAll("thead th").forEach((head,columnIndex) => {
+    
     head.addEventListener("click",()=>{
-      
+      console.log("burada")
       tables.sortingStart(table,columnIndex)
       
     })

@@ -24,7 +24,7 @@ const getAllUsers = async (req, res) => {
 const getAllSessions = async (req, res) => {
   try {
     const sessions = await Session.find({ user: req.params.userID }).populate([
-      "doctor",
+      "doctor",operations
     ]);
 
     res.status(200).json({
@@ -86,7 +86,7 @@ const newPassword = async (req, res, next) => {
 const getSingleDayAllDoctorSessions = async (req, res) => {
   try {
 
-    console.log("burası")
+    
     const doctors = await Employee.find({
       company: res.locals.company._id,
       role: "doktor",
@@ -102,8 +102,7 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
 
     let firstDay = date.getDate();
     let lastDay = new Date(new Date(date.setMonth(date.getMonth() + 1)).setDate(0)).getDate();
-    console.log(firstDay);
-    console.log(lastDay);
+   
 
     for (const i in doctors) {
       if (Object.hasOwnProperty.call(doctors, i)) {
