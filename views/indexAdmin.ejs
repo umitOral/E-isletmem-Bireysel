@@ -19,24 +19,12 @@
 
                 <main>
                     <h1>Ana Sayfa</h1>
-                    <div class="search">
-                        <form autocomplete="off" id="search-user" action="./admin/users/findSingleUser">
-                            <div class="autocomplete inputs">
-                                <input id="userName" type="text" name="userName" placeholder="İsim Soyisim">
-                                <input id="userPhone" type="text" name="userPhone" placeholder="Telefon">
-
-                                <input type="submit" value="Ara">
-                            </div>
-
-                        </form>
-
-
-                    </div>
+                    
                     <div class="insights">
                         <div id="appointments">
 
                             <h2>
-                                <%= new Date().toLocaleDateString() %>
+                                <%= new Date().toLocaleDateString("tr-TR") %>
                             </h2>
 
                             <hr>

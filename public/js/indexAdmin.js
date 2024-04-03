@@ -321,7 +321,6 @@ function getAllAppointmentofSingleDoctor() {
         selectedDate.replaceAll("/", "-")
     )
     .then((response) => {
-      
       const sessionsOfDoctorSingleDay = response.sessionsOfDoctorSingleDay;
       company = response.company;
       const workHours = response.workHours;
