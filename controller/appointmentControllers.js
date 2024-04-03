@@ -1,33 +1,81 @@
 import Session from "../models/sessionModel.js";
 import Operation from "../models/OperationsModel.js";
 // import Order from '../models/OrderModel.js';
-import ORDER_STATUS_LIST from "../config/order_status_list.js";
+import {
+  OPERATION_STATUS,
+  OPERATION_STATUS_AUTOMATIC,
+} from "../config/status_list.js";
 
 const createAppointment = async (req, res) => {
   try {
     console.log(req.body);
 
-    req.body.startHour = new Date(`${req.body.date},${req.body.startHour}`);
-    req.body.endHour = new Date(`${req.body.date},${req.body.endHour}`);
+    req.body.appointmentData.startHour = new Date(
+      `${req.body.appointmentData.date},${req.body.appointmentData.startHour}`
+    );
+    req.body.appointmentData.endHour = new Date(
+      `${req.body.appointmentData.date},${req.body.appointmentData.endHour}`
+    );
 
-    req.body.date = new Date(req.body.date);
+    req.body.appointmentData.date = new Date(req.body.appointmentData.date);
+    req.body.appointmentData.operations = [];
 
-    //     const totalPrice = req.body.services
-    //   .map((element) => element.productPrice)
-    //   .reduce((a, b) => a + b);
-    req.body.operations.forEach(async (element) => {
-      await Operation.updateOne({_id:element}, {$push:{appointments:element}});
-      await Operation.updateOne({_id:element},{$inc:{appointmensCount:1},operationAppointmentStatus:"kapalı"})
-    });
+    if (req.body.operations.newOperations) {
+      req.body.operations.newOperations.forEach((element) => {
+        element.company = res.locals.company;
+        element.user = req.body.appointmentData.user;
 
-    console.log("başarılı")
-    await Session.create(req.body);
+        element.operationStatus = OPERATION_STATUS_AUTOMATIC.PLANNED;
+        element.sessionOfOperation = [
+          {
+            sessionID: "111111111111111111111111",
+            sessionState: OPERATION_STATUS_AUTOMATIC.PLANNED,
+            sessionDate: new Date(req.body.appointmentData.date),
+          },
+        ];
+        element.appointmensCount = element.sessionOfOperation.length;
+      });
+    }
+
+    if (req.body.operations.oldOperations) {
+      req.body.operations.oldOperations.forEach((element) => {
+        req.body.appointmentData.operations.push(element);
+      });
+    }
+
+    await Operation.insertMany(req.body.operations.newOperations).then(
+      (response) => {
+        response.forEach((element) => {
+          req.body.appointmentData.operations.push(element._id);
+        });
+      }
+    );
+
+    let session = await Session.create(req.body.appointmentData);
+
+    await Operation.updateMany(
+      { _id: { $in: req.body.operations.oldOperations } },
+      {
+        $push: {
+          sessionOfOperation: {
+            sessionDate: new Date(req.body.appointmentData.date),
+            sessionState: OPERATION_STATUS_AUTOMATIC.PLANNED,
+            refAppointmentID: session._id,
+          },
+        },
+        $set: {
+          operationStatus: OPERATION_STATUS_AUTOMATIC.PLANNED,
+          "sessionOfOperation[sessionOfOperation.length-1].sessionState":OPERATION_STATUS_AUTOMATIC.PLANNED,
+        },
+      }
+    );
 
     res.status(200).json({
       success: true,
       message: "randevu başarıyla eklenmiştir",
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "create session error",
@@ -37,17 +85,37 @@ const createAppointment = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
   try {
-    const session = await Session.findByIdAndDelete(req.params.id);
+    console.log("delete appointment");
 
-    session.operations.forEach(async(element,index) => {
-        await Operation.updateOne({_id:session.operations[index]},{$pull:{appointments:element}}) 
-        await Operation.updateOne({_id:session.operations[index]},{$inc:{appointmensCount:-1},operationAppointmentStatus:"açık"}) 
-    });
-    
-    res.json({
-      succes: true,
-      message: "Seans Başarıyla Silindi",
-    });
+    let date = new Date();
+    const session = await Session.findById(req.params.id);
+
+    session.date.setTime(session.startHour);
+    let diffTime = date - session.date;
+    console.log(diffTime);
+    if (diffTime < 0) {
+      await Session.findByIdAndDelete(req.params.id);
+      session.operations.forEach(async (element, index) => {
+        await Operation.updateOne(
+          { _id: session.operations[index] },
+          { $pull: { appointments: element } }
+        );
+        await Operation.updateOne(
+          { _id: session.operations[index] },
+          { $inc: { appointmensCount: -1 }, operationAppointmentStatus: "yok" }
+        );
+      });
+
+      res.json({
+        succes: true,
+        message: "Seans Başarıyla Silindi",
+      });
+    } else {
+      res.json({
+        succes: false,
+        message: "Geçmişteki bir Randevu Silinemez!",
+      });
+    }
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -57,13 +125,19 @@ const deleteAppointment = async (req, res) => {
 };
 const updateStateAppointment = async (req, res) => {
   try {
+    console.log("updateStateAppointment");
+    console.log(req.query);
+    console.log(req.params);
+
     const session = await Session.findByIdAndUpdate(req.params.id, {
-      state: req.query.state,
-    });
+      appointmentState: req.query.state,
+    }).populate("operations");
+
+   
 
     res.json({
       succes: true,
-      message: "Seans durumu değişti",
+      message: "Randevu durumu değişti",
       data: req.query.state,
     });
   } catch (error) {

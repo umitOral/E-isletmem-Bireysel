@@ -172,7 +172,7 @@ const addCompanyPayment = async (req, res) => {
 
 const companyPaymentResult = async (req, res) => {
   try {
-    console.log("burası");
+    
     
     const subscription = await Subscription.findOne({ token: req.body.token });
     

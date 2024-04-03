@@ -37,7 +37,7 @@ const sessionSchema = new Schema(
     }],
     appointmentState: {
       type: String,
-      default: "Bekleniyor"
+      default: "bekleniyor"
     },
   },
   { timestamps: true }

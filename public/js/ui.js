@@ -57,6 +57,28 @@ export class UI {
           `;
     }
   }
+  showOldOperations(data) {
+    const oldOperationsTable = document.querySelector(
+      "#old_operations_content table tbody"
+    );
+
+    oldOperationsTable.innerHTML = ``;
+
+    data.forEach((element) => {
+      oldOperationsTable.innerHTML += `
+                <tr>
+                  <td>${element.operationName}</td>
+                  <td>${new Date(
+                    element.sessionOfOperation[
+                      element.sessionOfOperation.length - 1
+                    ].sessionDate
+                  ).toLocaleDateString()}</td>
+                  <td>${element.operationStatus}</td>
+                </tr>
+      `;
+    });
+  }
+
   addResponseToTable(table, data) {
     const rows = table.querySelectorAll("tbody tr");
     const tableBody = table.querySelector("tbody");
@@ -69,15 +91,41 @@ export class UI {
 
     for (const index in data) {
       const element = data[index];
+      let operationData = element.operationData.map(
+        (item) => item.dataName + ":" + item.data
+      );
 
       tableBody.innerHTML += `
-          <tr>
-              <td hidden>${element._id}</td>
+          <tr data-operationid="${element._id}">
+             
               <td>${new Date(element.createdAt).toLocaleDateString()}</td>
               <td>${element.operationName}</td>
-              <td>${element.operationAppointmentStatus}</td>
-              <td>${element.appointmensCount}/${element.totalAppointmens}</td>
-              <td>${element.paidValue}/${element.operationPrice}</td>
+              <td>${element.operationStatus} </td>
+              <td>${element.operationAppointmentStatus} </td>
+              
+              <td>${element.sessionOfOperation.length}/${element.totalAppointments}</td>
+              <td>
+              
+              ${element.operationData
+                .map(
+                  (item, i) => `
+              <div data-dataId="${item._id}" data-dataName="${item.dataName}">
+                 ${item.dataName}:${item.data}
+                 <i title="Datayı düzenle" class="fa-regular fa-pen-to-square edit-operation-data"></i>
+                 <i title="Datayı Sil" class="fa-regular fa-trash-can delete-operation-data"></i>
+              </div>
+              `
+                )
+                .join("")}
+
+              </td>
+              
+              <td>${element.operationPrice} </td>
+              <td>%${element.discount} </td>
+              <td>${
+                element.operationPrice * ((100 - element.discount) / 100)
+              }</td>
+              <td>${element.paidValue}</td>
               <td>${(() => {
                 if (element.images.length !== 0) {
                   return `
@@ -89,21 +137,188 @@ export class UI {
               })()}
 
               </td>
-              <td><i class="fa-solid fa-folder-plus"></i></td>
+              <td><i title="Resim Ekle" class="fa-solid fa-folder-plus"></i>
+              </td>
               <td>
               <select name="" class="operations-edit-select">
-                <option value="" selected>Düzenle</option>
-                <option value="delete">İşlem Sil</option>
-                <option value="add-data">Veri Ekle</option>
+                <option value="" selected>Seçenekler</option>
+                <option value="delete">İşlemi Sil</option>
+                <option value="add-data">İşleme Veri Ekle</option>
+                <option value="add-session">Seans Arttır</option>
+                <option value="add-discount">İndirim Tanımla</option>
                 </select>
               </td>
               
-              <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+              <td><i class="fa-solid fa-arrow-turn-down show-sessions" title="seansları göster"></i></td>
+              
+          </tr>
+          <tr class="inner-table">
+            <td colspan=3>
+                <table>
+                <thead>
+                  <th>Seans</th>
+                  <th>Seans Durumu</th>
+                  <th>Tarih</th>
+                  <th>Seans Verisi</th>
+                </thead>
+                <tbody>
+                
+                  ${element.sessionOfOperation.map((item,index)=>`
+                  <tr>
+                    <td>seans-${index+1}</td>
+                    <td>${item.sessionState}</td>
+                    
+                    <td>${(()=>{
+                      if(item.sessionDate){
+                        return `${new Date(item.sessionDate).toLocaleDateString()}`
+                      }else{
+                        return `Bekleniyor`
+                      }
+                    })()}</td>
+                    <td>${item.sessionDatas.map((item)=>`
+                      ${item.dataName}: ${item.data}
+                    `).join("")}</td>
+                    
+                    <td>${(() => {
+                      if (item.sessionDescription) {
+                        return `
+                       ${item.sessionDescription}
+                        `;
+                      } else {
+                        return `Not Yok`;
+                      }
+                    })()}</td>
+                   
+                  </tr>
+                `).join("")}
+                  
+                </tbody>
+              </table>
+            </td>
+                
+              
           </tr>
           `;
     }
   }
 
+  updateOperationstoUI(
+    selectedUsersOperations,
+    operationsArea,
+    OPERATION_STATUS,
+    SESSION_STATUS
+  ) {
+    selectedUsersOperations.forEach((element) => {
+      operationsArea.innerHTML += `
+      <div class="operation-wrapper">
+      <div class="operation" data-operationid="${element._id}">
+        <div class="operation_header">
+            <h3>${element.operationName}</h3>
+            <div class="operation_options">
+             
+              <i title="Veri Ekle" class="fa-solid fa-plus add-dataToOperation"></i>
+              <i title="İşleme Açıklama ekle"class="fa-solid fa-comment-medical add-descriptionToOperation"></i>
+              
+          </div>
+            <div class="operation-describe">
+                ${(() => {
+                        if (element.operationDescription) {
+                          return `
+                          <span>Notlar:</span>
+                          <span id="operation-describe-details">${element.operationDescription}</span>
+                          `;
+                        } else {
+                          return ``;
+                        }
+                      })()}
+              </div>
+            <div class="operation-datas">
+                ${(() => {
+                        if (element.operationData.length!==0) {
+                          return `
+                          
+                            ${element.operationData.map((item)=>`
+                                <div  data-dataname="${item.dataName}" data-dataid="${item._id}">
+                                  ${item.dataName}:${item.data}
+                                  <div>
+                                  <i title="İşlem verisi düzenle" class="fa-solid fa-edit edit-data-operation"></i>
+                                  <i title="İşlem verisi Sil" class="fa-solid fa-trash delete-data-operation"></i>
+                                  </div>
+                                </div>
+                            `).join("")}
+                          `;
+                        } else {
+                          return ``;
+                        }
+                      })()}
+              </div>
+             
+
+        </div>
+      
+      <div class="session-of-operation" data-sessionid="${
+          element.sessionOfOperation[element.sessionOfOperation.length - 1]
+            ._id
+        }">
+        <div class=""session-header>
+          Seans:${element.sessionOfOperation.length}
+        </div>
+        <div class="operation_options">
+          <select name="" class="edit-session-status">
+          <option value="${element.sessionOfOperation[element.sessionOfOperation.length - 1].sessionState}" selected hidden disable>${element.sessionOfOperation[element.sessionOfOperation.length - 1].sessionState} </option>
+                  ${SESSION_STATUS.map(
+                    (item) => `<option value="${item}">${item}</option>`
+                  )}
+          </select> 
+          <i title="Veri Ekle" class="fa-solid fa-plus add-dataToSession"></i>
+          <i title="Seansa Açıklama ekle"class="fa-solid fa-comment-medical add-description"></i>
+          
+        </div>
+        <div class="data_options">
+          
+            ${element.sessionOfOperation[
+              element.sessionOfOperation.length - 1
+            ].sessionDatas
+              .map(
+                (item) => `
+              <div data-sessiondatasid="${item._id}" data-dataname="${item.dataName}">
+              ${item.dataName}:${item.data}
+                <div>
+                  <i title="Veriyi düzenle" class="fa-solid fa-edit edit-data"></i>
+                  <i title="Veriyi Sil" class="fa-solid fa-trash delete-data-session"></i>
+                </div>
+                
+              </div>
+            `
+              )
+              .join("")}
+          
+            ${(()=>{
+              if (element.sessionOfOperation[element.sessionOfOperation.length - 1].sessionDescription) {
+                return `
+                <div >Notlar:
+                ${element.sessionOfOperation[element.sessionOfOperation.length - 1].sessionDescription}
+                  
+                </div>
+                `
+              } else {
+                return ``
+              }
+
+            })()}
+        </div>
+       
+              
+      </div>
+
+      
+      
+  </div>
+
+      
+      `;
+    });
+  }
   showModalWithoutResponse(success, message) {
     const messageBox = document.querySelector(".information-modal");
 
@@ -195,34 +410,46 @@ export class UI {
     for (const iterator of paymentTablesChildren) {
       iterator.remove();
     }
-    if (data.payments.length===0) {
-      paymentTable.innerHTML="Bu tarih aralığında tahsilat bulunmamaktadır"
-    }else{
-      paymentTable.innerHTML=""
+    if (data.payments.length === 0) {
+      paymentTable.innerHTML = "Bu tarih aralığında tahsilat bulunmamaktadır";
+    } else {
+      paymentTable.innerHTML = "";
     }
     data.payments.forEach((payment, index) => {
       function fromUserCheck() {
         if (payment.fromUser) {
-          return true
-        }else{
-          return false
+          return true;
+        } else {
+          return false;
         }
       }
-      
+
       paymentTable.innerHTML += `
             <tr>
-                    <td>${new Date(payment.createdAt).toLocaleDateString()}//${new Date(payment.createdAt).toLocaleTimeString()}</td>
+                    <td>${new Date(
+                      payment.createdAt
+                    ).toLocaleDateString()}//${new Date(
+        payment.createdAt
+      ).toLocaleTimeString()}</td>
                     
                     <td>${payment.description}</td>
-                    <td>${fromUserCheck()?payment.fromUser.name+" "+payment.fromUser.surname:""}</td> 
+                    <td>${
+                      fromUserCheck()
+                        ? payment.fromUser.name + " " + payment.fromUser.surname
+                        : ""
+                    }</td> 
                     <td>${payment.cashOrCard}</td>
-                    <td class="${payment.totalPrice<-1 ? "red_row" : "green_row"}">${payment.totalPrice}</td>
+                    <td class="${
+                      payment.totalPrice < -1 ? "red_row" : "green_row"
+                    }">${payment.totalPrice}</td>
                     <td></td>
                     <td><span class="material-symbols-sharp edit_payment">
                         more_vert
                     </span>
                         <div class="edit_payment_small_modal">
-                            <button  class="delete-payment" data-paymentid="${payment._id}">Sil</button>
+                            <button  class="delete-payment" data-paymentid="${
+                              payment._id
+                            }">Sil</button>
                             <button class="edit-payment-btn"
                             data-paymentid="${payment._id}">Düzenle</button>
                         </div>
@@ -243,7 +470,7 @@ export class UI {
     netCash.innerHTML = data.netCash;
   }
 
-  showAllSessionToUI(allTimesforAllDoctors, AllDoctor) {
+  showAllSessionToUI(allTimesforAllDoctors, AllDoctor,APPOINTMENT_STATUS) {
     console.log(allTimesforAllDoctors);
     const allDoctorEvents = document.querySelector(".events-all-doctors");
 
@@ -289,9 +516,14 @@ export class UI {
                             <span>${element.user.name} ${
             element.user.surname
           }</span>
+                            
+                            
                             <span class="buttons">${
                               element.appointmentState
                             }</span>
+
+                            
+                         
 
                         </div>
                         <div class="options-appointments" >
@@ -299,12 +531,11 @@ export class UI {
                                 more_vert
                             </span>
                             <div class="session-options-modal">
-                                <span class="edit-session-btn">Düzenle</span>
-                                <span class="delete-session">Sil</span>
-                                <span class="change-state">Bitti</span>
-                                <span class="change-state">Seansta</span>
-                                <span class="change-state">Hasta Gelmedi</span>
-                                <span class="change-state">Personel Gelmedi</span>
+                                ${APPOINTMENT_STATUS.map((item)=>`
+                                <span class="change-state" value="${item}">${item}</span>
+                                `).join("")}
+                                
+                              
                                 
                             </div>
 
@@ -355,6 +586,95 @@ export class UI {
           singleDoctorArea.appendChild(singleDoctorEvents);
         }
       });
+    });
+  }
+  sessionToUISingleDoctor(times,APPOINTMENT_STATUS_LIST) {
+    const appointmentsOfDoctor = document.querySelector(
+      ".appointments-of-doctor"
+    );
+
+    while (appointmentsOfDoctor.firstChild) {
+      appointmentsOfDoctor.firstChild.remove();
+    }
+
+    times.forEach((element, index) => {
+      if (element._id) {
+        appointmentsOfDoctor.innerHTML += `
+                    <div class="event full" data-appointmentid="${
+                      element._id
+                    }" data-userid="${element.user._id}" style="height:${
+          (element.timeIndexes[1] - element.timeIndexes[0] + 1) * 75
+        }px">
+
+                        <div class="center">
+                        <div>
+                        <span>${new Date(element.startHour)
+                          .toLocaleTimeString()
+                          .slice(0, 5)}-</span><span>${new Date(element.endHour)
+          .toLocaleTimeString()
+          .slice(0, 5)}</span>
+
+                        </div>
+
+                            <span>${element.user.name} ${
+          element.user.surname
+        }</span>
+                            
+                            <select class="change-state-appointment" name="" id="">
+                              <option   value="${
+                                element.appointmentState
+                              }" selected disable hidden>${element.appointmentState}</option>
+                              <span class="delete-session">Sil</span>
+                              ${APPOINTMENT_STATUS_LIST.map((item)=>`
+                              <option  value="${item}">${item}</option>
+                              `)}
+                            </select>
+     
+                        </div>
+                        <div>
+                        <input type="radio" name="appointmentCheckBox" class="appointmentCheckBox">
+                        </div>
+                       
+                          
+                    </div>
+                    `;
+      } else {
+        appointmentsOfDoctor.innerHTML += `
+                         
+                    <div class="event" data-time="${index}" data-startHour="${
+          element.startHour
+        }" data-endHour="${element.endHour}" style="height:75px">
+                                             
+                        <div>
+                        <span>${new Date(element.startHour).toLocaleTimeString(
+                          [],
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )} </span> -
+                        <span>${new Date(element.endHour).toLocaleTimeString(
+                          [],
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )} </span>
+                        
+                        
+                        </div>
+                        <span>  Boş</span>
+                        
+                        <div>
+                       
+                        
+                        </div>
+                        
+
+                    </div>
+                    
+                    `;
+      }
     });
   }
 

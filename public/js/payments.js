@@ -294,7 +294,7 @@ userSelect.addEventListener("change", () => {
     .then((response) => {
       console.log(response);
       if (response.operations.length === 0) {
-        console.log("burası");
+        
         let opt = document.createElement("option");
         opt.setAttribute("selected", "");
         opt.setAttribute("disable", "");
@@ -336,6 +336,7 @@ userSelect.addEventListener("change", () => {
           opt.setAttribute("data-price", element.operationPrice);
           opt.setAttribute("data-id", element._id);
           opt.setAttribute("data-paidvalue", element.paidValue);
+          opt.setAttribute("data-discount", element.discount);
           opt.textContent = element.operationName;
           opt.value = element.operationName;
           operationsSelect.add(opt);
@@ -351,26 +352,29 @@ userSelect.addEventListener("change", () => {
 let selectedOperations = [];
 
 operationsSelect.addEventListener("change", () => {
+  let selectedOption=operationsSelect.options[operationsSelect.options.selectedIndex]
   selectedOperations.push({
     operationId:
-      operationsSelect.options[operationsSelect.options.selectedIndex].dataset
-        .id,
+    selectedOption.dataset.id,
     operationPrice: Number(
-      operationsSelect.options[operationsSelect.options.selectedIndex].dataset
-        .price
+      selectedOption.dataset.price
     ),
     paymentValue:
       Number(
-        operationsSelect.options[operationsSelect.options.selectedIndex].dataset
+        selectedOption.dataset
           .price
       ) -
       Number(
-        operationsSelect.options[operationsSelect.options.selectedIndex].dataset
+        selectedOption.dataset
           .paidvalue
       ),
     paidValue: Number(
-      operationsSelect.options[operationsSelect.options.selectedIndex].dataset
+      selectedOption.dataset
         .paidvalue
+    ),
+    discount: Number(
+      selectedOption.dataset
+        .discount
     ),
   });
 
@@ -378,57 +382,51 @@ operationsSelect.addEventListener("change", () => {
   let row = selected_proccess_table.insertRow(0);
   row.setAttribute(
     "data-price",
-    operationsSelect.options[operationsSelect.options.selectedIndex].dataset
+    selectedOption.dataset
       .price
   );
   row.setAttribute(
     "data-id",
-    operationsSelect.options[operationsSelect.options.selectedIndex].dataset.id
+    selectedOption.dataset.id
   );
   row.setAttribute(
     "data-value",
-    operationsSelect.options[operationsSelect.options.selectedIndex].value
+    selectedOption.value
   );
   row.setAttribute(
     "data-paidvalue",
-    operationsSelect.options[operationsSelect.options.selectedIndex].dataset
+    selectedOption.dataset
       .paidvalue
   );
+  row.setAttribute(
+    "data-discount",
+    selectedOption.dataset.discount
+  );
   let rowContent = `
-                <td>${operationsSelect.options[
-                  operationsSelect.options.selectedIndex
-                ].textContent.trim()}</td>
+                <td>${selectedOption.textContent.trim()}</td>
                 
                 <td>
                 <input type="number" min="0" value="1" readonly >
                 </td>
+                <td>
+                <input type="number" min="0" value="${selectedOption.dataset.price}" readonly >
+                </td>
+                
+                <td>
+                <input type="number" min="0" value="${selectedOption.dataset.discount}" readonly >
+                </td>
+                <td>
+                <input type="number" min="0" value="${selectedOption.dataset.price*((100-selectedOption.dataset.discount)/100)}" readonly >
+                </td>
                 
 
-                <td>${
-                  operationsSelect.options[
-                    operationsSelect.options.selectedIndex
-                  ].dataset.paidvalue
-                }/${
-    operationsSelect.options[operationsSelect.options.selectedIndex].dataset
-      .price
-  }</td>
+                <td>${selectedOption.dataset.paidvalue
+                }</td>
                 <td>
                 <input type="number" class="payment_value" min="0"
-                  max="${
-                    operationsSelect.options[
-                      operationsSelect.options.selectedIndex
-                    ].dataset.price -
-                    operationsSelect.options[
-                      operationsSelect.options.selectedIndex
-                    ].dataset.paidvalue
+                  max="${(selectedOption.dataset.price*((100-selectedOption.dataset.discount)/100))-selectedOption.dataset.paidvalue
                   }" 
-                  placeholder="${
-                    operationsSelect.options[
-                      operationsSelect.options.selectedIndex
-                    ].dataset.price -
-                    operationsSelect.options[
-                      operationsSelect.options.selectedIndex
-                    ].dataset.paidvalue
+                  placeholder="${(selectedOption.dataset.price*((100-selectedOption.dataset.discount)/100))-selectedOption.dataset.paidvalue
                   }">TL
                 </td>
                 
@@ -440,7 +438,7 @@ operationsSelect.addEventListener("change", () => {
 
   
 
-  operationsSelect.options[operationsSelect.options.selectedIndex].remove();
+  selectedOption.remove();
 
   calculatetTotalPrice();
 });

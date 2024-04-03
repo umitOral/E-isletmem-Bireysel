@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import Employee from "../models/EmployeesModel.js";
-import ROLES_LIST from "../config/roles_list.js";
+import {ROLES_LIST} from "../config/status_list.js";
 
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
@@ -35,6 +35,8 @@ const getIndexPage = (req, res) => {
     });
   }
 };
+
+
 const resetPasswordPage = async (req, res) => {
   try {
     res.status(200).render("front/newPassword", {
@@ -144,6 +146,7 @@ const getServicesPage = (req, res) => {
     });
   }
 };
+
 const returnPoliciesPage = (req, res) => {
   try {
     res.status(200).render("front/return-policies", {
@@ -211,6 +214,20 @@ const getservicesPage = async (req, res) => {
     });
   }
 };
+const getDatasPage = async (req, res) => {
+  try {
+
+    res.status(200).render("datasPage", {
+
+      link: "services",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "pagecontroller",
+    });
+  }
+};
 
 const getRegisterPage = (req, res) => {
   try {
@@ -236,10 +253,13 @@ const getContactPage = (req, res) => {
     });
   }
 };
-const getAdminPage = (req, res) => {
+const getAdminPage = async (req, res) => {
   try {
+   
+    
     res.status(200).render("indexAdmin", {
       link: "index",
+      
     });
   } catch (error) {
     res.status(500).json({
@@ -632,4 +652,5 @@ export {
   getSuperAdminTicketsPage,
   companyPaymentsListPage,
   getSingleEmployeePage,
+  getDatasPage
 };

@@ -57,7 +57,7 @@ const authenticateToken = async (req, res, next) => {
 
 const verifyRoles = (...roles) => {
   return async (req, res, next) => {
-    console.log("burası" + roles);
+    
     console.log(res.locals.employee.role);
     if (!roles.includes(res.locals.employee.role)) {
       next(new Error("Buraya giriş yetkiniz bulunmamaktadır.", 401));

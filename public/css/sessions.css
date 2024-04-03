@@ -394,18 +394,17 @@ tr {
   left: -87px;
 }
 
-.selected_proccess_type_add,.selected_proccess_type_update{
+.selected_proccess_type_add,.selected_proccess_type_update,.selected_proccess_type_new{
   display: flex;
   padding: 0.5rem;
   gap: 0.5rem;
   overflow-x: auto;
 }
-.selected_proccess_type_add div,.selected_proccess_type_update div{
+.selected_proccess_type_add div,.selected_proccess_type_update div,.selected_proccess_type_new div{
   display: flex;
   align-items: center;
   border: 1px solid rgba(128, 128, 128, 0.283);
   border-radius: var(--border-radius-1);
-  
 }
 .selected_proccess_type_add div input,.selected_proccess_type_update div input{
   border: none;
@@ -417,10 +416,16 @@ tr {
   cursor: pointer;
   padding: 0.5rem;
   border-left: 1px solid rgba(128, 128, 128, 0.283);
-
   border-radius: var(--border-radius-1);
 }
-.selected_proccess_type_add div i:hover,.selected_proccess_type_update div i:hover{
+.selected_proccess_type_new div i{
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-left: 1px solid rgba(128, 128, 128, 0.283);
+  border-radius: var(--border-radius-1);
+}
+.selected_proccess_type_add div i:hover,.selected_proccess_type_update div i:hover,.selected_proccess_type_new div i:hover{
  background-color: red;
  
 }

@@ -3,7 +3,7 @@ import Company from "../models/companyModel.js";
 import Operation from "../models/OperationsModel.js";
 import Employee from "../models/EmployeesModel.js";
 import Payment from "../models/paymentsModel.js";
-import ORDER_STATUS_LIST from "../config/order_status_list.js";
+import Session from "../models/sessionModel.js";
 import { passwordResetMail } from "../controller/mailControllers.js";
 
 import bcrypt from "bcrypt";
@@ -12,12 +12,16 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import { CustomError } from "../helpers/error/CustomError.js";
-import SERVICES_LIST from "../config/services_list.js";
+import {
+  APPOINTMENT_STATUS,
+  SERVICES_LIST,
+  OPERATION_STATUS_AUTOMATIC,
+} from "../config/status_list.js";
 import Subscription from "../models/subscriptionModel.js";
+import { response } from "express";
 
 const createCompany = async (req, res, next) => {
   try {
-    console.log("burasıx");
     const data = req.body;
     const newDate = new Date();
     req.body.subscribeEndDate = new Date(
@@ -82,7 +86,25 @@ const activateEmployee = async (req, res) => {
     });
   }
 };
-const findUser = async (req, res) => {
+const getUsersAllSessions = async (req, res) => {
+  console.log(req.params)
+  try {
+    const sessions = await Session.find({ user: req.params.id }).populate(["doctor","operations"]);
+    
+    res.status(200).json({
+      succes: true,
+      sessions: sessions,
+      APPOINTMENT_STATUS,
+      message: "seanslar başarıyla çekildi",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "api hatası",
+    });
+  }
+};
+const findUsers = async (req, res) => {
   try {
     //search
     let query = User.find();
@@ -141,6 +163,37 @@ const findUser = async (req, res) => {
       pagination: pagination,
       link: "users",
       defaultSearchValue: req.query.user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "usercontroller error",
+    });
+  }
+};
+const findSingleUser = async (req, res) => {
+  try {
+    //search
+
+    console.log(req.query);
+    let query = User.find();
+
+    if (req.query) {
+      const searchObject = {};
+      const regex = new RegExp(req.query.userName, "i");
+      searchObject["name"] = regex;
+      searchObject["company"] = res.locals.company._id;
+      searchObject["role"] = "customer";
+
+      // searchObject["title"] = regex
+      query = query.where(searchObject);
+    }
+
+    const data = await query;
+
+    res.status(200).json({
+      message: "hasta çekildi",
+      data: data,
     });
   } catch (error) {
     res.status(500).json({
@@ -303,7 +356,6 @@ const loginUser = async (req, res, next) => {
 
 const uploadPictures = async (req, res) => {
   try {
-    console.log("burası");
     console.log(req.body);
     const cloudinaryImageUploadMethod = async (file) => {
       const result = await cloudinary.uploader.upload(file, {
@@ -372,13 +424,16 @@ const uploadPictures = async (req, res) => {
     });
   }
 };
+
 const addDataToOperation = async (req, res) => {
   try {
-    console.log("addd data");
+    console.log("addd data operaiton");
     console.log(req.body);
+    console.log(req.params);
 
-    await Operation.updateOne(
-      { _id: req.params.operationId },
+    let responseData = await Operation.findOneAndUpdate(
+      { _id: req.params.operationID },
+
       {
         $push: {
           operationData: {
@@ -386,15 +441,18 @@ const addDataToOperation = async (req, res) => {
             data: req.body.data,
           },
         },
-      }
-    ).then(response=>{
-      res.json({
-        succes: true,
-        message: "resim başarıyla eklendi",
-      });
-    })
+      },
 
-    
+      {
+        returnOriginal: false,
+      }
+    );
+
+    res.json({
+      succes: true,
+      responseData,
+      message: "veri başarıyla eklendi",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -403,33 +461,23 @@ const addDataToOperation = async (req, res) => {
     });
   }
 };
+
 const addOperation = async (req, res) => {
   try {
-    
     console.log(req.body);
+    console.log(req.params);
 
-    req.body.company = res.locals.company;
-    req.body.user = req.params.id;
-    req.body.doctor = {};
+    req.body.selectedOperations.forEach((element) => {
+      element.company = res.locals.company;
+      element.operationStatus = OPERATION_STATUS_AUTOMATIC.WAITING;
+      element.user = req.params.id;
 
-    req.body.operationName = req.body.selectedValues.productName;
-    req.body.operationPrice = req.body.selectedValues.productPrice;
+      if (req.body.discount !== 0) {
+        element.discount = req.body.discount;
+      }
+    });
 
-    if (req.body.selectedValues.serviceDataName) {
-      req.body.operationData = {
-        dataName: req.body.selectedValues.serviceDataName,
-        data: req.body.selectedValues.serviceDataValue,
-      };
-    }
-    
-    if (req.body.selectedValues.productPrice===0) {
-      req.body.paymentStatus ="ödendi"
-    }
-    
-
-    // req.body.price=req.body.products.map(element=>element.productPrice).reduce((a,b)=>a+b)
-
-    await Operation.create(req.body);
+    await Operation.insertMany(req.body.selectedOperations);
 
     res.json({
       succes: true,
@@ -443,36 +491,19 @@ const addOperation = async (req, res) => {
     });
   }
 };
-const deleteOperation = async (req, res) => {
+const addDiscountToOperation = async (req, res) => {
   try {
-    console.log("delete operation");
+    console.log(req.body);
     console.log(req.params);
 
-    await Operation.findByIdAndDelete(req.params.operationId)
-      .then((response) => {
-        response.images.forEach(async (element) => {
-          await cloudinary.uploader.destroy(
-            element.public_id,
-            function (error, result) {
-              if (error) {
-                console.log(error);
-              } else {
-                console.log(result);
-                res.json({
-                  succes: true,
-                  message: "işlem başarıyla Silindi",
-                });
-              }
-            }
-          );
-        });
-      })
-      .catch((err) => {
-        res.json({
-          succes: true,
-          message: "işlem Silinirken bir Sorun oluştu tekrar deneyiniz.",
-        });
-      });
+    await Operation.findByIdAndUpdate(req.params.operationID, {
+      $set: { discount: req.body.discount },
+    });
+
+    res.json({
+      succes: true,
+      message: "işlem başarıyla eklendi",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -481,9 +512,143 @@ const deleteOperation = async (req, res) => {
     });
   }
 };
+const addOperationInsideAppointment = async (req, res) => {
+  try {
+    console.log(req.body);
+    console.log(req.params);
+
+    req.body.selectedOperations.forEach((element) => {
+      element.company = res.locals.company;
+      element.user = req.params.id;
+      element.operationStatus = OPERATION_STATUS_AUTOMATIC.PLANNED;
+      element.sessionOfOperation = [
+        {
+          sessionID: req.body.appointment,
+        },
+      ];
+      element.discount = req.body.discount;
+    });
+
+    const results = await Operation.insertMany(req.body.selectedOperations);
+
+    for (const iterator of results) {
+      await Session.findByIdAndUpdate(req.body.appointment, {
+        $push: { operations: iterator._id },
+      });
+    }
+
+    res.json({
+      succes: true,
+      responseData: results,
+      message: "işlem başarıyla eklendi",
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "işlem eklenirken bir hata oluştu.",
+    });
+  }
+};
+const deleteOperation = async (req, res) => {
+  try {
+    console.log("delete operation");
+    let operation = await Operation.findById(req.params.operationId).then(
+      (response) => {
+        if (response.sessionOfOperation.length !== 0) {
+          res.status(200).json({
+            succes: true,
+            message: "işleme ait seanslar bulunmaktadır.Silinemez",
+          });
+        } else if (response.payments.length !== 0) {
+          res.status(200).json({
+            succes: true,
+            message: "işleme ait ödemeler bulunmaktadır.Silinemez",
+          });
+        } else {
+          res.status(200).json({
+            succes: true,
+            message: "işlem başarıyla silindi.",
+          });
+        }
+      }
+    );
+
+    // let operation = await Operation.findById(req.params.operationId).populate(
+    //   "appointments"
+    // );
+    // console.log(operation)
+    // let appointmentsDates = operation.appointments.map((item) =>
+    //   item.date.setTime(item.startHour)
+    // );
+    // let date = new Date();
+    // let diffTime = [];
+
+    // console.log(appointmentsDates);
+    // appointmentsDates.forEach(async (element) => {
+    //   diffTime.push(date - element);
+    // });
+
+    // let result = diffTime.findIndex((item) => item > 0);
+    // console.log(result);
+    // if (result !== -1) {
+    //   res.status(200).json({
+    //     succes: false,
+    //     message: "İşleme ait geçmiş Randevular olduğundan İşlem Silinemez.",
+    //   });
+    // } else if (operation.payments.length !== 0) {
+    //   res.status(200).json({
+    //     succes: false,
+    //     message: "İşleme ait geçmiş Ödemeler olduğundan İşlem Silinemez.",
+    //   });
+    // } else {
+    //   await Session.deleteMany({ _id: { $in: operation.appointments } });
+    //   await Operation.findByIdAndDelete(req.params.operationId)
+    //     .then((response) => {
+    //       console.log("işlem silindi");
+    //       if (response.images.length !== 0) {
+    //         console.log("resimvar");
+    //         response.images.forEach(async (element) => {
+    //           await cloudinary.uploader.destroy(
+    //             element.public_id,
+    //             function (error, result) {
+    //               if (error) {
+    //                 console.log(error);
+    //               } else {
+    //                 console.log(result);
+    //               }
+    //             }
+    //           );
+    //         });
+    //         res.status(200).json({
+    //           succes: true,
+    //           message: "işlem başarıyla Silindi",
+    //         });
+    //       } else {
+    //         res.status(200).json({
+    //           succes: true,
+    //           message: "işlem başarıyla Silindi",
+    //         });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //       res.status(500).json({
+    //         succes: false,
+    //         message: "işlem Silinirken bir Sorun oluştu tekrar deneyiniz.",
+    //       });
+    //     });
+    // }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      succes: false,
+      message: "işlem Silinirken bir hata oluştu.",
+    });
+  }
+};
+
 
 const deletePhoto = async (req, res) => {
-  console.log("burası");
   console.log(req.params);
   try {
     //TODO
@@ -522,18 +687,47 @@ const deletePhoto = async (req, res) => {
     });
   }
 };
-const getUsersOpenOperations = async (req, res) => {
+const getUsersPlannedOperations = async (req, res) => {
   try {
-    const operations = await Operation.find({
-      user: req.params.id,
-      operationAppointmentStatus: "açık",
-    });
+    console.log(req.body);
+    const operations = await Operation.find({ _id: { $in: req.body } });
 
-    res.json({ success: true, message: "işlemler çekildi", operations });
+    res.json({
+      success: true,
+      message: "işlemler çekildi",
+      operations,
+    });
   } catch (error) {
     res.status(500).json({
       succes: false,
-      message: "resimler çekilirken bir hata oluştu",
+      message: "işlemler çekilirken bir hata oluştu",
+    });
+  }
+};
+const getUsersContinueOperations = async (req, res) => {
+  try {
+    console.log(req.body);
+    console.log(req.params);
+
+    const operations = await Operation.find({
+      user: req.params.id,
+      operationStatus: {
+        $in: [
+          OPERATION_STATUS_AUTOMATIC.WAITING,
+          OPERATION_STATUS_AUTOMATIC.CONTINUE,
+        ],
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "işlemler çekildi",
+      operations,
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "işlemler çekilirken bir hata oluştu",
     });
   }
 };
@@ -543,10 +737,7 @@ const getUsersHasPaymentOperations = async (req, res) => {
       user: req.params.id,
       paymentStatus: "ödenmedi",
     });
-    
-    
 
-    
     res.json({
       success: true,
       message: "ödenmeyen işlemler çekildi",
@@ -559,9 +750,23 @@ const getUsersHasPaymentOperations = async (req, res) => {
     });
   }
 };
+const getUsersOldOperations = async (req, res) => {
+  try {
+    const operations = await Operation.find({
+      user: req.params.id,
+    });
+
+    res.json({ success: true, message: "işlemler çekildi", data: operations });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+
+      message: "resimler çekilirken bir hata oluştu",
+    });
+  }
+};
 const getUsersAllOperations = async (req, res) => {
   try {
-    console.log("burası");
     const operations = await Operation.find({
       user: req.params.id,
     });
@@ -604,10 +809,9 @@ const getUsersAllPayments = async (req, res) => {
   try {
     console.log(req.params);
 
-    const payments = await Payment.find({fromUser:req.params.id});
+    const payments = await Payment.find({ fromUser: req.params.id });
 
-    
-    res.json({ success: true, message: "ödemeler çekildi", data:payments });
+    res.json({ success: true, message: "ödemeler çekildi", data: payments });
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -674,7 +878,8 @@ export {
   logOut,
   uploadPictures,
   editInformations,
-  findUser,
+  findUsers,
+  findSingleUser,
   deactivateEmployee,
   findEmployees,
   activateEmployee,
@@ -683,8 +888,13 @@ export {
   getAllPhotos,
   addOperation,
   getUsersAllOperations,
-  getUsersOpenOperations,
+  getUsersPlannedOperations,
+  getUsersContinueOperations,
   getUsersHasPaymentOperations,
+  getUsersAllPayments,
+  addOperationInsideAppointment,
   addDataToOperation,
-  getUsersAllPayments
+  addDiscountToOperation,
+  getUsersOldOperations,
+  getUsersAllSessions
 };

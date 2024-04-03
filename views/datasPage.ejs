@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/users.css">
+        <link rel="stylesheet" href="/css/services.css">
+
+</head>
+
+<body>
+    <%- include("partials/aside.ejs") %>
+
+        <section id="content">
+            <!---------- left aside ------------->
+            <%- include('partials/header.ejs') %>
+
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <div class="header">
+                        <h1> Veriler</h1>
+                    </div>
+                    <div class="search">
+                        <form autocomplete="off" action="./search">
+                            <div class="autocomplete inputs">
+                                <input id="myInput" type="text" name="services" placeholder="Hizmet Seç">
+                                <input type="submit" value="Ara">
+                            </div>
+
+                        </form>
+
+                        <div id="add_data_btn"><button>Veri Ekle +</button></div>
+
+
+                    </div>
+
+                    <div class="print">
+
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Yazdır &nbsp; &#10140</label>
+                            <label for="" class="to_pdf">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
+                        </div>
+
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+
+                                <th>Veri İsmi</i></th>
+                                <th>Veri Opsiyonları</th>
+                                <th></th>
+
+
+                            </thead>
+                            <tbody id="userList">
+
+                                <% locals.company.serviceDatas.forEach(element=> { %>
+                                    <tr data-id="<%= element._id %>">
+                                        <td>
+                                            <%= element.dataName %>
+                                        </td>
+                                        <td>
+                                            <table>
+                                                <% element.dataOptions.forEach(dataOptions=> { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= dataOptions%>
+                                                            <i class="fa-regular fa-pen-to-square"></i>
+                                                        </td>
+                                                        
+                                                        
+                                                    </tr>
+                                                    <% }) %>
+
+                                            </table>
+                                        </td>
+                                        <td><button class="add_serviceOption"> Opsiyon ekle+</button></td>
+
+                                    </tr>
+
+                                    <% }) %>
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+
+
+
+                    <div class="add_data modal">
+                        <h2>Yeni Veri Ekle</h2>
+                        <form action="./datas/addData" method="POST" id="data-form">
+                            <div class="inputs ">
+                                <span>Veri Adı:</span>
+                                <input type="text" name="dataName" id="user-name" required
+                                    placeholder="Örn: cilt kalitesi,cilt rengi..">
+                            </div>
+
+                            <button type="submit" class="save_button" id="add-user">Kaydet</button>
+                            <button type="button" class="cancel_button">Vazgeç</button>
+                        </form>
+                    </div>
+                    <div class="add_option modal">
+                        <h2>Yeni Opsiyon Ekle</h2>
+                        <form action="./datas/addOptiontoData" method="POST" id="dataOption_form">
+                            <div class="inputs ">
+                                <span>Opsiyon Adı:</span>
+                                <input type="text" name="dataOption" id="user-name" required
+                                    placeholder="Örn: seyrek,zayıf ..">
+                            </div>
+
+                            <button type="submit" class="save_button" id="add-user">Kaydet</button>
+                            <button type="button" class="cancel_button">Vazgeç</button>
+                        </form>
+                    </div>
+                    <div class="edit_option modal">
+                        <h2>Opsiyon Düzenle</h2>
+                        <form action="./datas/editOption" method="POST" id="dataEdit_form">
+                            <div class="inputs ">
+                                <span>Opsiyon Adı:</span>
+                                <input type="text" name="dataOption" id="user-name" required
+                                    placeholder="">
+                            </div>
+
+                            <button type="submit" class="save_button" id="add-user">Kaydet</button>
+                            <button type="button" class="cancel_button">Vazgeç</button>
+                        </form>
+                    </div>
+
+                </main>
+                <div class="information-modal">AAAA</div>
+        </section>
+
+
+
+        <script type="module" src="/js/main.js"></script>
+        <script src="/js/sidebar.js"></script>
+        <script type="module" src="/js/datas.js"></script>
+
+
+
+
+
+</body>
+
+</html>

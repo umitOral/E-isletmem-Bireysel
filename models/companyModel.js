@@ -30,18 +30,19 @@ const companySchema = new Schema(
     workHours: {
       type: Object,
       workStart: {
-        type: String
+        type: String,
       },
       workEnd: {
-        type: String
+        type: String,
       },
       workPeriod: {
-        type: Number
-      },default:{
-        workStart:"08:00",
-        workEnd:"18:00",
-        workPeriod:15,
-      }
+        type: Number,
+      },
+      default: {
+        workStart: "08:00",
+        workEnd: "18:00",
+        workPeriod: 15,
+      },
     },
 
     users: [
@@ -58,6 +59,12 @@ const companySchema = new Schema(
     subscribeEndDate: { type: Date, default: null },
 
     activeOrNot: { type: Boolean, default: true },
+    serviceDatas: [
+      {
+        dataName: { type:String, lowercase: true, trim: true },
+        dataOptions:[{type:String,lowercase:true, trim:true}]
+      },
+    ],
     services: [
       {
         serviceName: {
@@ -65,9 +72,9 @@ const companySchema = new Schema(
         },
         servicePrice: { type: Number },
         activeorNot: { type: Boolean, default: true },
-        serviceData:[]
-      }
-    ]
+        serviceData: [],
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -90,10 +90,9 @@
 
                             </div>
                             <div class="inputs">
-                                <span>İşlem Tipi:</span>
-
+                                <span>Devam eden İşlemler:</span>
                                 <select class="proccess_type_add" id="proccess_type_add">
-                                    <option value="" selected hidden disable></option>    
+                                    <option value="" selected hidden disable>Önce hasta seçiniz</option>    
                                 </select>
 
                                 <div class="selected_proccess_type_add">
@@ -101,6 +100,23 @@
                                 </div>
 
                             </div>
+                            <div class="inputs">
+                                <span>Yeni İşlemler:</span>
+                                <select class="proccess_type_new" id="proccess_type_new">
+                                    <option value="" selected hidden disable>İşlem Seçiniz</option>
+                                    <% locals.company.services.forEach(element => { %>
+                                        <% if (element.activeorNot===true) { %>
+                                            <option data-price="<%= element.servicePrice %>" data-id="<%= element._id %>" value="<%= element.serviceName %>"><%= element.serviceName %></option>
+                                        <% } %>
+                                    <% }) %>   
+                                </select>
+
+                                <div class="selected_proccess_type_new">
+
+                                </div>
+
+                            </div>
+                            
                            
 
                             <div class="inputs" hidden>timeIndex:
@@ -140,61 +156,7 @@
                     </form>
 
                 </div>
-                <div class="modal modal_update_session ">
-
-                    <h2>Seans Düzenle</h2>
-
-                    <form method="POST">
-                        <div class="inputs">
-
-                            <div class="title">
-                                <span>İşlem Tipi:</span>
-
-                                <select class="proccess_type_update">
-                                    <option value="" selected disabled hidden>
-                                        Hizmet Seçiniz
-                                    </option>
-                                   
-                                </select>
-
-                                <div class="selected_proccess_type_update">
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                        <div class="add-event-body">
-                            <div class="inputs">Hasta:
-                                <select name="user" class="user" id="user_update">
-
-                                    <% users.forEach(user=> { %>
-                                        <option value="<%= user._id %>">
-                                            <%= user.name %>
-                                        </option>
-                                        <% }) %>
-                                </select>
-
-                            </div>
-
-                            <div class="inputs" hidden>sessionID:
-                                <input type="text" name="sessionID" class="sessionID" >
-                            </div>
-
-                            <div class="inputs">Not:
-                                <input type="text" name="description" placeholder="notlar" class="description">
-                            </div>
-
-
-                            <button type="submit" class="save_update_button">Kaydet</button>
-
-                            <span class="cancel_button">Vazgeç</span>
-
-                        </div>
-                    </form>
-
-                </div>
+                
                 <div class="information-modal">AAAA</div>
         </section>
         

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { OPERATION_STATUS_AUTOMATIC } from "../config/status_list.js";
 
 const Schema = mongoose.Schema;
 const OperationSchema = new Schema(
@@ -6,9 +7,16 @@ const OperationSchema = new Schema(
     operationName: {
       type: String,
     },
+    operationDate: {
+      type: Date,
+    },
     operationAppointmentStatus: {
       type: String,
-      default: "açık",
+      default: "yok",
+    },
+    operationStatus: {
+      type: String,
+      default: OPERATION_STATUS_AUTOMATIC.WAITING,
     },
     paymentStatus: {
       type: String,
@@ -32,21 +40,26 @@ const OperationSchema = new Schema(
     },
     discount: {
       type: Number,
+      default: 0,
     },
-    operationName: {
-      type: String,
-    },
-    totalAppointmens: {
+
+    totalAppointments: {
       type: Number,
     },
     appointmensCount: {
       type: Number,
       default: 0,
     },
-    appointments: [
+    sessionOfOperation: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Session",
+        refAppointmentID: {
+          type: Schema.Types.ObjectId,
+          ref: "Session",
+        },
+        sessionState: { type: String, default: OPERATION_STATUS_AUTOMATIC.WAITING},
+        sessionDatas: [{ dataName:{type:String}, data:{type:String} }],
+        sessionDescription:{type:String},
+        sessionDate:{type:Date},
       },
     ],
     images: [
@@ -59,17 +72,18 @@ const OperationSchema = new Schema(
     ],
     payments: [
       {
-        paymentId:{
+        paymentId: {
           type: Schema.Types.ObjectId,
           ref: "Payment",
         },
-        paymentValue:{type:Number}
-      }
+        paymentValue: { type: Number },
+      },
     ],
     operationData: [{ dataName: String, data: String }],
+    operationDescription:{type:String}
   },
 
-  { timestamps: true, autoIndex: false }
+  {timestamps:true, autoIndex: false }
 );
 
 const Operation = mongoose.model("Operation", OperationSchema);

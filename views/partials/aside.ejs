@@ -60,10 +60,26 @@
                                 </li>
                                 <% } else{ %>
                                     <li>
-                                        <a href="/admin/services" <% if (link==="services" ) { %>class="active"<% } %>>
+                                        <a href="#" <% if (link==="services" ) { %>class="active"<% } %>>
                                                 <i class="icon ph-bold ph-eyedropper"></i>
-                                                <span class="text">Hizmetler</span>
+                                                <span class="text">Tanımlamalar</span>
+                                                <i class="arrow ph-bold ph-caret-down"></i>
                                         </a>
+                                        <ul class="sub-menu">
+                                                            
+                                            <li>
+                                                <a href="/admin/services">
+                                                    <span class="text">Hizmetler</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="/admin/datas">
+                                                    <span class="text">Veriler</span>
+                                                </a>
+                                            </li>
+                                            
+
+                                        </ul>
                                     </li>   
                                     <% } %>
 

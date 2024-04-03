@@ -40,7 +40,7 @@
 .selected_proccess_type_add {
   display: flex;
   flex-direction: column;
-  width: max-content;
+  width: 100%;
 }
 .selected_proccess_type_add div{
   
@@ -181,6 +181,17 @@
   border-bottom-right-radius: 0;
   border-bottom: none;
 }
+.inner-table{
+  display: none;
+  
+}
+.inner-table.showed{
+  display: block;
+  transition: all 1s ease;
+}
+.asc{
+  transform: rotate(180deg);
+}
 
 .userInformationsContent.generals,
 .sessions,
@@ -279,6 +290,20 @@ img.imageBig{
   border-radius: 1rem;
   padding: 1rem;
 }
+i:hover{
+  cursor: pointer;
+  color:rgb(60, 60, 60)
+}
+
+.tooltiptext{
+  visibility: hidden;
+}
+.fa-solid.fa-folder-plus:hover .tooltiptext{
+  visibility: visible;
+}
+
+
+
 .modalBigImage i:hover{
   background-color: white;
   color: black;

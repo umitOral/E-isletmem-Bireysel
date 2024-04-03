@@ -24,6 +24,8 @@ const addEventType = document.querySelector(".proccess_type");
 const deleteEvent = document.querySelector(".fa-trash");
 const eventsWrapper = document.querySelector(".events");
 
+let APPOINTMENT_STATUS=[]
+
 let today = new Date();
 let activeDay;
 let month = today.getMonth();
@@ -41,12 +43,7 @@ function showDatesAtPage(params) {
       month: "long",
       year: "numeric",
     });
-    // appointmentListDate.textContent = new Date(params).toLocaleDateString([], {
-    //   weekday: "long",
-    //   day: "2-digit",
-    //   month: "2-digit",
-    //   year: "2-digit",
-    // });
+  
   } else {
     calendarHead.textContent = today.toLocaleDateString([], {
       month: "long",
@@ -70,6 +67,7 @@ function getAllSessions() {
       const allDoctorAllSessions = response.allDoctorAllSessions;
       const AllDoctor = response.doctors;
       const workHours = response.workHours;
+      APPOINTMENT_STATUS=Object.values(response.APPOINTMENT_STATUS)
 
       //array
 
@@ -118,7 +116,7 @@ function getAllSessions() {
       });
       console.log(allTimesAllDoctor);
 
-      ui.showAllSessionToUI(allTimesAllDoctor, AllDoctor);
+      ui.showAllSessionToUI(allTimesAllDoctor, AllDoctor,APPOINTMENT_STATUS);
 
       changeState();
       getSessions();
@@ -127,12 +125,12 @@ function getAllSessions() {
     .catch((err) => console.log(err));
 }
 
+const userSelect = document.querySelector("#user-select");
 async function getSessions() {
-  const userSelect = document.querySelector("#user-select");
   userSelect.addEventListener("change", () => {
     let userID = userSelect.options[userSelect.selectedIndex].value;
     request
-      .getwithUrl("./users/" + userID + "/getUsersOpenOperations")
+      .getwithUrl("./users/" + userID + "/getUsersContinueOperations")
       .then((response) => {
         console.log(response);
         ui.addOperationstoUI(response.operations);
@@ -183,13 +181,14 @@ function changeState() {
       }
 
       if (e.target.classList.contains("change-state")) {
+        console.log(e.target.textContent)
         request
           .updateStateSession(
             "./appointments/" +
               e.target.parentElement.parentElement.parentElement.dataset
                 .session +
               "/updateStateAppointment?state=" +
-              e.target.textContent
+              e.target.textContent.toLowerCase()
           )
           .then((response) => {
             console.log(response);
@@ -359,6 +358,15 @@ closeAddSessionBtns.forEach((element) => {
   element.addEventListener("click", () => {
     modalAddSession.classList.remove("showed_modal");
     modalUpdateSession.classList.remove("showed_modal");
+    while (proccessType.firstChild) {
+      proccessType.firstChild.remove()
+    }
+    while (selected_proccess_type_add.firstChild) {
+      selected_proccess_type_add.firstChild.remove()
+    }
+    
+    userSelect.innerHTML+=` <option value="" selected hidden disable>Hasta seçiniz</option>`
+    selectedOperations={}
   });
 });
 
@@ -470,9 +478,7 @@ function sessionEditButtonHandled(e) {
     });
   }
 
-  if (e.target.classList.contains("edit-session-btn")) {
-    showEditModal(e);
-  }
+  
 }
 
 function showAddEventModal(e) {
@@ -501,79 +507,15 @@ function showAddEventModal(e) {
   modalAddSession.classList.add("showed_modal");
 }
 
-const modalUpdateSession = document.querySelector(".modal_update_session");
 
 let selectedValuesUpdate = [];
 
-function showEditModal(e) {
-  const sessionID = modalUpdateSession.querySelector(".sessionID");
-  const description = modalUpdateSession.querySelector(".description");
-  const user = modalUpdateSession.querySelector(".user");
 
-  while (selected_proccess_type_update.firstChild) {
-    selected_proccess_type_update.firstChild.remove();
-  }
-
-  while (selectedValuesUpdate.length > 0) {
-    selectedValuesUpdate.pop();
-  }
-
-  request
-    .getwithUrl(
-      "./appointments/" +
-        e.target.parentElement.parentElement.parentElement.dataset.session +
-        "/getAppointment"
-    )
-    .then((response) => {
-      sessionID.setAttribute("value", response.data._id);
-      description.value = response.data.description;
-      userUpdate.value = response.data.user._id;
-
-      response.data.services.map((element) =>
-        selectedValuesUpdate.push(element)
-      );
-      console.log(selectedValuesUpdate);
-      //add response services to UI ************************************************
-
-      selectedValuesUpdate.forEach((element) => {
-        const proccessDiv = document.createElement("div");
-        const nodeinput = document.createElement("input");
-
-        nodeinput.setAttribute("name", "services");
-        nodeinput.setAttribute("disabled", "");
-        nodeinput.setAttribute("type", "text");
-        nodeinput.setAttribute("class", "selected_proccess");
-        nodeinput.setAttribute("value", element);
-
-        const deleteButton = document.createElement("i");
-
-        deleteButton.classList.add("ph");
-        deleteButton.classList.add("ph-x");
-
-        proccessDiv.appendChild(nodeinput);
-        proccessDiv.appendChild(deleteButton);
-        selected_proccess_type_update.appendChild(proccessDiv);
-      });
-
-      const selectedProcess = document.querySelectorAll(
-        ".selected_proccess_type_update div i"
-      );
-      console.log(selectedProcess);
-      selectedProcess.forEach((element) => {
-        element.addEventListener("click", (e) => {
-          selectedValuesUpdate.pop(element.previousElementSibling.value);
-          element.parentElement.remove();
-        });
-      });
-    })
-    .catch((err) => console.log(err));
-
-  modalUpdateSession.classList.toggle("showed_modal");
-}
 
 // **********************************************************************add session modal actions
 
 const proccessType = document.querySelector(".proccess_type_add");
+const proccessTypeNew = document.querySelector(".proccess_type_new");
 const proccessTypeUpdate = document.querySelector(".proccess_type_update");
 
 const modalAddSessionSave = document.querySelector(".save_button");
@@ -581,6 +523,9 @@ const modalUpdateSessionSave = document.querySelector(".save_update_button");
 
 const selected_proccess_type_add = document.querySelector(
   ".selected_proccess_type_add"
+);
+const selected_proccess_type_new = document.querySelector(
+  ".selected_proccess_type_new"
 );
 const selected_proccess_type_update = document.querySelector(
   ".selected_proccess_type_update"
@@ -596,8 +541,9 @@ modalAddSessionSave.addEventListener("click", (e) => {
   });
 
   let data = {
-    operations: selectedValues,
-    user: addSessionForm.user.value,
+    operations: selectedOperations,
+    appointmentData:{
+      user: addSessionForm.user.value,
     timeIndexes: [
       addSessionForm.timeIndexes[0].value,
       addSessionForm.timeIndexes[1].value,
@@ -607,6 +553,8 @@ modalAddSessionSave.addEventListener("click", (e) => {
     doctor: addSessionForm.doctor.value,
     date: addSessionForm.date.value,
     description: addSessionForm.description.value,
+    }
+    
   };
   request
     .postWithUrl("./appointments/createAppointment", data)
@@ -615,8 +563,20 @@ modalAddSessionSave.addEventListener("click", (e) => {
       while (selected_proccess_type_add.firstChild) {
         selected_proccess_type_add.firstChild.remove();
       }
+      while (selected_proccess_type_new.firstChild) {
+        selected_proccess_type_new.firstChild.remove();
+      }
+      selectedOperations={
+        oldOperations:[],
+        newOperations:[]
+      }
+      userSelect.innerHTML+=` <option value="" selected hidden disable>Hasta seçiniz</option>`
+      proccessTypeNew.innerHTML+=`<option value="" selected hidden disable>İşlem Seçiniz</option>`
+      
     })
-    .then((response) => getAllSessions(selectedDate))
+    .then((response) =>{
+      console.log(response)
+     getAllSessions(selectedDate)})
 
     .catch((err) => console.log(err));
   modalAddSession.classList.remove("showed_modal");
@@ -624,13 +584,17 @@ modalAddSessionSave.addEventListener("click", (e) => {
 
 // ///////////////////////////////////
 
-let selectedValues = [];
+let selectedOperations = {
+  oldOperations:[],
+  newOperations:[]
+};
 proccessType.addEventListener("change", (e) => {
   console.log("hizmet seçildi");
 
-  selectedValues.push(
+  selectedOperations.oldOperations.push(
     proccessType.options[proccessType.options.selectedIndex].dataset.id,
   );
+  console.log(selectedOperations)
   
   const proccessDiv = document.createElement("div");
   const nodeinput = document.createElement("input");
@@ -665,11 +629,33 @@ proccessType.addEventListener("change", (e) => {
   proccessDiv.appendChild(deleteButton);
   selected_proccess_type_add.appendChild(proccessDiv);
 });
+proccessTypeNew.addEventListener("change", (e) => {
+  console.log("yeni hizmet seçildi");
+
+  selectedOperations.newOperations.push(
+    {
+      operationName:proccessTypeNew.options[proccessTypeNew.options.selectedIndex].value,
+      operationPrice:proccessTypeNew.options[proccessTypeNew.options.selectedIndex].dataset.price,
+      totalAppointments:1,
+      appointments:[]
+    }
+  );
+  console.log(selectedOperations)
+  
+  selected_proccess_type_new.innerHTML+=`
+          <div>
+          <input name="services" disabled="" type="text" class="selected_proccess"
+          data-id="${proccessTypeNew.options[proccessTypeNew.options.selectedIndex].dataset.id}"
+          data-price="${proccessTypeNew.options[proccessTypeNew.options.selectedIndex].dataset.price}"
+          value="${proccessTypeNew.options[proccessTypeNew.options.selectedIndex].textContent.trim()}"><i class="ph ph-x">
+          </i></div>
+          `
+
+
+});
 
 selected_proccess_type_add.addEventListener("click", (e) => {
   if (e.target.classList.contains("ph-x")) {
-    
-
     // add back to selectedbox
     const orderSelect = document.getElementById("proccess_type_add");
     let opt = document.createElement("option");
@@ -679,13 +665,20 @@ selected_proccess_type_add.addEventListener("click", (e) => {
     );
     opt.setAttribute("data-id", e.target.previousSibling.dataset.id);
     
-
     opt.value = e.target.previousElementSibling.value;
     opt.textContent = e.target.previousElementSibling.value;
     orderSelect.add(opt);
 
     // remove selected options
-    selectedValues.pop(e.target.previousElementSibling.value);
+    selectedOperations.oldOperations.pop(e.target.previousElementSibling.value);
+    e.target.parentElement.remove();
+  }
+});
+selected_proccess_type_new.addEventListener("click", (e) => {
+  if (e.target.classList.contains("ph-x")) {
+    
+    // remove selected options
+    selectedOperations.newOperations.pop(e.target.previousElementSibling.value);
     e.target.parentElement.remove();
   }
 });

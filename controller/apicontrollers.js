@@ -4,6 +4,9 @@ import Session from "../models/sessionModel.js";
 import Company from "../models/companyModel.js";
 import jwt from "jsonwebtoken";
 import { CustomError } from "../helpers/error/CustomError.js";
+import  {SESSION_STATUS_LIST,OPERATION_STATUS,APPOINTMENT_STATUS} from "../config/status_list.js";
+import Operation from "../models/OperationsModel.js";
+
 
 const getAllUsers = async (req, res) => {
   try {
@@ -21,29 +24,12 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
-const getAllSessions = async (req, res) => {
-  try {
-    const sessions = await Session.find({ user: req.params.userID }).populate([
-      "doctor",operations
-    ]);
 
-    res.status(200).json({
-      succes: true,
-      sessions: sessions,
-      message: "seanslar başarıyla çekildi",
-    });
-  } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "api hatası",
-    });
-  }
-};
 
 const newPassword = async (req, res, next) => {
   try {
     const token = req.params.token;
-    console.log("burası");
+   
     if (req.body.password !== req.body.password2) {
       return next(new Error("şifreler aynı değil", 400));
     }
@@ -129,8 +115,45 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
     res.status(200).json({
       workHours,
       doctors: doctors,
+      APPOINTMENT_STATUS,
       // sessionsAllDoctor: sessionsAllDoctor,
       allDoctorAllSessions: allDoctorAllSessions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "api hatası",
+    });
+  }
+};
+const getAllAppointmentofSingleDoctor = async (req, res) => {
+  try {
+    
+    const doctor=res.locals.employee._id
+    const company=res.locals.company
+   
+   
+    // test codes
+    const workHours = res.locals.company.workHours;
+  
+    const actualDate = new Date(req.params.date + ",Z00:00:00");
+    console.log(actualDate)
+        const sessionsOfDoctorSingleDay = await Session.find({
+          date: actualDate,
+          doctor:doctor,
+        })
+          .populate(["user","operations"])
+          .sort({ startHour: 1 });
+
+    res.status(200).json({
+      succes:true,
+      message:"Randevular çekildi",
+      workHours:workHours,
+      sessionsOfDoctorSingleDay: sessionsOfDoctorSingleDay,
+      company:company,
+      SESSION_STATUS_LIST,
+      OPERATION_STATUS,
+      APPOINTMENT_STATUS
     });
   } catch (error) {
     res.status(500).json({
@@ -208,6 +231,6 @@ export {
   getAllUsers,
   getSingleDayAllDoctorSessions,
   newPassword,
-  getAllSessions,
-  getDaysFullorNot
+  getDaysFullorNot,
+  getAllAppointmentofSingleDoctor
 };

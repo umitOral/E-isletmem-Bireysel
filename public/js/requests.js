@@ -9,6 +9,7 @@ export class Request {
     return responseData;
   }
   async getwithUrl(url) {
+    console.log(url)
     const response = await fetch(url);
     const responseData = await response.json();
     return responseData;

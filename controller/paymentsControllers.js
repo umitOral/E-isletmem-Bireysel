@@ -135,7 +135,7 @@ const deletePayment = async (req, res) => {
 
 const editPayment = async (req, res) => {
   try {
-    console.log("burası");
+    
 
     let requestPayments = req.body.operations.map((item) => item.operationId);
 

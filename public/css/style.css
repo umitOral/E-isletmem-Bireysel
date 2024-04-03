@@ -155,8 +155,12 @@ button {
   background-color: var(--color-success);
   width: max-content;
   padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
 }
-
+.centered_div{
+  display: flex;
+  justify-content: center;
+}
 hr {
   margin: 1rem 0;
 }
@@ -365,7 +369,7 @@ header div div i {
   gap: 20px;
   background-color: #fff;
   padding: 0rem 1.5rem 1.5rem 1.5rem;
-
+  overflow-x: auto;
   transition: all 0.3s;
   z-index: 997;
 }
@@ -591,111 +595,9 @@ main {
   padding-bottom: 1rem;
 }
 
-main .date {
-  display: inline-block;
-  background-color: var(--color-light);
-  border-radius: var(--border-radius-1);
-  margin-top: 1rem;
-  padding: 0.5rem 1.6rem;
-}
 
-main .date input[type="date"] {
-  background-color: transparent;
-  color: var(--color-dark);
-}
 
-main .insights {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.6rem;
-  margin-bottom: 3rem;
-}
 
-main .insights > div {
-  background-color: var(--color-white);
-  padding: var(--card-padding);
-  border-radius: var(--card-border-radius);
-  margin-top: 1rem;
-  box-shadow: var(--box-shadow);
-  background-color: var(--color-white);
-}
-
-main .insights > div:hover {
-  box-shadow: none;
-}
-
-main .insights > div span {
-  color: var(--color-white);
-  background-color: var(--color-primary);
-  padding: 0.5rem;
-  border-radius: 50%;
-  font-size: 2rem;
-}
-
-main .insights > div.income span {
-  background-color: var(--color-danger);
-}
-
-main .insights > div.schedules span {
-  background-color: var(--color-warning);
-}
-
-main .insights > div .middle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-main .insights h3 {
-  font-size: 1rem;
-  margin: 1.5rem 0 0;
-}
-
-main .insights .progress {
-  position: relative;
-  width: 92px;
-  height: 92px;
-  border-radius: 50%;
-}
-
-main .insights svg {
-  width: 7rem;
-  height: 7rem;
-}
-
-main .insights svg circle {
-  fill: none;
-  stroke: var(--color-primary);
-  stroke-width: 14;
-  stroke-linecap: round;
-  transform: translate(5px, 5px);
-  stroke-dasharray: 100;
-  stroke-dashoffset: 0;
-}
-
-main .insights .sales svg circle {
-  stroke: var(--color-success);
-  stroke-dasharray: 200;
-  stroke-dashoffset: 100;
-}
-
-main .insights .sales svg circle {
-  stroke: var(--color-success);
-  stroke-dasharray: 200;
-  stroke-dashoffset: 100;
-}
-
-main .insights .progress .number {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 /* -------------------users ----------*/
 
 table {
@@ -836,67 +738,9 @@ table thead {
   background-color: var(--color-info-light);
 }
 
-/* --------------------rigt section ----------------*/
 
-.right .recent-updates h2 {
-  margin-top: 1rem;
-}
-.right .recent-updates .updates {
-  margin-top: 1rem;
-  background-color: var(--color-white);
-  padding: var(--card-padding);
-  border-radius: var(--card-border-radius);
-  box-shadow: var(--box-shadow);
-  transition: all 300ms ease;
-}
-.right .recent-updates .updates:hover {
-  box-shadow: none;
-}
-.right .recent-updates .updates .update {
-  display: grid;
-  grid-template-columns: 2.6rem auto;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
 
-/* -------------------analytics */
-.analytics {
-  margin-top: 2rem;
-}
-.analytics h2 {
-  margin-bottom: 0.8rem;
-}
-.analytics .item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background-color: var(--color-white);
-  border-radius: var(--border-radius-2);
-  box-shadow: var(--box-shadow);
-  padding: 1.4rem var(--card-padding);
-  margin-bottom: 0.7rem;
-  transition: all 300ms ease;
-}
-.analytics .item.item2 .icon span {
-  background-color: var(--color-danger);
-}
-.analytics .item.item3 .icon span {
-  background-color: var(--color-warning);
-}
-.analytics .item:hover {
-  box-shadow: none;
-}
-.analytics .item .icon span {
-  padding: 1rem;
-  border-radius: 50%;
-  background-color: var(--color-success);
-}
-.analytics .item .right {
-  display: flex;
-  margin: 0;
-  justify-content: space-between;
-  width: 100%;
-}
+
 
 .buttons {
   background-color: var(--color-success);
@@ -916,7 +760,7 @@ table thead {
   background-color: white;
   border-radius: var(--border-radius-1);
   padding: 2rem;
-  width: 500px;
+  width: 630px;
   max-width: 90%;
 
   position: absolute;

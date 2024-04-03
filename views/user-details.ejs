@@ -44,7 +44,7 @@
                             <div class="show-content informations">Bilgiler<i
                                     class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <div class="show-content sessions">Randevular
+                            <div class="show-content appointments">Randevular
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
                             <div class="show-content payment">Tahsilatlar
@@ -53,7 +53,7 @@
                             <div class="show-content images">Resimler
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <div class="show-content orders">İşlemler
+                            <div class="show-content operations">İşlemler
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
 
@@ -158,58 +158,7 @@
                                                     <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></th>
                                                 </thead>
                                                 <tbody class="sessionTableBody">
-                                                    <% sessions.forEach(session=> { %>
-                                                        <tr>
 
-                                                            <td>
-                                                                <%= new Date(session.date).toLocaleDateString() %>
-                                                            </td>
-
-                                                            <td>
-                                                                <%= new
-                                                                    Date(session.startHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
-                                                                    %>-
-                                                                    <%= new
-                                                                        Date(session.endHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
-                                                                        %>
-                                                            </td>
-
-                                                            <td>
-                                                                <%= session.doctor.name%>
-                                                            </td>
-                                                            <td>
-                                                                <% session.operations.forEach(element=> { %>
-                                                                    <%= element.operationName%>
-                                                                        <% }) %>
-                                                            </td>
-                                                            <td>
-                                                                <%= session.description %>
-                                                            </td>
-
-
-                                                            <td>
-                                                                <p class="finish">
-                                                                    <%= session.appointmentState %>
-                                                                </p>
-                                                            </td>
-                                                            <td style="position: relative;">
-
-                                                                <i
-                                                                    class="fa-solid fa-ellipsis-vertical edit_modals"></i>
-
-                                                                <div class="session-options-modal"
-                                                                    data-appointmentID="<%= session._id %>">
-                                                                    <span class="edit-session-btn">Düzenle</span>
-                                                                    <span class="delete-session">Sil</span>
-                                                                    <span class="change-state">Bitti</span>
-                                                                    <span class="change-state">Seansta</span>
-                                                                    <span class="change-state">Hasta Gelmedi</span>
-                                                                    <span class="change-state">Personel Gelmedi</span>
-                                                                </div>
-
-                                                            </td>
-                                                        </tr>
-                                                        <% }) %>
                                                 </tbody>
 
 
@@ -238,7 +187,7 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td></td>
-                                                        
+
                                                         <td>Toplam:</td>
                                                         <td> xxxxx</td>
                                                     </tr>
@@ -271,10 +220,15 @@
 
                                                 <th>Kayıt Tarihi<i class="fa-solid fa-arrow-up"></i></th>
                                                 <th>İşlem<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>Seanslar</td>
+                                                <th>İşlem Durumu<i class="fa-solid fa-arrow-up"></i></td>
+                                                <th>Mevcut Randevu<i class="fa-solid fa-arrow-up"></i></td>
+                                                <th>Randevular</td>
+                                                <th>Datalar</td>
+                                                <th>Fiyat<i class="fa-solid fa-arrow-up"></i></td>
+                                                <th>İndirim<i class="fa-solid fa-arrow-up"></i></td>
+                                                <th>Son Fiyat<i class="fa-solid fa-arrow-up"></i></td>
                                                 <th>Ödenen/Toplam<i class="fa-solid fa-arrow-up"></i></th>
-                                                
+
                                                 <th></th>
 
                                             </thead>
@@ -374,15 +328,16 @@
                         enctype="multipart/form-data">
 
 
-                        <div class="options">
+                        <div>
                             <span>İşlem:</span>
                             <select class="proccess_type_add">
+
                                 <option value="" selected disabled hidden>İşlem seçiniz</option>
                                 <% locals.company.services.forEach(service=> { %>
                                     <% if (service.activeorNot===true) { %>
                                         <option value="<%= service.serviceName %>"
-                                            data-price="<%= service.servicePrice %>" <%
-                                            if(service.serviceData.length!==0){ %>
+                                            data-price="<%= service.servicePrice %>" data-serviceid="<%= service._id %>"
+                                            <% if(service.serviceData.length!==0){ %>
                                             data-serviceData="<%= service.serviceData[0] %>"
                                                 <% } else{ %>
 
@@ -397,8 +352,34 @@
                                             <% }) %>
 
                             </select>
-                            <div class="selected_proccess_type_add">
 
+
+                            <div class="selected_proccess_type_add">
+                                <table id="selected_proccess_table">
+                                    <thead>
+                                        <td>Hizmet</td>
+                                        <td>Seans Sayısı</td>
+                                        <td>Fiyat</td>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot>
+
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Yüzde İndirimi: <input type="number" id="percent_discount"></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>toplam:</td>
+                                            <td id="total_value"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                             <div class="processes_datas inputs">
 
@@ -406,12 +387,8 @@
 
                         </div>
 
-                        <div class="inputs ">
-                            <span>Seans Sayısı:</span>
-                            <input type="number" name="total" id="appointment-count" class="appointment-count"
-                                value="1">
-                        </div>
-                        
+
+
 
                         <button type="submit" id="add-order">Kaydet</button>
                         <span class="cancel_button">Vazgeç</span>
@@ -422,13 +399,9 @@
                 <div class="modal modal_image">
                     <h2>Resim Ekle</h2>
 
-                    <form action="./<%= singleUser._id %>/uploadpictures" method="POST" enctype="multipart/form-data"
-                        id="add_picture_form">
+                    <form action="./<%= singleUser._id %>/uploadpictures" data-operationid="" method="POST"
+                        enctype="multipart/form-data" id="add_picture_form">
 
-                        <div class="inputs " hidden>
-                            <span>İşlem id</span>
-                            <input type="text" name="operationId" id="operationId" class="operationId" value="aa">
-                        </div>
                         <div class="inputs ">
                             <span>Resim seç</span>
                             <input type="file" name="upload_file" id="upload_file" class="upload_file" src="" alt=""
@@ -509,18 +482,102 @@
             </div>
 
         </div>
+
         <div class="modal add-data-modal">
-            <form action="" class="add-data-form">
+            <form action="" id="add-data-form" data-operationid="">
                 <div>
                     <h2>Veri Ekle</h2>
                 </div>
                 <div class="inputs">Veri Adı:
-                    <input type="text" class="data-name" name="data-name">
-                    Veri:
-                    <input type="text" class="data-value" name="data-value">
-                    <input type="hidden" class="operation-id" name="" value="">
+                    <select name="datas" id="datas_select_input">
+                        <% locals.company.serviceDatas.forEach(element=> { %>
+                            <option value="<%= element._id %>">
+                                <%= element.dataName %>
+                            </option>
+
+                            <% }) %>
+                    </select>
+
+                    Opsiyon:
+                    <select name="datasOption" id="datasOptions_select_input">
+                        <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
+                            <option value="">
+                                <%= element %>
+                            </option>
+
+                            <% }) %>
+                    </select>
+                    <div >
+                        Sayısal Değer:
+                    <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
+                    </div>
                 </div>
                 <button type="submit" class="save_button" id="add-data-save-button">Kaydet</button>
+                <button type="button" class="cancel_button">Vazgeç</button>
+            </form>
+
+
+        </div>
+        <div class="modal add-session-modal">
+            <form action="" id="add-session-form" data-operationid="">
+                <div>
+                    <h2>Seans Ekle</h2>
+                </div>
+                <div class="inputs">Seans Sayısı:
+                    <input type="Number" min="1" id="add-session" name="addsession">
+
+                </div>
+                <button type="submit" class="save_button" id="add-session-save-button">Kaydet</button>
+                <button type="button" class="cancel_button">Vazgeç</button>
+            </form>
+
+
+        </div>
+
+        <div class="modal add_discount_modal">
+            <form action="" id="add-discount-form" data-operationid="">
+                <div>
+                    <h2>İndirim Tanımla</h2>
+                </div>
+                <div class="inputs">İndirim Miktarı(%)
+                    <input type="text" name="discountValue" id="discountValue" value="">
+                </div>
+
+                <button type="submit" class="save_button" id="add-discount-save-button">Kaydet</button>
+                <button type="button" class="cancel_button">Vazgeç</button>
+            </form>
+
+
+        </div>
+        <div class="modal edit-data-modal">
+            <form action="" id="edit-data-form">
+                <div>
+                    <h2>Veri düzenle</h2>
+                </div>
+                <div class="inputs">Veri Adı:
+                    <input type="text" name="dataName" id="dataName" value="" readonly>
+                </div>
+                <div class="inputs">Opsiyon:
+                    <select name="editDataOption" id="edit_data_option"></select>
+                </div>
+                <button type="submit" class="save_button" id="edit-data-save-button">Kaydet</button>
+                <button type="button" class="cancel_button">Vazgeç</button>
+            </form>
+
+
+        </div>
+        <div class="modal appointment-modal">
+            <form action="" id="edit-data-form">
+                <div>
+                    <h2>En yakın Randevu</h2>
+                </div>
+                <div class="inputs">Doktor:
+                    <input type="text" name="appointmentDoc" id="appointmentDoc" value="" readonly>
+                </div>
+                <div class="inputs">Tarih:
+                    <input type="date" name="appointmentDate" id="appointmentDate">
+                </div>
+                <button type="submit" class="save_button" id="edit-data-save-button">Kaydet</button>
                 <button type="button" class="cancel_button">Vazgeç</button>
             </form>
 

@@ -41,20 +41,36 @@ saveButtons.forEach((button) => {
 
 //modal actions
 
-const addServicesButton = document.querySelector(".add_service_btn")
-const modalServiceCancel = document.querySelector(".cancel_button")
+const addServicesButton = document.querySelector("#add_service_btn")
+
+const allModals = document.querySelectorAll(".modal")
+
+const modalCancelBtn= document.querySelectorAll(".cancel_button")
 const modalServiceAdd = document.querySelector(".add_service")
 
 
+
 addServicesButton.addEventListener("click", showModalAddServices)
-modalServiceCancel.addEventListener("click", closeModalAddService)
+
+modalCancelBtn.forEach(element => {
+  element.addEventListener("click", closeModal)
+});
+
 
 function showModalAddServices() {
+  allModals.forEach(element => {
+    element.classList.remove("showed_modal")
+  });
     modalServiceAdd.classList.add("showed_modal")
 }
-function closeModalAddService(e) {
+
+
+function closeModal(e) {
   e.preventDefault()
-    modalServiceAdd.classList.remove("showed_modal")
+  allModals.forEach(element => {
+    element.classList.remove("showed_modal")
+  });
+    
 }
 
 
