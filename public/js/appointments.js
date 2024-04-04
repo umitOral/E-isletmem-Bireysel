@@ -31,7 +31,7 @@ let activeDay;
 let month = today.getMonth();
 let year = today.getFullYear();
 let selectedDate = today.toDateString();
-console.log(selectedDate);
+
 
 showDatesAtPage();
 getAllSessions();
@@ -64,11 +64,15 @@ function getAllSessions() {
       "/api/getSingleDayAllDoctorSessions/" + selectedDate.replaceAll("/", "-")
     )
     .then((response) => {
+      console.log(response)
       const allDoctorAllSessions = response.allDoctorAllSessions;
       const AllDoctor = response.doctors;
       const workHours = response.workHours;
       APPOINTMENT_STATUS=Object.values(response.APPOINTMENT_STATUS)
 
+      if (response.doctors.length===0) {
+        ui.showModal(false,"Personel bulunamadı. Sol menüden kullanıcı ekleyin.")
+      }
       //array
 
       let allTimesAllDoctor = [];

@@ -23,6 +23,8 @@ export class UI {
     }, 2000);
   }
 
+ 
+
   addPaymentsToTable(table, data) {
     const rows = table.querySelectorAll("tbody tr");
     const tableBody = table.querySelector("tbody");

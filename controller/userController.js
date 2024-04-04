@@ -28,6 +28,13 @@ const createCompany = async (req, res, next) => {
       newDate.setMonth(newDate.getMonth() + 1)
     ).toISOString();
 
+    req.body.serviceDatas = [
+      {
+        dataName: "saç yapısı",
+        dataOptions: ["kuru", "karma", "normal"],
+      },
+    ];
+
     const processes = SERVICES_LIST;
 
     req.body.services = [];
@@ -87,10 +94,13 @@ const activateEmployee = async (req, res) => {
   }
 };
 const getUsersAllSessions = async (req, res) => {
-  console.log(req.params)
+  console.log(req.params);
   try {
-    const sessions = await Session.find({ user: req.params.id }).populate(["doctor","operations"]);
-    
+    const sessions = await Session.find({ user: req.params.id }).populate([
+      "doctor",
+      "operations",
+    ]);
+
     res.status(200).json({
       succes: true,
       sessions: sessions,
@@ -647,7 +657,6 @@ const deleteOperation = async (req, res) => {
   }
 };
 
-
 const deletePhoto = async (req, res) => {
   console.log(req.params);
   try {
@@ -896,5 +905,5 @@ export {
   addDataToOperation,
   addDiscountToOperation,
   getUsersOldOperations,
-  getUsersAllSessions
+  getUsersAllSessions,
 };
