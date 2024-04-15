@@ -1,4 +1,4 @@
-.inputs {
+tr .inputs {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -13,4 +13,13 @@
 }
 .inputs i.showed{
     display: block;
+}
+
+a{
+    display: block;
+}
+a:hover{
+    background-color: rgba(128, 128, 128, 0.4);
+    padding: 0.4rem 0;
+    border-radius: 0.5rem;
 }

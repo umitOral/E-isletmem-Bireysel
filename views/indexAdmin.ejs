@@ -19,6 +19,7 @@
 
                 <main>
                     <h1>Ana Sayfa</h1>
+                    <h1><%= locals.companySubscribe %></h1>
                     
                     <div class="insights">
                         <div id="appointments">
@@ -99,9 +100,10 @@
                             <div class="selected_proccess_type_add">
                                 <table id="selected_proccess_table">
                                     <thead>
-                                        <td>Hizmet</td>
-                                        <td>Seans Sayısı</td>
-                                        <td>Fiyat</td>
+                                        <th>Hizmet</th>
+                                        <th>Seans Sayısı</th>
+                                        <th>Fiyat</th>
+                                        <th>İndirim Tutarı</th>
                                     </thead>
 
                                     <tbody>
@@ -111,7 +113,8 @@
                                         <tr>
                                             <td></td>
                                             <td></td>
-                                            <td>Yüzde İndirimi: <input type="number" id="percent_discount"></td>
+                                            <td>Yüzde İndirimi: </td>
+                                            <td><input type="number" id="percent_discount" class="tdInputs" max="100"></td>
 
                                         </tr>
                                         <tr>
@@ -265,7 +268,7 @@
         
         
                 </div>
-                <div class="information-modal"></div>
+                <div class="information-modal-wrapper"></div>
 
         </section>
         <script src="/js/sidebar.js"></script>

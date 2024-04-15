@@ -19,7 +19,11 @@ const addPayment = async (req, res) => {
           let totalPaymentValue =
             totalPayments.reduce((a, b) => a + b) + element.paymentValue;
           console.log(totalPaymentValue);
-          if (foundedOperation.operationPrice === totalPaymentValue) {
+          if (
+            (foundedOperation.operationPrice - foundedOperation.discount) *
+              ((100 - foundedOperation.percentDiscount) / 100) ===
+            totalPaymentValue
+          ) {
             foundedOperation.payments.push({
               paymentId: response._id,
               paymentValue: element.paymentValue,
@@ -33,7 +37,11 @@ const addPayment = async (req, res) => {
           }
         } else {
           let totalPaymentValue = element.paymentValue;
-          if (foundedOperation.operationPrice === totalPaymentValue) {
+          if (
+            (foundedOperation.operationPrice - foundedOperation.discount) *
+              ((100 - foundedOperation.percentDiscount) / 100) ===
+            totalPaymentValue
+          ) {
             foundedOperation.payments.push({
               paymentId: response._id,
               paymentValue: element.paymentValue,
@@ -135,8 +143,6 @@ const deletePayment = async (req, res) => {
 
 const editPayment = async (req, res) => {
   try {
-    
-
     let requestPayments = req.body.operations.map((item) => item.operationId);
 
     let payment = await Payment.findById(req.body.paymentId);
@@ -173,10 +179,12 @@ const editPayment = async (req, res) => {
         await Payment.findByIdAndUpdate(req.body.paymentId, {
           $set: { totalPrice: totalPrice },
         });
-      } else {
-       
-        // let _id = new mongoose.Types.ObjectId(req.body.paymentId);
         
+       
+
+      } else {
+        // let _id = new mongoose.Types.ObjectId(req.body.paymentId);
+
         await Operation.updateOne(
           { _id: operation.operationId },
           {
@@ -185,9 +193,12 @@ const editPayment = async (req, res) => {
                 req.body.operations[indexcontrol].paymentValue,
             },
           },
-          { arrayFilters: [{ "elm.paymentId": req.body.paymentId}], upsert: true }
+          {
+            arrayFilters: [{ "elm.paymentId": req.body.paymentId }],
+            upsert: true,
+          }
         );
-        
+
         let modifiedOperation = await Operation.findById(operation.operationId);
         if (modifiedOperation.payments.length === 0) {
           modifiedOperation.paidValue;
@@ -218,6 +229,7 @@ const editPayment = async (req, res) => {
           .map((item) => item.paymentValue)
           .reduce((a, b) => a + b);
         await modifiedPayment.save();
+        
       }
     });
 
@@ -225,6 +237,7 @@ const editPayment = async (req, res) => {
       success: true,
       message: "ödeme düzenlendi.",
     });
+  
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -234,15 +247,22 @@ const editPayment = async (req, res) => {
 };
 const getSearchedPayments = async (req, res) => {
   try {
-    let startDate = new Date(req.query.startDate);
-    startDate.setDate(startDate.getDate() - 1);
-    startDate.setHours(24, 0, 0);
-    let endDate = new Date(req.query.endDate);
-    endDate.setDate(endDate.getDate());
-    endDate.setHours(0, 0, 0, 0);
-    let day = endDate.getDate();
-    endDate.setDate(day + 1);
 
+
+    function toDateInputValue(dateObject) {
+      const local = new Date(dateObject);
+      local.setMinutes(
+        dateObject.getMinutes() + dateObject.getTimezoneOffset()
+      );
+      return local;
+    }
+
+    let startDate = toDateInputValue(new Date(req.query.startDate));
+
+    let endDate = toDateInputValue(new Date(req.query.endDate));
+   
+    console.log(startDate);
+    console.log(endDate);
     const payments = await Payment.find({
       company: res.locals.company._id,
       createdAt: {

@@ -338,7 +338,7 @@ const loginUser = async (req, res, next) => {
     if (employee) {
       const company = await Company.findOne({ _id: employee.company });
       same = await bcrypt.compare(req.body.password, employee.password);
-      console.log(company);
+
       if (same) {
         const token = createToken(company._id, employee._id);
         res.cookie("jsonwebtoken", token, {
@@ -346,9 +346,25 @@ const loginUser = async (req, res, next) => {
           maxAge: 1000 * 60 * 60 * 24,
         });
 
+        let today = new Date();
+        let endDate = new Date(company.subscribeEndDate);
+        let diffTime = endDate - today;
+        console.log(diffTime);
+        if (diffTime < 0) {
+          res.cookie("companySubscribe", false, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24,
+          });
+        } else {
+          res.cookie("companySubscribe", true, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24,
+          });
+        }
+
         res.status(401).json({
           success: true,
-          message: "Giriş Başarılı,yönlendiriliyorsunuz ...",
+          message: "Giriş Başarılı,yönlendiriliyorsunuz",
         });
       } else {
         return next(new Error("Kullanıcı adı veya şifresi yanlış", 400));
@@ -536,7 +552,8 @@ const addOperationInsideAppointment = async (req, res) => {
           sessionID: req.body.appointment,
         },
       ];
-      element.discount = req.body.discount;
+      element.percentDiscount = req.body.percentDiscount;
+      element.discount = element.operationDiscount;
     });
 
     const results = await Operation.insertMany(req.body.selectedOperations);
@@ -819,8 +836,12 @@ const getUsersAllPayments = async (req, res) => {
     console.log(req.params);
 
     const payments = await Payment.find({ fromUser: req.params.id });
-
-    res.json({ success: true, message: "ödemeler çekildi", data: payments });
+    if (payments.length===0) {
+      res.json({success: true, message: "ödeme bulunamadı", data: payments });
+    }else{
+      res.json({success: true, message: "ödemeler çekildi", data: payments });
+    }
+    
   } catch (error) {
     res.status(500).json({
       succes: false,

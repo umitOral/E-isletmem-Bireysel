@@ -2,17 +2,16 @@
 
 /* ROOT VARİABLES */
 :root {
-  
   --color-main: #04d9d9;
-  --color-main-lighter: #5FD9D9;
-  --color-main-lighter2: #94F2F2;
-  --color-main-lighter2: #94F2F2;
-  --color-main-lighter3: #B6F2F2;
-  --color-main-gray: #F2F2F2;
+  --color-main-lighter: #5fd9d9;
+  --color-main-lighter2: #94f2f2;
+  --color-main-lighter2: #94f2f2;
+  --color-main-lighter3: #b6f2f2;
+  --color-main-gray: #f2f2f2;
   --hue: 223;
-	--bg: hsl(var(--hue),10%,90%);
-	--fg: hsl(var(--hue),10%,10%);
-  
+  --bg: hsl(var(--hue), 10%, 90%);
+  --fg: hsl(var(--hue), 10%, 10%);
+
   --color-primary: #7380ec;
   --color-danger: #ff7782;
   --color-success: #41f1b6;
@@ -49,12 +48,11 @@
   box-sizing: border-box;
 }
 .table-wrapper table tbody tr:nth-child(even) {
- background-color: rgba(128, 128, 128, 0.05);
+  background-color: rgba(128, 128, 128, 0.05);
 }
 input::placeholder {
   opacity: 0.5;
 }
-
 
 html {
   font-size: 14px;
@@ -62,7 +60,19 @@ html {
 input {
   font-family: "Poppins", sans-serif;
 }
-input[type="radio"]{
+
+.tdInputs{
+  width: 100px;
+  border: 1px solid rgba(128, 128, 128, 0.432);
+  padding: 0.3rem;
+  border-radius: 0.2rem;
+
+}
+.tdInputs.deactive{
+  color: rgba(128, 128, 128, 0.45);
+  
+}
+input[type="radio"] {
   width: 1.2rem;
 }
 .logo {
@@ -88,7 +98,7 @@ input[type="radio"]{
   background-color: #ffffff79;
   z-index: 999;
   display: flex;
-flex-direction: column;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   transition: opacity 0.75s;
@@ -143,10 +153,8 @@ flex-direction: column;
   background-color: red;
 }
 
-
 button {
   border: 1px solid rgba(128, 128, 128, 0.394);
-  
   padding: 0.5rem;
   color: var(--color-dark-variant);
   cursor: pointer;
@@ -157,48 +165,51 @@ button {
   padding: 0.5rem 2rem;
   border-radius: 0.5rem;
 }
-.centered_div{
+.centered_div {
   display: flex;
   justify-content: center;
 }
 hr {
   margin: 1rem 0;
 }
-.information-modal {
-  display: none;
-  align-items: center;
-  color: white;
-  text-align: center;
+.information-modal-wrapper{
   position: fixed;
-  padding: 1rem 5rem;
+  top:80px;
+  right: 10px;
+}
+.information {
+  display: flex;
+  gap: 1rem;
+  color: white;
+  align-items: center;
+  padding: 1rem 4rem;
   right: 5%;
   top: 20%;
   z-index: 999;
   border-radius: var(--border-radius-1);
- 
+  position: relative;
+  opacity: 0;
+  height: fit-content;
+  /* transition: opacity 1s ease; */
+  transition: height 0.5s ease;
+  margin-bottom: 10px; /* Bildirimler arasında bir boşluk bırakır */
 }
 
-
-.information-modal.failure {
-  display: block;
-  display: flex;
-  gap: 1rem;
-  
+.information.failure {
+  opacity: 1;
+  color:white;
   background-color: var(--color-danger);
   border: 1px solid var(--color-danger);
-  color: white;
 }
-.information-modal.success {
-  display: block;
-  display: flex;
-  gap: 1rem;
-  
+
+.information.success {
+  opacity: 1;
+  color:white;
   background-color: var(--color-success);
   border: 1px solid var(--color-success);
-  color: white;
-  
 }
-.information-modal i{
+
+.information i {
   font-size: 2rem;
 }
 
@@ -217,11 +228,10 @@ select {
 
 /*  */
 
-select *{
+select * {
   background-color: white;
- 
 }
-select:hover{
+select:hover {
   background-color: rgba(128, 128, 128, 0.116);
 }
 
@@ -260,8 +270,6 @@ h1 {
   font-weight: 800;
   font-size: 1.8rem;
 }
-
-
 
 h3 {
   font-size: 0.87rem;
@@ -313,7 +321,7 @@ b {
 .warning {
   color: var(--color-warning);
 }
-.header{
+.header {
   margin: 0.5rem 0;
 }
 header {
@@ -363,7 +371,7 @@ header div div i {
 
 .sidebar {
   position: fixed;
- 
+
   width: 256px;
   height: 100%;
   display: flex;
@@ -383,7 +391,6 @@ header div div i {
   width: 100%;
   padding: 1rem;
 }
-
 
 .user-img span {
   font-size: 1.8rem;
@@ -414,15 +421,11 @@ header div div i {
 .menu ul li.deactivate {
   border-radius: 8px;
   background-color: var(--color-background);
-  
-  
 }
 .menu ul li.deactivate a {
   cursor: default;
-  
-  
 }
-.unauthorize{
+.unauthorize {
   font-size: 1rem;
 }
 .menu ul li a {
@@ -472,7 +475,7 @@ header div div i {
   top: 0;
   width: 200px;
   border-radius: 20px;
- 
+
   border: 1px solid #f6f6f6;
   background-color: #fff;
   box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.1);
@@ -586,7 +589,7 @@ main {
   display: flex;
   flex-direction: column;
   padding: 24px;
-  
+
   background-color: white;
   border-radius: var(--card-border-radius);
   margin: 0.5rem;
@@ -595,9 +598,6 @@ main {
   border-bottom: 1px solid var(--color-border-color);
   padding-bottom: 1rem;
 }
-
-
-
 
 /* -------------------users ----------*/
 
@@ -612,11 +612,10 @@ table th {
   cursor: pointer;
   padding: 0.5rem;
 }
-table thead{
+table thead {
   border-bottom: 1px solid rgba(128, 128, 128, 0.237);
 }
-table th.active i{
-  
+table th.active i {
   cursor: pointer;
   color: var(--color-success);
   border: 1px solid rgba(128, 128, 128, 0.418);
@@ -631,27 +630,22 @@ table th.active.fa-solid.fa-arrow-up {
 .fa-solid.fa-arrow-up {
   font-size: 1.1rem;
   margin-left: 0.3rem;
-  
-  
-  
 }
 .fa-solid.fa-arrow-up:hover {
   border: 1px solid rgba(128, 128, 128, 0.418);
   border-radius: 50%;
   padding: 0.2rem 0.3rem;
   color: var(--color-success);
-  
 }
-.input_save_buttons{
+.input_save_buttons {
   background-color: var(--color-success);
 }
-th.asc i{
+th.asc i {
   transform: rotate(180deg);
   border: 1px solid rgba(128, 128, 128, 0.418);
   border-radius: 50%;
   padding: 0.2rem 0.3rem;
 }
-
 
 td {
   padding: 0.5rem;
@@ -667,14 +661,15 @@ td {
   border: 1px solid var(--color-border-color);
 }
 
-.red_row{
+.red_row {
   background-color: rgba(255, 109, 109, 1);
 }
-.green_row{
+.green_row {
   background-color: rgba(173, 255, 173, 1);
 }
 
-tbody td,tfoot td {
+tbody td,
+tfoot td {
   border-bottom: 1px solid var(--color-light);
   color: var(--color-dark-variant);
   height: 3rem;
@@ -682,8 +677,13 @@ tbody td,tfoot td {
   position: relative;
 }
 
-tbody td.details:hover{
+tbody td.details a {
+  display: block;
+  padding: 1rem;
+}
+tbody td.details a:hover {
   background-color: rgba(128, 128, 128, 0.144);
+  border-radius: 1rem;
 }
 table tbody tr:last-child td {
   border: none;
@@ -739,19 +739,17 @@ table thead {
   background-color: var(--color-info-light);
 }
 
-
-
-
-
 .buttons {
   background-color: var(--color-success);
-
   cursor: pointer;
   border: 1px solid rgba(128, 128, 128, 0.394);
 
   border-radius: var(--border-radius-1);
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1rem;
   color: var(--color-dark-variant);
+}
+.buttons:hover {
+  border: 1.5px solid rgba(128, 128, 128, 1);
 }
 
 /* modals general settings */
@@ -777,6 +775,8 @@ table thead {
 
 .modal.showed_modal {
   display: block;
+  width: max-content;
+  min-width: 450px
 }
 
 .modal button {
@@ -801,7 +801,6 @@ table thead {
 .modal span {
   font-weight: 500;
   display: block;
-  
 }
 
 .modal h2 {
@@ -818,29 +817,29 @@ table thead {
   flex-direction: column;
 }
 
-.options>div {
+.options > div {
   display: flex;
-  
+
   padding: 0.5rem;
   cursor: pointer;
   z-index: 999;
 }
 
 *::-webkit-scrollbar {
-	background-color: transparent;
-	width: 12px;
+  background-color: transparent;
+  width: 12px;
 }
 *::-webkit-scrollbar-thumb {
-	border-radius: 99px;
-	background-color: #ddd;
-	border: 4px solid #fff;
+  border-radius: 99px;
+  background-color: #ddd;
+  border: 4px solid #fff;
 }
 
 .options div label {
   border: 1px solid rgba(128, 128, 128, 0.394);
   border-radius: var(--border-radius-1);
   padding: 0.5rem;
-  
+
   cursor: pointer;
 }
 
@@ -922,7 +921,7 @@ header .head {
   background-color: var(--color-primary);
 }
 
-.print-icon:hover  {
+.print-icon:hover {
   background-color: green;
 }
 .print-icon:hover + .print-selection {
@@ -932,72 +931,71 @@ header .head {
 /* -----------------print section end -------------- */
 /* ------------------------loader */
 
-
 .pl {
-	display: block;
-	width: 6.25em;
-	height: 6.25em;
+  display: block;
+  width: 6.25em;
+  height: 6.25em;
 }
-.pl__ring, .pl__ball {
-	animation: ring 2s ease-out infinite;
+.pl__ring,
+.pl__ball {
+  animation: ring 2s ease-out infinite;
 }
 .pl__ball {
-	animation-name: ball;
+  animation-name: ball;
 }
 
 /* Dark theme  */
 @media (prefers-color-scheme: dark) {
-	:root {
-		--bg: hsl(var(--hue),10%,10%);
-		--fg: hsl(var(--hue),10%,90%);
-	}
+  :root {
+    --bg: hsl(var(--hue), 10%, 10%);
+    --fg: hsl(var(--hue), 10%, 90%);
+  }
 }
 
 /* Animation */
 @keyframes ring {
-	from {
-		stroke-dasharray: 0 257 0 0 1 0 0 258;
-	}
-	25% {
-		stroke-dasharray: 0 0 0 0 257 0 258 0;
-	}
-	50%, to {
-		stroke-dasharray: 0 0 0 0 0 515 0 0;
-	}
+  from {
+    stroke-dasharray: 0 257 0 0 1 0 0 258;
+  }
+  25% {
+    stroke-dasharray: 0 0 0 0 257 0 258 0;
+  }
+  50%,
+  to {
+    stroke-dasharray: 0 0 0 0 0 515 0 0;
+  }
 }
 @keyframes ball {
-	from, 50% {
-		animation-timing-function: ease-in;
-		stroke-dashoffset: 1;
-	}
-	64% {
-		animation-timing-function: ease-in;
-		stroke-dashoffset: -109;
-	}
-	78% {
-		animation-timing-function: ease-in;
-		stroke-dashoffset: -145;
-	}
-	92% {
-		animation-timing-function: ease-in;
-		stroke-dashoffset: -157;
-	}
-	57%, 71%, 85%, 99%, to {
-		animation-timing-function: ease-out;
-		stroke-dashoffset: -163;
-	}
+  from,
+  50% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: 1;
+  }
+  64% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: -109;
+  }
+  78% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: -145;
+  }
+  92% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: -157;
+  }
+  57%,
+  71%,
+  85%,
+  99%,
+  to {
+    animation-timing-function: ease-out;
+    stroke-dashoffset: -163;
+  }
 }
 
 /* mobile ------------------------------------------------------------------------------------ */
 @media (max-width: 768px) {
-  .information-modal {
-    
-    right: 10%;
-    left: 10%;
-    top: 30%;
-    
-   
-  }
+  
   header .head {
     display: block;
     width: 60%;
@@ -1028,7 +1026,6 @@ header .head {
   }
   section#content {
     position: relative;
-    
 
     width: calc(100% - 62px);
     left: 62px;
@@ -1124,7 +1121,7 @@ header .head {
   .search {
     flex-wrap: nowrap;
   }
-  .header{
+  .header {
     text-align: center;
   }
 }

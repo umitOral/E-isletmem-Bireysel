@@ -51,6 +51,8 @@
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
                             
+                           
+                            
                             <div class="show-content operations">İşlemler
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
@@ -187,7 +189,7 @@
                                                         <td></td>
 
                                                         <td>Toplam:</td>
-                                                        <td> xxxxx</td>
+                                                        <td id="total-value"> 0</td>
                                                     </tr>
                                                 </tfoot>
 
@@ -408,7 +410,7 @@
                         <button type="button" class="cancel_add_pic cancel_button">Vazgeç</button>
                     </form>
                 </div>
-                <div class="information-modal"></div>
+                <div class="information-modal-wrapper"></div>
                 <div class="loader_wrapper hidden">
                     <svg class="pl" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
                         <defs>
@@ -572,6 +574,63 @@
             </form>
 
 
+        </div>
+        <div class="modal modal_edit_payment">
+            <h2>Ödeme Düzenle</h2>
+            <form action="" method="POST" id="edit-payment-form">
+                <div class="inputs" id="payment_user_edit">
+                    <input type="text" value="aaa" readonly>
+                </div>
+
+                <div class="selected_proccess_type_edit">
+                    <table class="selected_proccess_table_edit">
+                        <thead>
+                            <td>Ürün/Hizmet</td>
+                            <td>Adet</td>
+                            <td>Fiyat</td>
+                            <td>İndirim(TL)</td>
+                            <td>İndirim(%)</td>
+                            <td>Son Fiyat</td>
+                            <td>Ödenen</td>
+                        </thead>
+                        <tbody>
+
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>toplam:</td>
+                                <td id="total_value_edit"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="payment_options ">
+                    <span>Tahsilat:</span>
+                    <div>
+                        <input type="radio" id="credit_card_ratio_edit" name="cashOrCard"
+                            value="Kredi Kartı">
+                          <label for="credit_card_ratio_edit">Kredi Kartı</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="cash_ratio_edit" name="cashOrCard" value="Nakit">
+                          <label for="cash_ratio_edit">Nakit</label>
+                    </div>
+                </div>
+
+                <div class="inputs">
+                    <label for="description">Notlar:</label>
+                    <textarea name="description" id="description_for_edit" cols="10" rows="3"></textarea>
+                     
+                </div>
+                <button type="submit" class="save_update_btn">Kaydet</button>
+                <button type="button" class="cancel_button">Vazgeç</button>
+
+
+            </form>
         </div>
 
 

@@ -23,6 +23,9 @@ const addPaymentFrom = document.querySelector("#add_payment");
 const selected_proccess_type_add = document.querySelector(
   ".selected_proccess_type_add"
 );
+const selected_proccess_type_edit = document.querySelector(
+  ".selected_proccess_type_edit"
+);
 const selected_proccess_table = document.querySelector(
   ".selected_proccess_table tbody"
 );
@@ -30,6 +33,12 @@ const paymentsTable = document.querySelector("#payments_table");
 
 const startDate = document.querySelector(".startDate");
 const endDate = document.querySelector(".endDate");
+
+
+const paymentTable = document.querySelector("#payments_table");
+
+let selectedOperationsforEdit = [];
+let editedPayment = "";
 
 eventListeners();
 
@@ -48,9 +57,25 @@ cancelButtons.forEach((cancelbutton) => {
   cancelbutton.addEventListener("click", cancelAddPayment);
 });
 
- function filterPayment (e) {
-  
+ function filterPayment() {
+  console.log("2")
    request
+    .getwithUrl(
+      `/admin/payments/getSearchedPayments?startDate=${startDate.value}&endDate=${endDate.value}`
+    )
+    .then((response) => {
+      console.log("3")
+      console.log(response);
+      ui.showAllPaymensToUI(response);
+    })
+    .catch((err) => console.log(err));
+    
+}
+
+function filterPaymentStartPage() {
+  console.log(startDate.value)
+  console.log(endDate.value)
+  request
     .getwithUrl(
       `/admin/payments/getSearchedPayments?startDate=${startDate.value}&endDate=${endDate.value}`
     )
@@ -59,33 +84,16 @@ cancelButtons.forEach((cancelbutton) => {
       ui.showAllPaymensToUI(response);
     })
     .catch((err) => console.log(err));
-    
 }
 
-function filterPaymentStartPage() {
-  request
-    .getwithUrl(
-      `/admin/payments/getSearchedPayments?startDate=${startDate.value}&endDate=${endDate.value}`
-    )
-    .then((response) => {
-      ui.showAllPaymensToUI(response);
-
-      const paymentTable = document.querySelector("#payments_table");
-
-      paymentTable.addEventListener("click", (e) => {
-        if (e.target.classList.contains("delete-payment")) {
-          deletePayment(e);
-        }
-        if (e.target.classList.contains("edit-payment-btn")) {
-          handleEditModal(e);
-        }
-      });
-    })
-    .catch((err) => console.log(err));
-}
-
-let selectedOperationsforEdit = [];
-let editedPayment = "";
+paymentTable.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-payment")) {
+    deletePayment(e);
+  }
+  if (e.target.classList.contains("edit-payment-btn")) {
+    handleEditModal(e);
+  }
+});
 
 function handleEditModal(e) {
   console.log(e.target);
@@ -107,7 +115,7 @@ function handleEditModal(e) {
       paymentUserEdit.value =
         response.data.fromUser.name + " " + response.data.fromUser.surname;
 
-        paymentDescriptionEdit.value=response.data.description
+      paymentDescriptionEdit.value = response.data.description;
 
       response.operationsDetails.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
@@ -121,62 +129,41 @@ function handleEditModal(e) {
             </td>
             
 
-            <td>${element.paidValue}/${element.operationPrice}
+            <td>
+              ${element.operationPrice}
             </td>
             <td>
-            <input type="number" class="payment_value" min="0"
-              max="${
-                element.operationPrice -
-                (element.paidValue -
-                  response.data.operations[index].paymentValue)
-              }" 
-              placeholder="${response.data.operations[index].paymentValue}">TL
+              ${element.discount}
+            </td>
+            <td>
+              ${element.percentDiscount}
+            </td>
+            <td>
+            
+            ${
+              (element.operationPrice - element.discount) *
+              ((100 - element.percentDiscount) / 100)
+            }
+            </td>
+            <td>
+              <input class="payment_value" value=" ${
+                response.data.operations[index].paymentValue
+              }" placeholder="${
+          response.data.operations[index].paymentValue
+        }"></input>
             </td>
             
             <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
         </tr>
            
-            
             `;
       });
-
-      selectedOperationsforEdit = [];
-
+      selectedOperationsforEdit=[]
       response.data.operations.forEach((element) => {
         selectedOperationsforEdit.push(element);
       });
-      calculatetTotalPriceforEdit();
       console.log(selectedOperationsforEdit);
-
-      selected_proccess_table_edit.addEventListener("click", (e) => {
-       
-        if (e.target.classList.contains("payment_value")) {
-          let index = selectedOperationsforEdit.findIndex(
-            (item) =>
-              item._id === e.target.parentElement.parentElement.dataset.id
-          );
-          
-
-          e.target.addEventListener("input", (e) => {
-            selectedOperationsforEdit[index].paymentValue = Number(
-              e.target.value
-            );
-            console.log(selectedOperationsforEdit);
-            calculatetTotalPriceforEdit();
-          });
-        }
-
-        if (e.target.classList.contains("delete_items_from_basket")) {
-          let index = selectedOperationsforEdit.findIndex(
-            (item) =>
-              item._id === e.target.parentElement.parentElement.dataset.id
-          );
-          selectedOperationsforEdit.splice(index, 1);
-          e.target.parentElement.parentElement.remove();
-          calculatetTotalPriceforEdit();
-          console.log(selectedOperationsforEdit);
-        }
-      });
+      calculatetTotalPriceforEdit();
     })
     .catch((err) => {
       console.log(err);
@@ -221,8 +208,7 @@ const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
 );
 
-saveEditModal.addEventListener("click", (e) => {
-  
+saveEditModal.addEventListener("click",(e) => {
   let data = {
     paymentId: editedPayment,
     cashOrCard: editPaymentForm.cashOrCard.value,
@@ -231,15 +217,18 @@ saveEditModal.addEventListener("click", (e) => {
   };
   console.log(data);
 
-  request
+    request
     .postWithUrl("./payments/" + editedPayment + "/editPayment", data)
     .then((response) => {
+      console.log("1")
       ui.showModal(true, response.message);
-      editPaymentModal.classList.toggle("showed_modal")
-      filterPayment()
+      editPaymentModal.classList.toggle("showed_modal");
+      setTimeout(() => {
+        filterPayment();
+      }, 1000);
     })
     .catch((err) => console.log(err));
-    e.preventDefault();
+  e.preventDefault();
 });
 
 function handleTableBody(e) {
@@ -274,10 +263,24 @@ function cancelAddPayment(e) {
 }
 
 // start date
+// lazım olacak
+function toDateInputValue(dateObject){
+  const local = new Date(dateObject);
+  local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+  return local.toJSON().slice(0,10);
+};
+
 function startingDate() {
-  startDate.valueAsDate = new Date();
-  endDate.valueAsDate = new Date();
+
+  startDate.value = toDateInputValue(new Date());
+
+  let newDate=new Date()
+  newDate.setDate(newDate.getDate()+1)
+  endDate.value = toDateInputValue(newDate);
+ 
 }
+
+
 
 function dateRange() {
   const value = startDate.value;
@@ -294,7 +297,6 @@ userSelect.addEventListener("change", () => {
     .then((response) => {
       console.log(response);
       if (response.operations.length === 0) {
-        
         let opt = document.createElement("option");
         opt.setAttribute("selected", "");
         opt.setAttribute("disable", "");
@@ -304,7 +306,6 @@ userSelect.addEventListener("change", () => {
 
         // remove selected operations from uı
         while (selected_proccess_table.firstChild) {
-          console.log("hey");
           selected_proccess_table.firstChild.remove();
         }
         calculatetTotalPrice();
@@ -337,6 +338,7 @@ userSelect.addEventListener("change", () => {
           opt.setAttribute("data-id", element._id);
           opt.setAttribute("data-paidvalue", element.paidValue);
           opt.setAttribute("data-discount", element.discount);
+          opt.setAttribute("data-percentdiscount", element.percentDiscount);
           opt.textContent = element.operationName;
           opt.value = element.operationName;
           operationsSelect.add(opt);
@@ -352,91 +354,88 @@ userSelect.addEventListener("change", () => {
 let selectedOperations = [];
 
 operationsSelect.addEventListener("change", () => {
-  let selectedOption=operationsSelect.options[operationsSelect.options.selectedIndex]
+  let selectedOption =
+    operationsSelect.options[operationsSelect.options.selectedIndex];
+
   selectedOperations.push({
-    operationId:
-    selectedOption.dataset.id,
-    operationPrice: Number(
-      selectedOption.dataset.price
-    ),
+    operationId: selectedOption.dataset.id,
+    operationPrice: Number(selectedOption.dataset.price),
     paymentValue:
-      Number(
-        selectedOption.dataset
-          .price
-      ) -
-      Number(
-        selectedOption.dataset
-          .paidvalue
-      ),
-    paidValue: Number(
-      selectedOption.dataset
-        .paidvalue
-    ),
-    discount: Number(
-      selectedOption.dataset
-        .discount
-    ),
+      (Number(selectedOption.dataset.price) -
+        Number(selectedOption.dataset.discount)) *
+        ((100 - Number(selectedOption.dataset.percentdiscount)) / 100) -
+      Number(selectedOption.dataset.paidvalue),
+    paidValue: Number(selectedOption.dataset.paidvalue),
+    discount: Number(selectedOption.dataset.discount),
+    percentDiscount: Number(selectedOption.dataset.percentdiscount),
   });
 
   console.log(selectedOperations);
-  let row = selected_proccess_table.insertRow(0);
-  row.setAttribute(
-    "data-price",
-    selectedOption.dataset
-      .price
-  );
-  row.setAttribute(
-    "data-id",
-    selectedOption.dataset.id
-  );
-  row.setAttribute(
-    "data-value",
-    selectedOption.value
-  );
-  row.setAttribute(
-    "data-paidvalue",
-    selectedOption.dataset
-      .paidvalue
-  );
-  row.setAttribute(
-    "data-discount",
-    selectedOption.dataset.discount
-  );
-  let rowContent = `
-                <td>${selectedOption.textContent.trim()}</td>
-                
-                <td>
-                <input type="number" min="0" value="1" readonly >
-                </td>
-                <td>
-                <input type="number" min="0" value="${selectedOption.dataset.price}" readonly >
-                </td>
-                
-                <td>
-                <input type="number" min="0" value="${selectedOption.dataset.discount}" readonly >
-                </td>
-                <td>
-                <input type="number" min="0" value="${selectedOption.dataset.price*((100-selectedOption.dataset.discount)/100)}" readonly >
-                </td>
-                
 
-                <td>${selectedOption.dataset.paidvalue
-                }</td>
-                <td>
-                <input type="number" class="payment_value" min="0"
-                  max="${(selectedOption.dataset.price*((100-selectedOption.dataset.discount)/100))-selectedOption.dataset.paidvalue
-                  }" 
-                  placeholder="${(selectedOption.dataset.price*((100-selectedOption.dataset.discount)/100))-selectedOption.dataset.paidvalue
-                  }">TL
-                </td>
-                
-                <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
-                
-                `;
+  selected_proccess_table.innerHTML += `
+  <tr data-price="${selectedOption.dataset.price}"
+       data-value="${selectedOption.value}"
+       data-paidvalue="${selectedOption.dataset.paidvalue}"
+       data-discount="${selectedOption.dataset.discount}"
+       data-percentDiscount="${selectedOption.dataset.percentdiscount}"
+       data-id="${selectedOption.dataset.id}">
 
-  row.innerHTML = rowContent;
+      <td>${selectedOption.textContent.trim()}</td>
+                
+      <td>
+      <input class="tdInputs deactive" type="number" min="0" value="1" readonly >
+      </td>
+      <td>
+      <input class="tdInputs deactive" type="number" min="0" value="${
+        selectedOption.dataset.price
+      }" readonly >
+      </td>
+      
+      <td>
+      <input class="tdInputs deactive" type="number" min="0" value="${
+        selectedOption.dataset.discount
+      }" readonly >
+      </td>
+      <td>
+      <input class="tdInputs deactive" type="number" min="0" value="${
+        selectedOption.dataset.percentdiscount
+      }" readonly >
+      </td>
+      <td>
+      <input class="tdInputs deactive"  type="number" min="0" value="${
+        ((selectedOption.dataset.price - selectedOption.dataset.discount) *
+          (100 - selectedOption.dataset.percentdiscount)) /
+        100
+      }" readonly >
+      </td>
+      
 
-  
+      <td>
+      <input class="tdInputs deactive"  type="number" min="0" value="${
+        selectedOption.dataset.paidvalue
+      }" readonly >
+      
+      </td>
+      <td>
+      <input class="payment_value tdInputs" type="number" class="payment_value" min="0"
+        max="${(
+          ((selectedOption.dataset.price - selectedOption.dataset.discount) *
+            (100 - selectedOption.dataset.percentdiscount)) /
+            100 -
+          selectedOption.dataset.paidvalue
+        ).toFixed(1)}" 
+        value="${(
+          ((selectedOption.dataset.price - selectedOption.dataset.discount) *
+            (100 - selectedOption.dataset.percentdiscount)) /
+            100 -
+          selectedOption.dataset.paidvalue
+        ).toFixed(1)}"
+        step="0.1">  
+      </td>
+      
+      <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
+  <tr/>
+`;
 
   selectedOption.remove();
 
@@ -445,14 +444,14 @@ operationsSelect.addEventListener("change", () => {
 
 function calculatetTotalPrice() {
   console.log("calculating");
-
+  console.log(selectedOperations);
   let totalValue = document.querySelector("#total_value");
   let paymentValues = selectedOperations.map((element) => element.paymentValue);
 
   if (paymentValues.length === 0) {
     totalValue.textContent = 0;
   } else {
-    totalValue.textContent = paymentValues.reduce((a, b) => a + b);
+    totalValue.textContent = paymentValues.reduce((a, b) => a + b).toFixed(1);
   }
 }
 function calculatetTotalPriceforEdit() {
@@ -473,29 +472,26 @@ function calculatetTotalPriceforEdit() {
 // remove selected operations
 
 selected_proccess_type_add.addEventListener("click", (e) => {
-  if (e.target.classList.contains("fa-trash")) {
+  if (e.target.classList.contains("delete_items_from_basket")) {
     // add back to selectedbox
 
     let opt = document.createElement("option");
-    opt.setAttribute(
-      "data-price",
-      e.target.parentElement.parentElement.dataset.price
-    );
-    opt.setAttribute(
-      "data-id",
-      e.target.parentElement.parentElement.dataset.id
-    );
-    opt.setAttribute(
-      "value",
-      e.target.parentElement.parentElement.dataset.value
-    );
-    opt.setAttribute(
-      "data-paidvalue",
-      e.target.parentElement.parentElement.dataset.paidvalue
-    );
-    opt.textContent = e.target.parentElement.parentElement.dataset.value;
 
-    operationsSelect.add(opt);
+    operationsSelect.innerHTML += `
+    
+    <option selected disable hidden >işlem seçiniz</option>
+  
+     <option
+      data-price="${e.target.parentElement.parentElement.dataset.price}" 
+      data-id="${e.target.parentElement.parentElement.dataset.id}"
+      data-paidvalue="${e.target.parentElement.parentElement.dataset.paidvalue}"
+      data-discount="${e.target.parentElement.parentElement.dataset.discount}"
+      data-percentdiscount="${e.target.parentElement.parentElement.dataset.percentdiscount}"
+      value="${e.target.parentElement.parentElement.dataset.value}"
+     >
+     ${e.target.parentElement.parentElement.dataset.value}
+     </option>
+     `;
 
     // remove selected options
     let index = selectedOperations.findIndex(
@@ -517,17 +513,43 @@ selected_proccess_type_add.addEventListener("click", (e) => {
   }
 
   // //////////////////
+});
 
+selected_proccess_type_add.addEventListener("input", (e) => {
   if (e.target.classList.contains("payment_value")) {
     let index = selectedOperations.findIndex(
       (item) =>
         item.operationId === e.target.parentElement.parentElement.dataset.id
     );
 
-    e.target.addEventListener("input", (e) => {
-      selectedOperations[index].paymentValue = Number(e.target.value);
+    selectedOperations[index].paymentValue = Number(e.target.value);
 
-      calculatetTotalPrice();
+    calculatetTotalPrice();
+  }
+});
+
+selected_proccess_table_edit.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete_items_from_basket")) {
+    let index = selectedOperationsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    selectedOperationsforEdit.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    calculatetTotalPriceforEdit();
+    console.log(selectedOperationsforEdit);
+  }
+});
+
+selected_proccess_table_edit.addEventListener("input", (e) => {
+  if (e.target.classList.contains("payment_value")) {
+    let index = selectedOperationsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+
+    e.target.addEventListener("input", (e) => {
+      selectedOperationsforEdit[index].paymentValue = Number(e.target.value);
+      console.log(selectedOperationsforEdit);
+      calculatetTotalPriceforEdit();
     });
   }
 });

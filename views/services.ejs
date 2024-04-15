@@ -30,7 +30,7 @@
                             </div>
 
                         </form>
-                        <div id="add_service_btn"><button>Hizmet Ekle +</button></div>
+                        <div id="add_service_btn"><button class="buttons">Hizmet Ekle +</button></div>
                         
                         
 
@@ -85,7 +85,7 @@
 
                                         </td>
                                         <% if(service.activeorNot){ %>
-                                            <td><a href="./services/<%= service._id %>/deactivateService">Pasif Et</a></td>
+                                            <td><a class="button" href="./services/<%= service._id %>/deactivateService">Pasif Et</a></td>
                                             <% } else{ %>
                                                 <td><a href="./services/<%= service._id %>/activateService">Aktif Et</a></td>
                                                 <% } %>
@@ -116,10 +116,7 @@
                                 <span>Fiyat</span>
                                 <input type="number" name="servicePrice" id="surname" placeholder="hizmet için fiyat giriniz" required>
                             </div>
-                            <div class="inputs" >
-                                <span>Veri:</span>
-                                <input type="text" name="serviceData" id="serviceData" placeholder="örnek:greft Sayısı">
-                            </div>
+                            
 
 
 
@@ -130,7 +127,7 @@
 
 
                 </main>
-                <div class="information-modal">AAAA</div>
+                <div class="information-modal-wrapper"></div>
         </section>
 
 

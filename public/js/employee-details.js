@@ -7,7 +7,7 @@ const tables = new Tables();
 
 const showContentsBtn = document.querySelectorAll(".show-content");
 const contents = document.querySelectorAll(".userInformationsContent");
-const messageBox = document.querySelector(".information-modal");
+
 
 const tableElements = document.querySelectorAll("table");
 

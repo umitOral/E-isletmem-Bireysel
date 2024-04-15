@@ -6,13 +6,14 @@ const ui = new UI();
 
 
 // definitions
-const searchUserForm = document.querySelector("#search-user");
+
 const userData = document.querySelector("#userName");
 const userPhone = document.querySelector("#userPhone");
 const addOperationModalBtn = document.querySelector("#add_operation_modal");
 const addOperationForm = document.querySelector("#add_operation_form");
 const cancelButtons = document.querySelectorAll(".cancel_button");
 const serviceAddSelect = document.querySelector(".service_type_add");
+
 
 
 const tableOfSelectedServices = document.querySelector(
@@ -43,6 +44,8 @@ const addDescriptionToOperationForm = document.querySelector("#add-descriptioToO
 const addDataToOperationForm = document.querySelector("#add-dataToOperation-form");
 const editDataForm = document.querySelector("#edit-data-form");
 const editOperationDataForm = document.querySelector("#edit-data-operation-form");
+const TotalValueCell = document.querySelector("#total_value");
+let percentDiscountInput = document.querySelector("#percent_discount");
 
 const appointmentsOfDoctorArea = document.querySelector(
   ".appointments-of-doctor"
@@ -79,6 +82,8 @@ function eventListeners() {
   addDescriptionForm.addEventListener("submit", (e) => addDescriptiontoSession(e));
   addDescriptionToOperationForm.addEventListener("submit", (e) => addDescriptionToOperation(e));
   addDataToOperationForm.addEventListener("submit", (e) => addDataToOperation(e));
+  percentDiscountInput.addEventListener("input",calculateTotal);
+  
   addOperationForm.addEventListener("submit", addOperation);
   cancelButtons.forEach((element) => {
     element.addEventListener("click", closeModal);
@@ -92,6 +97,7 @@ serviceAddSelect.addEventListener("change", (e) => {
     operationPrice: Number(
       e.target.options[e.target.options.selectedIndex].dataset.price
     ),
+    operationDiscount:0,
     totalAppointments: 1,
   });
   tableOfSelectedServices.innerHTML = "";
@@ -99,12 +105,14 @@ serviceAddSelect.addEventListener("change", (e) => {
     tableOfSelectedServices.innerHTML += `
         <tr data-operationname="${element.operationName}" data-operationid="${element.operationid}" data-operationprice="${element.operationPrice}">
             <td>${element.operationName}</td>
-            <td><input type="number"class="appointment-count" value="1"></td>
+            <td><input type="number"class="appointment-count tdInputs" value="1" min="1"></td>
             <td>${element.operationPrice}</td>
+            <td><input class="discount tdInputs" max="${element.operationPrice}"></input></td>
             <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
         </tr>
         `;
   });
+  calculateTotal()
 });
 
 appointmentsOfDoctorArea.addEventListener("click", (e) => {
@@ -288,7 +296,7 @@ function updateOperationsofAppointment(responseData) {
 }
 
 addOperationModal.addEventListener("click", (e) => {
-  console.log(e.target);
+ 
   if (e.target.classList.contains("delete_items_from_basket")) {
     console.log("xxx");
     let controlindex = selectedServices.findIndex(
@@ -298,21 +306,41 @@ addOperationModal.addEventListener("click", (e) => {
     );
     selectedServices.splice(controlindex, 1);
     e.target.parentElement.parentElement.remove();
+    calculateTotal()
   }
 });
 
-searchUserForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  request
-    .getwithUrl(
-      "./admin/users/search/findSingleUser?userName=" +
-        userData.value +
-        "&userPhone=" +
-        userPhone.value
-    )
-    .then((response) => console.log(response))
-    .catch((err) => console.log(err));
+addOperationModal.addEventListener("change", (e) => {
+  console.log(e.target);
+  if (e.target.classList.contains("appointment-count")) {
+    
+    let controlindex = selectedServices.findIndex(
+      (item) =>
+        item.operationName ===
+        e.target.parentElement.parentElement.dataset.operationname
+    );
+    
+    selectedServices[controlindex].totalAppointments=e.target.value;
+    console.log(selectedServices)
+  }
+ 
 });
+addOperationModal.addEventListener("input", (e) => {
+  if (e.target.classList.contains("discount")) {
+    console.log("hahahah")
+    let controlindex = selectedServices.findIndex(
+      (item) =>
+        item.operationName ===
+        e.target.parentElement.parentElement.dataset.operationname
+    );
+    
+    selectedServices[controlindex].operationDiscount=e.target.value;
+    calculateTotal()
+  }
+ 
+});
+
+
 
 function getAllAppointmentofSingleDoctor() {
   request
@@ -390,7 +418,7 @@ function addOperation() {
   let data = {
     selectedOperations: selectedServices,
     appointment: selectedAppointment,
-    discount: Number(addOperationForm.percent_discount.value),
+    percentDiscount: Number(addOperationForm.percent_discount.value),
   };
   request
     .postWithUrl(
@@ -724,4 +752,16 @@ function getOldOperations(params) {
       ui.showModal(response.succes, response.message);
     })
     .catch((err) => console.log(err));
+}
+
+
+function calculateTotal() {
+  let percentDiscountInput = document.querySelector("#percent_discount");
+  let totalPrice=selectedServices.map((item)=>item.operationPrice-item.operationDiscount).reduce((a,b)=>a+b)
+
+    totalPrice=(totalPrice*(100-percentDiscountInput.value)/100).toFixed(0)
+ 
+  
+  
+  TotalValueCell.innerHTML=totalPrice
 }

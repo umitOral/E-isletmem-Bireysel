@@ -6,7 +6,7 @@ const ui=new UI()
 const showContentsBtns = document.querySelectorAll(".show-content")
 const contents = document.querySelectorAll(".userInformationsContent")
 const userID = document.querySelector(".userID").dataset.user
-const messageBox = document.querySelector(".information-modal")
+
 
 
 const editBtn = document.querySelector(".edit-informations-btn")

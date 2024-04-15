@@ -12,7 +12,6 @@ const saveButtons = document.querySelectorAll(".input_save_buttons");
 const cancelButtonModal = document.querySelectorAll(".cancel_button");
 
 
-const messageBox = document.querySelector(".information-modal")
 
 
 

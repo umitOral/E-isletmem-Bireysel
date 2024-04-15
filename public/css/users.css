@@ -39,11 +39,7 @@ div.search input[type="search"] {
   border-radius: var(--border-radius-2);
   color: gray;
 }
-#register-form {
-  border: 1px solid rgba(128, 128, 128, 0.4);
-  padding: 1rem;
-  border-radius: 1rem;
-}
+
 .inputs.dates {
   display: flex;
   gap: 1rem;

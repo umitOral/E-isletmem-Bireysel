@@ -28,7 +28,7 @@
                                 <input type="date" name="endDate" class="endDate">
                             </div>
 
-                            <button class="buttons payments-filter-button">Listele</button>
+                            <button type="button" class="buttons payments-filter-button">Listele</button>
 
                         </form>
 
@@ -75,35 +75,35 @@
                                     <td></td>
                                     <td colspan="2">Toplam Ciro:</td>
                                     <td class="total-income">
-                                        <%= totalIncome%>
+                                        
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Toplam Gider:</td>
                                     <td class="total-expenses">
-                                        <%= totalExpenses %>
+                                       
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Toplam Nakit:</td>
                                     <td class="total-cash">
-                                        <%=totalCash%>
+                                        
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Toplam Kredi Kartı:</td>
                                     <td class="total-crediTCard">
-                                        <%=totalCreditCard%>
+                                        
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Net Kasa </td>
                                     <td class="netCash">
-                                        <%=netCash%>
+                                        
                                     </td>
                                 </tr>
                             </tfoot>
@@ -146,8 +146,9 @@
                                         <td>Ürün/Hizmet</td>
                                         <td>Adet</td>
                                         <td>Fiyat</td>
+                                        <td>İndirim(TL)</td>
                                         <td>İndirim(%)</td>
-                                        <td>İnd.Fiyat</td>
+                                        <td>Son Fiyat</td>
                                         <td>Ödenen</td>
                                         <td>Ödenecek Tutar</td>
 
@@ -237,13 +238,16 @@
                                 <input type="text" value="aaa" readonly>
                             </div>
 
-                            <div class="selected_proccess_type_add_edit">
+                            <div class="selected_proccess_type_edit">
                                 <table class="selected_proccess_table_edit">
                                     <thead>
                                         <td>Ürün/Hizmet</td>
                                         <td>Adet</td>
-                                        <td>T.Ödenen/Fiyat</td>
-                                        <td>Ödenen Tutar</td>
+                                        <td>Fiyat</td>
+                                        <td>İndirim(TL)</td>
+                                        <td>İndirim(%)</td>
+                                        <td>Son Fiyat</td>
+                                        <td>Ödenen</td>
                                     </thead>
                                     <tbody>
 
@@ -279,7 +283,7 @@
                                  
                             </div>
                             <button type="submit" class="save_update_btn">Kaydet</button>
-                            <button class="cancel_button">Vazgeç</button>
+                            <button type="button" class="cancel_button">Vazgeç</button>
 
 
                         </form>
@@ -288,7 +292,7 @@
 
                 </main>
         </section>
-        <div class="information-modal"></div>
+        <div class="information-modal-wrapper"></div>
 
 
         <!----------- end of sidebar ----------->

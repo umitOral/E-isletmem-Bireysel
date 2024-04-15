@@ -22,6 +22,7 @@ const cancelModal = document.querySelectorAll(".modal .cancel_button");
 const cancelAddPhoto = document.querySelector(".cancel_add_pic");
 
 const addDataModal = document.querySelector(".add-data-modal");
+const editPaymentModal = document.querySelector(".modal_edit_payment");
 
 const addSessionModal = document.querySelector(".add-session-modal");
 const addDataSaveButton = document.querySelector("#add-data-save-button");
@@ -486,11 +487,20 @@ function getAllPayments() {
       console.log(response);
       ui.showModal(response.success, response.message);
       ui.addPaymentsToTable(paymentTable, response.data);
+      handlePaymentEditBtn();
     })
     .catch((err) => {
       ui.showModal(false, err.message);
     });
 }
+
+
+paymentTable.addEventListener("change",(e)=>{
+  if (e.target.classList.contains("operations-edit-select")) {
+    
+  }
+})
+
 
 // get all operations
 
@@ -629,6 +639,211 @@ function handleOperationEditBtn() {
     });
   });
 }
+
+
+function handlePaymentEditBtn() {
+  const editSelectBtns = document.querySelectorAll(".payments-edit-select");
+
+  editSelectBtns.forEach((element) => {
+    element.addEventListener("change", (e) => {
+      const paymentID =
+        e.target.parentElement.parentElement.dataset
+          .paymentid;
+      if (e.target.options[e.target.options.selectedIndex].value === "delete-payment") {
+        if (confirm("ödeme silinecek onaylıyor musunuz?")) {
+          request
+          .getwithUrl("../payments/" + paymentID + "/deletePayment")
+            .then((response) => {
+              console.log(response)
+              ui.showModal(response.succes, response.message);
+              calculatetTotalPriceforEdit()
+              getAllPayments();
+              
+            })
+            .catch((err) => ui.showModal(false, err.message));
+        }
+      }
+      if (
+        e.target.options[e.target.options.selectedIndex].value === "edit-payment"
+      ) {
+       
+        handleEditPaymentModal(e)
+        
+      }
+
+   
+    });
+  });
+}
+
+const paymentCreditCartRatio = document.querySelector(
+  ".modal_edit_payment  #credit_card_ratio_edit"
+);
+const paymentCCashRatio = document.querySelector(
+  ".modal_edit_payment  #cash_ratio_edit"
+);
+const paymentUserEdit = document.querySelector(
+  ".modal_edit_payment  #payment_user_edit input"
+);
+const paymentDescriptionEdit = document.querySelector(
+  ".modal_edit_payment  #description_for_edit"
+);
+const editPaymentForm = document.querySelector(
+  ".modal_edit_payment #edit-payment-form"
+);
+const saveEditModal = document.querySelector(
+  ".modal_edit_payment .save_update_btn"
+);
+
+const selected_proccess_table_edit = document.querySelector(
+  ".selected_proccess_table_edit tbody"
+);
+let selectedOperationsforEdit=[]
+function handleEditPaymentModal(e) {
+ console.log("burası")
+  let editedPayment = e.target.parentElement.parentElement.dataset.paymentid;
+  let editPaymentForm=document.querySelector("#edit-payment-form")
+  
+  request
+    .getwithUrl("../payments/" + editedPayment)
+    .then((response) => {
+      console.log(response);
+      selectedOperationsforEdit=response.data
+      editPaymentModal.classList.add("showed_modal");
+      selected_proccess_table_edit.innerHTML = "";
+
+      if (response.data.cashOrCard === "Nakit") {
+        paymentCCashRatio.checked = true;
+      } else {
+        paymentCreditCartRatio.checked = true;
+      }
+      editPaymentForm.dataset.paymentid = e.target.parentElement.parentElement.dataset.paymentid;
+      paymentUserEdit.value =
+        response.data.fromUser.name + " " + response.data.fromUser.surname;
+
+      paymentDescriptionEdit.value = response.data.description;
+
+      response.operationsDetails.forEach((element, index) => {
+        selected_proccess_table_edit.innerHTML += `
+        <tr data-id="${response.data.operations[index]._id}" data-price="${
+          response.data.operations[index].paymentValue
+        }" >
+            <td>${element.operationName}</td>
+                
+            <td>
+            <input type="number" min="0" value="1" readonly >
+            </td>
+            
+
+            <td>
+              ${element.operationPrice}
+            </td>
+            <td>
+              ${element.discount}
+            </td>
+            <td>
+              ${element.percentDiscount}
+            </td>
+            <td>
+            
+            ${
+              (element.operationPrice - element.discount) *
+              ((100 - element.percentDiscount) / 100)
+            }
+            </td>
+            <td>
+              <input class="payment_value" value=" ${
+                response.data.operations[index].paymentValue
+              }" placeholder="${
+          response.data.operations[index].paymentValue
+        }"></input>
+            </td>
+            
+            <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
+        </tr>
+           
+            `;
+      });
+      
+      selectedOperationsforEdit=[]
+      response.data.operations.forEach((element) => {
+        selectedOperationsforEdit.push(element);
+      });
+      
+      calculatetTotalPriceforEdit();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+selected_proccess_table_edit.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete_items_from_basket")) {
+    let index = selectedOperationsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    selectedOperationsforEdit.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    calculatetTotalPriceforEdit();
+    console.log(selectedOperationsforEdit);
+  }
+});
+
+selected_proccess_table_edit.addEventListener("input", (e) => {
+  if (e.target.classList.contains("payment_value")) {
+    let index = selectedOperationsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+
+    e.target.addEventListener("input", (e) => {
+      selectedOperationsforEdit[index].paymentValue = Number(e.target.value);
+      console.log(selectedOperationsforEdit);
+      calculatetTotalPriceforEdit();
+    });
+  }
+});
+
+function calculatetTotalPriceforEdit() {
+  console.log("calculating2");
+
+  let totalValueforEdit = document.querySelector("#total_value_edit");
+  
+  let paymentValues = selectedOperationsforEdit.map(
+    (element) => element.paymentValue
+  );
+
+  if (paymentValues.length === 0) {
+    totalValueforEdit.textContent = 0;
+  } else {
+    totalValueforEdit.textContent = paymentValues.reduce((a, b) => a + b);
+  }
+}
+
+
+saveEditModal.addEventListener("click",(e) => {
+  e.preventDefault();
+  let data = {
+    paymentId:e.target.parentElement.dataset.paymentid ,
+    cashOrCard: editPaymentForm.cashOrCard.value,
+    description: editPaymentForm.description.value,
+    operations: selectedOperationsforEdit,
+  };
+  console.log(data);
+
+    request
+    .postWithUrl("../payments/" + e.target.parentElement.dataset.paymentid + "/editPayment", data)
+    .then((response) => {
+      console.log(response)
+      ui.showModal(true, response.message);
+      editPaymentModal.classList.toggle("showed_modal");
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000);
+    })
+    .catch((err) => console.log(err));
+  e.preventDefault();
+});
+
 function handleAppointmentEditBtn() {
   
   const editSelectBtns = document.querySelectorAll(".appointment-edit-select");

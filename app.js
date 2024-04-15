@@ -59,7 +59,7 @@ app.use("/", pageRoute);
 app.use("/admin", authMiddleware.checkUser);
 
 app.use("/api",authMiddleware.checkUser, api);
-app.use("/admin", authMiddleware.authenticateToken, adminRoutes);
+app.use("/admin", authMiddleware.authenticateToken,authMiddleware.checkSubscription, adminRoutes);
 app.use("/superAdmin",authMiddleware.authenticateToken,authMiddleware.checkUser,superAdminRoutes);
 //error handlers
 app.use(customErrorHandler)

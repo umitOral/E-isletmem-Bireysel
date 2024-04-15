@@ -10,13 +10,8 @@ const calendar = document.querySelector(".calendar"),
   daysContainer = document.querySelector(".days"),
   prev = document.querySelector(".prev"),
   next = document.querySelector(".next"),
-  todayBtn = document.querySelector(".today-btn"),
-  gotoBtn = document.querySelector(".goto-btn"),
-  dateInput = document.querySelector(".date-input");
+  todayBtn = document.querySelector(".today-btn")
 
-const messageBox = document.querySelector(".information-modal");
-
-const eventDay = document.querySelector(".event-day");
 const appointmentListDate = document.querySelector(".appointment-list");
 
 const addEventSubmit = document.querySelector(".add-event-btn");
@@ -312,34 +307,9 @@ todayBtn.addEventListener("click", () => {
   initCalender();
 });
 
-dateInput.addEventListener("input", (e) => {
-  // allow only numbers
-  dateInput.value = dateInput.value.replace(/[^0-9/]/g, "");
-  // add / character after 2
-  if (dateInput.value.length === 2) {
-    dateInput.value += "/";
-  }
-  // dont allow more than 7 character
-  if (dateInput.value.length > 7) {
-    dateInput.value = dateInput.value.slice(0, 7);
-  }
 
-  // if backspace pressed
-  if (e.inputType === "deleteContentBackward") {
-    if (dateInput.value.length === 3) {
-      dateInput.value = dateInput.value.slice(0, 2);
-    }
-  }
-});
 
-gotoBtn.addEventListener("click", function goToDate() {
-  const dateArr = dateInput.value.split("/");
-  if (dateArr[0] > 0 && dateArr[0] < 13 && dateArr[1].length == 4) {
-    month = dateArr[0] - 1;
-    year = dateArr[1];
-    initCalender();
-  }
-});
+
 
 // todo section --------------------------------------
 
@@ -361,16 +331,22 @@ const sessionID = document.querySelector(".sessionID");
 closeAddSessionBtns.forEach((element) => {
   element.addEventListener("click", () => {
     modalAddSession.classList.remove("showed_modal");
-    modalUpdateSession.classList.remove("showed_modal");
-    while (proccessType.firstChild) {
-      proccessType.firstChild.remove()
+    
+    while (selected_proccess_type_new.firstChild) {
+      selected_proccess_type_new.firstChild.remove()
     }
     while (selected_proccess_type_add.firstChild) {
       selected_proccess_type_add.firstChild.remove()
     }
+
     
+    selectedOperations={
+      oldOperations:[],
+      newOperations:[]
+    }
     userSelect.innerHTML+=` <option value="" selected hidden disable>Hasta seçiniz</option>`
-    selectedOperations={}
+    proccessTypeNew.innerHTML+=`<option value="" selected hidden disable>İşlem Seçiniz</option>`
+    
   });
 });
 

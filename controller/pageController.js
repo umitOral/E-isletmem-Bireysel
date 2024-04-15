@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import Employee from "../models/EmployeesModel.js";
-import {ROLES_LIST} from "../config/status_list.js";
+import { ROLES_LIST } from "../config/status_list.js";
 
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
@@ -15,13 +15,9 @@ let day = now.getDate();
 let month = now.getMonth();
 let year = now.getFullYear();
 
-
-
-
 const firstDate = new Date(year, month, day);
 const secondDate = new Date(year, month, day);
-secondDate.setHours(23,59,59,999)
-
+secondDate.setHours(23, 59, 59, 999);
 
 const getIndexPage = (req, res) => {
   try {
@@ -35,7 +31,6 @@ const getIndexPage = (req, res) => {
     });
   }
 };
-
 
 const resetPasswordPage = async (req, res) => {
   try {
@@ -66,7 +61,6 @@ const getForgotPasswordPage = async (req, res, next) => {
 const getSuperAdminPage = async (req, res) => {
   try {
     let companies = await Company.find({});
-    
 
     res.status(200).render("superAdmin/superAdminMain", {
       companies,
@@ -83,7 +77,6 @@ const getSuperAdminPage = async (req, res) => {
 const getSuperAdminTicketsPage = async (req, res) => {
   try {
     let tickets = await Ticket.find({});
-   
 
     res.status(200).render("superAdmin/superAdminTickets", {
       tickets,
@@ -198,9 +191,8 @@ const getPricesPage = (req, res) => {
 const getservicesPage = async (req, res) => {
   try {
     let company = res.locals.company;
-    
+
     const services = await company.services;
-    
 
     res.status(200).render("services", {
       services,
@@ -216,9 +208,7 @@ const getservicesPage = async (req, res) => {
 };
 const getDatasPage = async (req, res) => {
   try {
-
     res.status(200).render("datasPage", {
-
       link: "services",
     });
   } catch (error) {
@@ -255,11 +245,8 @@ const getContactPage = (req, res) => {
 };
 const getAdminPage = async (req, res) => {
   try {
-   
-    
     res.status(200).render("indexAdmin", {
       link: "index",
-      
     });
   } catch (error) {
     res.status(500).json({
@@ -271,32 +258,29 @@ const getAdminPage = async (req, res) => {
 
 const getUsersPage = async (req, res) => {
   try {
-    let query = User.find({});
-    if (req.query) {
-      const searchObject = {};
-
-      searchObject["company"] = res.locals.company._id;
-      searchObject["role"] = "customer";
-      query = query.where(searchObject);
-    }
-
+    
     //pagination
     const page = parseInt(req.query.page) || 1;
-    const limit = 5;
+    const limit = parseInt(req.query.page) ||  5;
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const total = await User.count()
-      .where("role")
-      .equals("customer")
-      .where("company")
-      .equals(res.locals.company._id);
+    let users =await  User.find({
+      company: res.locals.company._id,
+      role: "customer",
+    }).skip(startIndex).limit(limit).sort({'updatedAt':-1});
+
+    let total =await  User.count({
+      company: res.locals.company._id,
+      role: "customer",
+    })
+
+
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
     pagination["page"] = page;
     pagination["lastpage"] = lastpage;
-   
 
     if (startIndex > 0) {
       pagination.previous = {
@@ -311,8 +295,6 @@ const getUsersPage = async (req, res) => {
       };
     }
 
-    query = query.skip(startIndex).limit(limit);
-    const users = await query;
 
     res.status(200).render("users", {
       users,
@@ -495,11 +477,12 @@ const companyPaymentPage = (req, res) => {
   }
 };
 
-
 const companyPaymentsListPage = async (req, res) => {
   try {
-    const subscriptions = await Subscription.find({ company: res.locals.company });
-    
+    const subscriptions = await Subscription.find({
+      company: res.locals.company,
+    });
+
     res.status(200).render("companyPaymentsList", {
       link: "companyPaymentsList",
       subscriptions,
@@ -513,49 +496,11 @@ const companyPaymentsListPage = async (req, res) => {
 };
 const getPaymentsPage = async (req, res) => {
   try {
-    
-    
     const users = await User.find({ company: res.locals.company._id });
-    const payments = await Payment.find({
-      company: res.locals.company._id,
-      createdAt: {
-        $gte: firstDate,
-        $lte: secondDate,
-      },
-    }).populate("fromUser", ["name","surname"]);
-    console.log(firstDate)
-    console.log(secondDate)
-    
-    let totalIncome = 0;
-    let totalExpenses = 0;
-    let totalCash = 0;
-    let totalCreditCard = 0;
-    let netCash = 0;
-
-    payments.forEach((payment) => {
-      if (payment.totalPrice > 0) {
-        totalIncome += payment.totalPrice;
-        if (payment.cashOrCard === "Nakit") {
-          totalCash += payment.totalPrice;
-        } else {
-          totalCreditCard += payment.totalPrice;
-        }
-      } else {
-        totalExpenses += payment.totalPrice;
-      }
-    });
-
-    netCash = totalCash - (totalExpenses*-1);
 
     res.status(200).render("payments", {
       link: "payments",
       users: users,
-      payments: payments,
-      totalIncome,
-      totalExpenses,
-      totalCash,
-      totalCreditCard,
-      netCash,
     });
   } catch (error) {
     res.status(500).json({
@@ -566,21 +511,13 @@ const getPaymentsPage = async (req, res) => {
 };
 const getUserPage = async (req, res) => {
   try {
-    
     const singleUser = await User.findById(req.params.id);
-    const payments = await Payment.find({ fromUser: req.params.id });
-    const sessions = await Sessions.find({ user: req.params.id }).populate(
-      ["operations","doctor"]
-    );
-      
+
     res.status(200).render("user-details", {
       singleUser,
-      sessions,
-      payments,
       link: "users",
     });
   } catch (error) {
-    
     res.status(500).json({
       succes: false,
       message: error,
@@ -592,7 +529,6 @@ const getSingleEmployeePage = async (req, res) => {
     const singleUser = await Employee.findById(req.params.id);
     const roles = Object.keys(ROLES_LIST);
     let rolesValue = [];
-    
 
     for (const key in ROLES_LIST) {
       if (Object.hasOwnProperty.call(ROLES_LIST, key)) {
@@ -621,7 +557,6 @@ const getSingleEmployeePage = async (req, res) => {
 };
 
 export {
- 
   getForgotPasswordPage,
   getSuperAdminPage,
   getSettingsPage,
@@ -652,5 +587,5 @@ export {
   getSuperAdminTicketsPage,
   companyPaymentsListPage,
   getSingleEmployeePage,
-  getDatasPage
+  getDatasPage,
 };

@@ -49,6 +49,7 @@
                             <thead>
 
 
+                                <th>Kayıt Tarihi<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>İsim<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Soyisim <i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Rol <i class="fa-solid fa-arrow-up"></i></th>
@@ -64,6 +65,9 @@
                                 <% employees.forEach(employee=> { %>
                                     <tr>
 
+                                        <td>
+                                            <%= new Date(employee.registerDate).toLocaleDateString("tr-TR") %>
+                                        </td>
                                         <td>
                                             <%= employee.name %>
                                         </td>
@@ -213,7 +217,7 @@
                     </form>
                 </div>
         </section>
-        <div class="information-modal">AAAA</div>
+        <div class="information-modal-wrapper"></div>
 
         <script src="/js/sidebar.js"></script>
         <script type="module" src="../js/main.js"></script>

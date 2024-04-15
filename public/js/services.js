@@ -11,7 +11,7 @@ const saveButtons = document.querySelectorAll(".input_save_buttons");
 const cancelButtonModal = document.querySelectorAll(".cancel_button");
 
 const priceInputs = document.querySelectorAll(".price_inputs");
-const messageBox = document.querySelector(".information-modal")
+
 
 priceInputs.forEach((input) => {
   input.addEventListener("input", () => {

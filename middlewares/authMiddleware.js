@@ -5,12 +5,10 @@ import Employee from "../models/EmployeesModel.js";
 
 const checkUser = async (req, res, next) => {
   const token = req.cookies.jsonwebtoken;
-  
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
       if (err) {
-        console.log(err.message);
         res.locals.company = null;
         next();
       } else {
@@ -54,11 +52,31 @@ const authenticateToken = async (req, res, next) => {
     });
   }
 };
+const checkSubscription = async (req, res, next) => {
+  try {
+    const token = req.cookies.jsonwebtoken;
+   
+
+    if (req.cookies.companySubscribe === "true") {
+      
+      next();
+    } else {
+      
+      if (req._parsedUrl.pathname !== "/admin/companyPaymentPage") {
+        res.redirect("/admin/companyPaymentPage");
+      }
+      next()
+    }
+  } catch (error) {
+    res.status(401).json({
+      succes: false,
+      message: "yetkisizlikten gelen hata",
+    });
+  }
+};
 
 const verifyRoles = (...roles) => {
   return async (req, res, next) => {
-    
-    console.log(res.locals.employee.role);
     if (!roles.includes(res.locals.employee.role)) {
       next(new Error("Buraya giriş yetkiniz bulunmamaktadır.", 401));
     }
@@ -68,21 +86,28 @@ const verifyRoles = (...roles) => {
 
 const verifyactiveOrNot = () => {
   return async (req, res, next) => {
-    
-    const employee = await Employee.findOne({email:req.body.email})
-    
+    const employee = await Employee.findOne({ email: req.body.email });
+
     if (employee) {
       if (!employee.activeOrNot) {
-        next(new Error("Hesabınız Pasiftir. Lütfen Mağaza yetkiliniz ile iletişime geçiniz.", 401));
+        next(
+          new Error(
+            "Hesabınız Pasiftir. Lütfen Mağaza yetkiliniz ile iletişime geçiniz.",
+            401
+          )
+        );
       }
       next();
     } else {
       next(new Error("Kullanıcı bulunamadı", 401));
     }
-    
   };
 };
 
-
-
-export { authenticateToken, checkUser, verifyRoles, verifyactiveOrNot };
+export {
+  authenticateToken,
+  checkUser,
+  verifyRoles,
+  verifyactiveOrNot,
+  checkSubscription,
+};

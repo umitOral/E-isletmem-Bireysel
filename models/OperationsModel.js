@@ -38,6 +38,10 @@ const OperationSchema = new Schema(
       type: Number,
       default: 0,
     },
+    percentDiscount: {
+      type: Number,
+      default: 0,
+    },
     discount: {
       type: Number,
       default: 0,

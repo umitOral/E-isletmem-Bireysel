@@ -4,61 +4,93 @@ export class UI {
   }
 
   showModal(success, message) {
-    const messageBox = document.querySelector(".information-modal");
-
-    if (success == false) {
-      messageBox.classList.add("failure");
-      messageBox.innerHTML = `
-            <span>${message}</span><i class="fa-solid fa-circle-xmark"></i>
-        `;
+    
+    let wrapper=document.querySelector( ".information-modal-wrapper")
+    var information = document.createElement("div");
+    information.className = "information";
+    
+    if (success === false) {
+      information.classList.add("failure");
+   
+      information.innerHTML=`<span>${message}</span><i class="fa-solid fa-circle-xmark"></i>`
+      wrapper.appendChild(information)
+      
     } else {
-      messageBox.classList.add("success");
-      messageBox.innerHTML = `
+      information.classList.add("success");
+     
+      information.innerHTML = `
             <span>${message}</span><i class="fa-solid fa-circle-check"></i>
         `;
+        wrapper.appendChild(information)
     }
+
+  
+
+    
     setTimeout(() => {
-      messageBox.classList.remove("failure");
-      messageBox.classList.remove("success");
-    }, 2000);
+      information.remove();
+    }, 3000);
+   
+       
+            
+   
+   
+
+    // Bildirimi görünür hale getir
+   
+    
   }
 
  
 
   addPaymentsToTable(table, data) {
+    
     const rows = table.querySelectorAll("tbody tr");
-    const tableBody = table.querySelector("tbody");
+    const tableBody = table.querySelector("tbody"); 
+    const totalValue = table.querySelector("#total-value"); 
 
     rows.forEach((element) => {
       element.remove();
     });
 
-    console.log(data);
-
-    for (const index in data) {
-      const element = data[index];
-
-      tableBody.innerHTML += `
-          <tr>
-              <td hidden>${element._id}</td>
-              <td>${new Date(element.createdAt).toLocaleDateString()}</td>
-              <td>${element.cashOrCard}</td>
-              <td>${element.totalPrice}</td>
-              
-              
-              <td>
-              <select name="" class="operations-edit-select">
-                <option value="" selected>Düzenle</option>
-                <option value="delete">İşlem Sil</option>
-                <option value="add-data">Veri Ekle</option>
-                </select>
-              </td>
-              
-              
-          </tr>
-          `;
+  
+    if (data.length!==0) {
+      
+      totalValue.textContent=data.map((item)=>item.totalPrice).reduce((a,b)=>a+b)
+      for (const index in data) {
+        const element = data[index];
+  
+        tableBody.innerHTML += `
+            <tr data-paymentid="${element._id}">
+                <td>${new Date(element.createdAt).toLocaleDateString()}</td>
+                <td>${element.cashOrCard}</td>
+                <td>${element.totalPrice}</td>
+                
+                
+                <td>
+                <select name="" class="payments-edit-select">
+                  <option selected disable hidden>Seçenekler</option>
+                  <option value="edit-payment">Düzenle</option>
+                  <option value="delete-payment">Tahsilat Sil</option>
+                  </select>
+                </td>
+                
+                
+            </tr>
+            `;
+  
+      }
+    }else{
+     
+      tableBody.innerHTML =`
+      Herhangi bir ödeme bulunamadı
+      `
     }
+
+    
   }
+
+
   showOldOperations(data) {
     const oldOperationsTable = document.querySelector(
       "#old_operations_content table tbody"
@@ -123,9 +155,9 @@ export class UI {
               </td>
               
               <td>${element.operationPrice} </td>
-              <td>%${element.discount} </td>
+              <td>${element.discount}TL+%${element.percentDiscount}</td>
               <td>${
-                element.operationPrice * ((100 - element.discount) / 100)
+                (element.operationPrice-element.discount )* ((100 - element.percentDiscount) / 100)
               }</td>
               <td>${element.paidValue}</td>
               <td>${(() => {
@@ -335,10 +367,10 @@ export class UI {
             <span>${message}</span><i class="fa-solid fa-circle-check"></i>
         `;
     }
-    setTimeout(() => {
-      messageBox.classList.remove("failure");
-      messageBox.classList.remove("success");
-    }, 1500);
+    // setTimeout(() => {
+    //   messageBox.classList.remove("failure");
+    //   messageBox.classList.remove("success");
+    // }, 1500);
   }
 
   showAlert(message) {
@@ -406,8 +438,6 @@ export class UI {
     const totalCash = document.querySelector(".total-cash");
     const totalCreditCard = document.querySelector(".total-crediTCard");
     const netCash = document.querySelector(".netCash");
-
-    console.log(data);
 
     for (const iterator of paymentTablesChildren) {
       iterator.remove();
