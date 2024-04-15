@@ -12,6 +12,7 @@ const module={
         path: path.resolve(__dirname+"/public", 'bundles'), 
         filename: 'appointments.js'
     },
+    mode: 'development',
     
     module: {
       rules: [
