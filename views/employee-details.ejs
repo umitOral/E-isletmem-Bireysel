@@ -141,7 +141,7 @@
 
                                     <div class="inputs ">
                                         <span>Kayıt Tarihi:</span>
-                                        <input type="text" name="" id="" value="<%= new Date(singleUser.registerDate).toLocaleDateString() %>" readonly>
+                                        <input type="text" name="" id="" value="<%= new Date(singleUser.registerDate).toLocaleDateString("tr-TR") %>" readonly>
                                     </div>
                                    
                                     <span class="edit-informations-btn">Düzenle</span>
@@ -167,7 +167,7 @@
                                                 <tr>
 
                                                     <td>
-                                                        <%= new Date(session.date).toLocaleDateString() %>
+                                                        <%= new Date(session.date).toLocaleDateString("tr-TR") %>
                                                     </td>
 
                                                     <td>

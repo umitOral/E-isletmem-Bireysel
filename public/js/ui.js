@@ -62,7 +62,7 @@ export class UI {
   
         tableBody.innerHTML += `
             <tr data-paymentid="${element._id}">
-                <td>${new Date(element.createdAt).toLocaleDateString()}</td>
+                <td>${new Date(element.createdAt).toLocaleDateString("tr-TR")}</td>
                 <td>${element.cashOrCard}</td>
                 <td>${element.totalPrice}</td>
                 
@@ -106,7 +106,7 @@ export class UI {
                     element.sessionOfOperation[
                       element.sessionOfOperation.length - 1
                     ].sessionDate
-                  ).toLocaleDateString()}</td>
+                  ).toLocaleDateString("tr-TR")}</td>
                   <td>${element.operationStatus}</td>
                 </tr>
       `;
@@ -132,7 +132,7 @@ export class UI {
       tableBody.innerHTML += `
           <tr data-operationid="${element._id}">
              
-              <td>${new Date(element.createdAt).toLocaleDateString()}</td>
+              <td>${new Date(element.createdAt).toLocaleDateString("tr-TR")}</td>
               <td>${element.operationName}</td>
               <td>${element.operationStatus} </td>
               <td>${element.operationAppointmentStatus} </td>
@@ -204,7 +204,7 @@ export class UI {
                     
                     <td>${(()=>{
                       if(item.sessionDate){
-                        return `${new Date(item.sessionDate).toLocaleDateString()}`
+                        return `${new Date(item.sessionDate).toLocaleDateString("tr-TR")}`
                       }else{
                         return `Bekleniyor`
                       }

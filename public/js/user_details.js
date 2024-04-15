@@ -283,7 +283,7 @@ function getAllAppointments() {
         <tr data-appointmentid="${session._id}">
     
         <td>
-            ${new Date(session.date).toLocaleDateString()}
+            ${new Date(session.date).toLocaleDateString("tr-TR")}
         </td>
 
         <td>
