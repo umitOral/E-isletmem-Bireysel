@@ -381,14 +381,9 @@ const getAppointmentsPage = async (req, res) => {
     });
     // sort({ registerDate: 1 })
 
-    const users = await User.find({
-      role: "customer",
-      company: res.locals.company._id,
-    });
-
     res.status(200).render("appointments", {
       link: "appointments",
-      users,
+      
       services: activeServices,
     });
   } catch (error) {

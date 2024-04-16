@@ -5,6 +5,7 @@ import Employee from "../models/EmployeesModel.js";
 
 const checkUser = async (req, res, next) => {
   const token = req.cookies.jsonwebtoken;
+  const token2 = req.cookies.userData;
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
@@ -12,6 +13,11 @@ const checkUser = async (req, res, next) => {
         res.locals.company = null;
         next();
       } else {
+
+        jwt.verify(token2,process.env.JWT_SECRET,(err,decodedToken)=>{
+          
+          res.locals.usersNames = decodedToken.usersNames;
+        })
         const company = await Company.findById(decodedToken.companyID).populate(
           "employees"
         );
@@ -33,7 +39,7 @@ const checkUser = async (req, res, next) => {
 const authenticateToken = async (req, res, next) => {
   try {
     const token = req.cookies.jsonwebtoken;
-
+    
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET, (err) => {
         if (err) {
@@ -55,8 +61,6 @@ const authenticateToken = async (req, res, next) => {
 const checkSubscription = async (req, res, next) => {
   try {
     const token = req.cookies.jsonwebtoken;
-   
-
     if (req.cookies.companySubscribe === "true") {
       
       next();

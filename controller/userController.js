@@ -341,7 +341,16 @@ const loginUser = async (req, res, next) => {
 
       if (same) {
         const token = createToken(company._id, employee._id);
+        
+        const usersNames=await User.find({role:"customer",company:company},{name:true,surname:true})
+        
+        const token2 = createTokenSingleData(usersNames);
+        
         res.cookie("jsonwebtoken", token, {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24,
+        });
+        res.cookie("userData",token2, {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24,
         });
@@ -855,6 +864,12 @@ const logOut = (req, res) => {
     res.cookie("jsonwebtoken", "", {
       maxAge: 1,
     });
+    res.cookie("userData", "", {
+      maxAge: 1,
+    });
+    res.cookie("companySubscribe", "", {
+      maxAge: 1,
+    });
     res.redirect("/");
   } catch (error) {
     res.status(500).json({
@@ -896,6 +911,13 @@ const resetPasswordMail = async (req, res, next) => {
 
 const createToken = (companyID, employeeID) => {
   return jwt.sign({ companyID, employeeID }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
+};
+
+const createTokenSingleData = (usersNames) => {
+  console.log(usersNames)
+  return jwt.sign({usersNames}, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };

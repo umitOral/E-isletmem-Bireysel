@@ -758,7 +758,7 @@ table thead {
 
   background-color: white;
   border-radius: var(--border-radius-1);
-  padding: 2rem;
+  
   width: 630px;
   max-width: 90%;
 
@@ -778,7 +778,14 @@ table thead {
   width: max-content;
   min-width: 450px
 }
-
+.btn-mini{
+  margin-top: 0 !important;
+  width: max-content !important;
+  font-size: 1rem !important;
+}
+.btn-mini:hover{
+  border: 1px solid green;
+}
 .modal button {
   margin-top: 1rem;
 
@@ -794,6 +801,7 @@ table thead {
   cursor: pointer;
 }
 
+
 .modal button.cancel_button {
   background-color: var(--color-danger);
 }
@@ -805,8 +813,15 @@ table thead {
 
 .modal h2 {
   text-align: center;
-
+  padding: 1rem;
   margin-bottom: 1rem;
+  background-color: var(--color-main-gray);
+  
+  border-top-right-radius: var(--border-radius-1);
+  border-top-left-radius: var(--border-radius-1);
+}
+.modal form {
+  margin: 2rem;
 }
 .options {
   display: flex;

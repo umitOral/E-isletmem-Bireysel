@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="../css/sessions.css">
-    
+
     <%- include('partials/head.ejs') %>
 </head>
 
@@ -69,26 +69,39 @@
                     </div>
                 </main>
                 <div class="modal modal_add_session ">
-
+                    <h2>Randevu Ekle</h2>
                     <form action="" onsubmit="return false" method="POST" id="add-session-form">
-                        <h2>Randevu Ekle</h2>
+                        
 
                         <div class="add-event-body">
-                            <div class="inputs">Hasta:
-                                <select name="user" class="" id="user-select" required>
-                                    <option value="" selected hidden disable>Hasta seçiniz</option>
-                                    <% users.forEach(user=> { %>
-                                        <option value="<%= user._id %>">
-                                            <%= user.name+" "%><%= user.surname %>
+                            <div class="inputs">
+                                <span>Hasta:</span>
+                                <div style="display: flex; gap: 1rem;">
+                                    <input required type="text" list="user-names" name="user" id="user-select" autocomplete="off"
+                                    placeholder="isim soyisim">
+                               <button id="add-user-btn" type="button" class="btn-mini">Yeni+</button>
+                                </div>
+                               
+                                    
+                                <datalist  id="user-names">
+                                    <% locals.usersNames.forEach(element=> { %>
+
+                                        <option data-userid="<%= element._id %>"
+                                            data-userdata="<%= element.name+""+element.surname %>"
+                                            value="<%= element.name+" "+element.surname %>">
+
                                         </option>
                                         <% }) %>
-                                </select>
+
+                                </datalist>
+
+
 
                             </div>
                             <div class="inputs">
                                 <span>Devam eden İşlemler:</span>
                                 <select class="proccess_type_add" id="proccess_type_add">
-                                    <option value="" selected hidden disable>Önce hasta seçiniz</option>    
+                                    <option value="" selected hidden disable>Önce hasta seçiniz</option>
                                 </select>
 
                                 <div class="selected_proccess_type_add">
@@ -100,11 +113,14 @@
                                 <span>Yeni İşlemler:</span>
                                 <select class="proccess_type_new" id="proccess_type_new">
                                     <option value="" selected hidden disable>İşlem Seçiniz</option>
-                                    <% locals.company.services.forEach(element => { %>
+                                    <% locals.company.services.forEach(element=> { %>
                                         <% if (element.activeorNot===true) { %>
-                                            <option data-price="<%= element.servicePrice %>" data-id="<%= element._id %>" value="<%= element.serviceName %>"><%= element.serviceName %></option>
-                                        <% } %>
-                                    <% }) %>   
+                                            <option data-price="<%= element.servicePrice %>"
+                                                data-id="<%= element._id %>" value="<%= element.serviceName %>">
+                                                <%= element.serviceName %>
+                                            </option>
+                                            <% } %>
+                                                <% }) %>
                                 </select>
 
                                 <div class="selected_proccess_type_new">
@@ -112,8 +128,8 @@
                                 </div>
 
                             </div>
-                            
-                           
+
+
 
                             <div class="inputs" hidden>timeIndex:
                                 <input type="text" name="timeIndexes" id="" class="timeIndex">
@@ -146,17 +162,17 @@
                             <button type="submit" class="save_button">Seans Ekle +</button>
 
 
-                            <span class="cancel_button">Vazgeç</span>
+                            <span type="button" class="cancel_button">Vazgeç</span>
 
                         </div>
                     </form>
 
                 </div>
-                
+
                 <div class="information-modal-wrapper"></div>
-                
+
         </section>
-        
+
         <div class="loader_wrapper hidden">
             <svg class="pl" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -169,17 +185,20 @@
                         <stop offset="100%" stop-color="hsl(223,90%,55%)" />
                     </linearGradient>
                 </defs>
-                
-                <circle class="pl__ring" cx="100" cy="100" r="82" fill="none" stroke="url(#pl-grad1)" stroke-width="36" stroke-dasharray="0 257 1 257" stroke-dashoffset="0.01" stroke-linecap="round" transform="rotate(-90,100,100)" />
-                <line class="pl__ball" stroke="url(#pl-grad2)" x1="100" y1="18" x2="100.01" y2="182" stroke-width="36" stroke-dasharray="1 165" stroke-linecap="round" />
-                
+
+                <circle class="pl__ring" cx="100" cy="100" r="82" fill="none" stroke="url(#pl-grad1)" stroke-width="36"
+                    stroke-dasharray="0 257 1 257" stroke-dashoffset="0.01" stroke-linecap="round"
+                    transform="rotate(-90,100,100)" />
+                <line class="pl__ball" stroke="url(#pl-grad2)" x1="100" y1="18" x2="100.01" y2="182" stroke-width="36"
+                    stroke-dasharray="1 165" stroke-linecap="round" />
+
             </svg>
             <text class="">Yükleniyor..</text>
-            
+
 
         </div>
 
-       
+
         <script type="module" src="/js/appointments.js"></script>
         <!-- <script type="module" src="../bundles/appointments.js"></script> -->
 

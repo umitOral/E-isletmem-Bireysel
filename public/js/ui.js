@@ -374,7 +374,7 @@ export class UI {
   }
 
   showAlert(message) {
-    const messageBox = document.querySelector(".information-modal");
+    const messageBox = document.querySelector(".information-modal-wrapper");
 
     messageBox.classList.add("failure");
 

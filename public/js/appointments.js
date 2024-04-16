@@ -13,12 +13,10 @@ const calendar = document.querySelector(".calendar"),
   todayBtn = document.querySelector(".today-btn")
 
 const appointmentListDate = document.querySelector(".appointment-list");
+const addUserBtn = document.querySelector("#add-user-btn");
+const userSelect = document.querySelector("#user-select");
 
-const addEventSubmit = document.querySelector(".add-event-btn");
-const addEventType = document.querySelector(".proccess_type");
-const deleteEvent = document.querySelector(".fa-trash");
-const eventsWrapper = document.querySelector(".events");
-
+let userID=""
 let APPOINTMENT_STATUS=[]
 
 let today = new Date();
@@ -124,10 +122,15 @@ function getAllSessions() {
     .catch((err) => console.log(err));
 }
 
-const userSelect = document.querySelector("#user-select");
+
+
 async function getSessions() {
   userSelect.addEventListener("change", () => {
-    let userID = userSelect.options[userSelect.selectedIndex].value;
+    console.log(userSelect.value)
+    let value=userSelect.value.replaceAll(" ", "")
+    console.log(value)
+    userID = document.querySelector(`#user-names option[data-userdata=${value}]`).dataset.userid;
+    
     request
       .getwithUrl("./users/" + userID + "/getUsersContinueOperations")
       .then((response) => {
@@ -344,9 +347,11 @@ closeAddSessionBtns.forEach((element) => {
       oldOperations:[],
       newOperations:[]
     }
-    userSelect.innerHTML+=` <option value="" selected hidden disable>Hasta seçiniz</option>`
+    userSelect.value=""
     proccessTypeNew.innerHTML+=`<option value="" selected hidden disable>İşlem Seçiniz</option>`
-    
+    orderSelect.innerHTML=`
+    <option value="" selected hidden disable>Önce hasta seçiniz</option>
+    `
   });
 });
 
@@ -404,16 +409,7 @@ function addListener() {
   });
 }
 
-//convert time  --------------
-function convertTime(time) {
-  let timeArr = time.split(":");
 
-  let timeHour = timeArr[0];
-  let timeMinute = timeArr[1];
-  time = timeHour + ":" + timeMinute;
-
-  return time;
-}
 
 // edit session modal area -----------------------------------------------------********----------
 const addSessionBtn = document.querySelector("#add-session-btn");
@@ -430,7 +426,7 @@ addSessionBtn.addEventListener("click", function (e) {
   });
 
   if (checkedElements.length === 0) {
-    ui.showAlert("lütfen randevu saati seçiniz");
+    ui.showModal(false,"lütfen randevu saati seçiniz");
   } else {
     modalAddSession.classList.add("showed_modal");
 
@@ -498,7 +494,7 @@ const proccessType = document.querySelector(".proccess_type_add");
 const proccessTypeNew = document.querySelector(".proccess_type_new");
 const proccessTypeUpdate = document.querySelector(".proccess_type_update");
 
-const modalAddSessionSave = document.querySelector(".save_button");
+
 const modalUpdateSessionSave = document.querySelector(".save_update_button");
 
 const selected_proccess_type_add = document.querySelector(
@@ -511,7 +507,8 @@ const selected_proccess_type_update = document.querySelector(
   ".selected_proccess_type_update"
 );
 
-modalAddSessionSave.addEventListener("click", (e) => {
+addSessionForm.addEventListener("submit", (e) => {
+  console.log("burası")
   const selectedDate = year + "-" + (month + 1) + "-" + activeDay;
 
   const services = [];
@@ -523,7 +520,7 @@ modalAddSessionSave.addEventListener("click", (e) => {
   let data = {
     operations: selectedOperations,
     appointmentData:{
-      user: addSessionForm.user.value,
+      user: userID,
     timeIndexes: [
       addSessionForm.timeIndexes[0].value,
       addSessionForm.timeIndexes[1].value,
@@ -550,7 +547,7 @@ modalAddSessionSave.addEventListener("click", (e) => {
         oldOperations:[],
         newOperations:[]
       }
-      userSelect.innerHTML+=` <option value="" selected hidden disable>Hasta seçiniz</option>`
+      userSelect.value=""
       proccessTypeNew.innerHTML+=`<option value="" selected hidden disable>İşlem Seçiniz</option>`
       
     })
@@ -634,10 +631,12 @@ proccessTypeNew.addEventListener("change", (e) => {
 
 });
 
+ const orderSelect = document.getElementById("proccess_type_add");
+
 selected_proccess_type_add.addEventListener("click", (e) => {
   if (e.target.classList.contains("ph-x")) {
     // add back to selectedbox
-    const orderSelect = document.getElementById("proccess_type_add");
+   
     let opt = document.createElement("option");
     opt.setAttribute(
       "data-price",
@@ -663,79 +662,79 @@ selected_proccess_type_new.addEventListener("click", (e) => {
   }
 });
 
-proccessTypeUpdate.addEventListener("change", (e) => {
-  if (
-    !selectedValuesUpdate.includes(
-      proccessTypeUpdate.options[
-        proccessTypeUpdate.options.selectedIndex
-      ].textContent.trim()
-    )
-  ) {
-    selectedValuesUpdate.push(
-      proccessTypeUpdate.options[
-        proccessTypeUpdate.options.selectedIndex
-      ].textContent.trim()
-    );
-    const proccessDiv = document.createElement("div");
-    const nodeinput = document.createElement("input");
-    nodeinput.value =
-      proccessTypeUpdate.options[
-        proccessTypeUpdate.options.selectedIndex
-      ].textContent.trim();
-    nodeinput.setAttribute("name", "services");
-    nodeinput.setAttribute("disabled", "");
-    nodeinput.setAttribute("type", "text");
-    nodeinput.setAttribute("class", "selected_proccess");
-    nodeinput.setAttribute(
-      "value",
-      proccessTypeUpdate.options[
-        proccessTypeUpdate.options.selectedIndex
-      ].textContent.trim()
-    );
+// proccessTypeUpdate.addEventListener("change", (e) => {
+//   if (
+//     !selectedValuesUpdate.includes(
+//       proccessTypeUpdate.options[
+//         proccessTypeUpdate.options.selectedIndex
+//       ].textContent.trim()
+//     )
+//   ) {
+//     selectedValuesUpdate.push(
+//       proccessTypeUpdate.options[
+//         proccessTypeUpdate.options.selectedIndex
+//       ].textContent.trim()
+//     );
+//     const proccessDiv = document.createElement("div");
+//     const nodeinput = document.createElement("input");
+//     nodeinput.value =
+//       proccessTypeUpdate.options[
+//         proccessTypeUpdate.options.selectedIndex
+//       ].textContent.trim();
+//     nodeinput.setAttribute("name", "services");
+//     nodeinput.setAttribute("disabled", "");
+//     nodeinput.setAttribute("type", "text");
+//     nodeinput.setAttribute("class", "selected_proccess");
+//     nodeinput.setAttribute(
+//       "value",
+//       proccessTypeUpdate.options[
+//         proccessTypeUpdate.options.selectedIndex
+//       ].textContent.trim()
+//     );
 
-    const deleteButton = document.createElement("i");
+//     const deleteButton = document.createElement("i");
 
-    deleteButton.classList.add("ph");
-    deleteButton.classList.add("ph-x");
+//     deleteButton.classList.add("ph");
+//     deleteButton.classList.add("ph-x");
 
-    proccessDiv.appendChild(nodeinput);
-    proccessDiv.appendChild(deleteButton);
+//     proccessDiv.appendChild(nodeinput);
+//     proccessDiv.appendChild(deleteButton);
 
-    selected_proccess_type_update.appendChild(proccessDiv);
-  } else {
-    console.log("hizmet zaten var");
-  }
+//     selected_proccess_type_update.appendChild(proccessDiv);
+//   } else {
+//     console.log("hizmet zaten var");
+//   }
 
-  const selectedProcess = document.querySelectorAll(
-    ".selected_proccess_type_update div i"
-  );
-  selectedProcess.forEach((element) => {
-    element.addEventListener("click", (e) => {
-      selectedValuesUpdate.pop(element.previousElementSibling.value);
-      element.parentElement.remove();
-    });
-  });
-});
+//   const selectedProcess = document.querySelectorAll(
+//     ".selected_proccess_type_update div i"
+//   );
+//   selectedProcess.forEach((element) => {
+//     element.addEventListener("click", (e) => {
+//       selectedValuesUpdate.pop(element.previousElementSibling.value);
+//       element.parentElement.remove();
+//     });
+//   });
+// });
 
-modalUpdateSessionSave.addEventListener("click", (e) => {
-  e.preventDefault();
+// modalUpdateSessionSave.addEventListener("click", (e) => {
+//   e.preventDefault();
 
-  let data = {
-    description: e.target.parentElement.parentElement.description.value,
-    services: selectedValuesUpdate,
-    user: userUpdate.options[userUpdate.options.selectedIndex].value,
-  };
-  request
-    .postWithUrl(
-      "./appointments/" +
-        e.target.parentElement.parentElement.sessionID.value +
-        "/updateAppointment",
-      data
-    )
-    .then((response) => {
-      ui.showModal(true, response.message);
-      modalUpdateSession.classList.toggle("showed_modal");
-      getAllSessions();
-    })
-    .catch((err) => console.log(err));
-});
+//   let data = {
+//     description: e.target.parentElement.parentElement.description.value,
+//     services: selectedValuesUpdate,
+//     user: userUpdate.options[userUpdate.options.selectedIndex].value,
+//   };
+//   request
+//     .postWithUrl(
+//       "./appointments/" +
+//         e.target.parentElement.parentElement.sessionID.value +
+//         "/updateAppointment",
+//       data
+//     )
+//     .then((response) => {
+//       ui.showModal(true, response.message);
+//       modalUpdateSession.classList.toggle("showed_modal");
+//       getAllSessions();
+//     })
+//     .catch((err) => console.log(err));
+// });
