@@ -50,15 +50,7 @@ cancelModal.forEach((element) => {
   });
 });
 
-tableElements.forEach((table) => {
-  table.querySelectorAll("thead th").forEach((head,columnIndex) => {
-    head.addEventListener("click",()=>{
-      
-      tables.sortingStart(table,columnIndex)
-      
-    })
-  });
-});
+
 
 
 const userName = document.getElementById("user-name");
@@ -165,6 +157,18 @@ saveModal.forEach((element) => {
   };
 });
 
+
+// table sorting
+
+tableElements.forEach((table) => {
+  table.querySelectorAll("thead th").forEach((head,columnIndex) => {
+    head.addEventListener("click",()=>{
+      
+      tables.sortingStart(table,columnIndex)
+      
+    })
+  });
+});
 
 
 

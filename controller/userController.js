@@ -283,18 +283,47 @@ const createUser = async (req, res) => {
   try {
     const userEmail = req.body.email;
     req.body.company = res.locals.company;
+
     const searchEmail = await User.findOne({ email: userEmail });
-    console.log(userEmail);
+
     if (searchEmail && !searchEmail === "") {
       res.json({
         success: false,
         message: "bu mail adresi kullanılmaktadır.",
       });
     } else {
-      await User.create(req.body);
-      res.json({
-        success: true,
-        message: "Kulllanıcı başarıyla kaydedildi.",
+      await User.create(req.body).then((response) => {
+        jwt.verify(
+          req.cookies.userData,
+          process.env.JWT_SECRET,
+          async (err, decodedToken) => {
+            if (err) {
+              console.log(err);
+            }
+
+            decodedToken.usersNames.push({
+              _id: response._id,
+              name: response.name,
+              surname: response.surname,
+            });
+            console.log(decodedToken);
+            const updatedToken = createTokenSingleData(decodedToken.usersNames);
+            res.cookie("userData", updatedToken, {
+              httpOnly: true,
+              maxAge: 1000 * 60 * 60 * 24,
+            });
+
+            res.json({
+              success: true,
+              data: {
+                _id: response._id,
+                name: response.name,
+                surname: response.surname,
+              },
+              message: "Kulllanıcı başarıyla kaydedildi.",
+            });
+          }
+        );
       });
     }
   } catch (error) {
@@ -341,16 +370,19 @@ const loginUser = async (req, res, next) => {
 
       if (same) {
         const token = createToken(company._id, employee._id);
-        
-        const usersNames=await User.find({role:"customer",company:company},{name:true,surname:true})
-        
+
+        const usersNames = await User.find(
+          { role: "customer", company: company },
+          { name: true, surname: true }
+        );
+
         const token2 = createTokenSingleData(usersNames);
-        
+
         res.cookie("jsonwebtoken", token, {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24,
         });
-        res.cookie("userData",token2, {
+        res.cookie("userData", token2, {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24,
         });
@@ -845,12 +877,11 @@ const getUsersAllPayments = async (req, res) => {
     console.log(req.params);
 
     const payments = await Payment.find({ fromUser: req.params.id });
-    if (payments.length===0) {
-      res.json({success: true, message: "ödeme bulunamadı", data: payments });
-    }else{
-      res.json({success: true, message: "ödemeler çekildi", data: payments });
+    if (payments.length === 0) {
+      res.json({ success: true, message: "ödeme bulunamadı", data: payments });
+    } else {
+      res.json({ success: true, message: "ödemeler çekildi", data: payments });
     }
-    
   } catch (error) {
     res.status(500).json({
       succes: false,
@@ -916,8 +947,7 @@ const createToken = (companyID, employeeID) => {
 };
 
 const createTokenSingleData = (usersNames) => {
-  console.log(usersNames)
-  return jwt.sign({usersNames}, process.env.JWT_SECRET, {
+  return jwt.sign({ usersNames: usersNames }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };

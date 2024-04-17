@@ -93,10 +93,6 @@ main .insights h2 {
 }
 
 
-.operation:hover{
-  background-color: rgba(128, 128, 128, 0.05);
-
-}
 input[type="radio"] {
   width: 1.5rem;
   height: 1.5rem;
@@ -114,7 +110,8 @@ input[type="radio"] {
   cursor: pointer;
 }
  .operation .fa-solid:hover{
-  border: 1px solid gray;
+  outline: 1px solid #fb0;
+ 
   border-radius: 0.5rem;
 }
 .session-of-operation{

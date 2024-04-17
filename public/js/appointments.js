@@ -14,7 +14,10 @@ const calendar = document.querySelector(".calendar"),
 
 const appointmentListDate = document.querySelector(".appointment-list");
 const addUserBtn = document.querySelector("#add-user-btn");
+const addUserModal = document.querySelector(".add_customer");
+const addUserForm = document.querySelector("#add-user-form");
 const userSelect = document.querySelector("#user-select");
+const dataList=document.querySelector("#user-names")
 
 let userID=""
 let APPOINTMENT_STATUS=[]
@@ -28,6 +31,37 @@ let selectedDate = today.toDateString();
 
 showDatesAtPage();
 getAllSessions();
+
+addUserBtn.addEventListener("click",()=>{
+  addUserModal.classList.add("showed_modal")
+})
+addUserForm.addEventListener("submit",(e)=>{
+  e.preventDefault()
+  
+  let data={
+    name: addUserForm.name.value,
+    surname: addUserForm.surname.value,
+    email: addUserForm.email.value,
+    phone:addUserForm.phone.value,
+    sex: addUserForm.sex.value,
+    birtdhDate: addUserForm.birtdhDate.value,
+    address: addUserForm.address.value,
+    billingAddress: addUserForm.billingAddress.value,
+  }
+  
+  request.postWithUrl("./users/createUser",data)
+  .then(response=>{
+    console.log(response)
+    ui.showModal(response.success,response.message)
+    dataList.innerHTML+=`
+    <option data-userid="${response.data._id}" data-userdata="${response.data.name+response.data.surname}" value="${response.data.name+" "+response.data.surname}"></option>
+    `
+    addUserModal.classList.remove("showed_modal")
+  })
+  .catch(err=>console.log(err))
+})
+
+
 
 function showDatesAtPage(params) {
   if (params) {
@@ -316,7 +350,7 @@ todayBtn.addEventListener("click", () => {
 
 // todo section --------------------------------------
 
-const closeAddSessionBtns = document.querySelectorAll(".cancel_button");
+const closeAddSessionBtn = document.querySelector("#cancel-add-appointment");
 
 const modalAddSession = document.querySelector(".modal_add_session");
 
@@ -331,9 +365,8 @@ const dates = document.querySelectorAll(".event-date-from");
 const userUpdate = document.querySelector("#user_update");
 const sessionID = document.querySelector(".sessionID");
 
-closeAddSessionBtns.forEach((element) => {
-  element.addEventListener("click", () => {
-    modalAddSession.classList.remove("showed_modal");
+
+closeAddSessionBtn.addEventListener("click", () => {
     
     while (selected_proccess_type_new.firstChild) {
       selected_proccess_type_new.firstChild.remove()
@@ -342,7 +375,6 @@ closeAddSessionBtns.forEach((element) => {
       selected_proccess_type_add.firstChild.remove()
     }
 
-    
     selectedOperations={
       oldOperations:[],
       newOperations:[]
@@ -353,7 +385,7 @@ closeAddSessionBtns.forEach((element) => {
     <option value="" selected hidden disable>Önce hasta seçiniz</option>
     `
   });
-});
+
 
 function addListener() {
   const days = document.querySelectorAll(".day");

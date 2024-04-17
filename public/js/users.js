@@ -8,10 +8,10 @@ const form = document.querySelector("#register-form");
 
 eventListeners();
 function eventListeners() {
-  form.addEventListener("submit", createEmployee);
+  form.addEventListener("submit", createUser);
 }
 
-function createEmployee(e) {
+function createUser(e) {
   e.preventDefault();
   let formData = {
     name: form.name.value,

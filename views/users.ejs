@@ -57,28 +57,27 @@
 
                                 <th>İsim<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Soyisim<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Telefon<i class="fa-solid fa-arrow-up"></i></th>
+                               
 
 
                             </thead>
                             <tbody id="userList">
-                                <% users.forEach(user=> { %>
+                                <% for( let index = 0; index < 10; index++ ) { %>
+
                                     <tr>
+                                       <td>
+                                        <%= locals.usersNames[index].name %>
+                                    </td>
+                                    <td>
+                                        <%= locals.usersNames[index].surname %>
+                                    </td>
 
-                                        <td>
-                                            <%= user.name %>
-                                        </td>
-                                        <td>
-                                            <%= user.surname %>
-                                        </td>
-
-                                        <td><span class="continue">
-                                                <%= user.phone %>
-                                            </span> </td>
-                                        <td class="details"><a  href="./users/<%= user._id %>">Detay</a></td>
-
+                                    <td class="details"><a  href="./users/<%= locals.usersNames[index]._id %>">Detay</a></td>  
                                     </tr>
-                                    <% }) %>
+                                   
+                                <% } %>
+
+                             
 
 
                             </tbody>

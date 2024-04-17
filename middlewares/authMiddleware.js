@@ -17,6 +17,7 @@ const checkUser = async (req, res, next) => {
         jwt.verify(token2,process.env.JWT_SECRET,(err,decodedToken)=>{
           
           res.locals.usersNames = decodedToken.usersNames;
+          
         })
         const company = await Company.findById(decodedToken.companyID).populate(
           "employees"

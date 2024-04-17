@@ -27,7 +27,9 @@ const editPaymentModal = document.querySelector(".modal_edit_payment");
 const addSessionModal = document.querySelector(".add-session-modal");
 const addDataSaveButton = document.querySelector("#add-data-save-button");
 
-const addDSessionSaveButton = document.querySelector("#add-session-save-button");
+const addDSessionSaveButton = document.querySelector(
+  "#add-session-save-button"
+);
 let addDataForm = document.querySelector("#add-data-form");
 let addSessionForm = document.querySelector("#add-session-form");
 
@@ -42,8 +44,6 @@ const modalUser = document.querySelector(".modal_user");
 const addDiscountModal = document.querySelector(".add_discount_modal");
 const modalSlider = document.querySelector(".modal_slider");
 
-
-
 const modalImage = document.querySelector(".modal_image");
 const modalOrders = document.querySelector(".modal_orders");
 const userID = document.querySelector(".user-informations").dataset.userıd;
@@ -52,16 +52,15 @@ let modalEditData = document.querySelector(".edit-data-modal");
 
 // responsed datas
 
-let APPOINTMENT_STATUS=[]
+let APPOINTMENT_STATUS = [];
 
 eventListeners();
 
 function eventListeners() {
   addPictureForm.addEventListener("submit", addPicture);
-  addDiscountForm.addEventListener("submit",(e)=> addDiscount(e));
+  addDiscountForm.addEventListener("submit", (e) => addDiscount(e));
   editUserButton.addEventListener("click", editUser);
   editBtn.addEventListener("click", showInformationsModal);
-  
 }
 
 cancelModal.forEach((element) => {
@@ -79,31 +78,31 @@ cancelAddPhoto.addEventListener("click", () => {
 let datasOptionsSelectInput = document.querySelector(
   "#datasOptions_select_input"
 );
-let dataOptionNumberValue=document.querySelector("#dataOptionNumberValue")
+let dataOptionNumberValue = document.querySelector("#dataOptionNumberValue");
 datasSelectInput.addEventListener("change", (e) => {
-  
   let dataID = e.target.value;
-  
+
   request
     .getwithUrl("/admin/datas/" + dataID)
     .then((response) => {
       console.log(response);
-      let indexcontrol = response.data.serviceDatas.findIndex((item) =>item.dataName ===e.target.options[e.target.options.selectedIndex].textContent.trim()
+      let indexcontrol = response.data.serviceDatas.findIndex(
+        (item) =>
+          item.dataName ===
+          e.target.options[e.target.options.selectedIndex].textContent.trim()
       );
       console.log(indexcontrol);
       while (datasOptionsSelectInput.children[0]) {
         datasOptionsSelectInput.children[0].remove();
       }
-     
-         response.data.serviceDatas[indexcontrol].dataOptions.forEach(
+
+      response.data.serviceDatas[indexcontrol].dataOptions.forEach(
         (element) => {
           datasOptionsSelectInput.innerHTML += `
         <option value="${element}">${element}</option>
         `;
         }
       );
-      
-     
     })
     .catch((err) => console.log(err));
 });
@@ -237,7 +236,6 @@ function showInformationsModal() {
   modalUser.classList.add("showed_modal");
 }
 
-
 saveModal.forEach((element) => {
   element.onclick = () => {
     modalUser.classList.remove("showed_modal");
@@ -250,25 +248,24 @@ const sessionsSection = document.querySelector(
   ".userInformationsContent.appointments"
 );
 
+const showAppointmentsBtn = document.querySelector(
+  ".show-content.appointments"
+);
 
-const showAppointmentsBtn = document.querySelector(".show-content.appointments");
-
-showAppointmentsBtn.addEventListener("click",()=>{
+showAppointmentsBtn.addEventListener("click", () => {
   // sessionsSection.classList
-  console.log("adada")
-  getAllAppointments()
-})
+  console.log("adada");
+  getAllAppointments();
+});
 // change states
 
-
-
 function getAllAppointments() {
-  console.log("dada")
+  console.log("dada");
   request
-    .getwithUrl(userID+"/getUsersAllSessions")
+    .getwithUrl(userID + "/getUsersAllSessions")
     .then((response) => {
       console.log(response);
-      APPOINTMENT_STATUS=Object.values(response.APPOINTMENT_STATUS)
+      APPOINTMENT_STATUS = Object.values(response.APPOINTMENT_STATUS);
       const sessionsTableBody = document.querySelector(".sessionTableBody");
       const sessionsTableRows = document.querySelectorAll(
         ".sessionTableBody tr"
@@ -303,9 +300,11 @@ function getAllAppointments() {
             ${session.doctor.name}
         </td>
         <td>
-          ${session.operations.map((item,i)=>`
+          ${session.operations.map(
+            (item, i) => `
                 ${item.operationName}
-          `)}
+          `
+          )}
         </td>
 
         
@@ -316,10 +315,14 @@ function getAllAppointments() {
 
         <td>
           <select name="" class="updateStateAppointment">
-          <option value="" disable hidden selected >${session.appointmentState}</option>
-          ${APPOINTMENT_STATUS.map((item)=>`
+          <option value="" disable hidden selected >${
+            session.appointmentState
+          }</option>
+          ${APPOINTMENT_STATUS.map(
+            (item) => `
           <option value="${item}" >${item}</option>
-          `)}
+          `
+          )}
             
           </select>
             
@@ -338,7 +341,7 @@ function getAllAppointments() {
         `;
       });
 
-      handleAppointmentEditBtn()
+      handleAppointmentEditBtn();
     })
     .catch((err) => {
       console.log(err);
@@ -356,18 +359,11 @@ const selectedProcessTable = document.querySelector(
 
 selectedProcessTable.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete_items_from_basket")) {
-    
     handleDeleteOperationBtn(e);
   }
   if (e.target.classList.contains("appointment-count")) {
-    e.target.addEventListener("change",handleAppointmentBtn(e))
-   
+    e.target.addEventListener("change", handleAppointmentBtn(e));
   }
-  
-
- 
-   
- 
 });
 
 let selectedOperations = [];
@@ -384,7 +380,7 @@ proccessType.addEventListener("change", () => {
     operationPrice: Number(
       proccessType.options[proccessType.options.selectedIndex].dataset.price
     ),
-    totalAppointments:1
+    totalAppointments: 1,
   });
 
   selectedOperations.forEach((element) => {
@@ -399,80 +395,74 @@ proccessType.addEventListener("change", () => {
     `;
   });
 
-  
- 
-  
-  calculateTotal()
+  calculateTotal();
   // remove selected proccess
 });
 
-let percentDiscount=document.querySelector("#percent_discount")
+let percentDiscount = document.querySelector("#percent_discount");
 
-percentDiscount.addEventListener("input",()=>{
-  calculateTotal()
-})
+percentDiscount.addEventListener("input", () => {
+  calculateTotal();
+});
 
-let totalValue=document.querySelector("#total_value")
+let totalValue = document.querySelector("#total_value");
 function calculateTotal() {
-  let percentDiscount=document.querySelector("#percent_discount").value
-  let selectedOperationsTotalValue=0
-  if (selectedOperations.length!==0) {
-    selectedOperationsTotalValue=selectedOperations.map((item)=>item.operationPrice).reduce((a,b)=>a+b)
+  let percentDiscount = document.querySelector("#percent_discount").value;
+  let selectedOperationsTotalValue = 0;
+  if (selectedOperations.length !== 0) {
+    selectedOperationsTotalValue = selectedOperations
+      .map((item) => item.operationPrice)
+      .reduce((a, b) => a + b);
   }
-  
 
   if (percentDiscount) {
-    totalValue.textContent=selectedOperationsTotalValue*((100-percentDiscount)/100)
-  }
-  else{
-    if (selectedOperations.length!==0) {
-      totalValue.textContent=selectedOperations.map((item)=>item.operationPrice).reduce((a,b)=>a+b)
+    totalValue.textContent =
+      selectedOperationsTotalValue * ((100 - percentDiscount) / 100);
+  } else {
+    if (selectedOperations.length !== 0) {
+      totalValue.textContent = selectedOperations
+        .map((item) => item.operationPrice)
+        .reduce((a, b) => a + b);
     } else {
-      totalValue.textContent=0
+      totalValue.textContent = 0;
     }
-    
   }
-  
-  
-  
 }
 function handleDeleteOperationBtn(e) {
-  
   let controlindex = selectedOperations.findIndex(
     (item) =>
       item.operationName ===
       e.target.parentElement.parentElement.dataset.operationname
   );
-  console.log(controlindex)
+  console.log(controlindex);
   selectedOperations.splice(controlindex, 1);
-  console.log(selectedOperations)
-  
+  console.log(selectedOperations);
+
   e.target.parentElement.parentElement.remove();
   calculateTotal();
 }
 function handleAppointmentBtn(e) {
-  console.log("burasu")
-  console.log(e)
-  let appointmentCount=document.querySelectorAll(".appointment-count")
-  appointmentCount.forEach(element => {
-    element.addEventListener("change",()=>{
+  console.log("burasu");
+  console.log(e);
+  let appointmentCount = document.querySelectorAll(".appointment-count");
+  appointmentCount.forEach((element) => {
+    element.addEventListener("change", () => {
       let controlindex = selectedOperations.findIndex(
         (item) =>
           item.operationName ===
           element.parentElement.parentElement.dataset.operationname
       );
-      console.log(controlindex)
-      selectedOperations[controlindex].totalAppointments=Number(element.value)
-    })
+      console.log(controlindex);
+      selectedOperations[controlindex].totalAppointments = Number(
+        element.value
+      );
+    });
   });
-  
-  console.log(selectedOperations)
-  
-  
+
+  console.log(selectedOperations);
 }
 
 // get payments from db
-
 
 const showPaymentsBtn = document.querySelector(".show-content.payment");
 const orderTable = document.querySelector(".order-table");
@@ -494,13 +484,10 @@ function getAllPayments() {
     });
 }
 
-
-paymentTable.addEventListener("change",(e)=>{
+paymentTable.addEventListener("change", (e) => {
   if (e.target.classList.contains("operations-edit-select")) {
-    
   }
-})
-
+});
 
 // get all operations
 
@@ -515,17 +502,15 @@ function getAllOperations() {
       ui.addResponseToTable(orderTable, response.data);
 
       handleOperationEditBtn();
-      handleİmageBtn()
-      handleshowSessionsBtn()
-      showImagesBtn()
-      editDatasBtn()
-      
+      handleİmageBtn();
+      handleshowSessionsBtn();
+      showImagesBtn();
+      editDatasBtn();
     })
     .catch((err) => {
       ui.showModal(false, err.message);
     });
 }
-
 
 // order modal processes
 
@@ -540,23 +525,22 @@ orderModalBtn.addEventListener("click", () => {
 const addOrderBtn = document.querySelector("#add-order");
 
 addOrderBtn.addEventListener("click", () => {
-  
   let data = {
     selectedOperations,
-    discount:Number(percentDiscount.value)
+    discount: Number(percentDiscount.value),
   };
-  
+
   request
     .postWithUrl("./" + userID + "/addOperation", data)
     .then((response) => {
       ui.showModal(response.succes, response.message);
       modalOrders.classList.toggle("showed_modal");
-      selectedProcessTable.innerHTML=""
-      selectedOperations=[]
-      percentDiscount.value=0
-      proccessType.innerHTML+=`<option value="" selected disabled hidden>İşlem seçiniz</option>`
-      
-      calculateTotal()
+      selectedProcessTable.innerHTML = "";
+      selectedOperations = [];
+      percentDiscount.value = 0;
+      proccessType.innerHTML += `<option value="" selected disabled hidden>İşlem seçiniz</option>`;
+
+      calculateTotal();
       getAllOperations();
     })
     .catch((err) => console.log(err));
@@ -568,7 +552,7 @@ function handleİmageBtn() {
   const imageBtns = document.querySelectorAll(".fa-solid.fa-folder-plus");
   imageBtns.forEach((element) => {
     element.addEventListener("click", (e) => {
-      console.log("jjjj")
+      console.log("jjjj");
       console.log(e.target.parentElement.parentElement.dataset.operationid);
       addPictureForm.dataset.operationid =
         e.target.parentElement.parentElement.dataset.operationid;
@@ -580,12 +564,12 @@ function handleshowSessionsBtn() {
   const showSessionBtns = document.querySelectorAll(".show-sessions");
   showSessionBtns.forEach((element) => {
     element.addEventListener("click", (e) => {
-      console.log("kkk")
-      console.log(e.target.parentElement.nextElementSibling)
-      e.target.parentElement.parentElement.nextElementSibling.classList.toggle("showed")
-      e.target.classList.toggle("asc")
-      
-      
+      console.log("kkk");
+      console.log(e.target.parentElement.nextElementSibling);
+      e.target.parentElement.parentElement.nextElementSibling.classList.toggle(
+        "showed"
+      );
+      e.target.classList.toggle("asc");
     });
   });
 }
@@ -595,14 +579,13 @@ function handleOperationEditBtn() {
   editSelectBtns.forEach((element) => {
     element.addEventListener("change", (e) => {
       const operationId =
-        e.target.parentElement.parentElement.dataset
-          .operationid;
+        e.target.parentElement.parentElement.dataset.operationid;
       if (e.target.options[e.target.options.selectedIndex].value === "delete") {
         if (confirm("işlem silinecek onaylıyor musunuz?")) {
           request
             .getwithUrl("./" + userID + "/deleteOperation/" + operationId)
             .then((response) => {
-              console.log(response)
+              console.log(response);
               ui.showModal(response.succes, response.message);
 
               getAllOperations();
@@ -626,10 +609,10 @@ function handleOperationEditBtn() {
         addSessionForm.dataset.operationid =
           e.target.parentElement.parentElement.dataset.operationid;
       }
-      
 
       if (
-        e.target.options[e.target.options.selectedIndex].value === "add-discount"
+        e.target.options[e.target.options.selectedIndex].value ===
+        "add-discount"
       ) {
         addDiscountModal.classList.toggle("showed_modal");
 
@@ -640,38 +623,34 @@ function handleOperationEditBtn() {
   });
 }
 
-
 function handlePaymentEditBtn() {
   const editSelectBtns = document.querySelectorAll(".payments-edit-select");
 
   editSelectBtns.forEach((element) => {
     element.addEventListener("change", (e) => {
-      const paymentID =
-        e.target.parentElement.parentElement.dataset
-          .paymentid;
-      if (e.target.options[e.target.options.selectedIndex].value === "delete-payment") {
+      const paymentID = e.target.parentElement.parentElement.dataset.paymentid;
+      if (
+        e.target.options[e.target.options.selectedIndex].value ===
+        "delete-payment"
+      ) {
         if (confirm("ödeme silinecek onaylıyor musunuz?")) {
           request
-          .getwithUrl("../payments/" + paymentID + "/deletePayment")
+            .getwithUrl("../payments/" + paymentID + "/deletePayment")
             .then((response) => {
-              console.log(response)
+              console.log(response);
               ui.showModal(response.succes, response.message);
-              calculatetTotalPriceforEdit()
+              calculatetTotalPriceforEdit();
               getAllPayments();
-              
             })
             .catch((err) => ui.showModal(false, err.message));
         }
       }
       if (
-        e.target.options[e.target.options.selectedIndex].value === "edit-payment"
+        e.target.options[e.target.options.selectedIndex].value ===
+        "edit-payment"
       ) {
-       
-        handleEditPaymentModal(e)
-        
+        handleEditPaymentModal(e);
       }
-
-   
     });
   });
 }
@@ -698,17 +677,17 @@ const saveEditModal = document.querySelector(
 const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
 );
-let selectedOperationsforEdit=[]
+let selectedOperationsforEdit = [];
 function handleEditPaymentModal(e) {
- console.log("burası")
+  console.log("burası");
   let editedPayment = e.target.parentElement.parentElement.dataset.paymentid;
-  let editPaymentForm=document.querySelector("#edit-payment-form")
-  
+  let editPaymentForm = document.querySelector("#edit-payment-form");
+
   request
     .getwithUrl("../payments/" + editedPayment)
     .then((response) => {
       console.log(response);
-      selectedOperationsforEdit=response.data
+      selectedOperationsforEdit = response.data;
       editPaymentModal.classList.add("showed_modal");
       selected_proccess_table_edit.innerHTML = "";
 
@@ -717,7 +696,8 @@ function handleEditPaymentModal(e) {
       } else {
         paymentCreditCartRatio.checked = true;
       }
-      editPaymentForm.dataset.paymentid = e.target.parentElement.parentElement.dataset.paymentid;
+      editPaymentForm.dataset.paymentid =
+        e.target.parentElement.parentElement.dataset.paymentid;
       paymentUserEdit.value =
         response.data.fromUser.name + " " + response.data.fromUser.surname;
 
@@ -764,12 +744,12 @@ function handleEditPaymentModal(e) {
            
             `;
       });
-      
-      selectedOperationsforEdit=[]
+
+      selectedOperationsforEdit = [];
       response.data.operations.forEach((element) => {
         selectedOperationsforEdit.push(element);
       });
-      
+
       calculatetTotalPriceforEdit();
     })
     .catch((err) => {
@@ -807,7 +787,7 @@ function calculatetTotalPriceforEdit() {
   console.log("calculating2");
 
   let totalValueforEdit = document.querySelector("#total_value_edit");
-  
+
   let paymentValues = selectedOperationsforEdit.map(
     (element) => element.paymentValue
   );
@@ -819,25 +799,29 @@ function calculatetTotalPriceforEdit() {
   }
 }
 
-
-saveEditModal.addEventListener("click",(e) => {
+saveEditModal.addEventListener("click", (e) => {
   e.preventDefault();
   let data = {
-    paymentId:e.target.parentElement.dataset.paymentid ,
+    paymentId: e.target.parentElement.dataset.paymentid,
     cashOrCard: editPaymentForm.cashOrCard.value,
     description: editPaymentForm.description.value,
     operations: selectedOperationsforEdit,
   };
   console.log(data);
 
-    request
-    .postWithUrl("../payments/" + e.target.parentElement.dataset.paymentid + "/editPayment", data)
+  request
+    .postWithUrl(
+      "../payments/" +
+        e.target.parentElement.dataset.paymentid +
+        "/editPayment",
+      data
+    )
     .then((response) => {
-      console.log(response)
+      console.log(response);
       ui.showModal(true, response.message);
       editPaymentModal.classList.toggle("showed_modal");
       setTimeout(() => {
-        window.location.reload()
+        window.location.reload();
       }, 1000);
     })
     .catch((err) => console.log(err));
@@ -845,42 +829,51 @@ saveEditModal.addEventListener("click",(e) => {
 });
 
 function handleAppointmentEditBtn() {
-  
   const editSelectBtns = document.querySelectorAll(".appointment-edit-select");
-  const updateStateAppointment = document.querySelectorAll(".updateStateAppointment");
+  const updateStateAppointment = document.querySelectorAll(
+    ".updateStateAppointment"
+  );
 
   updateStateAppointment.forEach((element) => {
     element.addEventListener("change", (e) => {
-      
       const appointmentID =
-        e.target.parentElement.parentElement.dataset.appointmentid
-          
-        request
-        .getwithUrl("../"+"appointments/"+ appointmentID+ "/updateStateAppointment/?state="+e.target.value)
+        e.target.parentElement.parentElement.dataset.appointmentid;
+
+      request
+        .getwithUrl(
+          "../" +
+            "appointments/" +
+            appointmentID +
+            "/updateStateAppointment/?state=" +
+            e.target.value
+        )
         .then((response) => {
-          console.log(response)
+          console.log(response);
           ui.showModal(true, response.message);
 
           getAllAppointments();
         })
         .catch((err) => ui.showModal(false, err.message));
-
     });
-  
-  })
+  });
 
   editSelectBtns.forEach((element) => {
     element.addEventListener("change", (e) => {
-      
       const appointmentID =
-        e.target.parentElement.parentElement.dataset.appointmentid
-          console.log(appointmentID)
-      if (e.target.options[e.target.options.selectedIndex].classList.contains("delete-appointment")) {
+        e.target.parentElement.parentElement.dataset.appointmentid;
+      console.log(appointmentID);
+      if (
+        e.target.options[e.target.options.selectedIndex].classList.contains(
+          "delete-appointment"
+        )
+      ) {
         if (confirm("Randevu silinecek onaylıyor musunuz??")) {
           request
-            .getwithUrl("../"+"appointments/" +appointmentID+ "/deleteAppointment")
+            .getwithUrl(
+              "../" + "appointments/" + appointmentID + "/deleteAppointment"
+            )
             .then((response) => {
-              console.log(response)
+              console.log(response);
               ui.showModal(true, response.message);
 
               getAllAppointments();
@@ -889,55 +882,55 @@ function handleAppointmentEditBtn() {
         }
       }
       if (
-        e.target.options[e.target.options.selectedIndex].classList.contains("updateStateAppointment")
+        e.target.options[e.target.options.selectedIndex].classList.contains(
+          "updateStateAppointment"
+        )
       ) {
         request
-        .postWithUrl("../"+"appointments/"+ appointmentID+ "/updateStateAppointment",{state:e.target.value})
-        .then((response) => {
-          console.log(response)
-          ui.showModal(true, response.message);
+          .postWithUrl(
+            "../" + "appointments/" + appointmentID + "/updateStateAppointment",
+            { state: e.target.value }
+          )
+          .then((response) => {
+            console.log(response);
+            ui.showModal(true, response.message);
 
-          getAllAppointments();
-        })
-        .catch((err) => ui.showModal(false, err.message));
-
-        
+            getAllAppointments();
+          })
+          .catch((err) => ui.showModal(false, err.message));
       }
     });
   });
 }
 
-
-
 addDataSaveButton.addEventListener("click", (e) => {
   e.preventDefault();
 
-  let data={}
-  
- 
-  if (datasSelectInput.options.selectedIndex===-1) {
-     data = {
-        dataName:
+  let data = {};
+
+  if (datasSelectInput.options.selectedIndex === -1) {
+    data = {
+      dataName:
         datasSelectInput.options[
           datasSelectInput.options.selectedIndex
-          ].textContent.trim(),
-        data:datasOptionsSelectInput.value
-      };
-  }else{
-     data = {
-        dataName:
+        ].textContent.trim(),
+      data: datasOptionsSelectInput.value,
+    };
+  } else {
+    data = {
+      dataName:
         datasSelectInput.options[
           datasSelectInput.options.selectedIndex
-          ].textContent.trim(),
-          data: dataOptionNumberValue.value,
-      };
+        ].textContent.trim(),
+      data: dataOptionNumberValue.value,
+    };
   }
-
-
 
   request
     .postWithUrl(
-      "../operations/" + addDataForm.dataset.operationid + "/addDataToOperation",
+      "../operations/" +
+        addDataForm.dataset.operationid +
+        "/addDataToOperation",
       data
     )
     .then((response) => {
@@ -957,7 +950,9 @@ addDSessionSaveButton.addEventListener("click", (e) => {
 
   request
     .postWithUrl(
-      "../operations/" + addSessionForm.dataset.operationid + "/addSessionToOperation",
+      "../operations/" +
+        addSessionForm.dataset.operationid +
+        "/addSessionToOperation",
       data
     )
     .then((response) => {
@@ -993,23 +988,25 @@ function showImagesBtn() {
 }
 
 function addDiscount(e) {
-  e.preventDefault()
-  let data={
-    discount:addDiscountForm.discountValue.value
-  }
-  
-  request.postWithUrl("./"+userID+"/addDiscountToOperation/"+e.target.dataset.operationid,data)
-  .then(response=>{
-    ui.showModal(response.succes,response.message)
-    getAllOperations()
-  })
-  .catch(err=>console.log(err))
+  e.preventDefault();
+  let data = {
+    discount: addDiscountForm.discountValue.value,
+  };
+
+  request
+    .postWithUrl(
+      "./" + userID + "/addDiscountToOperation/" + e.target.dataset.operationid,
+      data
+    )
+    .then((response) => {
+      ui.showModal(response.succes, response.message);
+      getAllOperations();
+    })
+    .catch((err) => console.log(err));
 }
 
 function editDatasBtn() {
-  let operationDataEditBtns = document.querySelectorAll(
-    ".edit-operation-data"
-  );
+  let operationDataEditBtns = document.querySelectorAll(".edit-operation-data");
   let operationDataDeleteBtns = document.querySelectorAll(
     ".delete-operation-data"
   );
@@ -1034,7 +1031,7 @@ function editDatasBtn() {
   });
   operationDataEditBtns.forEach((element) => {
     element.addEventListener("click", async (e) => {
-      console.log("dada")
+      console.log("dada");
       let operationDataEditForm = document.querySelectorAll("#edit-data-form");
       let operationDataName = document.querySelector("#dataName");
       let editDatasOptionSelect = document.querySelector("#edit_data_option");
@@ -1076,7 +1073,10 @@ function editDatasBtn() {
         e.preventDefault();
         request
           .postWithUrl(
-            "/admin/operations/"+operationId+"/editDataofOperation/"+ dataId ,
+            "/admin/operations/" +
+              operationId +
+              "/editDataofOperation/" +
+              dataId,
             data
           )
           .then((response) => {
@@ -1091,7 +1091,6 @@ function editDatasBtn() {
     });
   });
 }
-
 
 // close the slider modal
 
@@ -1149,6 +1148,8 @@ function addPicture(e) {
 //tables sorting
 
 const tableElements = document.querySelectorAll("table");
+
+
 
 tableElements.forEach((table) => {
   table.querySelectorAll("thead th").forEach((head, columnIndex) => {
