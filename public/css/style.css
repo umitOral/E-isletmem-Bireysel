@@ -630,9 +630,10 @@ table th.active.fa-solid.fa-arrow-up {
 .fa-solid.fa-arrow-up {
   font-size: 1.1rem;
   margin-left: 0.3rem;
+  padding: 0.2rem 0.3rem;
 }
 .fa-solid.fa-arrow-up:hover {
-  border: 1px solid rgba(128, 128, 128, 0.418);
+  outline: 1px solid rgba(128, 128, 128, 0.418);
   border-radius: 50%;
   padding: 0.2rem 0.3rem;
   color: var(--color-success);

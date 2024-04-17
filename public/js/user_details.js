@@ -1145,16 +1145,3 @@ function addPicture(e) {
   e.preventDefault();
 }
 
-//tables sorting
-
-const tableElements = document.querySelectorAll("table");
-
-
-
-tableElements.forEach((table) => {
-  table.querySelectorAll("thead th").forEach((head, columnIndex) => {
-    head.addEventListener("click", () => {
-      tables.sortingStart(table, columnIndex);
-    });
-  });
-});

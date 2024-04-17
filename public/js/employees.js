@@ -3,6 +3,7 @@ const ui = new UI();
 import { Request } from "./requests.js";
 const request = new Request();
 
+
 const savebutton = document.querySelector(".save_button");
 const form = document.querySelector("#register-form");
 
@@ -58,7 +59,7 @@ function closeModalAddCostumer(e) {
 
 
 const adminColumn=document.querySelector("#userList")
-console.log(adminColumn.children[0].children[5])
+
 adminColumn.children[0].children[5].firstChild.style=`
 pointer-events: none !important;
 cursor: default;

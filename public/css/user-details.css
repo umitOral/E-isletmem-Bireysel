@@ -189,9 +189,6 @@
   display: block;
   transition: all 1s ease;
 }
-.asc{
-  transform: rotate(180deg);
-}
 
 .userInformationsContent.generals,
 .sessions,
