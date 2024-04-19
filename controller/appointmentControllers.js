@@ -1,12 +1,13 @@
 import Session from "../models/sessionModel.js";
 import Operation from "../models/OperationsModel.js";
+import {CustomError} from "../helpers/error/CustomError.js";
 // import Order from '../models/OrderModel.js';
 import {
   OPERATION_STATUS,
   OPERATION_STATUS_AUTOMATIC,
 } from "../config/status_list.js";
 
-const createAppointment = async (req, res) => {
+const createAppointment = async (req,res,next) => {
   try {
     console.log(req.body);
 
@@ -75,15 +76,12 @@ const createAppointment = async (req, res) => {
       message: "randevu başarıyla eklenmiştir",
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "create session error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
+
   }
 };
 
-const deleteAppointment = async (req, res) => {
+const deleteAppointment = async (req,res,next) => {
   try {
     console.log("delete appointment");
 
@@ -117,13 +115,11 @@ const deleteAppointment = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "delete session error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
+
   }
 };
-const updateStateAppointment = async (req, res) => {
+const updateStateAppointment = async (req,res,next) => {
   try {
     console.log("updateStateAppointment");
     console.log(req.query);
@@ -141,13 +137,10 @@ const updateStateAppointment = async (req, res) => {
       data: req.query.state,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "Sunucuda bir hata yaşandı lütfen tekrar deneyiniz",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const updateAppointment = async (req, res) => {
+const updateAppointment = async (req,res,next) => {
   try {
     console.log("uptt");
     console.log(req.body);
@@ -158,13 +151,11 @@ const updateAppointment = async (req, res) => {
       message: "randevu bilgileri değişti",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "update session error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
+
   }
 };
-const getAppointment = async (req, res) => {
+const getAppointment = async (req,res,next) => {
   try {
     const session = await Session.findById(req.params.id).populate("user");
 
@@ -173,10 +164,8 @@ const getAppointment = async (req, res) => {
       data: session,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "update session error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
+
   }
 };
 

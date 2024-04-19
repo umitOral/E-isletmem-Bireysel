@@ -570,7 +570,8 @@ addPaymentFrom.addEventListener("submit", (e) => {
   request
     .postWithUrl("./payments/addPayment", data)
     .then((response) => {
-      ui.showModal(true, response.message);
+      console.log(response)
+      ui.showModal(response.success, response.message);
       setTimeout(() => {
         window.location.reload();
       }, 500);

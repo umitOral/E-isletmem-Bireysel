@@ -1,78 +1,79 @@
+import { CustomError } from "../helpers/error/CustomError.js";
 import Operation from "../models/OperationsModel.js";
 import Payment from "../models/paymentsModel.js";
-import mongoose from "mongoose";
 
-const addPayment = async (req, res) => {
+
+const addPayment = async (req, res,next) => {
   try {
     req.body.company = res.locals.company._id;
+    await Payment.create(req.body)
+      .then((response) => {
+        req.body.operations.forEach(async (element) => {
+          let foundedOperation = await Operation.findOne({
+            _id: element.operationId,
+          });
 
-    await Payment.create(req.body).then((response) => {
-      req.body.operations.forEach(async (element) => {
-        let foundedOperation = await Operation.findOne({
-          _id: element.operationId,
+          if (foundedOperation.payments.length !== 0) {
+            let totalPayments = foundedOperation.payments.map(
+              (item) => item.paymentValue
+            );
+            let totalPaymentValue =
+              totalPayments.reduce((a, b) => a + b) + element.paymentValue;
+            console.log(totalPaymentValue);
+            if (
+              (foundedOperation.operationPrice - foundedOperation.discount) *
+                ((100 - foundedOperation.percentDiscount) / 100) ===
+              totalPaymentValue
+            ) {
+              foundedOperation.payments.push({
+                paymentId: response._id,
+                paymentValue: element.paymentValue,
+              });
+              foundedOperation.paymentStatus = "ödendi";
+            } else {
+              foundedOperation.payments.push({
+                paymentId: response._id,
+                paymentValue: element.paymentValue,
+              });
+            }
+          } else {
+            let totalPaymentValue = element.paymentValue;
+            if (
+              (foundedOperation.operationPrice - foundedOperation.discount) *
+                ((100 - foundedOperation.percentDiscount) / 100) ===
+              totalPaymentValue
+            ) {
+              foundedOperation.payments.push({
+                paymentId: response._id,
+                paymentValue: element.paymentValue,
+              });
+              foundedOperation.paymentStatus = "ödendi";
+            } else {
+              foundedOperation.payments.push({
+                paymentId: response._id,
+                paymentValue: element.paymentValue,
+              });
+            }
+          }
+          foundedOperation.paidValue =
+            foundedOperation.paidValue + element.paymentValue;
+          await foundedOperation.save();
         });
-
-        if (foundedOperation.payments.length !== 0) {
-          let totalPayments = foundedOperation.payments.map(
-            (item) => item.paymentValue
-          );
-          let totalPaymentValue =
-            totalPayments.reduce((a, b) => a + b) + element.paymentValue;
-          console.log(totalPaymentValue);
-          if (
-            (foundedOperation.operationPrice - foundedOperation.discount) *
-              ((100 - foundedOperation.percentDiscount) / 100) ===
-            totalPaymentValue
-          ) {
-            foundedOperation.payments.push({
-              paymentId: response._id,
-              paymentValue: element.paymentValue,
-            });
-            foundedOperation.paymentStatus = "ödendi";
-          } else {
-            foundedOperation.payments.push({
-              paymentId: response._id,
-              paymentValue: element.paymentValue,
-            });
-          }
-        } else {
-          let totalPaymentValue = element.paymentValue;
-          if (
-            (foundedOperation.operationPrice - foundedOperation.discount) *
-              ((100 - foundedOperation.percentDiscount) / 100) ===
-            totalPaymentValue
-          ) {
-            foundedOperation.payments.push({
-              paymentId: response._id,
-              paymentValue: element.paymentValue,
-            });
-            foundedOperation.paymentStatus = "ödendi";
-          } else {
-            foundedOperation.payments.push({
-              paymentId: response._id,
-              paymentValue: element.paymentValue,
-            });
-          }
-        }
-        foundedOperation.paidValue =
-          foundedOperation.paidValue + element.paymentValue;
-        foundedOperation.save();
+      })
+      .catch((err) => {
+        return new CustomError(err);
       });
-    });
 
     res.status(200).json({
       success: true,
       message: "Ödeme kaydedildi",
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+   
   }
 };
-const addExpense = async (req, res) => {
+
+const addExpense = async (req, res,next) => {
   try {
     req.body.company = res.locals.company._id;
     req.body.totalPrice = req.body.totalPrice * -1;
@@ -81,14 +82,13 @@ const addExpense = async (req, res) => {
 
     res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "addExpense error",
-    });
+    return next(
+      new CustomError("bilinmeyen hata", 500, error)
+    );
   }
 };
 
-const getSinglePayment = async (req, res) => {
+const getSinglePayment = async (req, res, next) => {
   try {
     const payment = await Payment.findById(req.params.id)
       .populate("fromUser", ["name", "surname"])
@@ -107,13 +107,11 @@ const getSinglePayment = async (req, res) => {
       message: "ödeme çekildi",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const deletePayment = async (req, res) => {
+
+const deletePayment = async (req, res, next) => {
   try {
     const payment = await Payment.findByIdAndDelete(req.params.id);
 
@@ -134,14 +132,10 @@ const deletePayment = async (req, res) => {
       message: "ödeme silindi",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
-  }
 };
+}
 
-const editPayment = async (req, res) => {
+const editPayment = async (req, res, next) => {
   try {
     let requestPayments = req.body.operations.map((item) => item.operationId);
 
@@ -179,9 +173,6 @@ const editPayment = async (req, res) => {
         await Payment.findByIdAndUpdate(req.body.paymentId, {
           $set: { totalPrice: totalPrice },
         });
-        
-       
-
       } else {
         // let _id = new mongoose.Types.ObjectId(req.body.paymentId);
 
@@ -229,7 +220,6 @@ const editPayment = async (req, res) => {
           .map((item) => item.paymentValue)
           .reduce((a, b) => a + b);
         await modifiedPayment.save();
-        
       }
     });
 
@@ -237,18 +227,13 @@ const editPayment = async (req, res) => {
       success: true,
       message: "ödeme düzenlendi.",
     });
-  
-  } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "payment controller error",
-    });
+  } catch (error) {return next(
+    new CustomError("bilinmeyen hata", 500, error)
+  );
   }
 };
-const getSearchedPayments = async (req, res) => {
+const getSearchedPayments = async (req, res, next) => {
   try {
-
-
     function toDateInputValue(dateObject) {
       const local = new Date(dateObject);
       local.setMinutes(
@@ -260,7 +245,7 @@ const getSearchedPayments = async (req, res) => {
     let startDate = toDateInputValue(new Date(req.query.startDate));
 
     let endDate = toDateInputValue(new Date(req.query.endDate));
-   
+
     console.log(startDate);
     console.log(endDate);
     const payments = await Payment.find({
@@ -303,10 +288,9 @@ const getSearchedPayments = async (req, res) => {
       netCash,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(
+      new CustomError("bilinmeyen hata", 500, error)
+    );
   }
 };
 
@@ -317,4 +301,4 @@ export {
   addExpense,
   editPayment,
   getSinglePayment,
-};
+}

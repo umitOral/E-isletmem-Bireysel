@@ -62,21 +62,18 @@
 
                             </thead>
                             <tbody id="userList">
-                                <% for( let index = 0; index < 10; index++ ) { %>
-
-                                    <tr>
-                                       <td>
-                                        <%= locals.usersNames[index].name %>
-                                    </td>
+                               <% locals.usersNames.forEach(element => { %>
+                                <tr>
                                     <td>
-                                        <%= locals.usersNames[index].surname %>
-                                    </td>
+                                     <%= element.name %>
+                                 </td>
+                                 <td>
+                                     <%= element.surname %>
+                                 </td>
 
-                                    <td class="details"><a  href="./users/<%= locals.usersNames[index]._id %>">Detay</a></td>  
-                                    </tr>
-                                   
-                                <% } %>
-
+                                 <td class="details"><a  href="./users/<%= element._id %>">Detay</a></td>  
+                                 </tr>
+                               <% }) %>
                              
 
 

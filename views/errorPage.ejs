@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../css/sessions.css">
+
+    <%- include('partials/head.ejs') %>
+
+        <script src="/js/inner_modules/closeModal.js"></script>
+</head>
+
+<body>
+
+    <%- include('partials/aside.ejs') %>
+        <section id="content">
+            <!---------- left aside ------------->
+
+            <%- include('partials/header.ejs') %>
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <div class="header" style="text-align: center;">
+                        <h1> <%= message %></h1>
+                        <h2> yöneticinize başvurun</h2>
+                        
+                        <h3><%= error; %></h3>
+                    </div>
+
+                    <div class="main main-sessions">
+
+
+                        <script
+                            src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+                        <lottie-player src="https://lottie.host/b8efa71d-061d-4879-af29-59f12ab73c04/YmAr6aNMim.json"
+                            background="##fff" speed="1" style="width: 30%; height: auto; margin: 0 auto;" loop  autoplay
+                            direction="1" mode="normal"></lottie-player>
+
+
+                    </div>
+                </main>
+
+
+
+
+        </section>
+
+
+
+
+
+
+
+        <script src="/js/sidebar.js"></script>
+
+</body>
+
+</html>

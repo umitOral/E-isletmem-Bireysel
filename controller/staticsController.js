@@ -1,9 +1,10 @@
 import User from '../models/userModel.js';
 import Payment from '../models/paymentsModel.js';
+import {CustomError} from '../helpers/error/CustomError.js';
 
 
 
-const getSexStaticsWithFilter = async (req, res) => {
+const getSexStaticsWithFilter = async (req, res,next) => {
     try {
         console.log(req.query)
         let startDate = new Date(req.query.startDate)
@@ -43,13 +44,10 @@ const getSexStaticsWithFilter = async (req, res) => {
         
 
     } catch (error) {
-        res.status(500).json({
-            succes: false,
-            message: "usercontroller error"
-        })
+        return next(new CustomError("bilinmeyen hata", 500, error));
     }
 }
-const getNewUserStaticswithFilter = async (req, res) => {
+const getNewUserStaticswithFilter = async (req, res,next) => {
     try {
         const users = await User.count({
             company: res.locals.company._id,
@@ -66,13 +64,10 @@ const getNewUserStaticswithFilter = async (req, res) => {
         
 
     } catch (error) {
-        res.status(500).json({
-            succes: false,
-            message: "statics error"
-        })
+        return next(new CustomError("bilinmeyen hata", 500, error));
     }
 }
-const getPaymentStaticsWithFilter = async (req, res) => {
+const getPaymentStaticsWithFilter = async (req, res,next) => {
     try {
 
         let startDate = new Date(req.query.startDate)
@@ -107,10 +102,7 @@ const getPaymentStaticsWithFilter = async (req, res) => {
 
 
     } catch (error) {
-        res.status(500).json({
-            succes: false,
-            message: "usercontroller error"
-        })
+        return next(new CustomError("bilinmeyen hata", 500, error));
     }
 }
 

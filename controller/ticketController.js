@@ -1,21 +1,14 @@
+import { Ticket } from "../models/ticketModel.js";
+import { CustomError } from "../helpers/error/CustomError.js";
 
-import {Ticket} from '../models/ticketModel.js'
+const answerTicket = async (req, res,next) => {
+  try {
+    const ticket = await Ticket.findByIdAndUpdate(req.params.id, {});
 
-const answerTicket = async (req, res) => {
-    try {
-      const ticket = await Ticket.findByIdAndUpdate(req.params.id,{
-        
-      });
-  
-      res.redirect("back");
-    } catch (error) {
-      res.status(500).json({
-        succes: false,
-        message: "delete error",
-      });
-    }
-  };
-
-  export {
-    answerTicket
+    res.redirect("back");
+  } catch (error) {
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
+};
+
+export { answerTicket };

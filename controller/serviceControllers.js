@@ -1,8 +1,9 @@
 import Company from "../models/companyModel.js";
+import {CustomError} from '../helpers/error/CustomError.js'
 
 import { v4 as uuidv4 } from "uuid";
 
-const addService = async (req, res) => {
+const addService = async (req, res,next) => {
   try {
     console.log(res.locals.company._id);
 
@@ -20,13 +21,10 @@ const addService = async (req, res) => {
 
     res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const deactivateService = async (req, res) => {
+const deactivateService = async (req, res,next) => {
   try {
    
     await Company.updateOne(
@@ -42,13 +40,10 @@ const deactivateService = async (req, res) => {
     );
     res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const activateService = async (req, res) => {
+const activateService = async (req, res,next) => {
   try {
     await Company.updateOne(
       { "services._id": req.params.id },
@@ -63,13 +58,10 @@ const activateService = async (req, res) => {
     );
     res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const findServices = async (req, res) => {
+const findServices = async (req, res,next) => {
   try {
     //search
     let query = Service.find();
@@ -127,17 +119,13 @@ const findServices = async (req, res) => {
       link: "users",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const editService = async (req, res) => {
+const editService = async (req, res,next) => {
   try {
-    
-    
+
     await Company.updateOne(
       { "services._id": req.params.id },
       {
@@ -156,10 +144,7 @@ const editService = async (req, res) => {
       message:"hizmet adı başarıyla değiştirildi."
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Sunucuda bir sorun oluştu,tekrar deneyiniz",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 

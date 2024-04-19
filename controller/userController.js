@@ -48,9 +48,9 @@ const createCompany = async (req, res, next) => {
     });
 
     if (data.password !== data.password2) {
-      return next(new Error("Girdiğiniz şifreler farklıdır", 400));
+      return next(new CustomError("Girdiğiniz şifreler farklıdır", 400));
     }
-    console.log(data);
+
     const company = await Company.create(data);
     data.role = "yönetici";
     data.company = company._id;
@@ -65,36 +65,29 @@ const createCompany = async (req, res, next) => {
     await Subscription.create(subscriptionData);
     next();
   } catch (error) {
-    return next(error);
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const deactivateEmployee = async (req, res) => {
+const deactivateEmployee = async (req, res, next) => {
   try {
     console.log("başarılı");
 
     await Employee.findByIdAndUpdate(req.params.id, { activeOrNot: false });
     res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller delete error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const activateEmployee = async (req, res) => {
+const activateEmployee = async (req, res, next) => {
   try {
     await Employee.findByIdAndUpdate(req.params.id, { activeOrNot: true });
     res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller activate error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getUsersAllSessions = async (req, res) => {
-  console.log(req.params);
+const getUsersAllSessions = async (req, res, next) => {
   try {
     const sessions = await Session.find({ user: req.params.id }).populate([
       "doctor",
@@ -108,13 +101,10 @@ const getUsersAllSessions = async (req, res) => {
       message: "seanslar başarıyla çekildi",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "api hatası",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const findUsers = async (req, res) => {
+const findUsers = async (req, res, next) => {
   try {
     //search
     let query = User.find();
@@ -175,13 +165,10 @@ const findUsers = async (req, res) => {
       defaultSearchValue: req.query.user,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const findSingleUser = async (req, res) => {
+const findSingleUser = async (req, res,next) => {
   try {
     //search
 
@@ -206,13 +193,10 @@ const findSingleUser = async (req, res) => {
       data: data,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const findEmployees = async (req, res) => {
+const findEmployees = async (req, res,next) => {
   try {
     //search
     let query = User.find();
@@ -272,14 +256,11 @@ const findEmployees = async (req, res) => {
       link: "users",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "usercontroller error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   try {
     const userEmail = req.body.email;
     req.body.company = res.locals.company;
@@ -287,10 +268,12 @@ const createUser = async (req, res) => {
     const searchEmail = await User.findOne({ email: userEmail });
 
     if (searchEmail && !searchEmail === "") {
-      res.json({
-        success: false,
-        message: "bu mail adresi kullanılmaktadır.",
-      });
+      return next(
+        new CustomError(
+          "Bu mail adresi ile kayıtlı kullanıcı bulunmaktadır",
+          400
+        )
+      );
     } else {
       await User.create(req.body).then((response) => {
         jwt.verify(
@@ -327,13 +310,10 @@ const createUser = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "bir sorunla karşılaşıldı. Tekrar deneyin",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const editInformations = async (req, res) => {
+const editInformations = async (req, res,next) => {
   try {
     console.log(req.body);
     await User.findByIdAndUpdate(req.params.id, {
@@ -351,17 +331,14 @@ const editInformations = async (req, res) => {
     });
     res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
 const loginUser = async (req, res, next) => {
   try {
     let same = false;
-
+   
     const employee = await Employee.findOne({ email: req.body.email });
 
     if (employee) {
@@ -408,20 +385,17 @@ const loginUser = async (req, res, next) => {
           message: "Giriş Başarılı,yönlendiriliyorsunuz",
         });
       } else {
-        return next(new Error("Kullanıcı adı veya şifresi yanlış", 400));
+        return next(new CustomError("Kullanıcı adı veya şifresi yanlış", 400));
       }
     } else {
-      return next(new Error("Kayıtlı kullanıcı bulunamadı", 400));
+      return next(new CustomError("Kayıtlı kullanıcı bulunamadı", 400));
     }
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Girişte sistemsel bir hata oluştu.",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const uploadPictures = async (req, res) => {
+const uploadPictures = async (req, res, next) => {
   try {
     console.log(req.body);
     const cloudinaryImageUploadMethod = async (file) => {
@@ -484,15 +458,11 @@ const uploadPictures = async (req, res) => {
       message: "resim başarıyla eklendi",
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const addDataToOperation = async (req, res) => {
+const addDataToOperation = async (req, res, next) => {
   try {
     console.log("addd data operaiton");
     console.log(req.body);
@@ -521,15 +491,11 @@ const addDataToOperation = async (req, res) => {
       message: "veri başarıyla eklendi",
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const addOperation = async (req, res) => {
+const addOperation = async (req, res, next) => {
   try {
     console.log(req.body);
     console.log(req.params);
@@ -551,14 +517,10 @@ const addOperation = async (req, res) => {
       message: "işlem başarıyla eklendi",
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      succes: false,
-      message: "işlem eklenirken bir hata oluştu.",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const addDiscountToOperation = async (req, res) => {
+const addDiscountToOperation = async (req, res, next) => {
   try {
     console.log(req.body);
     console.log(req.params);
@@ -572,14 +534,10 @@ const addDiscountToOperation = async (req, res) => {
       message: "işlem başarıyla eklendi",
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      succes: false,
-      message: "işlem eklenirken bir hata oluştu.",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const addOperationInsideAppointment = async (req, res) => {
+const addOperationInsideAppointment = async (req, res, next) => {
   try {
     console.log(req.body);
     console.log(req.params);
@@ -611,13 +569,10 @@ const addOperationInsideAppointment = async (req, res) => {
       message: "işlem başarıyla eklendi",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "işlem eklenirken bir hata oluştu.",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const deleteOperation = async (req, res) => {
+const deleteOperation = async (req, res, next) => {
   try {
     console.log("delete operation");
     let operation = await Operation.findById(req.params.operationId).then(
@@ -707,15 +662,11 @@ const deleteOperation = async (req, res) => {
     //     });
     // }
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      succes: false,
-      message: "işlem Silinirken bir hata oluştu.",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const deletePhoto = async (req, res) => {
+const deletePhoto = async (req, res, next) => {
   console.log(req.params);
   try {
     //TODO
@@ -748,13 +699,10 @@ const deletePhoto = async (req, res) => {
         })
       );
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "delete photo error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getUsersPlannedOperations = async (req, res) => {
+const getUsersPlannedOperations = async (req, res, next) => {
   try {
     console.log(req.body);
     const operations = await Operation.find({ _id: { $in: req.body } });
@@ -765,13 +713,10 @@ const getUsersPlannedOperations = async (req, res) => {
       operations,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "işlemler çekilirken bir hata oluştu",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getUsersContinueOperations = async (req, res) => {
+const getUsersContinueOperations = async (req, res, next) => {
   try {
     console.log(req.body);
     console.log(req.params);
@@ -792,13 +737,10 @@ const getUsersContinueOperations = async (req, res) => {
       operations,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "işlemler çekilirken bir hata oluştu",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getUsersHasPaymentOperations = async (req, res) => {
+const getUsersHasPaymentOperations = async (req, res, next) => {
   try {
     const operations = await Operation.find({
       user: req.params.id,
@@ -811,13 +753,10 @@ const getUsersHasPaymentOperations = async (req, res) => {
       operations,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "resimler çekilirken bir hata oluştu",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getUsersOldOperations = async (req, res) => {
+const getUsersOldOperations = async (req, res, next) => {
   try {
     const operations = await Operation.find({
       user: req.params.id,
@@ -825,14 +764,10 @@ const getUsersOldOperations = async (req, res) => {
 
     res.json({ success: true, message: "işlemler çekildi", data: operations });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-
-      message: "resimler çekilirken bir hata oluştu",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getUsersAllOperations = async (req, res) => {
+const getUsersAllOperations = async (req, res, next) => {
   try {
     const operations = await Operation.find({
       user: req.params.id,
@@ -840,13 +775,10 @@ const getUsersAllOperations = async (req, res) => {
 
     res.json({ success: true, message: "işlemler çekildi", data: operations });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "resimler çekilirken bir hata oluştu",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getAllPhotos = async (req, res) => {
+const getAllPhotos = async (req, res, next) => {
   try {
     console.log(req.params);
 
@@ -866,13 +798,10 @@ const getAllPhotos = async (req, res) => {
 
     res.json({ success: true, message: "resimler çekildi", photos });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "resimler çekilirken bir hata oluştu",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getUsersAllPayments = async (req, res) => {
+const getUsersAllPayments = async (req, res, next) => {
   try {
     console.log(req.params);
 
@@ -883,14 +812,11 @@ const getUsersAllPayments = async (req, res) => {
       res.json({ success: true, message: "ödemeler çekildi", data: payments });
     }
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "Ödemeler çekilirken bir hata oluştu",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const logOut = (req, res) => {
+const logOut = (req, res, next) => {
   try {
     res.cookie("jsonwebtoken", "", {
       maxAge: 1,
@@ -903,10 +829,7 @@ const logOut = (req, res) => {
     });
     res.redirect("/");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
@@ -926,17 +849,14 @@ const resetPasswordMail = async (req, res, next) => {
         "host"
       )}/newPassword/${resetToken}`;
       passwordResetMail(email, resetUrl);
-      console.log(resetUrl);
+
       res.status(200).json({
         succes: true,
         message: "şifre sıfırlama maili gönderildi.",
       });
     }
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 

@@ -3,7 +3,7 @@ import Employee from "../models/EmployeesModel.js";
 import Subscription from "../models/subscriptionModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { orderSuccesEmail } from "./mailControllers.js";
-import { iyziPayDeneme } from "./iyzipayController.js";
+
 import axios from "axios";
 import CryptoJS from "crypto-js";
 
@@ -11,7 +11,7 @@ import Iyzipay from "iyzipay";
 
 import { v4 as uuidv4 } from "uuid";
 
-const updateCompanyPassword = async (req, res) => {
+const updateCompanyPassword = async (req, res, next) => {
   try {
     if (req.body.password !== req.body.password2) {
       res.status(400).json({
@@ -32,15 +32,11 @@ const updateCompanyPassword = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "update error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const updateCompanyInformations = async (req, res, next) => {
   try {
-    
     req.body.workHours = {
       workStart: req.body.workStart,
       workEnd: req.body.workEnd,
@@ -54,30 +50,23 @@ const updateCompanyInformations = async (req, res, next) => {
       message: "bilgiler başarıyla değiştirildi.",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "update company error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const deleteCompany = async (req, res) => {
+const deleteCompany = async (req, res, next) => {
   try {
     const company = await Company.findByIdAndDelete(req.params.id);
 
     res.redirect("back");
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "delete error",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const addCompanyPayment = async (req, res) => {
+const addCompanyPayment = async (req, res, next) => {
   try {
     // TODO
-    // iyziPayDeneme(req)
-    console.log(req.body);
+
     const id = uuidv4();
     const company = await Company.findOne({ _id: res.locals.company._id });
 
@@ -145,7 +134,6 @@ const addCompanyPayment = async (req, res) => {
       if (err) {
         console.log(err);
       } else {
-       
         let data = {
           company: res.locals.company,
           amount: price,
@@ -163,19 +151,13 @@ const addCompanyPayment = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "ödeme işlemi sırasında sistemsel bir hata oluştu.",
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
-const companyPaymentResult = async (req, res) => {
+const companyPaymentResult = async (req, res, next) => {
   try {
-    
-    
     const subscription = await Subscription.findOne({ token: req.body.token });
-    
 
     var iyzipay = new Iyzipay({
       apiKey: process.env.IYZICO_API_KEY,
@@ -209,27 +191,38 @@ const companyPaymentResult = async (req, res) => {
       }
     );
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
 async function addSubscription(subscription) {
-  let company= await Company.findById(subscription.company)
-  
-  console.log(subscription.paymentDuration)
+  let company = await Company.findById(subscription.company);
+
+  console.log(subscription.paymentDuration);
   let today = new Date();
-  let diffTime = Math.ceil(((company.subscribeEndDate - today))/(1000*60 * 60 * 24));
+  let diffTime = Math.ceil(
+    (company.subscribeEndDate - today) / (1000 * 60 * 60 * 24)
+  );
   console.log(diffTime);
-  console.log(new Date().setDate(company.subscribeEndDate.getDate() + subscription.paymentDuration+diffTime));
+  console.log(
+    new Date().setDate(
+      company.subscribeEndDate.getDate() +
+        subscription.paymentDuration +
+        diffTime
+    )
+  );
   if (company.subscribeEndDate > today) {
-    company.subscribeEndDate = new Date().setDate(company.subscribeEndDate.getDate() + subscription.paymentDuration+diffTime);
-    await company.save()
+    company.subscribeEndDate = new Date().setDate(
+      company.subscribeEndDate.getDate() +
+        subscription.paymentDuration +
+        diffTime
+    );
+    await company.save();
   } else {
-    company.subscribeEndDate =new Date().setDate( today.getDate() + subscription.paymentDuration);
-    await company.save()
+    company.subscribeEndDate = new Date().setDate(
+      today.getDate() + subscription.paymentDuration
+    );
+    await company.save();
   }
 }
 

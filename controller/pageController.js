@@ -7,6 +7,8 @@ import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
 import Subscription from "../models/subscriptionModel.js";
 import { Ticket } from "../models/ticketModel.js";
+import { ErrorLogger } from "../helpers/logger/logger.js";
+
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 
@@ -25,14 +27,11 @@ const getIndexPage = (req, res) => {
       link: "indexAdmin",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
-const resetPasswordPage = async (req, res) => {
+const resetPasswordPage = async (req, res,next) => {
   try {
     res.status(200).render("front/newPassword", {
       token: req.params.token,
@@ -40,10 +39,7 @@ const resetPasswordPage = async (req, res) => {
       message: "success",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "sunucu hatası",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const getForgotPasswordPage = async (req, res, next) => {
@@ -52,13 +48,10 @@ const getForgotPasswordPage = async (req, res, next) => {
       link: "forgotPassword",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getSuperAdminPage = async (req, res) => {
+const getSuperAdminPage = async (req, res,next) => {
   try {
     let companies = await Company.find({});
 
@@ -68,13 +61,10 @@ const getSuperAdminPage = async (req, res) => {
       link: "companies",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getSuperAdminTicketsPage = async (req, res) => {
+const getSuperAdminTicketsPage = async (req, res,next) => {
   try {
     let tickets = await Ticket.find({});
 
@@ -84,111 +74,84 @@ const getSuperAdminTicketsPage = async (req, res) => {
       link: "companies",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
-const getLoginPage = (req, res) => {
+const getLoginPage = (req, res,next) => {
   try {
     res.status(200).render("front/login", {
       link: "login",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getAboutUsPage = (req, res) => {
+const getAboutUsPage = (req, res,next) => {
   try {
     res.status(200).render("front/about-us", {
       link: "about-us",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getTermOfUsePage = (req, res) => {
+const getTermOfUsePage = (req, res,next) => {
   try {
     res.status(200).render("front/term-of-use", {
       link: "about-us",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getServicesPage = (req, res) => {
+const getServicesPage = (req, res,next) => {
   try {
     res.status(200).render("front/our-services", {
       link: "about-us",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
-const returnPoliciesPage = (req, res) => {
+const returnPoliciesPage = (req, res,next) => {
   try {
     res.status(200).render("front/return-policies", {
       link: "return-policies",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const privacyPoliciesPage = (req, res) => {
+const privacyPoliciesPage = (req, res,next) => {
   try {
     res.status(200).render("front/privacy-policies", {
       link: "privacy-policies",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const kvkkPage = (req, res) => {
+const kvkkPage = (req, res,next) => {
   try {
     res.status(200).render("front/kvkk", {
       link: "kvkk",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getPricesPage = (req, res) => {
+const getPricesPage = (req, res,next) => {
   try {
     res.status(200).render("front/prices", {
       link: "prices",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getservicesPage = async (req, res) => {
+const getservicesPage = async (req, res,next) => {
   try {
     let company = res.locals.company;
 
@@ -206,76 +169,65 @@ const getservicesPage = async (req, res) => {
     });
   }
 };
-const getDatasPage = async (req, res) => {
+const getDatasPage = async (req, res,next) => {
   try {
     res.status(200).render("datasPage", {
       link: "services",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
-const getRegisterPage = (req, res) => {
+const getRegisterPage = (req, res,next) => {
   try {
     res.status(200).render("front/register", {
       link: "register",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getContactPage = (req, res) => {
+const getContactPage = (req, res,next) => {
   try {
     res.status(200).render("front/contact-us", {
       link: "register",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "pagecontroller",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getAdminPage = async (req, res) => {
+const getAdminPage = async (req, res,next) => {
   try {
     res.status(200).render("indexAdmin", {
       link: "index",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
-const getUsersPage = async (req, res) => {
+const getUsersPage = async (req, res, next) => {
   try {
-    
     //pagination
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.page) ||  5;
+    const limit = parseInt(req.query.page) || 5;
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    let users =await  User.find({
-      company: res.locals.company._id,
-      role: "customer",
-    }).skip(startIndex).limit(limit).sort({'updatedAt':-1});
-
-    let total =await  User.count({
+    let users = await User.find({
       company: res.locals.company._id,
       role: "customer",
     })
+      .skip(startIndex)
+      .limit(limit)
+      .sort({ updatedAt: -1 });
 
+    let total = await User.count({
+      company: res.locals.company._id,
+      role: "customer",
+    });
 
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
@@ -295,7 +247,6 @@ const getUsersPage = async (req, res) => {
       };
     }
 
-
     res.status(200).render("users", {
       users,
       total,
@@ -304,14 +255,24 @@ const getUsersPage = async (req, res) => {
       link: "users",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "error",
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getEmployeesPage = async (req, res) => {
+
+const deneme = async (req, res, next) => {
   try {
+    console.log(mmm);
+    res.status(200).json({
+      succes: true,
+      message: "başarılı",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getEmployeesPage = async (req, res, next) => {
+  try {
+    console.log(mmm);
     let query = Employee.find({});
     let roles = Object.keys(ROLES_LIST);
     let rolesValues = Object.values(ROLES_LIST);
@@ -363,15 +324,13 @@ const getEmployeesPage = async (req, res) => {
       link: "employees",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
-const getAppointmentsPage = async (req, res) => {
+const getAppointmentsPage = async (req, res, next) => {
   try {
+    console.log(mmm);
     let services = await Company.findById({ _id: res.locals.company._id });
     const activeServices = [];
     services.services.forEach((element) => {
@@ -383,66 +342,51 @@ const getAppointmentsPage = async (req, res) => {
 
     res.status(200).render("appointments", {
       link: "appointments",
-      
+
       services: activeServices,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
-const getPaymentStaticsPage = async (req, res) => {
+const getPaymentStaticsPage = async (req, res,next) => {
   try {
     res.status(200).render("statics/payments-statics.ejs", {
       link: "statics",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getUsersStaticsPage = async (req, res) => {
+const getUsersStaticsPage = async (req, res, next) => {
   try {
     res.status(200).render("statics/users-statics.ejs", {
       link: "statics",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getEmployeessStaticsPage = async (req, res) => {
+const getEmployeessStaticsPage = async (req, res, next) => {
   try {
     res.status(200).render("statics/employees-statics.ejs", {
       link: "statics",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getAppointmentsStaticsPage = async (req, res) => {
+const getAppointmentsStaticsPage = async (req, res, next) => {
   try {
     res.status(200).render("statics/appointments-statics.ejs", {
       link: "statics",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getSettingsPage = (req, res) => {
+const getSettingsPage = (req, res, next) => {
   try {
     const company = res.locals.company;
 
@@ -451,13 +395,10 @@ const getSettingsPage = (req, res) => {
       company,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const companyPaymentPage = (req, res) => {
+const companyPaymentPage = (req, res, next) => {
   try {
     const user = res.locals.company;
     res.status(200).render("companyPaymentPage", {
@@ -465,14 +406,11 @@ const companyPaymentPage = (req, res) => {
       user,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
-const companyPaymentsListPage = async (req, res) => {
+const companyPaymentsListPage = async (req, res,next) => {
   try {
     const subscriptions = await Subscription.find({
       company: res.locals.company,
@@ -483,13 +421,10 @@ const companyPaymentsListPage = async (req, res) => {
       subscriptions,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getPaymentsPage = async (req, res) => {
+const getPaymentsPage = async (req, res,next) => {
   try {
     const users = await User.find({ company: res.locals.company._id });
 
@@ -498,13 +433,10 @@ const getPaymentsPage = async (req, res) => {
       users: users,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getUserPage = async (req, res) => {
+const getUserPage = async (req, res, next) => {
   try {
     const singleUser = await User.findById(req.params.id);
 
@@ -513,13 +445,10 @@ const getUserPage = async (req, res) => {
       link: "users",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getSingleEmployeePage = async (req, res) => {
+const getSingleEmployeePage = async (req, res, next) => {
   try {
     const singleUser = await Employee.findById(req.params.id);
     const roles = Object.keys(ROLES_LIST);
@@ -544,10 +473,7 @@ const getSingleEmployeePage = async (req, res) => {
       link: "employees",
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: error,
-    });
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 
@@ -583,4 +509,5 @@ export {
   companyPaymentsListPage,
   getSingleEmployeePage,
   getDatasPage,
+  deneme,
 };

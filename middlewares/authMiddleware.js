@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import Company from "../models/companyModel.js";
 import Employee from "../models/EmployeesModel.js";
+import { CustomError } from "../helpers/error/CustomError.js";
 
 const checkUser = async (req, res, next) => {
   const token = req.cookies.jsonwebtoken;
@@ -104,7 +105,7 @@ const verifyactiveOrNot = () => {
       }
       next();
     } else {
-      next(new Error("Kullanıcı bulunamadı", 401));
+      next(new CustomError("Kullanıcı bulunamadı", 401));
     }
   };
 };

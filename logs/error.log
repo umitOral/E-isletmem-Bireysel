@@ -1,0 +1,30 @@
+{
+  source: 'ErrorService',
+  index: 0,
+  code: 11000,
+  keyPattern: { email: 1 },
+  keyValue: { email: 'bayi1@test.com' },
+  level: 'error',
+  message: 'xxxx E11000 duplicate key error collection: e-isletmem.companies index: email_1 dup key: { email: "bayi1@test.com" }',
+  stack: 'MongoServerError: E11000 duplicate key error collection: e-isletmem.companies index: email_1 dup key: { email: "bayi1@test.com" }\n' +
+    '    at C:\\Users\\Lenovo\\Desktop\\cloned\\archimetCRM\\node_modules\\mongodb\\lib\\operations\\insert.js:50:33\n' +
+    '    at C:\\Users\\Lenovo\\Desktop\\cloned\\archimetCRM\\node_modules\\mongodb\\lib\\operations\\command.js:84:64\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  timestamp: '2024-04-19T20:05:52.562Z',
+  [Symbol(errorLabels)]: Set(0) {}
+}
+{
+  source: 'ErrorService',
+  index: 0,
+  code: 11000,
+  keyPattern: { email: 1 },
+  keyValue: { email: 'bayi1@test.com' },
+  level: 'error',
+  message: 'xxxx E11000 duplicate key error collection: e-isletmem.companies index: email_1 dup key: { email: "bayi1@test.com" }',
+  stack: 'MongoServerError: E11000 duplicate key error collection: e-isletmem.companies index: email_1 dup key: { email: "bayi1@test.com" }\n' +
+    '    at C:\\Users\\Lenovo\\Desktop\\cloned\\archimetCRM\\node_modules\\mongodb\\lib\\operations\\insert.js:50:33\n' +
+    '    at C:\\Users\\Lenovo\\Desktop\\cloned\\archimetCRM\\node_modules\\mongodb\\lib\\operations\\command.js:84:64\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  timestamp: '2024-04-19T20:06:47.551Z',
+  [Symbol(errorLabels)]: Set(0) {}
+}

@@ -1,20 +1,17 @@
-
-
 import { createTransport } from "nodemailer";
-import dotenv from 'dotenv';
-import {contactEmailHTML,registerMail,resetPasswordMailHtml} from '../helpers/mails/mails.js';
-import {Ticket,ticketStatus} from '../models/ticketModel.js'
+import dotenv from "dotenv";
+import {
+  contactEmailHTML,
+  registerMail,
+  resetPasswordMailHtml,
+} from "../helpers/mails/mails.js";
+import { Ticket, ticketStatus } from "../models/ticketModel.js";
 
-dotenv.config({path:"../.env"});
-
-
-
-
+dotenv.config({ path: "../.env" });
 
 const sendMail = async (req, res) => {
   try {
-    
-    const html = registerMail
+    const html = registerMail;
     const transporter = createTransport({
       host: "smtpout.secureserver.net",
       port: 587,
@@ -35,18 +32,15 @@ const sendMail = async (req, res) => {
 
     console.log("message sent:" + info.messageId);
     res.json({
-        message:"kaydınız başarıyla oluşturuldu"
-    })
-
+      message: "kaydınız başarıyla oluşturuldu",
+    });
   } catch (error) {
     console.log(error);
   }
 };
-const passwordResetMail = async (email,url) => {
+const passwordResetMail = async (email, url) => {
   try {
-    
-    const html = resetPasswordMailHtml(url)
-    
+    const html = resetPasswordMailHtml(url);
 
     const transporter = createTransport({
       host: "smtpout.secureserver.net",
@@ -64,19 +58,41 @@ const passwordResetMail = async (email,url) => {
       html: html,
     });
 
-    transporter.verify().then(console.log).catch(console.error);
+    transporter
+      .verify()
+      .then((response) => console.log("mail başarılı"))
+      .catch((err) => console.log("mail başarısız"));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    console.log("mail başarılı")
-    
+const sendErrorEmail = async (err) => {
+  try {
+    const transporter = createTransport({
+      host: "smtpout.secureserver.net",
+      port: 587,
+      auth: {
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
+      to: "umit.oralmat10@gmail.com",
+      subject: "hata alındı",
+      html: err,
+    });
+
+    transporter.verify().then(console.log).catch(console.error);
 
   } catch (error) {
     console.log(error);
   }
 };
-const orderSuccesEmail=async(request)=>{
+const orderSuccesEmail = async (request) => {
   try {
-
-
     const transporter = createTransport({
       host: "smtpout.secureserver.net",
       port: 587,
@@ -90,32 +106,28 @@ const orderSuccesEmail=async(request)=>{
       from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: "umit.oralmat10@gmail.com",
       subject: "Ödemeniz alındı",
-      html: request.price+"'lik ödemeniz başarıyla gerçekleşti",
+      html: request.price + "'lik ödemeniz başarıyla gerçekleşti",
     });
 
     transporter.verify().then(console.log).catch(console.error);
 
-    
-   console.log("ödeme mail atıldı")
-    
+    console.log("ödeme mail atıldı");
   } catch (error) {
-   console.log(error)
+    console.log(error);
   }
-}
-const contactEmail=async(req,res)=>{
+};
+const contactEmail = async (req, res) => {
   try {
-
-    const data={
-      name:req.body.name,
-      messages:req.body.message,
-      phone:req.body.phone,
-      email:req.body.email,
-      ticketStatus:ticketStatus.OPEN
-    }
-    const html = contactEmailHTML
-    console.log(data)
-    await Ticket.create(data)
-    console.log("mail başarılı")
+    const data = {
+      name: req.body.name,
+      messages: req.body.message,
+      phone: req.body.phone,
+      email: req.body.email,
+      ticketStatus: ticketStatus.OPEN,
+    };
+    const html = contactEmailHTML;
+    console.log(data);
+    await Ticket.create(data);
 
     const transporter = createTransport({
       host: "smtpout.secureserver.net",
@@ -135,19 +147,21 @@ const contactEmail=async(req,res)=>{
 
     transporter.verify().then(console.log).catch(console.error);
 
-    
-    res.render("front/contact-us",{
-        message:"kaydınız başarıyla oluşturuldu"
-    })
-    
+    res.render("front/contact-us", {
+      message: "kaydınız başarıyla oluşturuldu",
+    });
   } catch (error) {
     res.status(400).json({
-      succes:false,
-      message:error
-    })
+      succes: false,
+      message: error,
+    });
   }
-}
+};
 
-
-
-export { sendMail,passwordResetMail,contactEmail,orderSuccesEmail};
+export {
+  sendMail,
+  passwordResetMail,
+  contactEmail,
+  orderSuccesEmail,
+  sendErrorEmail,
+};

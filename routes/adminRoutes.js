@@ -1,5 +1,5 @@
 import express from 'express';
-import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,getAppointmentsPage,getEmployeessStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getUserPage,getSingleEmployeePage,getservicesPage,getEmployeesPage,getPaymentsPage,getDatasPage} from '../controller/pageController.js';
+import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,deneme,getAppointmentsPage,getEmployeessStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getUserPage,getSingleEmployeePage,getservicesPage,getEmployeesPage,getPaymentsPage,getDatasPage} from '../controller/pageController.js';
 import {logOut,createUser,deletePhoto,addOperation,addDiscountToOperation,addOperationInsideAppointment,getUsersOldOperations,addDataToOperation,deleteOperation,uploadPictures,getAllPhotos,getUsersAllPayments,getUsersContinueOperations,getUsersPlannedOperations,getUsersHasPaymentOperations,getUsersAllOperations,editInformations,findUsers,findSingleUser,findEmployees,deactivateEmployee,activateEmployee,getUsersAllSessions} from '../controller/userController.js';
 import {createEmployees,editInformationsEmployees} from '../controller/employeesController.js';
 
@@ -18,6 +18,7 @@ const router=express.Router()
 
 
 router.route("/").get(getAdminPage)
+router.route("/deneme").get(deneme)
 router.route("/users").get(getUsersPage)
 
 
