@@ -5,6 +5,7 @@ import Employee from "../models/EmployeesModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 
 const checkUser = async (req, res, next) => {
+  console.log("2")
   const token = req.cookies.jsonwebtoken;
   const token2 = req.cookies.userData;
 
@@ -39,6 +40,7 @@ const checkUser = async (req, res, next) => {
 };
 
 const authenticateToken = async (req, res, next) => {
+  console.log("0")
   try {
     const token = req.cookies.jsonwebtoken;
     
@@ -61,6 +63,7 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 const checkSubscription = async (req, res, next) => {
+  console.log("1")
   try {
     const token = req.cookies.jsonwebtoken;
     if (req.cookies.companySubscribe === "true") {
@@ -82,7 +85,9 @@ const checkSubscription = async (req, res, next) => {
 };
 
 const verifyRoles = (...roles) => {
+  
   return async (req, res, next) => {
+    console.log("x")
     if (!roles.includes(res.locals.employee.role)) {
       next(new Error("Buraya giriş yetkiniz bulunmamaktadır.", 401));
     }

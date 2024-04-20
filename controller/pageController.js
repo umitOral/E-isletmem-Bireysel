@@ -12,6 +12,7 @@ import { ErrorLogger } from "../helpers/logger/logger.js";
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 
+
 let now = new Date();
 let day = now.getDate();
 let month = now.getMonth();
@@ -198,7 +199,10 @@ const getContactPage = (req, res,next) => {
   }
 };
 const getAdminPage = async (req, res,next) => {
+debugger
+  console.log("3")
   try {
+   
     res.status(200).render("indexAdmin", {
       link: "index",
     });
@@ -261,7 +265,7 @@ const getUsersPage = async (req, res, next) => {
 
 const deneme = async (req, res, next) => {
   try {
-    console.log(mmm);
+    console.log("xxx");
     res.status(200).json({
       succes: true,
       message: "başarılı",
@@ -272,7 +276,7 @@ const deneme = async (req, res, next) => {
 };
 const getEmployeesPage = async (req, res, next) => {
   try {
-    console.log(mmm);
+    
     let query = Employee.find({});
     let roles = Object.keys(ROLES_LIST);
     let rolesValues = Object.values(ROLES_LIST);
@@ -449,6 +453,7 @@ const getUserPage = async (req, res, next) => {
   }
 };
 const getSingleEmployeePage = async (req, res, next) => {
+  console.log(req.originalUrl)
   try {
     const singleUser = await Employee.findById(req.params.id);
     const roles = Object.keys(ROLES_LIST);

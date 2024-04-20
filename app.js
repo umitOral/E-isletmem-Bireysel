@@ -1,3 +1,4 @@
+
 import express, { Router } from "express";
 import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
@@ -64,14 +65,15 @@ app.use(express.static("public"));
 app.get("/views/front-side/main.ejs");
 //routes,middlewares
 app.use("/", pageRoute);
-app.use("/admin", authMiddleware.checkUser);
+
 
 app.use("/api", authMiddleware.checkUser, api);
 
 app.use(
   "/admin",
-  authMiddleware.authenticateToken,
+  [authMiddleware.authenticateToken,
   authMiddleware.checkSubscription,
+  authMiddleware.checkUser],
   adminRoutes
 );
 
