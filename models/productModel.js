@@ -17,15 +17,7 @@ const productSchema = new Schema({
     timestamps:true
 })
 
-userSchema.pre('save', function (next) {
-    const user = this
-    bcrypt.hash(user.password, 10, (err, hash) => {
-        user.password = hash
-        next()
-    });
 
-
-});
 
 
 

@@ -43,7 +43,6 @@ const authenticateToken = async (req, res, next) => {
   console.log("0")
   try {
     const token = req.cookies.jsonwebtoken;
-    
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET, (err) => {
         if (err) {
@@ -63,7 +62,6 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 const checkSubscription = async (req, res, next) => {
-  console.log("1")
   try {
     const token = req.cookies.jsonwebtoken;
     if (req.cookies.companySubscribe === "true") {

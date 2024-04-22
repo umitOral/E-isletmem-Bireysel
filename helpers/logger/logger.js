@@ -10,7 +10,7 @@ winston.loggers.add("ErrorLogger", {
   format: combine(errors({ stack: true }), timestamp(), json(), prettyPrint()),
   transports: [
     // new winston.transports.Console(),
-    new winston.transports.File({ filename: "logs/error.log" }),
+    // new winston.transports.File({ filename: "logs/error.log" }),
     new LogtailTransport(logtail),
   ],
   defaultMeta: { source: "ErrorService" },

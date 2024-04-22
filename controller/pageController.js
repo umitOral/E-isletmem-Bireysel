@@ -7,7 +7,7 @@ import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
 import Subscription from "../models/subscriptionModel.js";
 import { Ticket } from "../models/ticketModel.js";
-import { ErrorLogger } from "../helpers/logger/logger.js";
+
 
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
@@ -23,6 +23,7 @@ const secondDate = new Date(year, month, day);
 secondDate.setHours(23, 59, 59, 999);
 
 const getIndexPage = (req, res) => {
+  console.log("ggg")
   try {
     res.status(200).render("front/index", {
       link: "indexAdmin",
