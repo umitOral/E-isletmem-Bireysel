@@ -142,7 +142,7 @@
                                 </div>
                                 <div class="userInformationsContent  sessions ">
                                     <div>
-                                        <h2>Seanslar</h2>
+                                        <h2>Randevular</h2>
                                     </div>
                                     <div class="contentBody">
 
@@ -155,7 +155,7 @@
                                                     <th>Personel<i class="fa-solid fa-arrow-up"></i></th>
                                                     <th>İşlemler</td>
                                                     <th>Notlar</th>
-                                                    <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></th>
+                                                    <th>Randevu Durumu<i class="fa-solid fa-arrow-up"></i></th>
                                                 </thead>
                                                 <tbody class="sessionTableBody">
 
@@ -218,7 +218,6 @@
                                                 <th>Datalar</td>
                                                 <th>Fiyat<i class="fa-solid fa-arrow-up"></i></td>
                                                 <th>İndirim<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>Son Fiyat<i class="fa-solid fa-arrow-up"></i></td>
                                                 <th>Ödenen/Toplam<i class="fa-solid fa-arrow-up"></i></th>
 
                                                 <th></th>
@@ -476,12 +475,14 @@
         </div>
 
         <div class="modal add-data-modal">
+            <div>
+                <h2>Veri Ekle</h2>
+            </div>
             <form action="" id="add-data-form" data-operationid="">
-                <div>
-                    <h2>Veri Ekle</h2>
-                </div>
+                
                 <div class="inputs">Veri Adı:
                     <select name="datas" id="datas_select_input">
+                        <option value="" selected disable hidden>Veri seçiniz</option>
                         <% locals.company.serviceDatas.forEach(element=> { %>
                             <option value="<%= element._id %>">
                                 <%= element.dataName %>
@@ -490,8 +491,10 @@
                             <% }) %>
                     </select>
 
-                    Opsiyon:
+                    <div  style="display: none;">
+                        Opsiyon:
                     <select name="datasOption" id="datasOptions_select_input">
+                        <option value="" selected disable hidden>seçiniz</option>
                         <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
                             <option value="">
                                 <%= element %>
@@ -499,7 +502,8 @@
 
                             <% }) %>
                     </select>
-                    <div >
+                    </div>
+                    <div style="display:none" >
                         Sayısal Değer:
                     <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
                     </div>
@@ -511,11 +515,12 @@
 
         </div>
         <div class="modal add-session-modal">
+            <div>
+                <h2>Seans Ekle</h2>
+            </div>
             <form action="" id="add-session-form" data-operationid="">
-                <div>
-                    <h2>Seans Ekle</h2>
-                </div>
-                <div class="inputs">Seans Sayısı:
+                
+                <div class="inputs">Eklenecek Seans:
                     <input type="Number" min="1" id="add-session" name="addsession">
 
                 </div>
@@ -527,11 +532,15 @@
         </div>
 
         <div class="modal add_discount_modal">
+            <div>
+                <h2>İndirim Tanımla</h2>
+            </div>
             <form action="" id="add-discount-form" data-operationid="">
-                <div>
-                    <h2>İndirim Tanımla</h2>
-                </div>
+                
                 <div class="inputs">İndirim Miktarı(%)
+                    <input type="text" name="percentDiscountValue" id="percentDiscountValue" value="">
+                </div>
+                <div class="inputs">İndirim Miktarı(TL)
                     <input type="text" name="discountValue" id="discountValue" value="">
                 </div>
 
@@ -542,10 +551,11 @@
 
         </div>
         <div class="modal edit-data-modal">
+            <div>
+                <h2>Veri düzenle</h2>
+            </div>
             <form action="" id="edit-data-form">
-                <div>
-                    <h2>Veri düzenle</h2>
-                </div>
+                
                 <div class="inputs">Veri Adı:
                     <input type="text" name="dataName" id="dataName" value="" readonly>
                 </div>
@@ -563,7 +573,7 @@
                 <div>
                     <h2>En yakın Randevu</h2>
                 </div>
-                <div class="inputs">Doktor:
+                <div class="inputs">Persnoel:
                     <input type="text" name="appointmentDoc" id="appointmentDoc" value="" readonly>
                 </div>
                 <div class="inputs">Tarih:

@@ -22,7 +22,7 @@ router.route("/prices").get(getPricesPage)
 
 router.route("/login").get(getLoginPage)
 router.route("/register").get(getRegisterPage)
-router.route("/register").post(createCompany,sendMail)
+router.route("/register").post(createCompany)
 router.route("/login").post( authMiddleware.verifyactiveOrNot(),loginUser)
 
 router.route("/forgotPassword").get(getForgotPasswordPage)

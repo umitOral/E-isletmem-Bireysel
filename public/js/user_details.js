@@ -86,23 +86,34 @@ datasSelectInput.addEventListener("change", (e) => {
     .getwithUrl("/admin/datas/" + dataID)
     .then((response) => {
       console.log(response);
-      let indexcontrol = response.data.serviceDatas.findIndex(
+      let indexcontrol = response.serviceDatas.findIndex(
         (item) =>
           item.dataName ===
           e.target.options[e.target.options.selectedIndex].textContent.trim()
       );
       console.log(indexcontrol);
+
       while (datasOptionsSelectInput.children[0]) {
         datasOptionsSelectInput.children[0].remove();
       }
 
-      response.data.serviceDatas[indexcontrol].dataOptions.forEach(
-        (element) => {
+      console.log(response.serviceDatas[indexcontrol].dataOptions.length);
+      if (response.serviceDatas[indexcontrol].dataOptions.length === 0) {
+        datasOptionsSelectInput.setAttribute("disable", "true");
+        datasOptionsSelectInput.parentElement.style = "display:none";
+        dataOptionNumberValue.setAttribute("disable", "false");
+        dataOptionNumberValue.parentElement.style = "display:block";
+      } else {
+        datasOptionsSelectInput.setAttribute("disable", "false");
+        datasOptionsSelectInput.parentElement.style = "display:block";
+        dataOptionNumberValue.setAttribute("disable", "true");
+        dataOptionNumberValue.parentElement.style = "display:none";
+        response.serviceDatas[indexcontrol].dataOptions.forEach((element) => {
           datasOptionsSelectInput.innerHTML += `
         <option value="${element}">${element}</option>
         `;
-        }
-      );
+        });
+      }
     })
     .catch((err) => console.log(err));
 });
@@ -298,11 +309,13 @@ function getAllAppointments() {
 
         <td>
             ${session.doctor.name}
+            ${session.doctor.surname}
         </td>
         <td>
           ${session.operations.map(
             (item, i) => `
-                ${item.operationName}
+                ${item.operation.operationName}
+                seans:${item.session}
           `
           )}
         </td>
@@ -361,6 +374,8 @@ selectedProcessTable.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete_items_from_basket")) {
     handleDeleteOperationBtn(e);
   }
+});
+selectedProcessTable.addEventListener("change", (e) => {
   if (e.target.classList.contains("appointment-count")) {
     e.target.addEventListener("change", handleAppointmentBtn(e));
   }
@@ -442,22 +457,18 @@ function handleDeleteOperationBtn(e) {
   calculateTotal();
 }
 function handleAppointmentBtn(e) {
-  console.log("burasu");
-  console.log(e);
-  let appointmentCount = document.querySelectorAll(".appointment-count");
-  appointmentCount.forEach((element) => {
-    element.addEventListener("change", () => {
-      let controlindex = selectedOperations.findIndex(
-        (item) =>
-          item.operationName ===
-          element.parentElement.parentElement.dataset.operationname
-      );
-      console.log(controlindex);
-      selectedOperations[controlindex].totalAppointments = Number(
-        element.value
-      );
-    });
-  });
+  
+    
+  let controlindex = selectedOperations.findIndex(
+    (item) =>
+      item.operationName ===
+      e.target.parentElement.parentElement.dataset.operationname
+  );
+  console.log(controlindex);
+  selectedOperations[controlindex].totalAppointments = Number(
+    e.target.value
+  );
+  
 
   console.log(selectedOperations);
 }
@@ -906,25 +917,17 @@ function handleAppointmentEditBtn() {
 addDataSaveButton.addEventListener("click", (e) => {
   e.preventDefault();
 
-  let data = {};
+  let data = {
+    dataName:
+      datasSelectInput.options[
+        datasSelectInput.options.selectedIndex
+      ].textContent.trim(),
+    data: datasOptionsSelectInput.selectedIndex!==-1
+      ? datasOptionsSelectInput.options[datasOptionsSelectInput.selectedIndex].value
+      : dataOptionNumberValue.value,
+  };
 
-  if (datasSelectInput.options.selectedIndex === -1) {
-    data = {
-      dataName:
-        datasSelectInput.options[
-          datasSelectInput.options.selectedIndex
-        ].textContent.trim(),
-      data: datasOptionsSelectInput.value,
-    };
-  } else {
-    data = {
-      dataName:
-        datasSelectInput.options[
-          datasSelectInput.options.selectedIndex
-        ].textContent.trim(),
-      data: dataOptionNumberValue.value,
-    };
-  }
+  console.log(data);
 
   request
     .postWithUrl(
@@ -991,6 +994,7 @@ function addDiscount(e) {
   e.preventDefault();
   let data = {
     discount: addDiscountForm.discountValue.value,
+    percentDiscount: addDiscountForm.percentDiscountValue.value,
   };
 
   request
@@ -999,7 +1003,7 @@ function addDiscount(e) {
       data
     )
     .then((response) => {
-      ui.showModal(response.succes, response.message);
+      ui.showModal(response.success, response.message);
       getAllOperations();
     })
     .catch((err) => console.log(err));
@@ -1047,17 +1051,18 @@ function editDatasBtn() {
       await request
         .getwithUrl("/admin/datas/" + dataId)
         .then((response) => {
-          let indexcontrol = response.data.serviceDatas.findIndex(
+          console.log(response)
+          let indexcontrol = response.serviceDatas.findIndex(
             (item) => item.dataName === e.target.parentElement.dataset.dataname
           );
-          response.data.serviceDatas[indexcontrol].dataOptions.forEach(
+          response.serviceDatas[indexcontrol].dataOptions.forEach(
             (element) => {
               editDatasOptionSelect.innerHTML += `
               <option value="${element}">${element}</option>
               `;
             }
           );
-          console.log(response);
+          
         })
         .catch((err) => console.log(err));
 
@@ -1144,4 +1149,3 @@ function addPicture(e) {
 
   e.preventDefault();
 }
-

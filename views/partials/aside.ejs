@@ -26,7 +26,7 @@
                             <span class="text">Hastalar</span>
                     </a>
                 </li>
-                <% if(locals.employee.role.includes("doktor")||locals.employee.role.includes("resepsiyon")){ %>
+                <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
                     <li onclick="alert('yetkili değilsiniz');return false" class="deactivate"  title="Sadece Yönetici">
                         <a href="/admin/employees" <% if (link==="employees" ) { %>class="active"<% } %>>
                                 <i class="icon ph-bold ph-stethoscope"></i>
@@ -51,7 +51,7 @@
                                         <span class="text">Seanslar</span>
                                 </a>
                             </li>
-                            <% if(locals.employee.role.includes("doktor")||locals.employee.role.includes("resepsiyon")){ %>
+                            <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
                                 <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                                     <a href="/admin/services" <% if (link==="services" ) { %>class="active"<% } %>>
                                             <i class="icon ph-bold ph-eyedropper"></i>
@@ -84,7 +84,7 @@
                                     <% } %>
 
 
-                                        <% if(locals.employee.role.includes("doktor")){ %>
+                                        <% if(locals.employee.role.includes("personel")){ %>
                                             <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                                                 <a href="/admin/payments" <% if (link==="payments" ) { %>class="active"
                                                     <% } %>>
@@ -128,7 +128,7 @@
         <div class="menu">
             <p class="title">Ayarlar</p>
             <ul>
-                <% if(locals.employee.role.includes("doktor")||locals.employee.role.includes("resepsiyon")){ %>
+                <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
                     <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                     <a href="#" <% if (link==="settings" ) { %>
                         class="active"
@@ -171,7 +171,7 @@
     <div class="menu">
         <p class="title">Hesap</p>
         <ul>
-            <% if(locals.employee.role.includes("doktor")||locals.employee.role.includes("resepsiyon")){ %>
+            <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
                 <li  onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                     <a href="#" <% if (link==="companyPaymentPage" ) { %>
                         class="active"

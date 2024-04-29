@@ -3,14 +3,16 @@ import Operation from "../models/OperationsModel.js";
 import {CustomError} from "../helpers/error/CustomError.js";
 // import Order from '../models/OrderModel.js';
 import {
+  OPERATION_APPOINTMENT_AVALIABLE_STATUS,
   OPERATION_STATUS,
   OPERATION_STATUS_AUTOMATIC,
+  SESSION_STATUS_LIST_AUTOMATIC,
+  SESSION_STATUS_LIST,
 } from "../config/status_list.js";
 
 const createAppointment = async (req,res,next) => {
   try {
-    console.log(req.body);
-
+   console.log(req.body)
     req.body.appointmentData.startHour = new Date(
       `${req.body.appointmentData.date},${req.body.appointmentData.startHour}`
     );
@@ -24,6 +26,7 @@ const createAppointment = async (req,res,next) => {
     if (req.body.operations.newOperations) {
       req.body.operations.newOperations.forEach((element) => {
         element.company = res.locals.company;
+        element.operationAppointmentStatus =OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO;
         element.user = req.body.appointmentData.user;
 
         element.operationStatus = OPERATION_STATUS_AUTOMATIC.PLANNED;
@@ -40,33 +43,34 @@ const createAppointment = async (req,res,next) => {
 
     if (req.body.operations.oldOperations) {
       req.body.operations.oldOperations.forEach((element) => {
-        req.body.appointmentData.operations.push(element);
+        req.body.appointmentData.operations.push({operation:element.operationID,session:element.nextSessionNumber});
       });
     }
 
     await Operation.insertMany(req.body.operations.newOperations).then(
       (response) => {
         response.forEach((element) => {
-          req.body.appointmentData.operations.push(element._id);
+          req.body.appointmentData.operations.push({operation:element._id,session:1});
         });
       }
     );
 
     let session = await Session.create(req.body.appointmentData);
-
+   
     await Operation.updateMany(
-      { _id: { $in: req.body.operations.oldOperations } },
+      { _id: { $in: req.body.operations.oldOperations.map(item=>item.operationID)} },
       {
         $push: {
           sessionOfOperation: {
             sessionDate: new Date(req.body.appointmentData.date),
-            sessionState: OPERATION_STATUS_AUTOMATIC.PLANNED,
+            sessionState: SESSION_STATUS_LIST_AUTOMATIC.WAITING,
             refAppointmentID: session._id,
           },
         },
         $set: {
           operationStatus: OPERATION_STATUS_AUTOMATIC.PLANNED,
-          "sessionOfOperation[sessionOfOperation.length-1].sessionState":OPERATION_STATUS_AUTOMATIC.PLANNED,
+          operationAppointmentStatus:OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO,
+          "sessionOfOperation[sessionOfOperation.length-1].sessionState":SESSION_STATUS_LIST_AUTOMATIC.WAITING,
         },
       }
     );
@@ -121,7 +125,7 @@ const deleteAppointment = async (req,res,next) => {
 };
 const updateStateAppointment = async (req,res,next) => {
   try {
-    console.log("updateStateAppointment");
+    
     console.log(req.query);
     console.log(req.params);
 

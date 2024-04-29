@@ -9,7 +9,7 @@ const employeeSchema = new Schema({
   activeOrNot: { type: Boolean, default: true },
   email: { type: String, require: true },
   sex: { type: String, require: false },
-  birtdhDate: { type: Date, require: false },
+  birthDate: { type: Date, require: false },
   role: { type: Object },
   password: { type: String, require: false },
   phone: { type: String, require: false },

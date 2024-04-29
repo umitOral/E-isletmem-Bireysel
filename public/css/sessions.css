@@ -371,9 +371,6 @@ tr {
  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
  background-color: white;
 
- 
-  
-  padding: 0.5rem;
   cursor: pointer;
   z-index: 999;
 }
@@ -383,7 +380,7 @@ tr {
    width: 100px;
    cursor: pointer;
    border: none;
-   padding: 0.5rem;
+   padding: 0.5rem 1rem;
    
 }
 .session-options-modal.showed_modal{
@@ -432,10 +429,10 @@ tr {
 .session-options-modal.showed_modal span{
   padding: 0.5rem;
   cursor: pointer;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--color-main-gray);
 }
 .session-options-modal.showed_modal span:hover{
-  background-color: gray;
+  background-color: var(--color-main-gray);
 }
 .center .buttons{
   background-color: var(--color-main-gray);

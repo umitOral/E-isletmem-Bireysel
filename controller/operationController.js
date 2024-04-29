@@ -1,12 +1,15 @@
 import {
   OPERATION_STATUS,
   OPERATION_STATUS_AUTOMATIC,
+  OPERATION_APPOINTMENT_AVALIABLE_STATUS
 } from "../config/status_list.js";
 import Operation from "../models/OperationsModel.js";
 import {CustomError} from '../helpers/error/CustomError.js'
 
 const updateSessionStatus = async (req,res,next) => {
   try {
+    console.log(req.body)
+    console.log(req.params)
     let responseData = await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
       {
@@ -23,10 +26,11 @@ const updateSessionStatus = async (req,res,next) => {
     responseData.appointmensCount = responseData.sessionOfOperation.length;
     if (responseData.totalAppointments === responseData.appointmensCount) {
       responseData.operationStatus = OPERATION_STATUS_AUTOMATIC.FINISH;
+      
     } else {
-      responseData.operationStatus = OPERATION_STATUS_AUTOMATIC.CONTINUE;
+      responseData.operationStatus = OPERATION_STATUS_AUTOMATIC.WAITING;
     }
-
+    responseData.operationAppointmentStatus = OPERATION_APPOINTMENT_AVALIABLE_STATUS.YES;
     await responseData.save();
     console.log(responseData);
 

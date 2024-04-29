@@ -16,6 +16,8 @@ import {
   APPOINTMENT_STATUS,
   SERVICES_LIST,
   OPERATION_STATUS_AUTOMATIC,
+  ROLES_LIST,
+  PAYMENT_STATUS,
 } from "../config/status_list.js";
 import Subscription from "../models/subscriptionModel.js";
 import { response } from "express";
@@ -30,7 +32,7 @@ const createCompany = async (req, res, next) => {
 
     req.body.serviceDatas = [
       {
-        dataName: "saç yapısı",
+        dataName: "saç derisi",
         dataOptions: ["kuru", "karma", "normal"],
       },
     ];
@@ -52,7 +54,7 @@ const createCompany = async (req, res, next) => {
     }
 
     const company = await Company.create(data);
-    data.role = "yönetici";
+    data.role = ROLES_LIST.ADMIN;
     data.company = company._id;
 
     await Employee.create(data);
@@ -63,7 +65,10 @@ const createCompany = async (req, res, next) => {
       paymentTransactionId: 0,
     };
     await Subscription.create(subscriptionData);
-    next();
+    res.json({
+      success: true,
+      message: "kaydınız başarıyla oluşturuldu",
+    });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
@@ -91,7 +96,7 @@ const getUsersAllSessions = async (req, res, next) => {
   try {
     const sessions = await Session.find({ user: req.params.id }).populate([
       "doctor",
-      "operations",
+      "operations.operation",
     ]);
 
     res.status(200).json({
@@ -168,7 +173,7 @@ const findUsers = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const findSingleUser = async (req, res,next) => {
+const findSingleUser = async (req, res, next) => {
   try {
     //search
 
@@ -196,7 +201,7 @@ const findSingleUser = async (req, res,next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const findEmployees = async (req, res,next) => {
+const findEmployees = async (req, res, next) => {
   try {
     //search
     let query = User.find();
@@ -313,7 +318,7 @@ const createUser = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const editInformations = async (req, res,next) => {
+const editInformations = async (req, res, next) => {
   try {
     console.log(req.body);
     await User.findByIdAndUpdate(req.params.id, {
@@ -338,7 +343,7 @@ const editInformations = async (req, res,next) => {
 const loginUser = async (req, res, next) => {
   try {
     let same = false;
-   
+
     const employee = await Employee.findOne({ email: req.body.email });
 
     if (employee) {
@@ -464,7 +469,7 @@ const uploadPictures = async (req, res, next) => {
 
 const addDataToOperation = async (req, res, next) => {
   try {
-    console.log("addd data operaiton");
+    
     console.log(req.body);
     console.log(req.params);
 
@@ -506,7 +511,10 @@ const addOperation = async (req, res, next) => {
       element.user = req.params.id;
 
       if (req.body.discount !== 0) {
-        element.discount = req.body.discount;
+        element.percentDiscount = req.body.discount;
+      }
+      if (element.operationPrice === 0) {
+        element.paymentStatus = PAYMENT_STATUS.PAID;
       }
     });
 
@@ -525,13 +533,32 @@ const addDiscountToOperation = async (req, res, next) => {
     console.log(req.body);
     console.log(req.params);
 
-    await Operation.findByIdAndUpdate(req.params.operationID, {
-      $set: { discount: req.body.discount },
-    });
+    if ((req.body.discount === "") & (req.body.percentDiscount === "")) {
+      next(new CustomError("en az 1 adet indirim tanımlamanız gerekmektedir"));
+    } else if ((req.body.discount !== "") & (req.body.percentDiscount === "")) {
+      await Operation.findByIdAndUpdate(req.params.operationID, {
+        $set: {
+          discount: req.body.discount,
+        },
+      });
+    } else if ((req.body.percentDiscount !== "") & (req.body.discount === "")) {
+      await Operation.findByIdAndUpdate(req.params.operationID, {
+        $set: {
+          percentDiscount: req.body.percentDiscount,
+        },
+      });
+    } else if ((req.body.percentDiscount !== "") & (req.body.discount !== "")) {
+      await Operation.findByIdAndUpdate(req.params.operationID, {
+        $set: {
+          percentDiscount: req.body.percentDiscount,
+          discount: req.body.discount,
+        },
+      });
+    }
 
     res.json({
       succes: true,
-      message: "işlem başarıyla eklendi",
+      message: "indirim başarıyla tanımlandı",
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -576,18 +603,19 @@ const deleteOperation = async (req, res, next) => {
   try {
     console.log("delete operation");
     let operation = await Operation.findById(req.params.operationId).then(
-      (response) => {
+      async (response) => {
         if (response.sessionOfOperation.length !== 0) {
           res.status(200).json({
-            succes: true,
+            succes: false,
             message: "işleme ait seanslar bulunmaktadır.Silinemez",
           });
         } else if (response.payments.length !== 0) {
           res.status(200).json({
-            succes: true,
+            succes: false,
             message: "işleme ait ödemeler bulunmaktadır.Silinemez",
           });
         } else {
+          await Operation.findByIdAndDelete(req.params.operationId);
           res.status(200).json({
             succes: true,
             message: "işlem başarıyla silindi.",
@@ -803,9 +831,14 @@ const getAllPhotos = async (req, res, next) => {
 };
 const getUsersAllPayments = async (req, res, next) => {
   try {
-    console.log(req.params);
+    
 
-    const payments = await Payment.find({ fromUser: req.params.id });
+    const payments = await Payment.find({ fromUser: req.params.id })
+      payments.forEach(element => {
+        console.log(element.operations.operationId)
+      });
+
+
     if (payments.length === 0) {
       res.json({ success: true, message: "ödeme bulunamadı", data: payments });
     } else {

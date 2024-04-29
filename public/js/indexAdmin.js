@@ -241,7 +241,7 @@ function handleAppointmentSelect(e) {
   operationsArea.innerHTML = ``;
   let indexcontrol=responsedAppointments.findIndex((item)=>item._id===e.target.parentElement.parentElement.dataset.appointmentid)
   console.log(responsedAppointments)
-  let data=responsedAppointments[indexcontrol].operations.map((item)=>item._id)
+  let data=responsedAppointments[indexcontrol].operations.map((item)=>item.operation)
   
   console.log(data)
 

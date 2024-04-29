@@ -1,20 +1,16 @@
 
-import express, { Router } from "express";
+import express from "express";
 import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
 import fileUpload from "express-fileupload"; ///çoook önemli enctype="multipart/form-data" forma eklenecek
 import { v2 as cloudinary } from "cloudinary";
-
 import connect from "./controller/db.js";
-
-
 import dotenv from "dotenv";
 import pageRoute from "./routes/pageRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import superAdminRoutes from "./routes/superAdminRoutes.js";
 import api from "./routes/api.js";
 import { ErrorHandler } from "./middlewares/errorHandlerMiddleware.js";
-
 
 import * as authMiddleware from "./middlewares/authMiddleware.js";
 
@@ -25,13 +21,9 @@ dotenv.config();
 //app ana yapısı
 const app = express();
 
-
-
-
 //db connection
 connect()
  
-  
 
 //önemli cloudinary config
 cloudinary.config({
@@ -61,6 +53,7 @@ app.use(fileUpload({ useTempFiles: true }));
 
 //static files css,js
 app.use(express.static("public"));
+
 
 app.get("/views/front-side/main.ejs");
 //routes,middlewares

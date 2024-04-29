@@ -423,14 +423,14 @@ operationsSelect.addEventListener("change", () => {
             (100 - selectedOption.dataset.percentdiscount)) /
             100 -
           selectedOption.dataset.paidvalue
-        ).toFixed(1)}" 
+        ).toFixed()}" 
         value="${(
           ((selectedOption.dataset.price - selectedOption.dataset.discount) *
             (100 - selectedOption.dataset.percentdiscount)) /
             100 -
           selectedOption.dataset.paidvalue
-        ).toFixed(1)}"
-        step="0.1">  
+        ).toFixed()}"
+        step="1">  
       </td>
       
       <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
@@ -451,7 +451,7 @@ function calculatetTotalPrice() {
   if (paymentValues.length === 0) {
     totalValue.textContent = 0;
   } else {
-    totalValue.textContent = paymentValues.reduce((a, b) => a + b).toFixed(1);
+    totalValue.textContent = paymentValues.reduce((a, b) => a + b).toFixed();
   }
 }
 function calculatetTotalPriceforEdit() {

@@ -4,7 +4,7 @@ import { sendErrorEmail } from "../controller/mailControllers.js";
 import {CustomError} from '../helpers/error/CustomError.js'
 
 const ErrorHandler = async (err, req, res, next) => {
-  
+  console.log(err)
   let customError = err;
   
 if (customError.error) {

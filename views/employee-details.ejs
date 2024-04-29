@@ -37,12 +37,12 @@
                             <div class="show-content informations">Bilgiler<i
                                     class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <div class="show-content sessions">Randevular
+                            <div class="show-content appointments">Randevular
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <div class="show-content payment">Tahsilatlar
+                            <!-- <div class="show-content payment">Tahsilatlar
                                 <i class="fa-solid fa-pen-to-square edit"></i>
-                            </div>
+                            </div> -->
 
 
 
@@ -54,105 +54,100 @@
 
 
                             <div class="contents">
-
                                 <div class="userInformationsContent showed_content  generals">
-                                    <h2>Bilgiler</h2>
-                                    <hr>
-                                    <div class="inputs ">
-                                        <span>İsim</span>
-                                        <input type="text" name="name" id="name" value="<%= singleUser.name %>" readonly>
+                                    <div>
+                                        <h2>Bilgiler</h2>
                                     </div>
-                                    <div class="inputs ">
-                                        <span>Soyisim</span>
-                                        <input type="text" name="surname" id="surname" value="<%= singleUser.surname %>"
-                                            readonly>
-                                    </div>
-                                    
-                                    <div class="inputs ">
-                                        <span>Görev</span>
-                                        
-                                        <input type="text" name="role" id="user-surname"
-                                            value="<%= singleUser.role %>">
-                                    </div>
-                                    <div class="options">
-                                        <span>Aktiflik:</span>
-                                        
-                                        <% if(singleUser.activeOrNot==true){ %>
-                                            <div>
-                                                <input type="radio" id="activeOrNot-true" name="activeOrNot" checked >
-                                                <label for="activeOrNot-true">Aktif</label>
-                                                
-                                                
-                                            </div>
-                                          <% } else{ %>  
-                                            <div>
+                                    <div class="contentBody">
+                                        <div class="inputs ">
+                                            <span>İsim</span>
+                                            <input type="text" name="name" id="name" value="<%= singleUser.name %>" readonly>
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Soyisim</span>
+                                            <input type="text" name="surname" id="surname" value="<%= singleUser.surname %>"
+                                                readonly>
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Görev</span>
+                                            
+                                            <input type="text" name="role" id="user-surname"
+                                                value="<%= singleUser.role %>">
+                                        </div>
+                                        <div class="options">
+                                            <span>Aktiflik:</span>
+                                            
+                                            <% if(singleUser.activeOrNot==true){ %>
+                                                <div>
+                                                    <input type="radio" id="activeOrNot-true" name="activeOrNot" checked >
+                                                    <label for="activeOrNot-true">Aktif</label>
+                                                </div>
+                                              <% } else{ %>  
+                                                <div>
+                    
+                                                    <input type="radio" id="activeOrNot-false" name="activeOrNot" value="false" checked="checked" >
+                                                    &nbsp; <label for="activeOrNot-false">Deaktif</label>
+                    
+                                                </div>
+                                             <% } %>
                 
-                                                <input type="radio" id="activeOrNot-false" name="activeOrNot" value="false" checked="checked" >
-                                                &nbsp; <label for="activeOrNot-false">Deaktif</label>
+                                        </div>
+                                        <div class="options">
+                                            <span>Cinsiyet:</span>
+                                            <% if(singleUser.sex==="male"){ %>
+                                                <div>
+                                                   
+                                                    <input type="radio" id="sex-man" name="sex" value="male" checked="checked">
+                                                    &nbsp; <label for="sex-man">Erkek</label>
+                    
+                                                </div>
+                                              <% } else{ %>  
+                                                <div>
+                                                    <input type="radio" id="sex-women" name="sex" value="female" checked="checked">
+                                                    &nbsp; <label for="sex-women">Kadın</label>
+                    
+                                                </div>
+                                             <% } %>
                 
-                                            </div>
-                                         <% } %>
-                                        
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Doğum Tarihi</span>
+                                            
+                                            <input type="date" name="" id="" <% if (singleUser.birthDate) { %>
+                                             value="<%= singleUser.birthDate.toISOString().split('T')[0] %>"
+                                            <% } %> readonly>
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Mail</span>
+                                            <input type="email" name="" id="" value="<%= singleUser.email %>" readonly>
+                                        </div>
+    
+                                        <div class="inputs">
+                                            <span>Adres:</span>
+                                            <input type="text" value="<%= singleUser.address %>" readonly>
+                                        </div>
+                                        <div class="inputs ">
+                                            <span>Telefon</span>
+                                            <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
+                                        </div>
+    
+                                        <div class="inputs ">
+                                            <span>Kayıt Tarihi:</span>
+                                            <input type="text" name="" id="" value="<%= new Date(singleUser.registerDate).toLocaleDateString("tr-TR") %>" readonly>
+                                        </div>
                                        
-            
-                                    </div>
-                                    <div class="options">
-                                        <span>Cinsiyet:</span>
-                                        <% if(singleUser.sex==="male"){ %>
-                                            <div>
-                                               
-                                                <input type="radio" id="sex-man" name="sex" value="male" checked="checked">
-                                                &nbsp; <label for="sex-man">Erkek</label>
-                
-                                            </div>
-                                          <% } else{ %>  
-                                            <div>
-                                                <input type="radio" id="sex-women" name="sex" value="female" checked="checked">
-                                                &nbsp; <label for="sex-women">Kadın</label>
-                
-                                            </div>
-                                         <% } %>
-                                        
-                                       
-            
-                                    </div>
-                                    
-                                   
-                                    <div class="inputs ">
-                                        <span>Doğum Tarihi</span>
-                                        <input type="date" name="" id="" value="<%= singleUser.birthDate %>" readonly>
-                                    </div>
-                                    <div class="inputs ">
-                                        <span>Mail</span>
-                                        <input type="email" name="" id="" value="<%= singleUser.email %>" readonly>
-                                    </div>
 
-                                    <div class="inputs">
-                                        <span>Adres:</span>
-                                        <input type="text" value="<%= singleUser.address %>" readonly>
                                     </div>
-                                    
-                                    
-                                    <div class="inputs ">
-                                        <span>Telefon</span>
-                                        <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
-                                    </div>
-
-
-                                    <div class="inputs ">
-                                        <span>Kayıt Tarihi:</span>
-                                        <input type="text" name="" id="" value="<%= new Date(singleUser.registerDate).toLocaleDateString("tr-TR") %>" readonly>
-                                    </div>
-                                   
                                     <span class="edit-informations-btn">Düzenle</span>
-
+                                    
 
                                 </div>
-                                <div class="userInformationsContent  sessions ">
+                                <div class="userInformationsContent  appointments ">
+                                   <div>
                                     <h2>Seanslar</h2>
-                                    <hr>
-
-                                    <div class="table user-table">
+                                   </div>
+                                   <div class="contentBody">
+                                    <div class="table appointments-table">
                                         <table>
                                             <thead>
 
@@ -163,98 +158,21 @@
                                                 <th>Notlar</th>
                                                 <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></th>
                                             </thead>
-                                            <% sessions.forEach(session=> { %>
-                                                <tr>
-
-                                                    <td>
-                                                        <%= new Date(session.date).toLocaleDateString("tr-TR") %>
-                                                    </td>
-
-                                                    <td>
-                                                        <%= new
-                                                            Date(session.startHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
-                                                            %>-
-                                                            <%= new
-                                                                Date(session.endHour).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})
-                                                                %>
-                                                    </td>
-
-                                                    <td>
-                                                        <%= session.user.name %>
-                                                    </td>
-                                                    <td>
-                                                        <%= session.services%>
-                                                    </td>
-                                                    <td>
-                                                        <%= session.description %>
-                                                    </td>
-
-
-                                                    <td>
-                                                        <p class="finish">
-                                                            <%= session.state %>
-                                                        </p>
-                                                    </td>
-                                                    <td><a href="#">Düzenle</a></td>
-                                                </tr>
-                                                <% }) %>
+                                            <tbody></tbody>
 
 
                                         </table>
 
                                     </div>
+                                   </div>
+                                    
+
+                                   
 
                                 </div>
-                                <div class="userInformationsContent payments">
-                                    <h2>Ödemeler</h2>
+                                
 
-                                    <div class="table user-table">
-                                        <table>
-                                            <thead>
-                                                <th>Id</th>
-                                                <th>Tarih</th>
-                                                <th>Tutar</th>
-                                                <th>K.Kartı/Nakit</td>
-
-                                            </thead>
-
-
-
-
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td>Toplam:</td>
-                                                <td> xxxxx</td>
-                                            </tr>
-
-                                        </table>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="userInformationsContent procces">
-                                    <h2>İşlemler</h2>
-                                    <div class="operation_name"> <b>Saç Ekimi:</b></div>
-                                    <div class="table">
-                                        <table class="user-table-main">
-                                            <thead>
-                                                <th>Id</th>
-                                                <th>Tarih</th>
-                                                <th>Tutar</th>
-                                                <th>K.Kartı/Nakit</td>
-
-                                            </thead>
-                                            <tbody>
-                                                <tr></tr>
-                                            </tbody>
-
-                                        </table>
-
-                                    </div>
-
-                                </div>
+                                
 
                             </div>
 
@@ -280,64 +198,45 @@
                             <span>Görev:</span>
                             <select name="role" id="role">
                                 <option value="<%= singleUser.role %>"checked disable hidden><%= singleUser.role %> </option>
-                                <% rolesValue.forEach(role => { %>
+                                <% roles.forEach(role => { %>
                                     <option value="<%= role %>"><%=role %></option >
                                 <% }) %>
                             </select>
                             
                         </div>
                         
-                        <div class="options">
-                            <span>Aktiflik:</span>
-                            <% if(singleUser.activeOrNot==true){ %>
-                                <div>
-                                    <input type="radio" id="activeOrNotUpdate-true" name="activeOrNot" value="true" checked="checked">
-                                    &nbsp; <label for="activeOrNotUpdate-true">Aktif</label>
-    
-                                    <input type="radio" id="activeOrNotUpdate-false" name="activeOrNot" value="false" >
-                                    &nbsp; <label for="activeOrNotUpdate-false">Pasif</label>
-    
-                                </div>
-                              <% } else{ %>  
-                                <div>
-                                    <input type="radio" id="activeOrNotUpdate-true" name="activeOrNot" value="true" >
-                                    &nbsp; <label for="activeOrNotUpdate-true">Aktif</label>
-    
-                                    <input type="radio" id="activeOrNotUpdate-false" name="activeOrNot" value="false" checked="checked" >
-                                    &nbsp; <label for="activeOrNotUpdate-false">Deaktif</label>
-    
-                                </div>
-                             <% } %>
-                            
-                           
-
-                        </div>
+                        
                         <div class="options">
                             <span>Cinsiyet:</span>
-                            <% if(singleUser.sex==="male"){ %>
+                            <% if(singleUser.sex==="male" ){ %>
                                 <div>
-                                    <input type="radio" id="sex-women-update" name="sex" value="female" >
+                                    <input type="radio" id="sex-women-update" name="sex" value="female">
                                     &nbsp; <label for="sex-women-update">Kadın</label>
-    
+
                                     <input type="radio" id="sex-man-update" name="sex" value="male" checked="checked">
                                     &nbsp; <label for="sex-man-update">Erkek</label>
-    
+
                                 </div>
-                              <% } else{ %>  
-                                <div>
-                                    <input type="radio" id="sex-women-update" name="sex" value="female" checked="checked">
-                                    &nbsp; <label for="sex-women-update">Kadın</label>
-    
-                                    <input type="radio" id="sex-man-update" name="sex" value="male">
-                                    &nbsp; <label for="sex-man-update">Erkek</label>
-    
-                                </div>
-                             <% } %>
+                                <% } else{ %>
+                                    <div>
+                                        <input type="radio" id="sex-women-update" name="sex" value="female"
+                                            checked="checked">
+                                        &nbsp; <label for="sex-women-update">Kadın</label>
+
+                                        <input type="radio" id="sex-man-update" name="sex" value="male">
+                                        &nbsp; <label for="sex-man-update">Erkek</label>
+
+                                    </div>
+                                    <% } %>
 
                         </div>
+                        
                         <div class="inputs ">
                             <span>Doğum Tarihi:</span>
-                            <input type="date" name="birtdhDate" id="birtdhDate" value="<%= singleUser.birthDate %>" >
+                            
+                            <input type="date" name="birthDate" id="" <% if (singleUser.birthDate) { %>
+                                value="<%= singleUser.birthDate.toISOString().split('T')[0] %>"
+                               <% } %> readonly>
                         </div>
                         <div class="inputs ">
                             <span>Email:</span>

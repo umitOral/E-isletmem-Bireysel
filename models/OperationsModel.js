@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { OPERATION_STATUS_AUTOMATIC } from "../config/status_list.js";
+import { OPERATION_STATUS_AUTOMATIC,OPERATION_APPOINTMENT_AVALIABLE_STATUS } from "../config/status_list.js";
 
 const Schema = mongoose.Schema;
 const OperationSchema = new Schema(
@@ -12,7 +12,7 @@ const OperationSchema = new Schema(
     },
     operationAppointmentStatus: {
       type: String,
-      default: "yok",
+      default: OPERATION_APPOINTMENT_AVALIABLE_STATUS.YES,
     },
     operationStatus: {
       type: String,

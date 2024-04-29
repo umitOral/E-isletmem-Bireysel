@@ -90,7 +90,9 @@
 
                                         </td>
                                         <% if(employee.activeOrNot){ %>
-                                            <td><a href="./users/<%= employee._id %>/deactivateEmployee">Pasif Et</a></td>
+                                            <td><% if (employee.role!=="admin") { %>
+                                                <a href="./users/<%= employee._id %>/deactivateEmployee">Pasif Et</a>
+                                            <% } %></td>
                                             <% } else{ %>
                                                 <td><a href="./users/<%= employee._id %>/activateEmployee">Aktif Et</a></td>
                                                 <% } %>

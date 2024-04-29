@@ -4,65 +4,52 @@ export class UI {
   }
 
   showModal(success, message) {
-    
-    let wrapper=document.querySelector( ".information-modal-wrapper")
+    let wrapper = document.querySelector(".information-modal-wrapper");
     var information = document.createElement("div");
     information.className = "information";
-    
+
     if (success === false) {
       information.classList.add("failure");
-   
-      information.innerHTML=`<span>${message}</span><i class="fa-solid fa-circle-xmark"></i>`
-      wrapper.appendChild(information)
-      
+
+      information.innerHTML = `<span>${message}</span><i class="fa-solid fa-circle-xmark"></i>`;
+      wrapper.appendChild(information);
     } else {
       information.classList.add("success");
-     
+
       information.innerHTML = `
             <span>${message}</span><i class="fa-solid fa-circle-check"></i>
         `;
-        wrapper.appendChild(information)
+      wrapper.appendChild(information);
     }
 
-  
-
-    
     setTimeout(() => {
       information.remove();
     }, 3000);
-   
-       
-            
-   
-   
 
     // Bildirimi görünür hale getir
-   
-    
   }
 
- 
-
   addPaymentsToTable(table, data) {
-    
     const rows = table.querySelectorAll("tbody tr");
-    const tableBody = table.querySelector("tbody"); 
-    const totalValue = table.querySelector("#total-value"); 
+    const tableBody = table.querySelector("tbody");
+    const totalValue = table.querySelector("#total-value");
 
     rows.forEach((element) => {
       element.remove();
     });
 
-  
-    if (data.length!==0) {
-      
-      totalValue.textContent=data.map((item)=>item.totalPrice).reduce((a,b)=>a+b)
+    if (data.length !== 0) {
+      totalValue.textContent = data
+        .map((item) => item.totalPrice)
+        .reduce((a, b) => a + b);
       for (const index in data) {
         const element = data[index];
-  
+
         tableBody.innerHTML += `
             <tr data-paymentid="${element._id}">
-                <td>${new Date(element.createdAt).toLocaleDateString("tr-TR")}</td>
+                <td>${new Date(element.createdAt).toLocaleDateString(
+                  "tr-TR"
+                )}</td>
                 <td>${element.cashOrCard}</td>
                 <td>${element.totalPrice}</td>
                 
@@ -78,18 +65,13 @@ export class UI {
                 
             </tr>
             `;
-  
       }
-    }else{
-     
-      tableBody.innerHTML =`
+    } else {
+      tableBody.innerHTML = `
       Herhangi bir ödeme bulunamadı
-      `
+      `;
     }
-
-    
   }
-
 
   showOldOperations(data) {
     const oldOperationsTable = document.querySelector(
@@ -132,18 +114,22 @@ export class UI {
       tableBody.innerHTML += `
           <tr data-operationid="${element._id}">
              
-              <td>${new Date(element.createdAt).toLocaleDateString("tr-TR")}</td>
+              <td>${new Date(element.createdAt).toLocaleDateString(
+                "tr-TR"
+              )}</td>
               <td>${element.operationName}</td>
               <td>${element.operationStatus} </td>
               <td>${element.operationAppointmentStatus} </td>
               
-              <td>${element.sessionOfOperation.length}/${element.totalAppointments}</td>
+              <td>${element.sessionOfOperation.length}/${
+        element.totalAppointments
+      }</td>
               <td>
               
               ${element.operationData
                 .map(
                   (item, i) => `
-              <div data-dataId="${item._id}" data-dataName="${item.dataName}">
+              <div data-dataId="${item._id}" data-dataName="${item.dataName}" style="width:max-content;display:flex;gap:0.5rem;align-items:center;">
                  ${item.dataName}:${item.data}
                  <i title="Datayı düzenle" class="fa-regular fa-pen-to-square edit-operation-data"></i>
                  <i title="Datayı Sil" class="fa-regular fa-trash-can delete-operation-data"></i>
@@ -156,10 +142,11 @@ export class UI {
               
               <td>${element.operationPrice} </td>
               <td>${element.discount}TL+%${element.percentDiscount}</td>
-              <td>${
-                (element.operationPrice-element.discount )* ((100 - element.percentDiscount) / 100)
-              }</td>
-              <td>${element.paidValue}</td>
+              
+              <td>${element.paidValue}/${
+        (element.operationPrice - element.discount) *
+        ((100 - element.percentDiscount) / 100)
+      }</td>
               <td>${(() => {
                 if (element.images.length !== 0) {
                   return `
@@ -186,51 +173,68 @@ export class UI {
               <td><i class="fa-solid fa-arrow-turn-down show-sessions" title="seansları göster"></i></td>
               
           </tr>
+
           <tr class="inner-table">
-            <td colspan=3>
-                <table>
-                <thead>
-                  <th>Seans</th>
-                  <th>Seans Durumu</th>
-                  <th>Tarih</th>
-                  <th>Seans Verisi</th>
-                </thead>
-                <tbody>
+          <td>
+              <table>
+                <tr>
+                    <th>Seans</th>
+                    <th>Personel</th>
+                    <th>Seans Durumu</th>
+                    <th>Tarih</th>
+                    <th>Seans Verisi</th>
+                </tr>
                 
-                  ${element.sessionOfOperation.map((item,index)=>`
-                  <tr>
-                    <td>seans-${index+1}</td>
+                
+                  ${element.sessionOfOperation
+                    .map(
+                      (item, index) => `
+                      <tr>
+                    <td>seans-${index + 1}</td>
                     <td>${item.sessionState}</td>
+                    <td>${item.sessionState}</td>
+                   
                     
-                    <td>${(()=>{
-                      if(item.sessionDate){
-                        return `${new Date(item.sessionDate).toLocaleDateString("tr-TR")}`
-                      }else{
-                        return `Bekleniyor`
+                    <td>${(() => {
+                      if (item.sessionDate) {
+                        return `${new Date(item.sessionDate).toLocaleDateString(
+                          "tr-TR"
+                        )}`;
+                      } else {
+                        return `Bekleniyor`;
                       }
                     })()}</td>
-                    <td>${item.sessionDatas.map((item)=>`
-                      ${item.dataName}: ${item.data}
-                    `).join("")}</td>
+                    <td>${item.sessionDatas
+                      .map(
+                        (item) => `
+                                    ${item.dataName}: ${item.data}
+                                  `
+                      )
+                      .join("")}
+                    </td>
                     
                     <td>${(() => {
                       if (item.sessionDescription) {
                         return `
-                       ${item.sessionDescription}
-                        `;
+                                  ${item.sessionDescription}
+                                `;
                       } else {
                         return `Not Yok`;
                       }
-                    })()}</td>
-                   
-                  </tr>
-                `).join("")}
+                    })()}
+                    </td>
+                   </tr>
                   
-                </tbody>
-              </table>
-            </td>
+                  `
+                    )
+                    .join("")}
+                  
                 
-              
+
+              </table>
+          </td> 
+                  
+     
           </tr>
           `;
     }
@@ -256,22 +260,24 @@ export class UI {
           </div>
             <div class="operation-describe">
                 ${(() => {
-                        if (element.operationDescription) {
-                          return `
+                  if (element.operationDescription) {
+                    return `
                           <span>Notlar:</span>
                           <span id="operation-describe-details">${element.operationDescription}</span>
                           `;
-                        } else {
-                          return ``;
-                        }
-                      })()}
+                  } else {
+                    return ``;
+                  }
+                })()}
               </div>
             <div class="operation-datas">
                 ${(() => {
-                        if (element.operationData.length!==0) {
-                          return `
+                  if (element.operationData.length !== 0) {
+                    return `
                           
-                            ${element.operationData.map((item)=>`
+                            ${element.operationData
+                              .map(
+                                (item) => `
                                 <div  data-dataname="${item.dataName}" data-dataid="${item._id}">
                                   ${item.dataName}:${item.data}
                                   <div>
@@ -279,27 +285,34 @@ export class UI {
                                   <i title="İşlem verisi Sil" class="fa-solid fa-trash delete-data-operation"></i>
                                   </div>
                                 </div>
-                            `).join("")}
+                            `
+                              )
+                              .join("")}
                           `;
-                        } else {
-                          return ``;
-                        }
-                      })()}
+                  } else {
+                    return ``;
+                  }
+                })()}
               </div>
              
 
         </div>
       
       <div class="session-of-operation" data-sessionid="${
-          element.sessionOfOperation[element.sessionOfOperation.length - 1]
-            ._id
-        }">
+        element.sessionOfOperation[element.sessionOfOperation.length - 1]._id
+      }">
         <div class=""session-header>
           Seans:${element.sessionOfOperation.length}
         </div>
         <div class="operation_options">
           <select name="" class="edit-session-status">
-          <option value="${element.sessionOfOperation[element.sessionOfOperation.length - 1].sessionState}" selected hidden disable>${element.sessionOfOperation[element.sessionOfOperation.length - 1].sessionState} </option>
+          <option value="${
+            element.sessionOfOperation[element.sessionOfOperation.length - 1]
+              .sessionState
+          }" selected hidden disable>${
+        element.sessionOfOperation[element.sessionOfOperation.length - 1]
+          .sessionState
+      } </option>
                   ${SESSION_STATUS.map(
                     (item) => `<option value="${item}">${item}</option>`
                   )}
@@ -327,18 +340,25 @@ export class UI {
               )
               .join("")}
           
-            ${(()=>{
-              if (element.sessionOfOperation[element.sessionOfOperation.length - 1].sessionDescription) {
+            ${(() => {
+              if (
+                element.sessionOfOperation[
+                  element.sessionOfOperation.length - 1
+                ].sessionDescription
+              ) {
                 return `
                 <div >Notlar:
-                ${element.sessionOfOperation[element.sessionOfOperation.length - 1].sessionDescription}
+                ${
+                  element.sessionOfOperation[
+                    element.sessionOfOperation.length - 1
+                  ].sessionDescription
+                }
                   
                 </div>
-                `
+                `;
               } else {
-                return ``
+                return ``;
               }
-
             })()}
         </div>
        
@@ -502,7 +522,7 @@ export class UI {
     netCash.innerHTML = data.netCash;
   }
 
-  showAllSessionToUI(allTimesforAllDoctors, AllDoctor,APPOINTMENT_STATUS) {
+  showAllSessionToUI(allTimesforAllDoctors, AllDoctor, APPOINTMENT_STATUS) {
     console.log(allTimesforAllDoctors);
     const allDoctorEvents = document.querySelector(".events-all-doctors");
 
@@ -510,14 +530,17 @@ export class UI {
       allDoctorEvents.firstChild.remove();
     }
 
+
     allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
       const singleDoctorArea = document.createElement("div");
+
       singleDoctorArea.className = "single-doctor-area";
       singleDoctorArea.setAttribute("data-doctorid", AllDoctor[index]._id);
 
       singleDoctorArea.innerHTML += `
+
             <div class="doctor-name" value="">
-                ${AllDoctor[index].name}
+                ${AllDoctor[index].name} ${AllDoctor[index].surname}
             </div>
             `;
       // singleDoctorArea.dataset=AllDoctor[index]._id
@@ -532,7 +555,7 @@ export class UI {
                     <div class="event full" data-session="${
                       element._id
                     }" data-userName="${element.user.name}" style="height:${
-            (element.timeIndexes[1] - element.timeIndexes[0] + 1) * 75
+            (element.timeIndexes[1] - element.timeIndexes[0] + 1) * 100
           }px">
 
                         <div class="center">
@@ -548,6 +571,10 @@ export class UI {
                             <span>${element.user.name} ${
             element.user.surname
           }</span>
+                            <span>${element.operations.map(
+                              (item) => item.operationName
+                            )}
+                            </span>
                             
                             
                             <span class="buttons">${
@@ -563,9 +590,11 @@ export class UI {
                                 more_vert
                             </span>
                             <div class="session-options-modal">
-                                ${APPOINTMENT_STATUS.map((item)=>`
+                                ${APPOINTMENT_STATUS.map(
+                                  (item) => `
                                 <span class="change-state" value="${item}">${item}</span>
-                                `).join("")}
+                                `
+                                ).join("")}
                                 
                               
                                 
@@ -620,7 +649,7 @@ export class UI {
       });
     });
   }
-  sessionToUISingleDoctor(times,APPOINTMENT_STATUS_LIST) {
+  sessionToUISingleDoctor(times, APPOINTMENT_STATUS_LIST) {
     const appointmentsOfDoctor = document.querySelector(
       ".appointments-of-doctor"
     );
@@ -635,7 +664,7 @@ export class UI {
                     <div class="event full" data-appointmentid="${
                       element._id
                     }" data-userid="${element.user._id}" style="height:${
-          (element.timeIndexes[1] - element.timeIndexes[0] + 1) * 75
+          (element.timeIndexes[1] - element.timeIndexes[0] + 1) * 100
         }px">
 
                         <div class="center">
@@ -655,11 +684,15 @@ export class UI {
                             <select class="change-state-appointment" name="" id="">
                               <option   value="${
                                 element.appointmentState
-                              }" selected disable hidden>${element.appointmentState}</option>
+                              }" selected disable hidden>${
+          element.appointmentState
+        }</option>
                               <span class="delete-session">Sil</span>
-                              ${APPOINTMENT_STATUS_LIST.map((item)=>`
+                              ${APPOINTMENT_STATUS_LIST.map(
+                                (item) => `
                               <option  value="${item}">${item}</option>
-                              `)}
+                              `
+                              )}
                             </select>
      
                         </div>
@@ -720,6 +753,9 @@ export class UI {
   addOperationstoUI(data) {
     const userSelect = document.querySelector("#user-select");
     const orderSelect = document.getElementById("proccess_type_add");
+    while (orderSelect.firstChild) {
+      orderSelect.firstChild.remove()
+    }
     if (data.length === 0) {
       let opt = document.createElement("option");
       opt.setAttribute("selected", "");
@@ -744,6 +780,7 @@ export class UI {
         let opt = document.createElement("option");
         opt.setAttribute("data-price", element.operationPrice);
         opt.setAttribute("data-id", element._id);
+        opt.setAttribute("data-nextsessionnumber", element.sessionOfOperation.length+1);
         opt.textContent = element.operationName;
         opt.value = element.operationName;
         orderSelect.add(opt);

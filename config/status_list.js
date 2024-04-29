@@ -4,8 +4,7 @@ const APPOINTMENT_STATUS = {
   USERCANCEL:"hasta iptali",
 };
 const APPOINTMENT_STATUS_AUTOMATIC= {
-  WAITING: "bekleniyor",
-  FINISH:"tamamlandı",
+  WAITING: "aksiyon bekliyor",
 };
 
 const SESSION_STATUS_LIST = {
@@ -15,8 +14,12 @@ const SESSION_STATUS_LIST = {
   FINISH:"tamamlandı"
 };
 const SESSION_STATUS_LIST_AUTOMATIC = {
-  WAITING:"bekleniyor",
+  WAITING:"aksiyon bekliyor",
   PLANNED:"planlandı"
+};
+const PAYMENT_STATUS = {
+  PAID:"ödendi",
+  NOTPAID:"ödenmedi"
 };
 
 const SERVICES_LIST = ["ayak bakımı", "tırnak bakımı", "peeling"];
@@ -29,15 +32,20 @@ const OPERATION_STATUS = {
 const OPERATION_STATUS_AUTOMATIC = {
   FINISH:"tamamlandı",
   CONTINUE:"devam ediyor",
-  WAITING:"bekleniyor",
+  WAITING:"aksiyon bekliyor",
   PLANNED:"planlandı"
+}
+const OPERATION_APPOINTMENT_AVALIABLE_STATUS = {
+  NO:"var",
+  YES:"yok",
 }
 
   
 
 const ROLES_LIST = {
-  ADMIN: "yönetici",
-  DOCTOR: "doktor",
+  ADMIN:"admin",
+  MANAGER: "yönetici",
+  EMPLOYEE: "personel",
   RECEPTION: "resepsiyon",
   FINANCE: "muhasebe",
 };
@@ -52,5 +60,8 @@ export {
   ROLES_LIST,
   ORDER_STATUS_LIST,
   SESSION_STATUS_LIST,
-  OPERATION_STATUS_AUTOMATIC
+  OPERATION_STATUS_AUTOMATIC,
+  PAYMENT_STATUS,
+  OPERATION_APPOINTMENT_AVALIABLE_STATUS,
+  SESSION_STATUS_LIST_AUTOMATIC
 };

@@ -192,6 +192,7 @@
 
 .userInformationsContent.generals,
 .sessions,
+.appointments,
 .payments,
 .images, .procces {
   
@@ -215,7 +216,7 @@
 .userInformationsContent.showed_content .contentBody{
   overflow-y: auto;
   overflow-x: hidden;
-  height: 45vh;
+  height: 65vh;
   width: 100%;
 }
 .userInformationsContent.showed_content>div {
@@ -223,7 +224,9 @@
 
 }
 .userInformationsContent.showed_content>div:first-child {
-  background-color: var(--colo);
+  background-color: var(--color-info-light);
+  border-top-left-radius: var(--card-border-radius);
+  border-top-right-radius: var(--card-border-radius);
   text-align: center;
 }
 .inputs{

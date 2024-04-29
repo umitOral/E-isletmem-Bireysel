@@ -1,7 +1,9 @@
 import User from "../models/userModel.js";
 import Employee from "../models/EmployeesModel.js";
+import Sessions from "../models/sessionModel.js";
 import Company from "../models/companyModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
+import { APPOINTMENT_STATUS } from "../config/status_list.js";
 
 const createEmployees = async (req, res, next) => {
   try {
@@ -55,5 +57,20 @@ const editInformationsEmployees = async (req, res) => {
     });
   }
 };
+const getEmployesAppointments = async (req, res, next) => {
+  console.log(req.params)
+  try {
+    const appointments = await Sessions.find({doctor:req.params.employeesID}).populate("user",["name","surname"]).populate("operations");
+    console.log(appointments)
+    
+    res.status(200).json({
+      appointments,
+      APPOINTMENT_STATUS:Object.values(APPOINTMENT_STATUS),
+      link: "employees",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 
-export { createEmployees, editInformationsEmployees };
+export { createEmployees, editInformationsEmployees,getEmployesAppointments };

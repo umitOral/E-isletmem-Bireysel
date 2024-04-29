@@ -1,6 +1,8 @@
 import { Request } from "./requests.js";
 const request = new Request();
 import { UI } from "./ui.js";
+import { EmployeeDetailsUI } from "./ui/ui.employeeDetails.js";
+const employeeDetailsUI = new EmployeeDetailsUI();
 const ui = new UI();
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
@@ -10,6 +12,7 @@ const contents = document.querySelectorAll(".userInformationsContent");
 
 
 const tableElements = document.querySelectorAll("table");
+const appointmentsTabButton = document.querySelector(".show-content.appointments");
 
 
 const editBtn = document.querySelector(".edit-informations-btn");
@@ -39,6 +42,7 @@ function eventListeners() {
   
   editUserButton.addEventListener("click", editUser);
   editBtn.addEventListener("click", showInformationsModal);
+  appointmentsTabButton.addEventListener("click", getEmployeesAppointments);
   
   
 }
@@ -70,8 +74,8 @@ function editUser(e) {
       sex:form.sex.value,
       address:form.address.value,
       phone:form.phone.value,
-      activeOrNot:form.activeOrNot.value,
-      birtdhDate:form.birtdhDate.value,
+      
+      birthDate:form.birthDate.value,
       
     })
     .then((response) => {
@@ -133,6 +137,16 @@ const saveModal = document.querySelectorAll(".modal .save_button");
 function showInformationsModal() {
   
   modalUser.classList.add("showed_modal");
+}
+
+function getEmployeesAppointments() {
+  
+  request.getwithUrl(document.location.pathname+"/getEmployesAppointments")
+  .then(response=>{
+    console.log(response)
+    employeeDetailsUI.responseToUI(response.appointments,response.APPOINTMENT_STATUS)
+  })
+  .catch(err=>console.log(err))
 }
 
 

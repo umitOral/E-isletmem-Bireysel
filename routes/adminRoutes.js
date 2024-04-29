@@ -1,7 +1,7 @@
 import express from 'express';
 import {companyPaymentPage,companyPaymentsListPage,getSettingsPage,getAdminPage,getUsersPage,deneme,getAppointmentsPage,getEmployeessStaticsPage,getAppointmentsStaticsPage,getPaymentStaticsPage,getUsersStaticsPage,getUserPage,getSingleEmployeePage,getservicesPage,getEmployeesPage,getPaymentsPage,getDatasPage} from '../controller/pageController.js';
 import {logOut,createUser,deletePhoto,addOperation,addDiscountToOperation,addOperationInsideAppointment,getUsersOldOperations,addDataToOperation,deleteOperation,uploadPictures,getAllPhotos,getUsersAllPayments,getUsersContinueOperations,getUsersPlannedOperations,getUsersHasPaymentOperations,getUsersAllOperations,editInformations,findUsers,findSingleUser,findEmployees,deactivateEmployee,activateEmployee,getUsersAllSessions} from '../controller/userController.js';
-import {createEmployees,editInformationsEmployees} from '../controller/employeesController.js';
+import {createEmployees,editInformationsEmployees,getEmployesAppointments} from '../controller/employeesController.js';
 
 import {addService,editService,findServices,activateService,deactivateService} from '../controller/serviceControllers.js';
 import {addData,addOptiontoData,editOptionofData,getData,deleteOption} from '../controller/dataController.js';
@@ -78,6 +78,7 @@ router.route("/addCompanyPayment").post(addCompanyPayment)
 
 router.route("/employees").get(getEmployeesPage)
 router.route("/employees/:id").get(verifyRoles(ROLES_LIST.ADMIN),getSingleEmployeePage)
+router.route("/employees/:employeesID/getEmployesAppointments").get(getEmployesAppointments)
 
 router.route("/employees/search").get(findEmployees)
 router.route("/employees/createEmployee").post(createEmployees)

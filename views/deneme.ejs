@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Untitled</title>
+<meta name="generator" content="PSPad editor, www.pspad.com">
+<style type="text/css">
+.products {
+	float: left; /* to shrink-wrap the table */
+	position: relative; /* cross-browser consistent reference can only be placed outside the table element */
+	margin-bottom: -1px ; /* bottom margin to collapse the next table border touching, simulating next row */
+	border: solid #000;
+	border-width: 1px 0 1px 0;
+}
+.products table{
+	table-layout: auto; /* table width is shared by the columns according to cell content, table expands by no-break content */
+	table-layout: fixed; /* table width is equally shared by the columns, clips no-break content */
+	border-collapse: collapse;
+	width: 600px;
+}
+.products td{
+	border: solid #000;
+	border-width: 0 1px 0 1px;
+	padding: 5px 5px 2em;
+	vertical-align: top;
+	text-align: left;
+}
+.products .price{
+	position: absolute;
+	bottom: 5px; /* bottom refers to positioned ancestor bottom, here the table bottom */
+	left: auto; /* auto position is calculated by browser, usually the same as the in flow position */
+	margin-left: 0; /* optional, use margin to control left position according to the given position */
+}
+</style></head><body>
+
+<div class="products">
+	<table>
+		<tr>
+			<td><div>Content is wrapped in a block-container to get a line break after, witch is needed for a consistent left:auto on the price container.</div><div class="price">Price</div></td>
+			<td><div>Content Content Content Content Content Content</div><div class="price">Price</div></td>
+			<td><div>Content Content Content</div><div class="price">Price</div></td>
+			<td><div>Content</div><div class="price">Price</div></td>
+		</tr>
+	</table>
+</div>
+
+<div class="products">
+	<table>
+		<tr>
+			<td><div>Content</div><div class="price">Price</div></td>
+			<td><div>Content Content Content Content Content Content</div><div class="price">Price</div></td>
+			<td><div>Content Content Content</div><div class="price">Price</div></td>
+			<td><div>Content</div><div class="price">Price</div></td>
+		</tr>
+	</table>
+</div>
+
+</body></html>

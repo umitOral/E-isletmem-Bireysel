@@ -240,7 +240,7 @@ initCalender();
 async function initCalender() {
   loader.classList.toggle("showed");
   const fullorNot = await dayFullOrNight();
-  console.log(fullorNot);
+ 
 
   const firstDay = new Date(year, month, 1); //mevcut ayın ilk gün tarihi
   const lastDay = new Date(year, month + 1, 0); //mevcut ayın son gün tarihi
@@ -601,7 +601,10 @@ proccessType.addEventListener("change", (e) => {
   console.log("hizmet seçildi");
 
   selectedOperations.oldOperations.push(
-    proccessType.options[proccessType.options.selectedIndex].dataset.id,
+    {
+      operationID:proccessType.options[proccessType.options.selectedIndex].dataset.id,
+      nextSessionNumber:proccessType.options[proccessType.options.selectedIndex].dataset.nextsessionnumber
+    }
   );
   console.log(selectedOperations)
   
@@ -625,6 +628,10 @@ proccessType.addEventListener("change", (e) => {
   nodeinput.setAttribute(
     "value",
     proccessType.options[proccessType.options.selectedIndex].textContent.trim()
+  );
+  nodeinput.setAttribute(
+    "data-nextsessionnumber",
+    proccessType.options[proccessType.options.selectedIndex].dataset.nextsessionnumber
   );
 
   proccessType.options[proccessType.options.selectedIndex].remove();
@@ -673,6 +680,10 @@ selected_proccess_type_add.addEventListener("click", (e) => {
     opt.setAttribute(
       "data-price",
       e.target.previousElementSibling.dataset.price
+    );
+    opt.setAttribute(
+      "data-nextsessionnumber",
+      e.target.previousElementSibling.dataset.nextsessionnumber
     );
     opt.setAttribute("data-id", e.target.previousSibling.dataset.id);
     

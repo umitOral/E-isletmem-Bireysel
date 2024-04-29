@@ -15,6 +15,16 @@
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+
+  <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+    integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
   <!-- Additional CSS Files -->
   <link rel="stylesheet" href="assets/css/fontawesome.css">
   <link rel="stylesheet" href="css/login.css">
@@ -33,7 +43,7 @@
 
 
   <!-- ***** Header Area Start ***** -->
-  
+
   <%- include('../partials/header-front.ejs') %>
     <!-- ***** Header Area End ***** -->
 
@@ -73,11 +83,11 @@
         <div class="form-group">
           <span>Şifre Tekrar:</span>
 
-          <input type="password" name="password2" id="password2" required
-            placeholder="Şifreyi tekrar giriniz">
+          <input type="password" name="password2" id="password2" required placeholder="Şifreyi tekrar giriniz">
         </div>
         <div>
-          <input type="checkbox" name="" id="" required oninvalid="alert('Lütfen kullanım koşullarını Kabul ediniz')"> <span><u>Kullanım koşullarını</u> okudum ve kabul
+          <input type="checkbox" name="" id="" required oninvalid="alert('Lütfen kullanım koşullarını Kabul ediniz')">
+          <span><u>Kullanım koşullarını</u> okudum ve kabul
             ediyorum.</span>
         </div>
 
@@ -529,6 +539,7 @@
 
 
 
+
     <%- include('../partials/front-footer.ejs') %>
 
       <!-- Scripts -->
@@ -536,6 +547,7 @@
 
       <script type="module" src="./js/register.js"></script>
       <script type="module" src="/js/requests.js"></script>
+      <script type="module" src="/js/ui.js"></script>
 
 
 

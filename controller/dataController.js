@@ -82,11 +82,11 @@ const editOptionofData = async (req, res) => {
 const getData = async (req, res) => {
   try {
     
-    let company = res.locals.company
+    let serviceDatas = res.locals.company.serviceDatas
     res.status(200).json({
       success: true,
       message: "veriler çekildi",
-      data: company,
+      serviceDatas,
     });
   } catch (error) {
     res.status(500).json({
