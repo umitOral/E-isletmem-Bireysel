@@ -1,9 +1,12 @@
 import winston from "winston";
 const { combine, timestamp, json, prettyPrint, errors } = winston.format;
-
+import dotenv from 'dotenv'
+dotenv.config()
 import { Logtail } from "@logtail/node";
 import { LogtailTransport } from "@logtail/winston";
-const logtail = new Logtail("MYiHHni9VM86vy6gAzbeSiz8");
+
+const logtail = new Logtail(process.env.LOGGER_TOKEN);
+
 
 winston.loggers.add("ErrorLogger", {
   level: "error",

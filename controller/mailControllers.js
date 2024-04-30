@@ -13,7 +13,7 @@ const sendMail = async (req, res) => {
   try {
     const html = registerMail;
     const transporter = createTransport({
-      host: "smtpout.secureserver.net",
+      host: process.env.EMAIL_SMTP,
       port: 587,
       auth: {
         user: process.env.EMAIL_ADRESS,
@@ -43,7 +43,7 @@ const passwordResetMail = async (email, url) => {
     const html = resetPasswordMailHtml(url);
 
     const transporter = createTransport({
-      host: "smtpout.secureserver.net",
+      host:  process.env.EMAIL_SMTP,
       port: 587,
       auth: {
         user: process.env.EMAIL_ADRESS,
@@ -70,7 +70,7 @@ const passwordResetMail = async (email, url) => {
 const sendErrorEmail = async (err) => {
   try {
     const transporter = createTransport({
-      host: "smtpout.secureserver.net",
+      host:  process.env.EMAIL_SMTP,
       port: 587,
       auth: {
         user: process.env.EMAIL_ADRESS,
@@ -94,7 +94,7 @@ const sendErrorEmail = async (err) => {
 const orderSuccesEmail = async (request) => {
   try {
     const transporter = createTransport({
-      host: "smtpout.secureserver.net",
+      host:  process.env.EMAIL_SMTP,
       port: 587,
       auth: {
         user: process.env.EMAIL_ADRESS,
@@ -130,7 +130,7 @@ const contactEmail = async (req, res) => {
     await Ticket.create(data);
 
     const transporter = createTransport({
-      host: "smtpout.secureserver.net",
+      host: process.env.EMAIL_SMTP,
       port: 587,
       auth: {
         user: process.env.EMAIL_ADRESS,

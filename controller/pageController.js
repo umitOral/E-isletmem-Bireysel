@@ -197,8 +197,8 @@ const getContactPage = (req, res, next) => {
   }
 };
 const getAdminPage = async (req, res, next) => {
-  debugger;
   try {
+
     res.status(200).render("indexAdmin", {
       link: "index",
     });
