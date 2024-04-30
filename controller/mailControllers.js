@@ -14,7 +14,7 @@ const sendMail = async (req, res) => {
     const html = registerMail;
     const transporter = createTransport({
       host: process.env.EMAIL_SMTP,
-      port: 587,
+      port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_ADRESS,
         pass: process.env.EMAIL_PASSWORD,
@@ -41,10 +41,10 @@ const sendMail = async (req, res) => {
 const passwordResetMail = async (email, url) => {
   try {
     const html = resetPasswordMailHtml(url);
-
+    
     const transporter = createTransport({
       host:  process.env.EMAIL_SMTP,
-      port: 587,
+      port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_ADRESS,
         pass: process.env.EMAIL_PASSWORD,
@@ -71,7 +71,7 @@ const sendErrorEmail = async (err) => {
   try {
     const transporter = createTransport({
       host:  process.env.EMAIL_SMTP,
-      port: 587,
+      port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_ADRESS,
         pass: process.env.EMAIL_PASSWORD,
@@ -95,7 +95,7 @@ const orderSuccesEmail = async (request) => {
   try {
     const transporter = createTransport({
       host:  process.env.EMAIL_SMTP,
-      port: 587,
+      port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_ADRESS,
         pass: process.env.EMAIL_PASSWORD,
@@ -131,7 +131,7 @@ const contactEmail = async (req, res) => {
 
     const transporter = createTransport({
       host: process.env.EMAIL_SMTP,
-      port: 587,
+      port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_ADRESS,
         pass: process.env.EMAIL_PASSWORD,
