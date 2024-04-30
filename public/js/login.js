@@ -15,7 +15,7 @@ loginForm.addEventListener("submit", (e) => {
   request
     .postWithUrl("./login",data)
     .then((response) => {
-      
+      console.log(response)
       messageModal.style="display:block"
       messageModal.textContent=response.message
         if (response.success==true) {

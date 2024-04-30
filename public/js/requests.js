@@ -38,7 +38,7 @@ export class Request {
   }
   async postWithUrl(url, data) {
     console.log(url);
-    console.log(data);
+    
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(data),

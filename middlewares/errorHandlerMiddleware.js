@@ -6,7 +6,9 @@ import {CustomError} from '../helpers/error/CustomError.js'
 const ErrorHandler = async (err, req, res, next) => {
   console.log(err)
   let customError = err;
-  customError.error.user=res.locals.company.email
+  if (res.locals.company) {
+    customError.error.user=res.locals.company.email
+  }
 if (customError.error) {
   console.log("burası")
   if (customError.error.name === "SyntaxError") {

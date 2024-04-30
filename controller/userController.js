@@ -342,6 +342,7 @@ const editInformations = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
+    console.log("burası")
     let same = false;
 
     const employee = await Employee.findOne({ email: req.body.email });
