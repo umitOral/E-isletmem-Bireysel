@@ -13,7 +13,6 @@ const modalMessage = document.querySelector("dialog p");
 const terms = document.querySelector("u");
 const termsModal = document.querySelector(".terms_modal");
 const closeTermsSpan = document.querySelector(".terms_footer span");
-const loader = document.querySelector(".loader_wrapper.hidden");
 
 console.log(termsModal);
 
@@ -35,37 +34,37 @@ closeTermsSpan.addEventListener("click", () => {
 // "Show the dialog" button opens the dialog modally
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  loader.classList.toggle("showed");
+ 
 
-  // request
-  //   .createCompany(
-  //     {
-  //       email: form.email.value,
-  //       phone: form.phone.value,
-  //       password: form.password.value,
-  //       password2: form.password2.value,
-  //     },
-  //     "./register"
-  //   )
-  //   .then((response) => {
-  //     loader.classList.toggle("showed");
+  request
+    .createCompany(
+      {
+        email: form.email.value,
+        phone: form.phone.value,
+        password: form.password.value,
+        password2: form.password2.value,
+      },
+      "./register"
+    )
+    .then((response) => {
+      loader.classList.toggle("showed");
 
-  //     dialog.showModal();
-  //     console.log(response);
-  //     if (response.succes == true) {
-  //       modalMessage.textContent = response.message;
-  //     } else {
-  //       modalMessage.textContent = response.message;
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     loader.classList.toggle("showed");
+      dialog.showModal();
+      console.log(response);
+      if (response.succes == true) {
+        modalMessage.textContent = response.message;
+      } else {
+        modalMessage.textContent = response.message;
+      }
+    })
+    .catch((err) => {
+      loader.classList.toggle("showed");
 
-  //     console.log(err);
-  //   });
+      console.log(err);
+    });
 });
 
-// "Close" button closes the dialog
-// closeButton.addEventListener("click", () => {
-//   dialog.close();
-// });
+"Close" button closes the dialog
+closeButton.addEventListener("click", () => {
+  dialog.close();
+});
