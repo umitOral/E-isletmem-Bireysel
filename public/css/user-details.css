@@ -194,7 +194,9 @@
 .sessions,
 .appointments,
 .payments,
-.images, .procces {
+.images,
+.procces,
+.permissions{
   
   display: none;
 }

@@ -85,7 +85,9 @@ input[type="radio"] {
   height: auto;
   object-fit: cover;
 }
-
+.centered_cell{
+ margin: 0 auto;
+}
 .loader_wrapper.hidden {
   display: none;
 }

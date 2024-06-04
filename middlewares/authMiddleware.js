@@ -113,10 +113,25 @@ const verifyactiveOrNot = () => {
   };
 };
 
+const checkPriviliges = (...priviliges) => {
+  console.log(...priviliges)
+  
+  return async (req,res,next)=>{
+      if (res.locals.employee.permissions.includes(priviliges)) {
+         next()
+      }else{
+           next(new CustomError("İşlem için yetkiniz bulunmamaktadır.", 401));
+      }
+      
+  }
+  };
+  
+
 export {
   authenticateToken,
   checkUser,
   verifyRoles,
+  checkPriviliges,
   verifyactiveOrNot,
   checkSubscription,
 };
