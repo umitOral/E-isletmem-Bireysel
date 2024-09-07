@@ -52,7 +52,6 @@ const authenticateToken = async (req, res, next) => {
         }
       });
     } else {
-      console.log("burası")
       res.redirect("/login");
     }
   } catch (error) {
@@ -62,26 +61,7 @@ const authenticateToken = async (req, res, next) => {
     });
   }
 };
-const checkSubscription = async (req, res, next) => {
-  try {
-    const token = req.cookies.jsonwebtoken;
-    if (req.cookies.companySubscribe === "true") {
-      
-      next();
-    } else {
-      
-      if (req._parsedUrl.pathname !== "/admin/companyPaymentPage") {
-        res.redirect("/admin/companyPaymentPage");
-      }
-      next()
-    }
-  } catch (error) {
-    res.status(401).json({
-      succes: false,
-      message: "yetkisizlikten gelen hata",
-    });
-  }
-};
+
 
 const verifyRoles = (...roles) => {
   
@@ -114,7 +94,7 @@ const verifyactiveOrNot = () => {
 };
 
 const checkPriviliges = (...priviliges) => {
-  console.log(...priviliges)
+  
   
   return async (req,res,next)=>{
       if (res.locals.employee.permissions.includes(priviliges)) {
@@ -133,5 +113,5 @@ export {
   verifyRoles,
   checkPriviliges,
   verifyactiveOrNot,
-  checkSubscription,
+
 };

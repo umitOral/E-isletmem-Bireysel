@@ -349,7 +349,7 @@ const loginUser = async (req, res, next) => {
     if (employee) {
       const company = await Company.findOne({ _id: employee.company });
       same = await bcrypt.compare(req.body.password, employee.password);
-
+      console.log(company)
       if (same) {
         const token = createToken(company._id, employee._id);
 

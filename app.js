@@ -64,8 +64,8 @@ app.use("/api", authMiddleware.checkUser, api);
 
 app.use(
   "/admin",
-  [authMiddleware.authenticateToken,
-  authMiddleware.checkSubscription,
+  [
+    authMiddleware.authenticateToken,
   authMiddleware.checkUser],
   adminRoutes
 );
