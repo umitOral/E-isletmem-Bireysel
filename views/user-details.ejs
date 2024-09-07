@@ -82,6 +82,11 @@
                                             <input type="text" name="" id="surname" value="<%= singleUser.surname %>"
                                                 readonly>
                                         </div>
+                                        <div class="inputs ">
+                                            <span>Kayıt Tarihi:</span>
+                                            <input type="text" name="" id="surname" value="<%= singleUser.createdAt.toLocaleDateString()%>"
+                                                readonly>
+                                        </div>
                                         <div class="options ">
                                             <span>Cinsiyet</span>
                                             <% if(singleUser.sex==="male" ){ %>
