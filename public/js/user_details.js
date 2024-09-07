@@ -156,7 +156,7 @@ function editUser() {
       console.log(response);
       ui.showModal(true, response.message);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => ui.showModal(false, response.message));
 
   e.preventDefault();
 }
