@@ -61,7 +61,7 @@ const getEmployesAppointments = async (req, res, next) => {
   try {
     const appointments = await Sessions.find({ doctor: req.params.employeesID })
       .populate("user", ["name", "surname"])
-      .populate("operations");
+      .populate("operations.operation");
     console.log(appointments);
 
     res.status(200).json({

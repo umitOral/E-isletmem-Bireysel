@@ -32,7 +32,7 @@ export class EmployeeDetailsUI{
         <td>
           ${session.operations.map(
             (item, i) => `
-                ${item.operationName}
+                ${item.operation.operationName}
           `
           )}
         </td>
