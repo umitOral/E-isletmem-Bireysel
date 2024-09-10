@@ -10,7 +10,7 @@ const createEmployees = async (req, res, next) => {
   try {
     const userEmail = req.body.email;
     req.body.company = res.locals.company;
-    const searchEmail = await Employee.findOne({ email: userEmail });
+    const searchEmail = await Employee.findOne({ email: userEmail,company:res.locals.company});
     console.log(userEmail);
     if (searchEmail) {
       res.json({

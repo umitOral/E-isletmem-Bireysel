@@ -6,15 +6,15 @@ import bcrypt from 'bcrypt';
 
 const Schema = mongoose.Schema
 const userSchema = new Schema({
-    name: { type: String, require: true },
-    surname: { type: String, require: true },
+    name: { type: String, require: [true,"isim bilgisi gereklidir"],trim:true},
+    surname: { type: String, require: [true,"soyisim bilgisi gereklidir"],trim:true},
     activeOrNot:{type:Boolean,default:true},
-    email: { type: String, require: true },
+    email: { type: String, },
     sex: { type: String, require: false },
     birtdhDate: { type: Date, require: false },
     role: { type: String, default: "customer" },
     password: { type: String, require: false },
-    phone: { type: String, require: false },
+    phone: { type: String, require: true,unique:[true,"telefon bilgisi gereklidir"] },
     userCompany: { type: String, default:""},
     address: { type: String, require: false },
     billingAddress: { type: String, require: false },

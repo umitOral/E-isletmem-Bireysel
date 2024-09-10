@@ -3,6 +3,8 @@ import Employee from "../models/EmployeesModel.js";
 import Subscription from "../models/subscriptionModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { orderSuccesEmail } from "./mailControllers.js";
+import { SERVICES_LIST,DATAS_LIST,ROLES_LIST} from "../config/status_list.js";
+import { role_privileges} from "../config/role_priveleges.js";
 
 import axios from "axios";
 import CryptoJS from "crypto-js";
@@ -10,6 +12,61 @@ import CryptoJS from "crypto-js";
 import Iyzipay from "iyzipay";
 
 import { v4 as uuidv4 } from "uuid";
+
+const createCompany = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const newDate = new Date();
+    req.body.subscribeEndDate = new Date(
+      newDate.setMonth(newDate.getMonth() + 1)
+    ).toISOString();
+
+    req.body.serviceDatas = [];
+    DATAS_LIST.forEach((singleData) => {
+      req.body.serviceDatas.push({
+        dataName:singleData.dataName,
+        dataOptions:singleData.dataOptions  
+      })
+    });
+
+    const processes = SERVICES_LIST;
+
+    req.body.services = [];
+
+    processes.forEach((process) => {
+      req.body.services.push({
+        serviceName: process,
+        servicePrice: 99,
+        activeorNot: false,
+      });
+    });
+
+    if (data.password !== data.password2) {
+      return next(new CustomError("Girdiğiniz şifreler farklıdır", 400));
+    }
+
+    const company = await Company.create(data);
+    data.role = ROLES_LIST.ADMIN;
+    data.company = company._id;
+    data.permissions=role_privileges.privileges.map((privilege,value)=>privilege.key)
+
+
+    await Employee.create(data);
+    let subscriptionData = {
+      company: company._id,
+      amount: 0,
+      paymentDuration: 30,
+      paymentTransactionId: 0,
+    };
+    await Subscription.create(subscriptionData);
+    res.json({
+      success: true,
+      message: "kaydınız başarıyla oluşturuldu",
+    });
+  } catch (error) {
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  }
+};
 
 const updateCompanyPassword = async (req, res, next) => {
   try {
@@ -232,4 +289,5 @@ export {
   updateCompanyInformations,
   addCompanyPayment,
   companyPaymentResult,
+  createCompany
 };

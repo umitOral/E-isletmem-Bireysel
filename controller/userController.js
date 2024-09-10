@@ -22,57 +22,7 @@ import {
 import Subscription from "../models/subscriptionModel.js";
 import { response } from "express";
 
-const createCompany = async (req, res, next) => {
-  try {
-    const data = req.body;
-    const newDate = new Date();
-    req.body.subscribeEndDate = new Date(
-      newDate.setMonth(newDate.getMonth() + 1)
-    ).toISOString();
 
-    req.body.serviceDatas = [
-      {
-        dataName: "saç derisi",
-        dataOptions: ["kuru", "karma", "normal"],
-      },
-    ];
-
-    const processes = SERVICES_LIST;
-
-    req.body.services = [];
-
-    processes.forEach((process) => {
-      req.body.services.push({
-        serviceName: process,
-        servicePrice: 99,
-        activeorNot: false,
-      });
-    });
-
-    if (data.password !== data.password2) {
-      return next(new CustomError("Girdiğiniz şifreler farklıdır", 400));
-    }
-
-    const company = await Company.create(data);
-    data.role = ROLES_LIST.ADMIN;
-    data.company = company._id;
-
-    await Employee.create(data);
-    let subscriptionData = {
-      company: company._id,
-      amount: 0,
-      paymentDuration: 30,
-      paymentTransactionId: 0,
-    };
-    await Subscription.create(subscriptionData);
-    res.json({
-      success: true,
-      message: "kaydınız başarıyla oluşturuldu",
-    });
-  } catch (error) {
-    return next(new CustomError("bilinmeyen hata", 500, error));
-  }
-};
 
 const deactivateEmployee = async (req, res, next) => {
   try {
@@ -267,19 +217,31 @@ const findEmployees = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   try {
+    console.log("burası2")
+    console.log(req.body)
     const userEmail = req.body.email;
+    const userPhone = req.body.phone;
     req.body.company = res.locals.company;
 
-    const searchEmail = await User.findOne({ email: userEmail });
-
-    if (searchEmail && !searchEmail === "") {
+    const searchEmail = await User.findOne({ email: userEmail,company:res.locals.company});
+    const searchPhone = await User.findOne({ phone: userPhone,company:res.locals.company});
+    console.log(searchEmail)
+    if (searchEmail) {
       return next(
         new CustomError(
           "Bu mail adresi ile kayıtlı kullanıcı bulunmaktadır",
           400
         )
       );
-    } else {
+    } else if (searchPhone) {
+      return next(
+        new CustomError(
+          "Bu Telefon adresi ile kayıtlı kullanıcı bulunmaktadır",
+          400
+        )
+      );
+    }
+    else {
       await User.create(req.body).then((response) => {
         jwt.verify(
           req.cookies.userData,
@@ -294,7 +256,6 @@ const createUser = async (req, res, next) => {
               name: response.name,
               surname: response.surname,
             });
-            console.log(decodedToken);
             const updatedToken = createTokenSingleData(decodedToken.usersNames);
             res.cookie("userData", updatedToken, {
               httpOnly: true,
@@ -469,7 +430,7 @@ const uploadPictures = async (req, res, next) => {
 
 const addDataToOperation = async (req, res, next) => {
   try {
-    
+
     console.log(req.body);
     console.log(req.params);
 
@@ -831,12 +792,12 @@ const getAllPhotos = async (req, res, next) => {
 };
 const getUsersAllPayments = async (req, res, next) => {
   try {
-    
+
 
     const payments = await Payment.find({ fromUser: req.params.id })
-      payments.forEach(element => {
-        console.log(element.operations.operationId)
-      });
+    payments.forEach(element => {
+      console.log(element.operations.operationId)
+    });
 
 
     if (payments.length === 0) {
@@ -907,7 +868,6 @@ const createTokenSingleData = (usersNames) => {
 
 export {
   resetPasswordMail,
-  createCompany,
   createUser,
   loginUser,
   logOut,

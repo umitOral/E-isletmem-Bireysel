@@ -1606,7 +1606,7 @@ section.map .info-item {
   height: 100vh;
   background-color: #ffffff79;
   z-index: 999;
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   justify-content: center;
   align-items: center;

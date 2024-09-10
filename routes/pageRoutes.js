@@ -1,7 +1,7 @@
 import express from 'express';
 import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getcompanyPaymentResult,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getServicesPage,getForgotPasswordPage} from '../controller/pageController.js';
-import {createCompany,loginUser,resetPasswordMail} from '../controller/userController.js';
-import {companyPaymentResult} from '../controller/companyControllers.js';
+import {loginUser,resetPasswordMail} from '../controller/userController.js';
+import {companyPaymentResult,createCompany} from '../controller/companyControllers.js';
 import {sendMail,contactEmail} from '../controller/mailControllers.js';
 import {newPassword} from '../controller/apicontrollers.js';
 import * as authMiddleware from '../middlewares/authMiddleware.js'
