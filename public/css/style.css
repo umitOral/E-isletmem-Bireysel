@@ -105,6 +105,13 @@ input[type="radio"] {
   align-items: center;
   transition: opacity 0.75s;
 }
+.loader_inner_wrapper {
+  justify-content: center;
+  background-color: white;
+  padding: 4rem;
+  box-shadow: var(--box-shadow);
+  border-radius: 1.5rem;
+}
 .loader {
   width: 100px;
 }

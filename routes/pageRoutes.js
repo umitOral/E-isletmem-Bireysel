@@ -1,5 +1,5 @@
 import express from 'express';
-import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getServicesPage,getForgotPasswordPage} from '../controller/pageController.js';
+import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getcompanyPaymentResult,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getServicesPage,getForgotPasswordPage} from '../controller/pageController.js';
 import {createCompany,loginUser,resetPasswordMail} from '../controller/userController.js';
 import {companyPaymentResult} from '../controller/companyControllers.js';
 import {sendMail,contactEmail} from '../controller/mailControllers.js';
@@ -31,6 +31,7 @@ router.route("/forgotPassword").post(resetPasswordMail)
 router.route("/newPassword/:token").post(newPassword)
 
 router.route("/companyPaymentResultPage").post(companyPaymentResult)
+router.route("/companyPaymentResultPage").get(getcompanyPaymentResult)
 
 
 router.route("/contactEmail").post(contactEmail)

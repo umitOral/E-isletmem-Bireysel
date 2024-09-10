@@ -14,8 +14,9 @@ const terms = document.querySelector("u");
 const termsModal = document.querySelector(".terms_modal");
 const closeTermsSpan = document.querySelector(".terms_footer span");
 const messageModal = document.querySelector(".res-message");
+const loader = document.querySelector(".loader_wrapper.hidden");
 
-console.log(termsModal);
+
 
 const closeButton = document.querySelector("dialog span");
 console.log(closeButton);
@@ -35,8 +36,9 @@ closeTermsSpan.addEventListener("click", () => {
 // "Show the dialog" button opens the dialog modally
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  messageModal.style="display:block"
-  messageModal.textContent="Bekleyiniz..."
+  messageModal.style="display:none"
+  messageModal.textContent = "";
+  loader.classList.toggle("showed");
 
   request
     .createCompany(
@@ -49,12 +51,11 @@ form.addEventListener("submit", (e) => {
       "./register"
     )
     .then((response) => {
-     
-      
-      console.log(response);
+      loader.classList.toggle("showed");
       if (response.success == true) {
         dialog.showModal();
       } else {
+        messageModal.style="display:block"
         messageModal.textContent = response.message;
       }
     })

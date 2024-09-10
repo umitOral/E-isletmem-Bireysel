@@ -86,6 +86,15 @@ const getLoginPage = (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+const getcompanyPaymentResult = (req, res, next) => {
+  try {
+    res.status(200).render("front/companyPaymentResultPage", {
+      link: "login",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 const getAboutUsPage = (req, res, next) => {
   try {
     res.status(200).render("front/about-us", {
@@ -493,4 +502,5 @@ export {
   getSingleEmployeePage,
   getDatasPage,
   deneme,
+  getcompanyPaymentResult
 };
