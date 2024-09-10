@@ -15,6 +15,8 @@ const termsModal = document.querySelector(".terms_modal");
 const closeTermsSpan = document.querySelector(".terms_footer span");
 const messageModal = document.querySelector(".res-message");
 const loader = document.querySelector(".loader_wrapper.hidden");
+const terms_checkbox = document.getElementById("terms_checkbox");
+
 
 
 
@@ -22,7 +24,9 @@ const closeButton = document.querySelector("dialog span");
 console.log(closeButton);
 closeButton.addEventListener("click", () => {
   dialog.close();
+  
 });
+
 
 terms.addEventListener("click", () => {
   console.log("başarılı");
@@ -30,6 +34,7 @@ terms.addEventListener("click", () => {
 });
 closeTermsSpan.addEventListener("click", () => {
   console.log("kapandı");
+  terms_checkbox.checked=true
   termsModal.classList.remove("showed_modal");
 });
 
