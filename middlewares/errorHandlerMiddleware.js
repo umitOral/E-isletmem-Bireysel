@@ -15,12 +15,7 @@ if (customError.error) {
   if (customError.error.name === "ValidatorError") {
     customError = new CustomError(err.message, 400,customError.error);
   }
-  if (customError.error.name === "MongoServerError" && customError.error.code == 11000) {
-    customError = new CustomError(
-      "Mail adresi ile kayıtlı kullanıcı zaten bulunmaktadır.",
-      400,customError.error
-    );
-  }
+
   if (customError.error.name === "ValidationError") {
     customError = new CustomError(err.errors.password.properties.message, 400,customError.error);
   }

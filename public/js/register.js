@@ -24,7 +24,7 @@ const closeButton = document.querySelector("dialog span");
 console.log(closeButton);
 closeButton.addEventListener("click", () => {
   dialog.close();
-  
+
 });
 
 
@@ -34,41 +34,39 @@ terms.addEventListener("click", () => {
 });
 closeTermsSpan.addEventListener("click", () => {
   console.log("kapandı");
-  terms_checkbox.checked=true
+  terms_checkbox.checked = true
   termsModal.classList.remove("showed_modal");
 });
 
 // "Show the dialog" button opens the dialog modally
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  messageModal.style="display:none"
-  messageModal.textContent = "";
+  // messageModal.style="display:none"
+  // messageModal.textContent = "";
   loader.classList.toggle("showed");
+  console.log("haho")
+  const captchaResponse = grecaptcha.getResponse()
+  const fd = new FormData(e.target)
+  const params = new URLSearchParams(fd)
 
-  request
-    .createCompany(
-      {
-        email: form.email.value,
-        phone: form.phone.value,
-        password: form.password.value,
-        password2: form.password2.value,
-      },
-      "./register"
-    )
-    .then((response) => {
+  fetch("./register", {
+    method: "POST",
+    body: params
+  }).then(res => res.json())
+    .then(data => {
+      console.log(data)
       loader.classList.toggle("showed");
-      if (response.success == true) {
+      if (data.createSuccess) {
         dialog.showModal();
       } else {
-        messageModal.style="display:block"
-        messageModal.textContent = response.message;
+        messageModal.style = "display:block"
+        messageModal.textContent = data.message;
       }
     })
-    .catch((err) => {
+    .catch(err =>{
       messageModal.textContent=err.message
+      console.log(err)})
 
-      console.log(err);
-    });
 });
 
 

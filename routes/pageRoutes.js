@@ -5,6 +5,7 @@ import {companyPaymentResult,createCompany} from '../controller/companyControlle
 import {sendMail,contactEmail} from '../controller/mailControllers.js';
 import {newPassword} from '../controller/apicontrollers.js';
 import * as authMiddleware from '../middlewares/authMiddleware.js'
+import { verifyRecaptcha,checkPassword,verifyCompanyUniqueness} from "../helpers/recaptchaVerify.js";
 
 
 
@@ -22,7 +23,7 @@ router.route("/prices").get(getPricesPage)
 
 router.route("/login").get(getLoginPage)
 router.route("/register").get(getRegisterPage)
-router.route("/register").post(createCompany)
+router.route("/register").post(verifyCompanyUniqueness,checkPassword,verifyRecaptcha,createCompany)
 router.route("/login").post( authMiddleware.verifyactiveOrNot(),loginUser)
 
 router.route("/forgotPassword").get(getForgotPasswordPage)

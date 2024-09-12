@@ -41,9 +41,7 @@ const createCompany = async (req, res, next) => {
       });
     });
 
-    if (data.password !== data.password2) {
-      return next(new CustomError("Girdiğiniz şifreler farklıdır", 400));
-    }
+
 
     const company = await Company.create(data);
     data.role = ROLES_LIST.ADMIN;
@@ -60,7 +58,7 @@ const createCompany = async (req, res, next) => {
     };
     await Subscription.create(subscriptionData);
     res.json({
-      success: true,
+      createSuccess: true,
       message: "kaydınız başarıyla oluşturuldu",
     });
   } catch (error) {
