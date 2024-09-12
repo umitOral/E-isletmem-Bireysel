@@ -41,11 +41,14 @@ closeTermsSpan.addEventListener("click", () => {
 // "Show the dialog" button opens the dialog modally
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  // messageModal.style="display:none"
-  // messageModal.textContent = "";
+  // modal ressetting
+  messageModal.style="display:none"
+  messageModal.textContent = "";
+  // 
   loader.classList.toggle("showed");
-  console.log("haho")
+  // recaptcha token creating
   const captchaResponse = grecaptcha.getResponse()
+  // get form datas
   const fd = new FormData(e.target)
   const params = new URLSearchParams(fd)
 
@@ -59,6 +62,7 @@ form.addEventListener("submit", (e) => {
       if (data.createSuccess) {
         dialog.showModal();
       } else {
+        // showing errors
         messageModal.style = "display:block"
         messageModal.textContent = data.message;
       }

@@ -191,6 +191,7 @@ const getRegisterPage = (req, res, next) => {
   try {
     res.status(200).render("front/register", {
       link: "register",
+      RECAPTCHA_SITEKEY:process.env.RECAPTCHA_SITEKEY
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
