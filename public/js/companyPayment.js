@@ -4,6 +4,7 @@ import { Request } from "./requests.js";
 const request = new Request();
 import { UI } from "./ui.js";
 const ui = new UI();
+ui.closeNotification()
 
 const payButton = document.querySelector(".save_button");
 const formData = document.querySelector("form");
@@ -44,7 +45,7 @@ function addPaymentRequest(e) {
   };
 
   if (paymentValue.innerHTML === "0") {
-    ui.showModalWithoutResponse(false, "Lütfen  paket seçiniz");
+    ui.showNotificationWithoutResponse(false, "Lütfen  paket seçiniz");
   } else {
     
     request
@@ -53,9 +54,9 @@ function addPaymentRequest(e) {
         console.log(response);
 
         if (response.success === false) {
-          ui.showModal(false, response.result.errorMessage);
+          ui.showNotification(false, response.result.errorMessage);
         } else {
-          ui.showModal(true, response.message);
+          ui.showNotification(true, response.message);
           var URL = response.data;
 
          
@@ -65,7 +66,7 @@ function addPaymentRequest(e) {
       })
 
       .catch((err) => {
-        ui.showModal(false, err);
+        ui.showNotification(false, err);
       });
   }
 }

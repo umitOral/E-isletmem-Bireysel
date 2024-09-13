@@ -2,6 +2,7 @@ import { UI } from "./ui.js";
 const ui = new UI();
 import { Request } from "./requests.js";
 const request = new Request();
+ui.closeNotification()
 
 const savebutton = document.querySelector(".save_button");
 const form = document.querySelector("#register-form");
@@ -28,12 +29,12 @@ console.log(form.getAttribute("action"))
     .postWithUrl(form.getAttribute("action"), formData)
     .then((response) => {
       if (response.success === true) {
-        ui.showModal(true, response.message);
+        ui.showNotification(true, response.message);
         setTimeout(() => {
           window.location.reload();
         }, 1500);
       } else {
-        ui.showModal(false, response.message);
+        ui.showNotification(false, response.message);
       }
     })
     .catch((err) => console.log(err));

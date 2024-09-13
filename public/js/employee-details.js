@@ -7,6 +7,9 @@ const ui = new UI();
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
 
+ui.closeNotification()
+
+
 const showContentsBtn = document.querySelectorAll(".show-content");
 const contents = document.querySelectorAll(".userInformationsContent");
 
@@ -74,13 +77,13 @@ function editUser(e) {
     })
     .then((response) => {
       console.log(response);
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
       modalUser.classList.remove("showed_modal");
       setTimeout(() => {
         window.location.reload();
       }, 800);
     })
-    .catch((err) => ui.showModal(false, err));
+    .catch((err) => ui.showNotification(false, err));
 }
 
 showContentsBtn.forEach((element, index) => {
@@ -151,7 +154,7 @@ async function getEmployeesPermissions() {
     .getwithUrl(document.location.pathname + "/getEmployeesPermissions")
     .then((response) => {
       console.log(response);
-      ui.showModal(response.success, "izinler başarıyla çekildi");
+      ui.showNotification(response.success, "izinler başarıyla çekildi");
 
      
       response.data.allPermissions.privileges.forEach(element => {
@@ -159,9 +162,8 @@ async function getEmployeesPermissions() {
       });
       
       response.data.employeePermissions.forEach((element) => {
-        console.log(element)
         let index=response.data.allPermissions.privileges.findIndex(item=>item.key===element)
-        console.log(index)
+        
         response.data.allPermissions.privileges[index].ispermitted=true
       });
       permissionTableBody.innerHTML=""
@@ -197,11 +199,11 @@ function handleEvents(e) {
       )
       .then((response) => {
         console.log(response);
-        ui.showModal(response.success, response.message);
+        ui.showNotification(response.success, response.message);
       })
       .catch((err) => {
         console.log(err);
-        ui.showModal(false, err);
+        ui.showNotification(false, err);
       });
   }
 }

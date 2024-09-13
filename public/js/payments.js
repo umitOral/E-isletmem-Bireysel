@@ -6,6 +6,7 @@ import { Request } from "./requests.js";
 const request = new Request();
 import { UI } from "./ui.js";
 const ui = new UI();
+ui.closeNotification()
 
 const modalPayment = document.querySelector(".modal_payment");
 const modalExpenses = document.querySelector(".expenses_payment");
@@ -221,7 +222,7 @@ saveEditModal.addEventListener("click",(e) => {
     .postWithUrl("./payments/" + editedPayment + "/editPayment", data)
     .then((response) => {
       console.log("1")
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
       editPaymentModal.classList.toggle("showed_modal");
       setTimeout(() => {
         filterPayment();
@@ -571,13 +572,13 @@ addPaymentFrom.addEventListener("submit", (e) => {
     .postWithUrl("./payments/addPayment", data)
     .then((response) => {
       console.log(response)
-      ui.showModal(response.success, response.message);
+      ui.showNotification(response.success, response.message);
       setTimeout(() => {
         window.location.reload();
       }, 500);
     })
     .catch((err) => {
-      ui.showModal(false, err);
+      ui.showNotification(false, err);
     });
 });
 

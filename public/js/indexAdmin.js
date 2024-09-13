@@ -3,6 +3,7 @@ import { Request } from "./requests.js";
 const request = new Request();
 import { UI } from "./ui.js";
 const ui = new UI();
+ui.closeNotification()
 
 
 // definitions
@@ -202,7 +203,7 @@ function changeAppointmentState(e) {
 //     )
 //     .then((response) => {
 //       console.log(response);
-//       ui.showModal(response.succes, response.message);
+//       ui.showNotification(response.succes, response.message);
 //       updateOperationsofAppointment(response.responseData);
       
 //     })
@@ -226,7 +227,7 @@ function sessionStatusSelectHandle(e) {
     )
     .then((response) => {
       console.log(response);
-      ui.showModal(response.succes, response.message);
+      ui.showNotification(response.succes, response.message);
       updateOperationsofAppointment(response.responseData);
       
     })
@@ -426,13 +427,13 @@ function addOperation() {
       data
     )
     .then((response) => {
-      ui.showModal(response.succes, response.message);
+      ui.showNotification(response.succes, response.message);
       console.log(response);
       selectedServices = [];
       updateOperationsofAppointment(response.responseData);
     })
     .catch((err) => {
-      ui.showModal(err.succes, err.message);
+      ui.showNotification(err.succes, err.message);
     });
   addOperationModal.classList.remove("showed_modal");
 }
@@ -453,14 +454,14 @@ function editSessionData(e) {
       data
     )
     .then((response) => {
-      ui.showModal(response.succes, response.message);
+      ui.showNotification(response.succes, response.message);
       console.log(response);
       updateOperationsofAppointment(response.responseData);
       editDataModal.classList.remove("showed_modal");
     })
     .catch((err) => {
       console.log(err);
-      ui.showModal(err.succes, err.message);
+      ui.showNotification(err.succes, err.message);
     });
   addOperationModal.classList.remove("showed_modal");
 }
@@ -478,14 +479,14 @@ function editOperationData(e) {
       data
     )
     .then((response) => {
-      ui.showModal(response.succes, response.message);
+      ui.showNotification(response.succes, response.message);
       console.log(response);
       updateOperationsofAppointment(response.responseData);
       editDataModal.classList.remove("showed_modal");
     })
     .catch((err) => {
       console.log(err);
-      ui.showModal(err.succes, err.message);
+      ui.showNotification(err.succes, err.message);
     });
   editOperationDataModal.classList.remove("showed_modal");
 }
@@ -646,7 +647,7 @@ function addDataToOperation(e) {
 
     .then((response) => {
       console.log(response);
-      ui.showModal(response.succes, response.message);
+      ui.showNotification(response.succes, response.message);
       addSessionDataForm.dataOptionNumberValue.value=""
       addDataToOperationModal.classList.remove("showed_modal");
       updateOperationsofAppointment(response.responseData);
@@ -691,7 +692,7 @@ function addDataToSession(e) {
 
     .then((response) => {
       console.log(response);
-      ui.showModal(response.succes, response.message);
+      ui.showNotification(response.succes, response.message);
       addSessionDataForm.dataOptionNumberValue.value=""
       addDataModal.classList.remove("showed_modal");
       updateOperationsofAppointment(response.responseData);
@@ -715,7 +716,7 @@ function addDescriptiontoSession(e) {
       )
       .then((response) => {
         console.log(response);
-        ui.showModal(response.succes,response.message)
+        ui.showNotification(response.succes,response.message)
         updateOperationsofAppointment(response.responseData);
         addDescriptionModal.classList.remove("showed_modal")
       })
@@ -736,7 +737,7 @@ function addDescriptionToOperation(e) {
       )
       .then((response) => {
         console.log(response);
-        ui.showModal(response.succes,response.message)
+        ui.showNotification(response.succes,response.message)
         updateOperationsofAppointment(response.responseData);
         addDescriptioToOperationModal.classList.remove("showed_modal")
       })
@@ -749,7 +750,7 @@ function getOldOperations(params) {
     .then((response) => {
       console.log(response);
       ui.showOldOperations(response.data);
-      ui.showModal(response.succes, response.message);
+      ui.showNotification(response.succes, response.message);
     })
     .catch((err) => console.log(err));
 }

@@ -1,6 +1,7 @@
 
 import {UI} from './ui.js'
 const ui=new UI()
+ui.closeNotification()
 
 
 const showContentsBtns = document.querySelectorAll(".show-content")
@@ -59,7 +60,7 @@ function changePassword(e) {
     })
         .then(response => {
            
-           ui.showModal(true,response.messageBox)
+           ui.showNotification(true,response.messageBox)
            changePassworForm.password.value=""
            changePassworForm.password2.value=""
 
@@ -88,7 +89,7 @@ function changeInformations(e) {
         .then(response => {
             
             modalUser.classList.remove("showed_modal")
-            ui.showModal(true,response.message)
+            ui.showNotification(true,response.message)
         
         })
         .catch(err => console.log("hata:"+err))

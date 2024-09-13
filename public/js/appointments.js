@@ -3,6 +3,7 @@ const request = new Request();
 
 import { UI } from "./ui.js";
 const ui = new UI();
+ui.closeNotification()
 
 const loader = document.querySelector(".loader_wrapper.hidden");
 const calendar = document.querySelector(".calendar"),
@@ -52,7 +53,7 @@ addUserForm.addEventListener("submit",(e)=>{
   request.postWithUrl("./users/createUser",data)
   .then(response=>{
     console.log(response)
-    ui.showModal(response.success,response.message)
+    ui.showNotification(response.success,response.message)
     dataList.innerHTML+=`
     <option data-userid="${response.data._id}" data-userdata="${response.data.name+response.data.surname}" value="${response.data.name+" "+response.data.surname}"></option>
     `
@@ -98,7 +99,7 @@ function getAllSessions() {
       APPOINTMENT_STATUS=Object.values(response.APPOINTMENT_STATUS)
 
       if (response.doctors.length===0) {
-        ui.showModal(false,"Personel bulunamadı. Sol menüden kullanıcı ekleyin.")
+        ui.showNotification(false,"Personel bulunamadı. Sol menüden kullanıcı ekleyin.")
       }
       //array
 
@@ -206,11 +207,11 @@ function changeState() {
           )
           .then((response) => {
             console.log(response);
-            ui.showModal(true, response.message);
+            ui.showNotification(true, response.message);
             console.log("silme başarılı");
             getAllSessions();
           })
-          .catch((err) => ui.showModal(false, err));
+          .catch((err) => ui.showNotification(false, err));
       }
 
       if (e.target.classList.contains("save-edit-button")) {
@@ -458,7 +459,7 @@ addSessionBtn.addEventListener("click", function (e) {
   });
 
   if (checkedElements.length === 0) {
-    ui.showModal(false,"lütfen randevu saati seçiniz");
+    ui.showNotification(false,"lütfen randevu saati seçiniz");
   } else {
     modalAddSession.classList.add("showed_modal");
 
@@ -568,7 +569,7 @@ addSessionForm.addEventListener("submit", (e) => {
   request
     .postWithUrl("./appointments/createAppointment", data)
     .then((response) => {
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
       while (selected_proccess_type_add.firstChild) {
         selected_proccess_type_add.firstChild.remove();
       }
@@ -775,7 +776,7 @@ selected_proccess_type_new.addEventListener("click", (e) => {
 //       data
 //     )
 //     .then((response) => {
-//       ui.showModal(true, response.message);
+//       ui.showNotification(true, response.message);
 //       modalUpdateSession.classList.toggle("showed_modal");
 //       getAllSessions();
 //     })

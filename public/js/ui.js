@@ -3,7 +3,18 @@ export class UI {
     this.table = document.getElementById("userList");
   }
 
-  showModal(success, message) {
+  closeNotification(){
+    console.log("hhh")
+    const wrapper = document.querySelector(".information-modal-wrapper")
+    
+    wrapper.addEventListener("click", (e) => {
+        if (e.target.classList.contains("fa-xmark")) {
+            e.target.parentElement.remove()
+        }
+    })
+  }
+
+  showNotification(success, message) {
     let wrapper = document.querySelector(".information-modal-wrapper");
     var information = document.createElement("div");
     information.className = "information";
@@ -22,9 +33,9 @@ export class UI {
       wrapper.appendChild(information);
     }
 
-    setTimeout(() => {
-      information.remove();
-    }, 3000);
+    // setTimeout(() => {
+    //   information.remove();
+    // }, 3000);
 
     // Bildirimi görünür hale getir
   }

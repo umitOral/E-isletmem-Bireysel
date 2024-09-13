@@ -4,6 +4,8 @@ const request = new Request();
 import { UI } from "./ui.js";
 
 const ui = new UI();
+ui.closeNotification()
+
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
 import Zoomist from "https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.js";
@@ -131,10 +133,10 @@ function deleteButtonFunction(selector) {
             "./" + userID + "/deletePhoto/" + operationid + "/" + photoid
           )
           .then((response) => {
-            ui.showModal(true, response.message);
+            ui.showNotification(true, response.message);
             getOperationImages(operationid);
           })
-          .catch((err) => ui.showModal(false, err.message));
+          .catch((err) => ui.showNotification(false, err.message));
       }
     });
   });
@@ -154,9 +156,9 @@ function editUser() {
     })
     .then((response) => {
       console.log(response);
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
     })
-    .catch((err) => ui.showModal(false, response.message));
+    .catch((err) => ui.showNotification(false, response.message));
 
   e.preventDefault();
 }
@@ -168,7 +170,7 @@ async function getOperationImages(operationID) {
     .getwithUrl("./" + userID + "/getAllPhotos/" + operationID)
     .then((response) => {
       console.log(response);
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
       console.log(response.photos.length);
       while (allSmallImages.firstChild) {
         allSmallImages.firstChild.remove();
@@ -486,12 +488,12 @@ function getAllPayments() {
     .getwithUrl("./" + userID + "/getUsersAllPayments")
     .then((response) => {
       console.log(response);
-      ui.showModal(response.success, response.message);
+      ui.showNotification(response.success, response.message);
       ui.addPaymentsToTable(paymentTable, response.data);
       handlePaymentEditBtn();
     })
     .catch((err) => {
-      ui.showModal(false, err.message);
+      ui.showNotification(false, err.message);
     });
 }
 
@@ -519,7 +521,7 @@ function getAllOperations() {
       editDatasBtn();
     })
     .catch((err) => {
-      ui.showModal(false, err.message);
+      ui.showNotification(false, err.message);
     });
 }
 
@@ -544,7 +546,7 @@ addOrderBtn.addEventListener("click", () => {
   request
     .postWithUrl("./" + userID + "/addOperation", data)
     .then((response) => {
-      ui.showModal(response.succes, response.message);
+      ui.showNotification(response.succes, response.message);
       modalOrders.classList.toggle("showed_modal");
       selectedProcessTable.innerHTML = "";
       selectedOperations = [];
@@ -597,11 +599,11 @@ function handleOperationEditBtn() {
             .getwithUrl("./" + userID + "/deleteOperation/" + operationId)
             .then((response) => {
               console.log(response);
-              ui.showModal(response.succes, response.message);
+              ui.showNotification(response.succes, response.message);
 
               getAllOperations();
             })
-            .catch((err) => ui.showModal(false, err.message));
+            .catch((err) => ui.showNotification(false, err.message));
         }
       }
       if (
@@ -649,11 +651,11 @@ function handlePaymentEditBtn() {
             .getwithUrl("../payments/" + paymentID + "/deletePayment")
             .then((response) => {
               console.log(response);
-              ui.showModal(response.succes, response.message);
+              ui.showNotification(response.succes, response.message);
               calculatetTotalPriceforEdit();
               getAllPayments();
             })
-            .catch((err) => ui.showModal(false, err.message));
+            .catch((err) => ui.showNotification(false, err.message));
         }
       }
       if (
@@ -829,7 +831,7 @@ saveEditModal.addEventListener("click", (e) => {
     )
     .then((response) => {
       console.log(response);
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
       editPaymentModal.classList.toggle("showed_modal");
       setTimeout(() => {
         window.location.reload();
@@ -860,11 +862,11 @@ function handleAppointmentEditBtn() {
         )
         .then((response) => {
           console.log(response);
-          ui.showModal(true, response.message);
+          ui.showNotification(true, response.message);
 
           getAllAppointments();
         })
-        .catch((err) => ui.showModal(false, err.message));
+        .catch((err) => ui.showNotification(false, err.message));
     });
   });
 
@@ -885,11 +887,11 @@ function handleAppointmentEditBtn() {
             )
             .then((response) => {
               console.log(response);
-              ui.showModal(true, response.message);
+              ui.showNotification(true, response.message);
 
               getAllAppointments();
             })
-            .catch((err) => ui.showModal(false, err.message));
+            .catch((err) => ui.showNotification(false, err.message));
         }
       }
       if (
@@ -904,11 +906,11 @@ function handleAppointmentEditBtn() {
           )
           .then((response) => {
             console.log(response);
-            ui.showModal(true, response.message);
+            ui.showNotification(true, response.message);
 
             getAllAppointments();
           })
-          .catch((err) => ui.showModal(false, err.message));
+          .catch((err) => ui.showNotification(false, err.message));
       }
     });
   });
@@ -937,11 +939,11 @@ addDataSaveButton.addEventListener("click", (e) => {
       data
     )
     .then((response) => {
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
       addDataModal.classList.remove("showed_modal");
       getAllOperations();
     })
-    .catch((err) => ui.showModal(false, err.message));
+    .catch((err) => ui.showNotification(false, err.message));
 });
 
 addDSessionSaveButton.addEventListener("click", (e) => {
@@ -959,11 +961,11 @@ addDSessionSaveButton.addEventListener("click", (e) => {
       data
     )
     .then((response) => {
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
       addSessionModal.classList.remove("showed_modal");
       getAllOperations();
     })
-    .catch((err) => ui.showModal(false, err.message));
+    .catch((err) => ui.showNotification(false, err.message));
 });
 
 // show pics
@@ -1003,7 +1005,7 @@ function addDiscount(e) {
       data
     )
     .then((response) => {
-      ui.showModal(response.success, response.message);
+      ui.showNotification(response.success, response.message);
       getAllOperations();
     })
     .catch((err) => console.log(err));
@@ -1085,7 +1087,7 @@ function editDatasBtn() {
             data
           )
           .then((response) => {
-            ui.showModal(true, response.message);
+            ui.showNotification(true, response.message);
             modalEditData.classList.remove("showed_modal");
             getAllOperations();
           })
@@ -1136,14 +1138,14 @@ function addPicture(e) {
       if (response.success === true) {
       }
       modalImage.classList.remove("showed_modal");
-      ui.showModal(true, response.message);
+      ui.showNotification(true, response.message);
       uploadFiles = [];
       imageInput.value = "";
       addPictureForm.uploadTime.value = "";
       getAllOperations();
     })
     .catch((err) => {
-      ui.showModal(false, err);
+      ui.showNotification(false, err);
       console.log(err);
     });
 

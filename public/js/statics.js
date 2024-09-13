@@ -2,6 +2,7 @@ import { Request } from "./requests.js";
 const request = new Request();
 import { UI } from "./ui.js";
 const ui = new UI();
+ui.closeNotification()
 
 
 
@@ -55,7 +56,7 @@ function eventListeners() {
 function getSexStaticswithFilter(e) {
     request.getwithUrl(`/admin/statics/getSexStaticsWithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
         .then(response => {
-            ui.showModal(true,response.message)
+            ui.showNotification(true,response.message)
             ui.createChart(response)})
         .catch(err => console.log(err))
     e.preventDefault()
@@ -73,7 +74,7 @@ function getNewUserStaticswithFilter(e) {
 function getPaymentStaticsWithFilter(e) {
     request.getwithUrl(`/admin/statics/getPaymentStaticsWithFilter?startDate=${startDate.value}&endDate=${endDate.value}`)
         .then(response => {
-            ui.showModal(true,response.message)
+            ui.showNotification(true,response.message)
             ui.createChart(response)})
         .catch(err => console.log(err))
     e.preventDefault()
