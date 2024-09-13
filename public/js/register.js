@@ -57,7 +57,6 @@ form.addEventListener("submit", (e) => {
     body: params
   }).then(res => res.json())
     .then(data => {
-      console.log(data)
       loader.classList.toggle("showed");
       if (data.createSuccess) {
         dialog.showModal();

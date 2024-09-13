@@ -61,6 +61,17 @@ export class Request {
 
     return responseData;
   }
+  async postWithUrlformData(url, params) {
+    
+    const response = await fetch(url, {
+      method: "POST",
+      body:params
+     
+    });
+    const responseData = await response.json();
+
+    return responseData;
+  }
 
   async createCompany(data, url) {
     const response = await fetch(url, {

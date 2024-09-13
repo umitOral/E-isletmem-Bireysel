@@ -1,0 +1,49 @@
+.success_popup_wrapper.showed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff79;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.75s;
+  }
+  .success_popup_wrapper {
+    
+    display: none;
+    
+  }
+  .success_popup {
+    justify-content: center;
+    background-color: white;
+    padding: 2rem;
+    box-shadow: var(--box-shadow);
+    border: 1px solid rgba(128, 128, 128, 0.4);
+    border-radius: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .button{
+    font-size: 14px;
+    color: #fff;
+    background-color: #ff511a;
+    padding: 12px 30px;
+    display: inline-block;
+    border-radius: 5px;
+    font-weight: 500;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    border: none;
+    transition: all .3s;
+       
+   }
+   .button:hover{
+    background-color: #43ba7f;
+   }

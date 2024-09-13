@@ -1,0 +1,14 @@
+<div class="success_popup_wrapper" id="success_popup_wrapper">
+    <div class="success_popup">
+      
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+        <dotlottie-player src="https://lottie.host/9d87dbf5-faa7-464e-8e4f-03e1b7b7f44f/ZLe8B1lROy.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
+      <text id="loader_message">Mesajınızı aldık, en kısa sürede dönüş sağlayacağız.</text>
+      <button class="button" id="popup_close_btn" >Kapat</button>
+    </div>
+    <script>
+      document.getElementById("popup_close_btn").addEventListener("click",()=>{
+        document.getElementById("success_popup_wrapper").classList.remove("showed")
+      })
+    </script>
+  </div>

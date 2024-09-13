@@ -16,13 +16,16 @@
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/register.css">
+  <link rel="stylesheet" href="css/general_style.css">
   <link rel="stylesheet" href="assets/css/fontawesome.css">
   <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
 
   <script src="//code.jivosite.com/widget/evvUheNYIv" async></script>
 
 
- 
+
 </head>
 
 <body>
@@ -83,15 +86,7 @@
         </div>
       </div>
     </section>
-    <% if (locals.message) { %>
-      <section class="message">
-        <i class="fa-solid fa-check"></i>
-        <span>Mesajınız Gönderilmiştir.</span>
-        <span>
-          <%= locals.message %>
-        </span>
-      </section>
-      <% } %>
+  
 
         <section class="contact-us-form">
           <div class="container">
@@ -100,10 +95,11 @@
 
               </div>
               <div class="col-lg-10 offset-lg-1">
-
+                
                 <form id="contact" action="/contactEmail" method="post">
                   <div class="col-lg-12 mb-4">
                     <h2>İletişim Formu</h2>
+                    <div class="res-message"></div>
                   </div>
                   <div class="row">
                     <div class="col-lg-6">
@@ -126,7 +122,7 @@
 
                     <div class="col-lg-12">
                       <fieldset>
-                        <textarea name="message" id="message" placeholder="Mesajınız"></textarea>
+                        <textarea name="message" id="message" placeholder="Mesajınız" required minlength="10"></textarea>
                       </fieldset>
                     </div>
                     <div class="col-lg-12">
@@ -140,26 +136,24 @@
             </div>
           </div>
         </section>
-        <%- include('partials/loader.ejs') %>
+        <%- include('../partials/loader.ejs') %>
+          <%- include('../partials/success_popup.ejs') %>
 
 
 
-        <%- include('../partials/front-footer.ejs') %>
 
-          <!-- Scripts -->
-          <!-- Bootstrap core JavaScript -->
+            <%- include('../partials/front-footer.ejs') %>
 
-          <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+              <!-- Scripts -->
+              <!-- Bootstrap core JavaScript -->
 
-          <script src="assets/js/isotope.min.js"></script>
-          <script>
-            const loader =document.querySelector(".loader_wrapper")
-            const form =document.querySelector("#contact")
-            form.addEventListener("submit",()=>{
-              loader.classList.add("showed")
-            })
+              <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-          </script>
+              <script src="assets/js/isotope.min.js"></script>
+              <script type="module" src="./js/contact-us.js"></script>
+              <script type="module" src="/js/requests.js"></script>
+              <script type="module" src="/js/ui.js"></script>
+
 
 
 

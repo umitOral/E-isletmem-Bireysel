@@ -118,6 +118,10 @@ const orderSuccesEmail = async (request) => {
 };
 const contactEmail = async (req, res) => {
   try {
+    
+    // console.log(req.body)
+    const params= new URLSearchParams(req.body)
+    console.log(req.body)
     const data = {
       name: req.body.name,
       messages: req.body.message,
@@ -126,7 +130,6 @@ const contactEmail = async (req, res) => {
       ticketStatus: ticketStatus.OPEN,
     };
     const html = contactEmailHTML;
-    console.log(data);
     await Ticket.create(data);
 
     const transporter = createTransport({
@@ -147,8 +150,9 @@ const contactEmail = async (req, res) => {
 
     transporter.verify().then(console.log).catch(console.error);
 
-    res.render("front/contact-us", {
-      message: "kaydınız başarıyla oluşturuldu",
+    res.json({
+      success:true,
+      message: "mesajınızı aldık",
     });
   } catch (error) {
     res.status(400).json({
