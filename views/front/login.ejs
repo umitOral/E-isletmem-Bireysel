@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="assets/css/owl.css">
   <link rel="stylesheet" href="assets/css/animate.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+  <link rel="stylesheet" href="css/general_style.css">
  
 
 </head>
@@ -78,6 +79,22 @@
       
      
 
+    </div>
+
+    <div class="success_popup_wrapper" id="success_popup_wrapper">
+      <div class="success_popup">
+        
+        <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+          <dotlottie-player src="https://lottie.host/9d87dbf5-faa7-464e-8e4f-03e1b7b7f44f/ZLe8B1lROy.json" background="transparent" speed="1" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
+        <text id="popup_message">Giriş Başarılı</text>
+        <text id="popup_message">Yönlendiriliyorsunuz</text>
+        
+      </div>
+      <script>
+        document.getElementById("popup_close_btn").addEventListener("click",()=>{
+          document.getElementById("success_popup_wrapper").classList.remove("showed")
+        })
+      </script>
     </div>
 
 
