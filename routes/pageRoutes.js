@@ -35,7 +35,7 @@ router.route("/companyPaymentResultPage").post(companyPaymentResult)
 router.route("/companyPaymentResultPage").get(getcompanyPaymentResult)
 
 
-router.route("/contactEmail").post(contactEmail)
+router.route("/contactEmail").post(verifyRecaptcha,contactEmail)
 
 
 

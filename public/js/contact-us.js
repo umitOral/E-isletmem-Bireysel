@@ -12,6 +12,7 @@ form.addEventListener("submit", (e) => {
     messageModal.style = "display:none"
     messageModal.textContent = "";
     // 
+    const captchaResponse = grecaptcha.getResponse()
     const fd = new FormData(e.target)
     const params = new URLSearchParams(fd)
     loader.classList.toggle("showed");
@@ -24,7 +25,7 @@ form.addEventListener("submit", (e) => {
                 e.target.reset();
             } else {
                 messageModal.style = "display:block"
-                messageModal.textContent = data.message;
+                messageModal.textContent = response.message;
             }
 
         })
