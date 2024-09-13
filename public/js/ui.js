@@ -11,13 +11,13 @@ export class UI {
     if (success === false) {
       information.classList.add("failure");
 
-      information.innerHTML = `<span>${message}</span><i class="fa-solid fa-circle-xmark"></i>`;
+      information.innerHTML = `<i class="fa-solid fa-circle-exclamation left-icon"></i></i><span>${message}</span><i class="fa-solid fa-xmark danger"></i>`;
       wrapper.appendChild(information);
     } else {
       information.classList.add("success");
 
       information.innerHTML = `
-            <span>${message}</span><i class="fa-solid fa-circle-check"></i>
+            <i class="fa-solid fa-circle-check left-icon"></i><span>${message}</span><i class="fa-solid fa-xmark success"></i>
         `;
       wrapper.appendChild(information);
     }

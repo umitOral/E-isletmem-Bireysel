@@ -14,7 +14,11 @@
 
   --color-primary: #7380ec;
   --color-danger: #ff7782;
+  --color-danger-dark: #ff3949;
+  --color-danger-soft: #fea1a9;
   --color-success: #41f1b6;
+  --color-success-dark: #08eb9f;
+  --color-success-soft: #7af3cb;
   --color-warning: #ffbb55;
   --color-white: #fff;
   --color-info-light: #dce1eb;
@@ -185,13 +189,14 @@ hr {
   position: fixed;
   top:80px;
   right: 10px;
+  width: 20%;
 }
 .information {
   display: flex;
   gap: 1rem;
   color: white;
   align-items: center;
-  padding: 1rem 4rem;
+  justify-content: space-between;
   right: 5%;
   top: 20%;
   z-index: 999;
@@ -207,19 +212,45 @@ hr {
 .information.failure {
   opacity: 1;
   color:white;
-  background-color: var(--color-danger);
+  background-color:#ff7783;
   border: 1px solid var(--color-danger);
 }
 
 .information.success {
   opacity: 1;
   color:white;
-  background-color: var(--color-success);
+  background-color: #10ffb0;
   border: 1px solid var(--color-success);
 }
 
 .information i {
-  font-size: 2rem;
+  font-size: 1.5rem;
+}
+.information .fa-solid.fa-xmark.danger{
+  background-color:#fe4e5d;
+  border-radius: var(--border-radius-1);
+  padding: 0.8rem;
+  cursor: pointer;
+  color: white;
+}
+.information .fa-solid.fa-xmark.success{
+  background-color:#11e8a1;
+  border-radius: var(--border-radius-1);
+  padding: 0.8rem;
+  cursor: pointer;
+  color: white;
+}
+.information .fa-solid.fa-xmark.success:hover{
+  background-color: #00df94;
+ 
+}
+.information .fa-solid.fa-xmark:hover {
+  background-color: var(--color-danger-dark);
+  
+}
+.information .left-icon {
+  padding-left: 1rem;
+  
 }
 
 .inputs input,
@@ -1020,7 +1051,13 @@ header .head {
 
 /* mobile ------------------------------------------------------------------------------------ */
 @media (max-width: 768px) {
-  
+  .information-modal-wrapper{
+    position: fixed;
+    top:80px;
+    width: 80%;
+    right: 0;
+   
+  }
   header .head {
     display: block;
     width: 60%;

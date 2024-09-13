@@ -8,7 +8,11 @@ const ui = new UI();
 
 
 const saveButtons = document.querySelectorAll(".input_save_buttons");
+const informationModalWrapper = document.querySelector(".information-modal-wrapper");
+
+
 const cancelButtonModal = document.querySelectorAll(".cancel_button");
+
 
 const priceInputs = document.querySelectorAll(".price_inputs");
 
@@ -22,7 +26,7 @@ priceInputs.forEach((input) => {
 
 saveButtons.forEach((button) => {
   button.addEventListener("click", ()=>{
-   
+    closebtnshandle()
     const newPrice=button.previousElementSibling.value
     
     let data={
@@ -30,12 +34,22 @@ saveButtons.forEach((button) => {
     }
     request.postWithUrl("./services/"+button.parentElement.dataset.servicesid+"/editService",data)
     .then((response)=>{
-        ui.showModal(true,response.message)
+      console.log(response)
+        ui.showModal(response.success,response.message)
         button.classList.remove("showed");
     })
     .catch(err=>ui.showModal(false,err));
   });
 });
+
+function closebtnshandle() {
+  
+  informationModalWrapper.addEventListener("click",(e)=>{
+    if (e.target.classList.contains("fa-xmark")) {
+      e.target.parentElement.remove()
+    }
+  })
+}
 
 
 
