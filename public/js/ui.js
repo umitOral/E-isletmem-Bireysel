@@ -33,9 +33,9 @@ export class UI {
       wrapper.appendChild(information);
     }
 
-    // setTimeout(() => {
-    //   information.remove();
-    // }, 3000);
+    setTimeout(() => {
+      information.remove();
+    }, 3000);
 
     // Bildirimi görünür hale getir
   }
