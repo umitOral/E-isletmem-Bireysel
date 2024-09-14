@@ -25,7 +25,7 @@
         <section id="content">
             <!---------- left aside ------------->
 
-            <%- include('partials/header.ejs') %>
+            <th%- include('partials/header.ejs') %>
 
                 <!----------- end of sidebar ----------->
 
@@ -50,9 +50,9 @@
                             <div class="show-content payment">Tahsilatlar
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            
-                           
-                            
+
+
+
                             <div class="show-content operations">İşlemler
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
@@ -84,8 +84,8 @@
                                         </div>
                                         <div class="inputs ">
                                             <span>Kayıt Tarihi:</span>
-                                            <input type="text" name="" id="surname" value="<%= singleUser.createdAt.toLocaleDateString()%>"
-                                                readonly>
+                                            <input type="text" name="" id="surname"
+                                                value="<%= singleUser.createdAt.toLocaleDateString()%>" readonly>
                                         </div>
                                         <div class="options ">
                                             <span>Cinsiyet</span>
@@ -215,18 +215,53 @@
                                         <table class="order-table">
                                             <thead>
 
-                                                <th>Kayıt Tarihi<i class="fa-solid fa-arrow-up"></i></th>
-                                                <th>İşlem<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>İşlem Durumu<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>Mevcut Randevu<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>Randevular</td>
-                                                <th>Datalar</td>
-                                                <th>Fiyat<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>İndirim<i class="fa-solid fa-arrow-up"></i></td>
-                                                <th>Ödenen/Toplam<i class="fa-solid fa-arrow-up"></i></th>
+                                                <th>
+                                                    <div class="table_head">
+                                                        Kayıt Tarihi<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="table_head">
+                                                        İşlemler<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
 
-                                                <th></th>
-
+                                                <th>
+                                                    <div class="table_head">
+                                                        İşlem Durumu<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="table_head">
+                                                        Mevcut Randevu<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="table_head">
+                                                        Randevular<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="table_head">
+                                                        Datalar<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="table_head">
+                                                        Fiyat<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="table_head">
+                                                        İndirim<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="table_head">
+                                                        Ödenen/Toplam<i class="fa-solid fa-arrow-up"></i>
+                                                    </div>
+                                                </th>
+                                              
                                             </thead>
                                             <tbody>
 
@@ -235,13 +270,13 @@
 
                                         </table>
 
-                                    </div>
-
                                 </div>
 
                             </div>
 
                         </div>
+
+                    </div>
 
                     </div>
 
@@ -263,8 +298,7 @@
                         </div>
                         <div class="inputs ">
                             <span>Email</span>
-                            <input type="text" name="email" id="" value="<%= singleUser.email %>"
-                                >
+                            <input type="text" name="email" id="" value="<%= singleUser.email %>">
                         </div>
                         <div class="options">
                             <span>Cinsiyet:</span>
@@ -461,7 +495,7 @@
                 <h2>Veri Ekle</h2>
             </div>
             <form action="" id="add-data-form" data-operationid="">
-                
+
                 <div class="inputs">Veri Adı:
                     <select name="datas" id="datas_select_input">
                         <option value="" selected disable hidden>Veri seçiniz</option>
@@ -473,21 +507,21 @@
                             <% }) %>
                     </select>
 
-                    <div  style="display: none;">
+                    <div style="display: none;">
                         Opsiyon:
-                    <select name="datasOption" id="datasOptions_select_input">
-                        <option value="" selected disable hidden>seçiniz</option>
-                        <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
-                            <option value="">
-                                <%= element %>
-                            </option>
+                        <select name="datasOption" id="datasOptions_select_input">
+                            <option value="" selected disable hidden>seçiniz</option>
+                            <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
+                                <option value="">
+                                    <%= element %>
+                                </option>
 
-                            <% }) %>
-                    </select>
+                                <% }) %>
+                        </select>
                     </div>
-                    <div style="display:none" >
+                    <div style="display:none">
                         Sayısal Değer:
-                    <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
+                        <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
                     </div>
                 </div>
                 <button type="submit" class="save_button" id="add-data-save-button">Kaydet</button>
@@ -501,7 +535,7 @@
                 <h2>Seans Ekle</h2>
             </div>
             <form action="" id="add-session-form" data-operationid="">
-                
+
                 <div class="inputs">Eklenecek Seans:
                     <input type="Number" min="1" id="add-session" name="addsession">
 
@@ -518,7 +552,7 @@
                 <h2>İndirim Tanımla</h2>
             </div>
             <form action="" id="add-discount-form" data-operationid="">
-                
+
                 <div class="inputs">İndirim Miktarı(%)
                     <input type="text" name="percentDiscountValue" id="percentDiscountValue" value="">
                 </div>
@@ -537,7 +571,7 @@
                 <h2>Veri düzenle</h2>
             </div>
             <form action="" id="edit-data-form">
-                
+
                 <div class="inputs">Veri Adı:
                     <input type="text" name="dataName" id="dataName" value="" readonly>
                 </div>
@@ -603,8 +637,7 @@
                 <div class="payment_options ">
                     <span>Tahsilat:</span>
                     <div>
-                        <input type="radio" id="credit_card_ratio_edit" name="cashOrCard"
-                            value="Kredi Kartı">
+                        <input type="radio" id="credit_card_ratio_edit" name="cashOrCard" value="Kredi Kartı">
                           <label for="credit_card_ratio_edit">Kredi Kartı</label>
                     </div>
                     <div>
