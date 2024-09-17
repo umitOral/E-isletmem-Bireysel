@@ -20,13 +20,13 @@ const editUserButton = document.getElementById("edit-user");
 
 const loader = document.querySelector(".loader_wrapper.hidden");
 
-const cancelModal = document.querySelectorAll(".modal .cancel_button");
-const cancelAddPhoto = document.querySelector(".cancel_add_pic");
+const cancelModal = document.querySelectorAll(".cancel.form-btn");
+const cancelAddPhoto = document.querySelector("#cancel-add-photo");
 
-const addDataModal = document.querySelector(".add-data-modal");
-const editPaymentModal = document.querySelector(".modal_edit_payment");
+const addDataModal = document.querySelector("#add-data-modal");
+const editPaymentModal = document.querySelector("#modal_edit_payment");
 
-const addSessionModal = document.querySelector(".add-session-modal");
+const addSessionModal = document.querySelector("#add-session-modal");
 const addDataSaveButton = document.querySelector("#add-data-save-button");
 
 const addDSessionSaveButton = document.querySelector(
@@ -42,15 +42,16 @@ let datasSelectInput = document.querySelector("#datas_select_input");
 // modals
 const allModals = document.querySelectorAll(".modal");
 
-const modalUser = document.querySelector(".modal_user");
-const addDiscountModal = document.querySelector(".add_discount_modal");
-const modalSlider = document.querySelector(".modal_slider");
+const modalUser = document.querySelector("#modal_user");
+const addDiscountModal = document.querySelector("#add_discount_modal");
+const modalSlider = document.querySelector("#modal_slider");
 
-const modalImage = document.querySelector(".modal_image");
-const modalOrders = document.querySelector(".modal_orders");
+const modalImage = document.querySelector("#modal_image");
+const modalOrders = document.querySelector("#modal_order");
 const userID = document.querySelector(".user-informations").dataset.userıd;
 
-let modalEditData = document.querySelector(".edit-data-modal");
+let modalEditData = document.querySelector("#edit-data-modal");
+const  allSessionsofOperationModal = document.querySelector(".allSessionsofOperationModal");
 
 // responsed datas
 
@@ -67,7 +68,7 @@ function eventListeners() {
 
 cancelModal.forEach((element) => {
   element.addEventListener("click", (e) => {
-    element.parentElement.parentElement.classList.remove("showed_modal");
+    element.parentElement.parentElement.parentElement.parentElement.classList.add("hidden");
   });
 });
 
@@ -171,7 +172,6 @@ async function getOperationImages(operationID) {
     .then((response) => {
       console.log(response);
       ui.showNotification(true, response.message);
-      console.log(response.photos.length);
       while (allSmallImages.firstChild) {
         allSmallImages.firstChild.remove();
       }
@@ -201,7 +201,7 @@ showContentsBtn.forEach((element, index) => {
   element.addEventListener("click", (e) => {
     // close all open modals
     allModals.forEach((modal) => {
-      modal.classList.remove("showed_modal");
+      modal.classList.add("hidden");
     });
     //remove active all buttons
     showContentsBtn.forEach((element) => {
@@ -246,7 +246,7 @@ const saveModal = document.querySelectorAll(".modal .save_button");
 
 function showInformationsModal() {
   console.log("dada");
-  modalUser.classList.add("showed_modal");
+  modalUser.classList.remove("hidden");
 }
 
 saveModal.forEach((element) => {
@@ -347,8 +347,6 @@ function getAllAppointments() {
         <option value="" disable hidden selected >Seçenekler</option>
         
         <option class="addDescriptionAppointment">Açıklama ekle</option>
-        
-          
         
         </select>
         </td>
@@ -506,12 +504,13 @@ paymentTable.addEventListener("change", (e) => {
 
 const showOperationsBtn = document.querySelector(".show-content.operations");
 showOperationsBtn.addEventListener("click", getAllOperations);
-
+let allOperations={}
 function getAllOperations() {
   request
     .getwithUrl("./" + userID + "/getUsersAllOperations")
     .then((response) => {
       console.log(response);
+      allOperations=response
       ui.addResponseToTable(orderTable, response.data);
 
       handleOperationEditBtn();
@@ -530,34 +529,34 @@ function getAllOperations() {
 const orderModalBtn = document.querySelector("#order_btn");
 
 orderModalBtn.addEventListener("click", () => {
-  modalOrders.classList.toggle("showed_modal");
+  modalOrders.classList.remove("hidden");
 });
 
 // add order section
 
-const addOrderBtn = document.querySelector("#add-order");
+// const addOrderBtn = document.querySelector("#add-order");
 
-addOrderBtn.addEventListener("click", () => {
-  let data = {
-    selectedOperations,
-    discount: Number(percentDiscount.value),
-  };
+// addOrderBtn.addEventListener("click", () => {
+//   let data = {
+//     selectedOperations,
+//     discount: Number(percentDiscount.value),
+//   };
 
-  request
-    .postWithUrl("./" + userID + "/addOperation", data)
-    .then((response) => {
-      ui.showNotification(response.succes, response.message);
-      modalOrders.classList.toggle("showed_modal");
-      selectedProcessTable.innerHTML = "";
-      selectedOperations = [];
-      percentDiscount.value = 0;
-      proccessType.innerHTML += `<option value="" selected disabled hidden>İşlem seçiniz</option>`;
+//   request
+//     .postWithUrl("./" + userID + "/addOperation", data)
+//     .then((response) => {
+//       ui.showNotification(response.succes, response.message);
+//       modalOrders.classList.toggle("showed_modal");
+//       selectedProcessTable.innerHTML = "";
+//       selectedOperations = [];
+//       percentDiscount.value = 0;
+//       proccessType.innerHTML += `<option value="" selected disabled hidden>İşlem seçiniz</option>`;
 
-      calculateTotal();
-      getAllOperations();
-    })
-    .catch((err) => console.log(err));
-});
+//       calculateTotal();
+//       getAllOperations();
+//     })
+//     .catch((err) => console.log(err));
+// });
 
 // add picture
 
@@ -569,7 +568,7 @@ function handleİmageBtn() {
       console.log(e.target.parentElement.parentElement.dataset.operationid);
       addPictureForm.dataset.operationid =
         e.target.parentElement.parentElement.dataset.operationid;
-      modalImage.classList.toggle("showed_modal");
+      modalImage.classList.remove("hidden");
     });
   });
 }
@@ -609,7 +608,7 @@ function handleOperationEditBtn() {
       if (
         e.target.options[e.target.options.selectedIndex].value === "add-data"
       ) {
-        addDataModal.classList.toggle("showed_modal");
+        addDataModal.classList.toggle("hidden");
 
         addDataForm.dataset.operationid =
           e.target.parentElement.parentElement.dataset.operationid;
@@ -617,7 +616,7 @@ function handleOperationEditBtn() {
       if (
         e.target.options[e.target.options.selectedIndex].value === "add-session"
       ) {
-        addSessionModal.classList.toggle("showed_modal");
+        addSessionModal.classList.remove("hidden");
 
         addSessionForm.dataset.operationid =
           e.target.parentElement.parentElement.dataset.operationid;
@@ -627,10 +626,25 @@ function handleOperationEditBtn() {
         e.target.options[e.target.options.selectedIndex].value ===
         "add-discount"
       ) {
-        addDiscountModal.classList.toggle("showed_modal");
+        addDiscountModal.classList.remove("hidden");
 
         addDiscountForm.dataset.operationid =
           e.target.parentElement.parentElement.dataset.operationid;
+      }
+      if (
+        e.target.options[e.target.options.selectedIndex].value ==="show-all-sessions"
+      ) {
+        request
+            .getwithUrl("./" + userID + "/getSessionsofOperation/" + operationId)
+            .then((response) => {
+              console.log(response);
+              ui.showNotification(response.succes, response.message);
+
+              getAllOperations();
+            })
+            .catch((err) => ui.showNotification(false, err.message));
+            allSessionsofOperationModal.classList.toggle("showed_modal");
+
       }
     });
   });
@@ -684,7 +698,7 @@ const editPaymentForm = document.querySelector(
   ".modal_edit_payment #edit-payment-form"
 );
 const saveEditModal = document.querySelector(
-  ".modal_edit_payment .save_update_btn"
+  "#modal_edit_payment"
 );
 
 const selected_proccess_table_edit = document.querySelector(
@@ -701,7 +715,7 @@ function handleEditPaymentModal(e) {
     .then((response) => {
       console.log(response);
       selectedOperationsforEdit = response.data;
-      editPaymentModal.classList.add("showed_modal");
+      editPaymentModal.classList.remove("hidden");
       selected_proccess_table_edit.innerHTML = "";
 
       if (response.data.cashOrCard === "Nakit") {
@@ -812,7 +826,7 @@ function calculatetTotalPriceforEdit() {
   }
 }
 
-saveEditModal.addEventListener("click", (e) => {
+saveEditModal.addEventListener("submit", (e) => {
   e.preventDefault();
   let data = {
     paymentId: e.target.parentElement.dataset.paymentid,
@@ -978,7 +992,7 @@ function showImagesBtn() {
       getOperationImages(
         e.target.parentElement.parentElement.dataset.operationid
       );
-      modalSlider.classList.toggle("showed_modal");
+      modalSlider.classList.remove("hidden");
       operationName.textContent =
         e.target.parentElement.parentElement.children[2].textContent;
       operationDate.textContent =
@@ -1038,6 +1052,7 @@ function editDatasBtn() {
   operationDataEditBtns.forEach((element) => {
     element.addEventListener("click", async (e) => {
       console.log("dada");
+      modalEditData.classList.remove("hidden");
       let operationDataEditForm = document.querySelectorAll("#edit-data-form");
       let operationDataName = document.querySelector("#dataName");
       let editDatasOptionSelect = document.querySelector("#edit_data_option");
@@ -1088,13 +1103,12 @@ function editDatasBtn() {
           )
           .then((response) => {
             ui.showNotification(true, response.message);
-            modalEditData.classList.remove("showed_modal");
+            modalEditData.classList.add("hidden");
             getAllOperations();
           })
           .then((err) => console.log(err));
       });
 
-      modalEditData.classList.add("showed_modal");
     });
   });
 }
@@ -1102,10 +1116,10 @@ function editDatasBtn() {
 // close the slider modal
 
 const xBtn = document.querySelector(
-  ".modal_slider i.fa-solid.fa-square-xmark "
+  "#modal_slider i.fa-solid.fa-square-xmark "
 );
 xBtn.addEventListener("click", () => {
-  modalSlider.classList.toggle("showed_modal");
+  modalSlider.classList.add("hidden");
 });
 
 imageInput.addEventListener("change", handleFiles);

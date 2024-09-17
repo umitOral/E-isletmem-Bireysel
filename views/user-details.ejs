@@ -56,14 +56,10 @@
                             <div class="show-content operations">İşlemler
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-
-
                         </div>
 
 
                         <div class="right_section">
-
-
                             <div class="contents">
 
                                 <div class="userInformationsContent showed_content  generals">
@@ -72,17 +68,17 @@
                                     </div>
 
                                     <div class="contentBody">
-                                        <div class="inputs ">
+                                        <div class="form-group">
                                             <span>İsim</span>
                                             <input type="text" name="" id="name" value="<%= singleUser.name %>"
                                                 readonly>
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group">
                                             <span>Soyisim</span>
                                             <input type="text" name="" id="surname" value="<%= singleUser.surname %>"
                                                 readonly>
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group">
                                             <span>Kayıt Tarihi:</span>
                                             <input type="text" name="" id="surname"
                                                 value="<%= singleUser.createdAt.toLocaleDateString()%>" readonly>
@@ -106,37 +102,37 @@
                                                     </div>
                                                     <% } %>
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group">
                                             <span>Doğum Tarihi</span>
                                             <input type="date" name="" id="" value="<%= singleUser.birthDate %>"
                                                 readonly>
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group">
                                             <span>Email</span>
                                             <input type="email" name="" id="" value="<%= singleUser.email %>" readonly>
                                         </div>
 
-                                        <div class="inputs">
+                                        <div class="form-group">
                                             <span>Adres:</span>
                                             <input type="text" value="<%= singleUser.address %>" readonly>
                                         </div>
-                                        <div class="inputs">
+                                        <div class="form-group">
                                             <span>Şirket:</span>
                                             <input type="text" value="<%= singleUser.userCompany %>" readonly>
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group">
                                             <span>Fatura Adresi:</span>
                                             <input type="text" name="" id="" value="<%= singleUser.billingAddress %>"
                                                 readonly>
 
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group">
                                             <span>Telefon</span>
                                             <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
                                         </div>
 
 
-                                        <div class="inputs ">
+                                        <div class="form-group">
                                             <span>Açıklama</span>
                                             <input type="text" name="" id="" value="<%= singleUser.notes %>" readonly>
                                         </div>
@@ -261,7 +257,7 @@
                                                         Ödenen/Toplam<i class="fa-solid fa-arrow-up"></i>
                                                     </div>
                                                 </th>
-                                              
+
                                             </thead>
                                             <tbody>
 
@@ -270,6 +266,8 @@
 
                                         </table>
 
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -277,334 +275,298 @@
                         </div>
 
                     </div>
-
-                    </div>
-
                 </main>
 
-                <div class=" modal modal_user">
-
-                    <h2>Genel Bilgileri Düzenle</h2>
-
-                    <form action="./<%= singleUser._id %>/editInformations" method="POST" enctype="multipart/form-data">
-                        <div class="inputs ">
-                            <span>İsim</span>
-                            <input type="text" name="name" id="user-name" value="<%= singleUser.name %>">
-                        </div>
-
-                        <div class="inputs ">
-                            <span>Soyisim</span>
-                            <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Email</span>
-                            <input type="text" name="email" id="" value="<%= singleUser.email %>">
-                        </div>
-                        <div class="options">
-                            <span>Cinsiyet:</span>
-                            <% if(singleUser.sex==="male" ){ %>
-                                <div>
-                                    <input type="radio" id="sex-women-update" name="sex" value="female">
-                                    &nbsp; <label for="sex-women-update">Kadın</label>
-
-                                    <input type="radio" id="sex-man-update" name="sex" value="male" checked="checked">
-                                    &nbsp; <label for="sex-man-update">Erkek</label>
-
-                                </div>
-                                <% } else{ %>
-                                    <div>
-                                        <input type="radio" id="sex-women-update" name="sex" value="female"
-                                            checked="checked">
-                                        &nbsp; <label for="sex-women-update">Kadın</label>
-
-                                        <input type="radio" id="sex-man-update" name="sex" value="male">
-                                        &nbsp; <label for="sex-man-update">Erkek</label>
-
-                                    </div>
-                                    <% } %>
-
-                        </div>
-                        <div class="inputs ">
-                            <span>Adres</span>
-                            <input type="text" name="address" id="" value="<%= singleUser.address %>"
-                                placeholder="<%= singleUser.address %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Telefon</span>
-                            <input type="number" name="phone" id="" value="<%= singleUser.phone %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Şirket</span>
-                            <input type="text" name="userCompany" id="" value="<%= singleUser.userCompany %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Fatura Bilgisi:</span>
-                            <textarea name="billingAddress" id="" cols="70"
-                                rows="2"><%= singleUser.billingAddress %></textarea>
-                        </div>
-                        <div class="inputs ">
-                            <span>Açıklama</span>
-                            <textarea name="notes" id="" cols="70" rows="2"><%=singleUser.notes%></textarea>
-                        </div>
-                        <button type="submit" id="edit-user">Kaydet</button>
-                        <span class="cancel_button">Vazgeç</span>
-                    </form>
-                </div>
-                <div class="modal modal_orders">
-
-                    <h2>İşlem Ekle</h2>
-
-                    <form action="./<%= singleUser._id %>/addOperation" onsubmit="return false" method="POST"
-                        enctype="multipart/form-data">
-
-
-                        <div>
-                            <span>İşlem:</span>
-                            <select class="proccess_type_add">
-
-                                <option value="" selected disabled hidden>İşlem seçiniz</option>
-                                <% locals.company.services.forEach(service=> { %>
-                                    <% if (service.activeorNot===true) { %>
-                                        <option value="<%= service.serviceName %>"
-                                            data-price="<%= service.servicePrice %>" data-serviceid="<%= service._id %>"
-                                            <% if(service.serviceData.length!==0){ %>
-                                            data-serviceData="<%= service.serviceData[0] %>"
-                                                <% } else{ %>
-
-                                                    <% } %>
-
-                                                        >
-
-                                                        <%= service.serviceName %>
-                                        </option>
-                                        <% } %>
-
-                                            <% }) %>
-
-                            </select>
-
-
-                            <div class="selected_proccess_type_add">
-                                <table id="selected_proccess_table">
-                                    <thead>
-                                        <td>Hizmet</td>
-                                        <td>Seans Sayısı</td>
-                                        <td>Fiyat</td>
-                                    </thead>
-
-                                    <tbody>
-                                    </tbody>
-                                    <tfoot>
-
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Yüzde İndirimi: <input type="number" id="percent_discount"></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>toplam:</td>
-                                            <td id="total_value"></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <div class="processes_datas inputs">
-
-                            </div>
-
-                        </div>
 
 
 
 
-                        <button type="submit" id="add-order">Kaydet</button>
-                        <span class="cancel_button">Vazgeç</span>
-                    </form>
-                </div>
 
-
-                <div class="modal modal_image">
-                    <h2>Resim Ekle</h2>
-
-                    <form action="./<%= singleUser._id %>/uploadpictures" data-operationid="" method="POST"
-                        enctype="multipart/form-data" id="add_picture_form">
-
-                        <div class="inputs ">
-                            <span>Resim seç</span>
-                            <input type="file" name="upload_file" id="upload_file" class="upload_file" src="" alt=""
-                                multiple required>
-                        </div>
-                        <div class="uploaded_images_preview"></div>
-                        <div class="inputs">
-                            <span>çekilme zamanı:</span>
-                            <input type="number" name="uploadTime" id="uploadTime" required>
-                        </div>
-
-
-                        <button type="submit" class="save_button" id="add-img-save-button">Kaydet</button>
-                        <button type="button" class="cancel_add_pic cancel_button">Vazgeç</button>
-                    </form>
-                </div>
                 <div class="information-modal-wrapper"></div>
                 <%- include('partials/loader.ejs') %>
 
         </section>
 
+        <div class="modal hidden" id="modal_user">
+            <div class="inner_modal">
+                <h2>Genel Bilgileri Düzenle</h2>
 
-
-
-        <div class="modal modal_slider">
-            <div>
-                <div class="operation-image-informations">
-                    <span class="operation-name">Mezoterapi</span>
-                    <span class="operation-date">12.04.1992</span>
-                </div>
-                <i class="fa-solid fa-square-xmark"></i>
-            </div>
-
-            <div class="images-area">
-                <div class="small_images">
-
-                </div>
-
-
-                <!-- zoomist-container -->
-                <div class="zoomist-container slider">
-                    <!-- zoomist-wrapper is required -->
-                    <div class="zoomist-wrapper">
-                        <!-- zoomist-image is required -->
-                        <div class="zoomist-image">
-                            <!-- you can add anything you want to zoom here. -->
-                            <img src="/photos/images-preview.jpg" alt="cat" />
-                        </div>
+                <form action="./<%= singleUser._id %>/editInformations" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <span>İsim</span>
+                        <input type="text" name="name" id="user-name" value="<%= singleUser.name %>">
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <span>Soyisim</span>
+                        <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>">
+                    </div>
+                    <div class="form-group">
+                        <span>Email</span>
+                        <input type="text" name="email" id="" value="<%= singleUser.email %>">
+                    </div>
+                    <div class="options">
+                        <span>Cinsiyet:</span>
+                        <% if(singleUser.sex==="male" ){ %>
+                            <div>
+                                <input type="radio" id="sex-women-update" name="sex" value="female">
+                                &nbsp; <label for="sex-women-update">Kadın</label>
+
+                                <input type="radio" id="sex-man-update" name="sex" value="male" checked="checked">
+                                &nbsp; <label for="sex-man-update">Erkek</label>
+
+                            </div>
+                            <% } else{ %>
+                                <div>
+                                    <input type="radio" id="sex-women-update" name="sex" value="female"
+                                        checked="checked">
+                                    &nbsp; <label for="sex-women-update">Kadın</label>
+
+                                    <input type="radio" id="sex-man-update" name="sex" value="male">
+                                    &nbsp; <label for="sex-man-update">Erkek</label>
+
+                                </div>
+                                <% } %>
+
+                    </div>
+                    <div class="form-group">
+                        <span>Adres</span>
+                        <input type="text" name="address" id="" value="<%= singleUser.address %>"
+                            placeholder="<%= singleUser.address %>">
+                    </div>
+                    <div class="form-group">
+                        <span>Telefon</span>
+                        <input type="number" name="phone" id="" value="<%= singleUser.phone %>">
+                    </div>
+                    <div class="form-group">
+                        <span>Şirket</span>
+                        <input type="text" name="userCompany" id="" value="<%= singleUser.userCompany %>">
+                    </div>
+                    <div class="form-group">
+                        <span>Fatura Bilgisi:</span>
+                        <textarea name="billingAddress" id="" cols=""
+                            rows="2"><%= singleUser.billingAddress %></textarea>
+                    </div>
+                    <div class="form-group">
+                        <span>Açıklama</span>
+                        <textarea name="notes" id="" cols="" rows="2"><%=singleUser.notes%></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn save form-btn" type="submit" id="edit-user">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
 
 
-
-
+                </form>
             </div>
-
         </div>
+        <div class="modal hidden" id="modal_order">
+            <div class="inner_modal">
+                <h2>İşlem Ekle</h2>
 
-        <div class="modal add-data-modal">
-            <div>
-                <h2>Veri Ekle</h2>
-            </div>
-            <form action="" id="add-data-form" data-operationid="">
+                <form action="./<%= singleUser._id %>/addOperation" onsubmit="return false" method="POST"
+                    enctype="multipart/form-data">
 
-                <div class="inputs">Veri Adı:
-                    <select name="datas" id="datas_select_input">
-                        <option value="" selected disable hidden>Veri seçiniz</option>
-                        <% locals.company.serviceDatas.forEach(element=> { %>
-                            <option value="<%= element._id %>">
-                                <%= element.dataName %>
-                            </option>
 
-                            <% }) %>
-                    </select>
+                    <div class="form-group">
+                        <span>İşlem:</span>
+                        <select class="proccess_type_add">
 
-                    <div style="display: none;">
-                        Opsiyon:
-                        <select name="datasOption" id="datasOptions_select_input">
-                            <option value="" selected disable hidden>seçiniz</option>
-                            <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
-                                <option value="">
-                                    <%= element %>
-                                </option>
+                            <option value="" selected disabled hidden>İşlem seçiniz</option>
+                            <% locals.company.services.forEach(service=> { %>
+                                <% if (service.activeorNot===true) { %>
+                                    <option value="<%= service.serviceName %>" data-price="<%= service.servicePrice %>"
+                                        data-serviceid="<%= service._id %>" <% if(service.serviceData.length!==0){ %>
+                                        data-serviceData="<%= service.serviceData[0] %>"
+                                            <% } else{ %>
 
-                                <% }) %>
+                                                <% } %>
+
+                                                    >
+
+                                                    <%= service.serviceName %>
+                                    </option>
+                                    <% } %>
+
+                                        <% }) %>
+
                         </select>
                     </div>
-                    <div style="display:none">
-                        Sayısal Değer:
-                        <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
+
+                    <div class="selected_proccess_type_add">
+                        <table id="selected_proccess_table">
+                            <thead>
+                                <td>Hizmet</td>
+                                <td>Seans Sayısı</td>
+                                <td>Fiyat</td>
+                            </thead>
+
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Yüzde İndirimi: <input type="number" id="percent_discount"></td>
+
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>toplam:</td>
+                                    <td id="total_value"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                </div>
-                <button type="submit" class="save_button" id="add-data-save-button">Kaydet</button>
-                <button type="button" class="cancel_button">Vazgeç</button>
-            </form>
+                    <div class="processes_datas form-group">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn save form-btn" type="submit" id="edit-user">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
 
+                </form>
+            </div>
+        </div>
+
+        <div class="modal hidden" id="modal_image">
+            <div class="inner_modal">
+                <h2>Resim Ekle</h2>
+
+                <form action="./<%= singleUser._id %>/uploadpictures" data-operationid="" method="POST"
+                    enctype="multipart/form-data" id="add_picture_form">
+
+                    <div class="form-group">
+                        <span>Resim seç</span>
+                        <input type="file" name="upload_file" id="upload_file" class="upload_file" src="" alt=""
+                            multiple required>
+                    </div>
+                    <div class="uploaded_images_preview"></div>
+                    <div class="form-group">
+                        <span>çekilme zamanı:</span>
+                        <input type="number" name="uploadTime" id="uploadTime" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="add-img-save-button">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn" id="cancel-add-photo">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
 
         </div>
-        <div class="modal add-session-modal">
-            <div>
+        <div class="modal hidden" id="add-data-modal">
+            <div class="inner_modal">
+                <h2>Veri Ekle</h2>
+            
+                <form action="" id="add-data-form" data-operationid="">
+                    <div class="form-group">Veri Adı:
+                        <select name="datas" id="datas_select_input">
+                            <option value="" selected disable hidden>Veri seçiniz</option>
+                            <% locals.company.serviceDatas.forEach(element=> { %>
+                                <option value="<%= element._id %>">
+                                    <%= element.dataName %>
+                                </option>
+    
+                                <% }) %>
+                        </select>
+    
+                        <div style="display: none;">
+                            Opsiyon:
+                            <select name="datasOption" id="datasOptions_select_input">
+                                <option value="" selected disable hidden>seçiniz</option>
+                                <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
+                                    <option value="">
+                                        <%= element %>
+                                    </option>
+    
+                                    <% }) %>
+                            </select>
+                        </div>
+                        <div style="display:none">
+                            Sayısal Değer:
+                            <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="add-data-save-button">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+             
+        </div>
+        <div class="modal hidden" id="add-session-modal">
+            <div class="inner_modal">
                 <h2>Seans Ekle</h2>
+                <form action="" id="add-session-form" data-operationid="">
+
+                    <div class="form-group">Eklenecek Seans:
+                        <input type="Number" min="1" id="add-session" name="addsession">
+    
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="add-session-save-button">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
             </div>
-            <form action="" id="add-session-form" data-operationid="">
-
-                <div class="inputs">Eklenecek Seans:
-                    <input type="Number" min="1" id="add-session" name="addsession">
-
-                </div>
-                <button type="submit" class="save_button" id="add-session-save-button">Kaydet</button>
-                <button type="button" class="cancel_button">Vazgeç</button>
-            </form>
-
-
+               
+            
+            
         </div>
 
-        <div class="modal add_discount_modal">
-            <div>
+        <div class="modal hidden" id="add_discount_modal">
+            <div class="inner_modal">
+                 
                 <h2>İndirim Tanımla</h2>
-            </div>
+            
             <form action="" id="add-discount-form" data-operationid="">
 
-                <div class="inputs">İndirim Miktarı(%)
+                <div class="form-group">İndirim Miktarı(%)
                     <input type="text" name="percentDiscountValue" id="percentDiscountValue" value="">
                 </div>
-                <div class="inputs">İndirim Miktarı(TL)
+                <div class="form-group">İndirim Miktarı(TL)
                     <input type="text" name="discountValue" id="discountValue" value="">
                 </div>
 
-                <button type="submit" class="save_button" id="add-discount-save-button">Kaydet</button>
-                <button type="button" class="cancel_button">Vazgeç</button>
+                <form-gro>
+                    <button type="submit" class="btn save form-btn" id="add-discount-save-button">Kaydet</button>
+                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                </form-gro>
             </form>
-
-
-        </div>
-        <div class="modal edit-data-modal">
-            <div>
-                <h2>Veri düzenle</h2>
             </div>
-            <form action="" id="edit-data-form">
-
-                <div class="inputs">Veri Adı:
-                    <input type="text" name="dataName" id="dataName" value="" readonly>
-                </div>
-                <div class="inputs">Opsiyon:
-                    <select name="editDataOption" id="edit_data_option"></select>
-                </div>
-                <button type="submit" class="save_button" id="edit-data-save-button">Kaydet</button>
-                <button type="button" class="cancel_button">Vazgeç</button>
-            </form>
-
+           
 
         </div>
-        <div class="modal appointment-modal">
-            <form action="" id="edit-data-form">
-                <div>
-                    <h2>En yakın Randevu</h2>
-                </div>
-                <div class="inputs">Persnoel:
-                    <input type="text" name="appointmentDoc" id="appointmentDoc" value="" readonly>
-                </div>
-                <div class="inputs">Tarih:
-                    <input type="date" name="appointmentDate" id="appointmentDate">
-                </div>
-                <button type="submit" class="save_button" id="edit-data-save-button">Kaydet</button>
-                <button type="button" class="cancel_button">Vazgeç</button>
-            </form>
+        <div class="modal hidden" id="edit-data-modal">
+            <div class="inner_modal">
+                <h2>Veri düzenle</h2>
+                <form action="" id="edit-data-form">
 
+                    <div class="form-group">Veri Adı:
+                        <input type="text" name="dataName" id="dataName" value="" readonly>
+                    </div>
+                    <div class="form-group">Opsiyon:
+                        <select name="editDataOption" id="edit_data_option"></select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="edit-data-save-button">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+            
 
         </div>
-        <div class="modal modal_edit_payment">
-            <h2>Ödeme Düzenle</h2>
+        <div class="modal hidden" id="modal_edit_payment">
+            <div class="inner_modal">
+                <h2>Ödeme Düzenle</h2>
             <form action="" method="POST" id="edit-payment-form">
-                <div class="inputs" id="payment_user_edit">
+                <div class="form-group" id="payment_user_edit">
                     <input type="text" value="aaa" readonly>
                 </div>
 
@@ -646,20 +608,57 @@
                     </div>
                 </div>
 
-                <div class="inputs">
+                <div class="form-group">
                     <label for="description">Notlar:</label>
                     <textarea name="description" id="description_for_edit" cols="10" rows="3"></textarea>
                      
                 </div>
-                <button type="submit" class="save_update_btn">Kaydet</button>
-                <button type="button" class="cancel_button">Vazgeç</button>
+                <div class="form-group">
+                <button type="submit" class="btn save form-btn" id="">Kaydet</button>
+                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                </div>
+                
 
 
             </form>
+            </div>
+            
         </div>
 
+        <div class="modal hidden" id="modal_slider">
+            <div class="inner_modal slider-modal">
+                <div>
+                    <div class="operation-image-informations">
+                        <span class="operation-name">Mezoterapi</span>
+                        <span class="operation-date">12.04.1992</span>
+                    </div>
+                    <i class="fa-solid fa-square-xmark"></i>
+                </div>
+                <div class="images-area">
+                    <div class="small_images">
+    
+                    </div>
+    
+    
+                    <!-- zoomist-container -->
+                    <div class="zoomist-container slider">
+                        <!-- zoomist-wrapper is required -->
+                        <div class="zoomist-wrapper">
+                            <!-- zoomist-image is required -->
+                            <div class="zoomist-image">
+                                <!-- you can add anything you want to zoom here. -->
+                                <img src="/photos/images-preview.jpg" alt="cat" />
+                            </div>
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+           
 
+           
 
+        </div>
 
 
         <script type="module" src="/js/requests.js"></script>

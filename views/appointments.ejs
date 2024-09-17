@@ -6,7 +6,8 @@
 
     <%- include('partials/head.ejs') %>
 
-    <script src="/js/inner_modules/closeModal.js"></script>
+        <script src="/js/inner_modules/closeModal.js"></script>
+        <script src="/js/inner_modules/resetForm.js"></script>
 </head>
 
 <body>
@@ -70,173 +71,171 @@
 
                     </div>
                 </main>
-                <div class="modal modal_add_session ">
-                    <h2>Randevu Ekle</h2>
-                    <form action="" onsubmit="return false" method="POST" id="add-session-form">
-                        
-
-                            <div class="inputs">
-                                <span>Hasta:</span>
-                                <div style="display: flex; gap: 1rem;">
-                                    <input required type="text" list="user-names" name="user" id="user-select" autocomplete="off"
-                                    placeholder="isim soyisim">
-                               <button id="add-user-btn" type="button" class="btn-mini">Yeni+</button>
-                                </div>
-                               
-                                    
-                                <datalist  id="user-names">
-                                    <% locals.usersNames.forEach(element=> { %>
-
-                                        <option data-userid="<%= element._id %>"
-                                            data-userdata="<%= element.name+""+element.surname %>"
-                                            value="<%= element.name+" "+element.surname %>">
-
-                                        </option>
-                                        <% }) %>
-
-                                </datalist>
-
-
-
-                            </div>
-                            <div class="inputs">
-                                <span>Devam eden İşlemler:</span>
-                                <select class="proccess_type_add" id="proccess_type_add">
-                                    <option value="" selected hidden disable>Önce hasta seçiniz</option>
-                                </select>
-
-                                <div class="selected_proccess_type_add">
-
-                                </div>
-
-                            </div>
-                            <div class="inputs">
-                                <span>Yeni İşlemler:</span>
-                                <select class="proccess_type_new" id="proccess_type_new">
-                                    <option value="" selected hidden disable>İşlem Seçiniz</option>
-                                    <% locals.company.services.forEach(element=> { %>
-                                        <% if (element.activeorNot===true) { %>
-                                            <option data-price="<%= element.servicePrice %>"
-                                                data-id="<%= element._id %>" value="<%= element.serviceName %>">
-                                                <%= element.serviceName %>
-                                            </option>
-                                            <% } %>
-                                                <% }) %>
-                                </select>
-
-                                <div class="selected_proccess_type_new">
-
-                                </div>
-
-                            </div>
-
-
-
-                            <div class="inputs" hidden>timeIndex:
-                                <input type="text" name="timeIndexes" id="" class="timeIndex">
-                            </div>
-                            <div class="inputs" hidden>timeIndex1:
-                                <input type="text" name="timeIndexes" id="" class="timeIndex">
-                            </div>
-                            <div class="inputs">Başlangıç Saati:
-                                <input type="text" name="startHour" id="" class="startHour" readonly>
-                            </div>
-                            <div class="inputs">Bitiş Saati:
-                                <input type="text" name="endHour" id="" class="endHour" readonly>
-                            </div>
-
-                            <div class="inputs">Personel:
-                                <input type="text" id="" name="doctorName" class="doctor-name" readonly>
-                            </div>
-                            <div class="inputs" style="display: none;">PersnoelID:
-                                <input type="text" name="doctor" id="" class="doctor-id">
-                            </div>
-                            <div class="inputs">Tarih:
-                                <input type="date" name="date" class="event-date-from" readonly>
-                            </div>
-
-
-                            <div class="inputs">Not:
-                                <input type="text" name="description" placeholder="notlar">
-                            </div>
-
-                            <button type="submit" class="save_button">Seans Ekle +</button>
-
-
-                            <span type="button" id="cancel-add-appointment" class="cancel_button" onclick="closeModal(this)">Vazgeç</span>
-
-                        
-                    </form>
-
-                </div>
-
-                <div class="information-modal-wrapper"></div>
-
         </section>
-        <div class="add_customer modal">
-            <h2>Yeni Hasta Ekle</h2>
-            <form action="./users/createUser" method="POST" id="add-user-form">
-                <div class="inputs ">
-                    <span>İsim</span>
-                    <input type="text" name="name" id="user-name" required
-                        placeholder="İsim giriniz">
-                </div>
+        <div class="information-modal-wrapper"></div>
+        <div class="modal hidden" id="modal_add_session">
+            <div class="inner_modal">
+                <h2>Randevu Ekle</h2>
+                <form action="" onsubmit="return false" method="POST" id="add-session-form">
 
-                <div class="inputs ">
-                    <span>Soyisim</span>
-                    <input type="text" name="surname" id="surname" placeholder="soyisim giriniz" required>
-                </div>
-                <div class="inputs ">
-                    <span>Telefon</span>
-                    <input placeholder="başında '0' olmadan girin" type="tel" name="phone" id="phone" required pattern="[0-9]{10}" maxlength="10">
-                </div>
-                <div class="options">
-                    <span>Cinsiyet:</span>
-                    <div>
-                        <input type="radio" id="sex-women" name="sex" value="female" >
-                        &nbsp; <label for="sex-women">Kadın</label>
 
-                        <input type="radio" id="sex-man" name="sex" value="male">
-                        &nbsp; <label for="sex-man">Erkek</label>
+                    <div class="form-group">
+                        <span>Hasta:</span>
+                        <div style="display: flex; gap: 1rem;">
+                            <input required type="text" list="user-names" name="user" id="user-select"
+                                autocomplete="off" placeholder="isim soyisim">
+                            <button id="add-user-btn" type="button" class="btn-mini">Yeni+</button>
+                        </div>
+
+
+                        <datalist id="user-names">
+                            <% locals.usersNames.forEach(element=> { %>
+
+                                <option data-userid="<%= element._id %>"
+                                    data-userdata="<%= element.name+""+element.surname %>"
+                                    value="<%= element.name+" "+element.surname %>">
+
+                                </option>
+                                <% }) %>
+
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <span>Devam eden İşlemler:</span>
+                        <select class="proccess_type_add" id="proccess_type_add">
+                            <option value="" selected hidden disable>Önce hasta seçiniz</option>
+                        </select>
+
+                        <div class="selected_proccess_type_add">
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <span>Yeni İşlemler:</span>
+                        <select class="proccess_type_new" id="proccess_type_new">
+                            <option value="" selected hidden disable>İşlem Seçiniz</option>
+                            <% locals.company.services.forEach(element=> { %>
+                                <% if (element.activeorNot===true) { %>
+                                    <option data-price="<%= element.servicePrice %>" data-id="<%= element._id %>"
+                                        value="<%= element.serviceName %>">
+                                        <%= element.serviceName %>
+                                    </option>
+                                    <% } %>
+                                        <% }) %>
+                        </select>
+
+                        <div class="selected_proccess_type_new">
+
+                        </div>
+
+                    </div>
+                    <div class="form-group" hidden>timeIndex:
+                        <input type="text" name="timeIndexes" id="" class="timeIndex">
+                    </div>
+                    <div class="form-group" hidden>timeIndex1:
+                        <input type="text" name="timeIndexes" id="" class="timeIndex">
+                    </div>
+                    <div class="form-group">Başlangıç Saati:
+                        <input type="text" name="startHour" id="" class="startHour" readonly>
+                    </div>
+                    <div class="form-group">Bitiş Saati:
+                        <input type="text" name="endHour" id="" class="endHour" readonly>
+                    </div>
+
+                    <div class="form-group">Personel:
+                        <input type="text" id="" name="doctorName" class="doctor-name" readonly>
+                    </div>
+                    <div class="form-group" style="display: none;">PersnoelID:
+                        <input type="text" name="doctor" id="" class="doctor-id">
+                    </div>
+                    <div class="form-group">Tarih:
+                        <input type="date" name="date" class="event-date-from" readonly>
+                    </div>
+
+                    <div class="form-group">Not:
+                        <input type="text" name="description" placeholder="notlar">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn">Seans Ekle +</button>
+                        <button type="button" id="cancel-add-appointment" class="btn cancel form-btn"
+                            onclick="resetForm(this)">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+        <div class="modal hidden" id="add_customer">
+            <div class="inner_modal">
+                <h2>Yeni Hasta Ekle</h2>
+                <form action="./users/createUser" method="POST" id="add-user-form">
+                    <div class="form-group ">
+                        <span>İsim</span>
+                        <input type="text" name="name" id="user-name" required placeholder="İsim giriniz">
+                    </div>
+
+                    <div class="form-group ">
+                        <span>Soyisim</span>
+                        <input type="text" name="surname" id="surname" placeholder="soyisim giriniz" required>
+                    </div>
+                    <div class="form-group ">
+                        <span>Telefon</span>
+                        <input placeholder="başında '0' olmadan girin" type="tel" name="phone" id="phone" required
+                            pattern="[0-9]{10}" maxlength="10">
+                    </div>
+                    <div class="options">
+                        <span>Cinsiyet:</span>
+                        <div>
+                            <input type="radio" id="sex-women" name="sex" value="female">
+                            &nbsp; <label for="sex-women">Kadın</label>
+
+                            <input type="radio" id="sex-man" name="sex" value="male">
+                            &nbsp; <label for="sex-man">Erkek</label>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group ">
+                        <span>Doğum Tarihi</span>
+                        <input type="date" name="birtdhDate" id="birtdhDate">
+                    </div>
+                    <div class="form-group ">
+                        <span>Adres</span>
+                        <input type="text" name="address" id="address">
 
                     </div>
 
-                </div>
-                <div class="inputs ">
-                    <span>Doğum Tarihi</span>
-                    <input type="date" name="birtdhDate" id="birtdhDate">
-                </div>
-                <div class="inputs ">
-                    <span>Adres</span>
-                    <input type="text" name="address" id="address">
+                    <div class="form-group ">
+                        <span>Mail</span>
+                        <input type="email" name="email" id="email">
+                    </div>
 
-                </div>
-                
-                <div class="inputs ">
-                    <span>Mail</span>
-                    <input type="email" name="email" id="email">
-                </div>
+                    <div class="form-group ">
+                        <span>Fatura Bilgisi:</span>
+                        <textarea name="billingAddress" id="billingAddress" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <span>Açıklama</span>
+                        <textarea name="notes" id="notes" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="add-user">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn" onclick="resetForm()">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
 
-                <div class="inputs ">
-                    <span>Fatura Bilgisi:</span>
-                    <textarea name="billingAddress" id="billingAddress" rows="2"></textarea>
-                </div>
-                <div class="inputs">
-                    <span>Açıklama</span>
-                    <textarea name="notes" id="notes" rows="2"></textarea>
-                </div>
-                <button type="submit" class="save_button" id="add-user">Kaydet</button>
-                <button type="button" class="cancel_button" onclick="closeModal(this)">Vazgeç</button>
-            </form>
         </div>
 
         <%- include('partials/loader.ejs') %>
 
 
-        <script type="module" src="/js/appointments.js"></script>
-        <!-- <script type="module" src="../bundles/appointments.js"></script> -->
+            <script type="module" src="/js/appointments.js"></script>
+            <!-- <script type="module" src="../bundles/appointments.js"></script> -->
 
-        <script src="/js/sidebar.js"></script>
+            <script src="/js/sidebar.js"></script>
 
 </body>
 

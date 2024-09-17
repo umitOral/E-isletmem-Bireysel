@@ -24,6 +24,7 @@ import {
   getUsersOldOperations,
   addDataToOperation,
   deleteOperation,
+  getSessionsofOperation,
   uploadPictures,
   getAllPhotos,
   getUsersAllPayments,
@@ -127,6 +128,7 @@ router
   .route("/users/:id/addOperationInsideAppointment")
   .post(addOperationInsideAppointment);
 router.route("/users/:id/deleteOperation/:operationId").get(deleteOperation);
+router.route("/users/:id/getSessionsofOperation/:operationId").get(getSessionsofOperation);
 
 router.route("/users/:id/getAllPhotos/:operationId").get(getAllPhotos);
 router.route("/users/:id/getUsersAllPayments").get(getUsersAllPayments);

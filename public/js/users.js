@@ -5,12 +5,22 @@ const request = new Request();
 ui.closeNotification()
 
 const savebutton = document.querySelector(".save_button");
+const allModals = document.querySelectorAll(".modal");
+const cancelButtons = document.querySelectorAll(".cancel");
 const form = document.querySelector("#register-form");
 
 eventListeners();
 function eventListeners() {
   form.addEventListener("submit", createUser);
 }
+
+cancelButtons.forEach(element => {
+  element.addEventListener( "click",()=>{
+    allModals.forEach(element => {
+      element.classList.add("hidden")
+    });
+  })
+});
 
 function createUser(e) {
   e.preventDefault();
@@ -42,15 +52,9 @@ console.log(form.getAttribute("action"))
 
 
 const addCustomerButton = document.querySelector(".add_customer_btn")
-const modalCustomerAdd = document.querySelector(".add_customer")
-const modalCustomerCancel = document.querySelector(".cancel_button")
+const modalCustomerAdd = document.querySelector("#add_customer")
 
-addCustomerButton.addEventListener("click", showModalAddCostumer)
-modalCustomerCancel.addEventListener("click", closeModalAddCostumer)
 
-function showModalAddCostumer() {
-    modalCustomerAdd.classList.add("showed_modal")
-}
-function closeModalAddCostumer() {
-    modalCustomerAdd.classList.remove("showed_modal")
-}
+addCustomerButton.addEventListener("click",()=>modalCustomerAdd.classList.remove("hidden"))
+
+

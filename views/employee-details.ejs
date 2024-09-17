@@ -34,22 +34,15 @@
 
 
 
-                            <div class="show-content informations">Bilgiler<i
+                            <div class="show-content informations active">Bilgiler<i
                                     class="fa-solid fa-pen-to-square edit"></i>
                             </div>
                             <div class="show-content appointments">Randevular
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <div class="show-content permissions">İzinler
+                            <div class="show-content permissions">Yetkiler
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <!-- <div class="show-content payment">Tahsilatlar
-                                <i class="fa-solid fa-pen-to-square edit"></i>
-                            </div> -->
-
-
-
-
                         </div>
 
 
@@ -62,144 +55,150 @@
                                         <h2>Bilgiler</h2>
                                     </div>
                                     <div class="contentBody">
-                                        <div class="inputs ">
+                                        <div class="form-group ">
                                             <span>İsim</span>
-                                            <input type="text" name="name" id="name" value="<%= singleUser.name %>" readonly>
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Soyisim</span>
-                                            <input type="text" name="surname" id="surname" value="<%= singleUser.surname %>"
+                                            <input type="text" name="name" id="name" value="<%= singleUser.name %>"
                                                 readonly>
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group ">
+                                            <span>Soyisim</span>
+                                            <input type="text" name="surname" id="surname"
+                                                value="<%= singleUser.surname %>" readonly>
+                                        </div>
+                                        <div class="form-group ">
                                             <span>Görev</span>
-                                            
+
                                             <input type="text" name="role" id="user-surname"
                                                 value="<%= singleUser.role %>">
                                         </div>
                                         <div class="options">
                                             <span>Aktiflik:</span>
-                                            
+
                                             <% if(singleUser.activeOrNot==true){ %>
                                                 <div>
-                                                    <input type="radio" id="activeOrNot-true" name="activeOrNot" checked >
+                                                    <input type="radio" id="activeOrNot-true" name="activeOrNot"
+                                                        checked>
                                                     <label for="activeOrNot-true">Aktif</label>
                                                 </div>
-                                              <% } else{ %>  
-                                                <div>
-                    
-                                                    <input type="radio" id="activeOrNot-false" name="activeOrNot" value="false" checked="checked" >
-                                                    &nbsp; <label for="activeOrNot-false">Deaktif</label>
-                    
-                                                </div>
-                                             <% } %>
-                
+                                                <% } else{ %>
+                                                    <div>
+
+                                                        <input type="radio" id="activeOrNot-false" name="activeOrNot"
+                                                            value="false" checked="checked">
+                                                        &nbsp; <label for="activeOrNot-false">Deaktif</label>
+
+                                                    </div>
+                                                    <% } %>
+
                                         </div>
                                         <div class="options">
                                             <span>Cinsiyet:</span>
-                                            <% if(singleUser.sex==="male"){ %>
+                                            <% if(singleUser.sex==="male" ){ %>
                                                 <div>
-                                                   
-                                                    <input type="radio" id="sex-man" name="sex" value="male" checked="checked">
+
+                                                    <input type="radio" id="sex-man" name="sex" value="male"
+                                                        checked="checked">
                                                     &nbsp; <label for="sex-man">Erkek</label>
-                    
+
                                                 </div>
-                                              <% } else{ %>  
-                                                <div>
-                                                    <input type="radio" id="sex-women" name="sex" value="female" checked="checked">
-                                                    &nbsp; <label for="sex-women">Kadın</label>
-                    
-                                                </div>
-                                             <% } %>
-                
+                                                <% } else{ %>
+                                                    <div>
+                                                        <input type="radio" id="sex-women" name="sex" value="female"
+                                                            checked="checked">
+                                                        &nbsp; <label for="sex-women">Kadın</label>
+
+                                                    </div>
+                                                    <% } %>
+
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group ">
                                             <span>Doğum Tarihi</span>
-                                            
+
                                             <input type="date" name="" id="" <% if (singleUser.birthDate) { %>
-                                             value="<%= singleUser.birthDate.toISOString().split('T')[0] %>"
-                                            <% } %> readonly>
+                                            value="<%= singleUser.birthDate%>"
+                                                <% } %> readonly>
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group ">
                                             <span>Mail</span>
                                             <input type="email" name="" id="" value="<%= singleUser.email %>" readonly>
                                         </div>
-    
-                                        <div class="inputs">
+
+                                        <div class="form-group">
                                             <span>Adres:</span>
                                             <input type="text" value="<%= singleUser.address %>" readonly>
                                         </div>
-                                        <div class="inputs ">
+                                        <div class="form-group ">
                                             <span>Telefon</span>
                                             <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
                                         </div>
-    
-                                        <div class="inputs ">
+
+                                        <div class="form-group ">
                                             <span>Kayıt Tarihi:</span>
-                                            <input type="text" name="" id="" value="<%= new Date(singleUser.registerDate).toLocaleDateString("tr-TR") %>" readonly>
+                                            <input type="text" name="" id=""
+                                                value="<%= new Date(singleUser.registerDate).toLocaleDateString("tr-TR") %>" readonly>
                                         </div>
-                                       
+
 
                                     </div>
                                     <span class="edit-informations-btn">Düzenle</span>
-                                    
+
 
                                 </div>
                                 <div class="userInformationsContent  appointments ">
-                                   <div>
-                                    <h2>Seanslar</h2>
-                                   </div>
-                                   <div class="contentBody">
-                                    <div class="table appointments-table">
-                                        <table>
-                                            <thead>
-
-                                                <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
-                                                <th>Saat</th>
-                                                <th>Hasta<i class="fa-solid fa-arrow-up"></i></th>
-                                                <th>İşlemler</td>
-                                                <th>Notlar</th>
-                                                <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></th>
-                                            </thead>
-                                            <tbody></tbody>
-
-
-                                        </table>
-
+                                    <div>
+                                        <h2>Seanslar</h2>
                                     </div>
-                                   </div>
-                                    
+                                    <div class="contentBody">
+                                        <div class="table appointments-table">
+                                            <table>
+                                                <thead>
+
+                                                    <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
+                                                    <th>Saat</th>
+                                                    <th>Hasta<i class="fa-solid fa-arrow-up"></i></th>
+                                                    <th>İşlemler</td>
+                                                    <th>Notlar</th>
+                                                    <th>Seans Durumu<i class="fa-solid fa-arrow-up"></i></th>
+                                                </thead>
+                                                <tbody></tbody>
+
+
+                                            </table>
+
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="userInformationsContent  permissions ">
-                                   <div>
-                                    <h2>İzinler</h2>
-                                   </div>
-                                   <div class="contentBody">
-                                    
-                                    <div class="table permissions-table">
-                                        <table>
-                                            <thead>
-
-                                                <th>Yetki</th>
-                                                <th>Durum</th>
-                                                
-                                                
-                                            </thead>
-                                            <tbody></tbody>
-                                           
-
-                                        </table>
-
+                                    <div>
+                                        <h2>İzinler</h2>
                                     </div>
-                                   </div>
-                                    
+                                    <div class="contentBody">
 
-                                   
+                                        <div class="table permissions-table">
+                                            <table>
+                                                <thead>
+
+                                                    <th>Yetki</th>
+                                                    <th>Durum</th>
+
+
+                                                </thead>
+                                                <tbody></tbody>
+
+
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+
+
 
                                 </div>
-                                
 
-                                
+
+
 
                             </div>
 
@@ -207,188 +206,140 @@
 
                     </div>
                 </main>
-                <div class=" modal modal_user">
 
-                    <h2>Genel Bilgileri Düzenle</h2>
-
-                    <form action="./<%= singleUser._id %>/editInformations" method="POST" enctype="multipart/form-data" id="user-edit-form">
-                        <div class="inputs ">
-                            <span>İsim</span>
-                            <input type="text" name="name" id="user-name" value="<%= singleUser.name %>">
-                        </div>
-
-                        <div class="inputs ">
-                            <span>Soyisim</span>
-                            <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Görev:</span>
-                            <select name="role" id="role">
-                                <option value="<%= singleUser.role %>"checked disable hidden><%= singleUser.role %> </option>
-                                <% roles.forEach(role => { %>
-                                    <option value="<%= role %>"><%=role %></option >
-                                <% }) %>
-                            </select>
-                            
-                        </div>
-                        
-                        
-                        <div class="options">
-                            <span>Cinsiyet:</span>
-                            <% if(singleUser.sex==="male" ){ %>
-                                <div>
-                                    <input type="radio" id="sex-women-update" name="sex" value="female">
-                                    &nbsp; <label for="sex-women-update">Kadın</label>
-
-                                    <input type="radio" id="sex-man-update" name="sex" value="male" checked="checked">
-                                    &nbsp; <label for="sex-man-update">Erkek</label>
-
-                                </div>
-                                <% } else{ %>
-                                    <div>
-                                        <input type="radio" id="sex-women-update" name="sex" value="female"
-                                            checked="checked">
-                                        &nbsp; <label for="sex-women-update">Kadın</label>
-
-                                        <input type="radio" id="sex-man-update" name="sex" value="male">
-                                        &nbsp; <label for="sex-man-update">Erkek</label>
-
-                                    </div>
-                                    <% } %>
-
-                        </div>
-                        
-                        <div class="inputs ">
-                            <span>Doğum Tarihi:</span>
-                            
-                            <input type="date" name="birthDate" id="" <% if (singleUser.birthDate) { %>
-                                value="<%= singleUser.birthDate.toISOString().split('T')[0] %>"
-                               <% } %> readonly>
-                        </div>
-                        <div class="inputs ">
-                            <span>Email:</span>
-                            <input type="email" x="email" id="email" value="<%= singleUser.email %>" >
-                        </div>
-                        <div class="inputs ">
-                            <span>Adres</span>
-                            <input type="text" name="address" id="" value="<%= singleUser.address %>"
-                                placeholder="<%= singleUser.address %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Telefon</span>
-                            <input type="number" name="phone" id="" value="<%= singleUser.phone %>">
-                        </div>
-                        
-                        
-                        
-                        <button type="submit" id="edit-user">Kaydet</button>
-                        <span class="cancel_button">Vazgeç</span>
-                    </form>
-                </div>
-                <div class="modal modal_session">
-                    <h2>Seans Ekle</h2>
-                    <form action="">
-                        <div class="inputs ">
-                            <span>İsim</span>
-                            <input type="text" name="" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Soyisim</span>
-                            <input type="text" name="" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Tarih:</span>
-                            <input type="date" name="" id="">
-                        </div>
-                        <div class="inputs">
-                            <span>İşlem Tipi:</span>
-                            <select class="proccess_type">
-                                <option value="0">Yıkama</option>
-                                <option value="1">Saç Ekimi</option>
-                                <option value="2">Bakım</option>
-                                <option value="3">Cilt gerdirme</option>
-                            </select>
-                            <div class="selected_proccess_type">
-                                <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
-                            </div>
-                            <div class="inputs">Açıklama-Notlar:
-                                <textarea name="" id="" cols="10" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <button type="submit" class="save_button">Kaydet</button>
-                        <button class="cancel_button">Vazgeç</button>
-                    </form>
-                </div>
-                <div class="modal modal_payment">
-                    <h2>Ödeme Ekle</h2>
-                    <form action="">
-                        <div class="inputs ">
-                            <span>İsim</span>
-                            <input type="text" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Soyisim</span>
-                            <input type="text" name="" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Ödeme Miktarı:</span>
-                            <input type="number" name="" id="">
-                        </div>
-                        <div class="inputs ">
-                            <span>Tarih:</span>
-                            <input type="date" name="" id="" value="2023-01-01">
-                        </div>
-                        <div class="payment_options ">
-                            <span>Tahsilat:</span>
-                            <div>
-                                <input type="radio" id="credit_card_ratio" name="payment" value="credit_card">
-                                  <label for="credit_card_ratio">Kredi Kartı</label>
-                            </div>
-                            <div>
-                                <input type="radio" id="cash_ratio" name="payment" value="cash">
-                                  <label for="cash_ratio">Nakit</label>
-                            </div>
-
-                        </div>
-
-                        <button type="submit" class="save_button">Kaydet</button>
-                        <button class="cancel_button">Vazgeç</button>
-                    </form>
-                </div>
-                <div class="modal modal_image">
-                    <h2>Resim Ekle</h2>
-
-                    <form action="./<%= singleUser._id %>/uploadpictures" method="POST" enctype="multipart/form-data">
-
-                        <div class="inputs ">
-                            <span>Resim seç</span>
-                            <input type="file" name="upload_file" src="" alt="" multiple required
-                                onchange="getImagePreview(event)">
-                        </div>
-                        <div class="uploaded_images_preview"></div>
-                        <div>
-                            çekilme zamanı:
-                            <input type="text" name="uploadTime" required>
-                        </div>
-
-
-                        <button type="submit" class="save_button" id="add-img-save-button">Kaydet</button>
-                        <button class="cancel_button">Vazgeç</button>
-                    </form>
-                </div>
 
                 <%- include('partials/loader.ejs') %>
 
         </section>
+        <div class="modal hidden" id="modal_user">
+            <div class="inner_modal">
+                <h2>Genel Bilgileri Düzenle</h2>
+
+                <form action="./<%= singleUser._id %>/editInformations" method="POST" enctype="multipart/form-data"
+                    id="user-edit-form">
+                    <div class="form-group ">
+                        <span>İsim</span>
+                        <input type="text" name="name" id="user-name" value="<%= singleUser.name %>">
+                    </div>
+
+                    <div class="form-group ">
+                        <span>Soyisim</span>
+                        <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>">
+                    </div>
+                    <div class="form-group ">
+                        <span>Görev:</span>
+                        <select name="role" id="role">
+                            <option value="<%= singleUser.role %>" checked disable hidden>
+                                <%= singleUser.role %>
+                            </option>
+                            <% roles.forEach(role=> { %>
+                                <option value="<%= role %>">
+                                    <%=role %>
+                                </option>
+                                <% }) %>
+                        </select>
+
+                    </div>
 
 
-        </main>
+                    <div class="options">
+                        <span>Cinsiyet:</span>
+                        <% if(singleUser.sex==="male" ){ %>
+                            <div>
+                                <input type="radio" id="sex-women-update" name="sex" value="female">
+                                &nbsp; <label for="sex-women-update">Kadın</label>
+
+                                <input type="radio" id="sex-man-update" name="sex" value="male" checked="checked">
+                                &nbsp; <label for="sex-man-update">Erkek</label>
+
+                            </div>
+                            <% } else{ %>
+                                <div>
+                                    <input type="radio" id="sex-women-update" name="sex" value="female"
+                                        checked="checked">
+                                    &nbsp; <label for="sex-women-update">Kadın</label>
+
+                                    <input type="radio" id="sex-man-update" name="sex" value="male">
+                                    &nbsp; <label for="sex-man-update">Erkek</label>
+
+                                </div>
+                                <% } %>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <span>Doğum Tarihi:</span>
+
+                        <input type="date" name="birthDate" id="" <% if (singleUser.birthDate) { %>
+                        value="<%= singleUser.birthDate %>"
+                            <% } %> readonly>
+                    </div>
+                    <div class="form-group ">
+                        <span>Email:</span>
+                        <input type="email" x="email" id="email" value="<%= singleUser.email %>">
+                    </div>
+                    <div class="form-group ">
+                        <span>Adres</span>
+                        <input type="text" name="address" id="" value="<%= singleUser.address %>"
+                            placeholder="<%= singleUser.address %>">
+                    </div>
+                    <div class="form-group ">
+                        <span>Telefon</span>
+                        <input type="number" name="phone" id="" value="<%= singleUser.phone %>">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="edit-user">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="modal hidden" id="modal_session">
+            <div class="inner_modal">
+                <h2>Seans Ekle</h2>
+                <form action="">
+                    <div class="form-group ">
+                        <span>İsim</span>
+                        <input type="text" name="" id="">
+                    </div>
+                    <div class="form-group ">
+                        <span>Soyisim</span>
+                        <input type="text" name="" id="">
+                    </div>
+                    <div class="form-group ">
+                        <span>Tarih:</span>
+                        <input type="date" name="" id="">
+                    </div>
+                    <div class="form-group">
+                        <span>İşlem Tipi:</span>
+                        <select class="proccess_type">
+                            <option value="0">Yıkama</option>
+                            <option value="1">Saç Ekimi</option>
+                            <option value="2">Bakım</option>
+                            <option value="3">Cilt gerdirme</option>
+                        </select>
+                        <div class="selected_proccess_type">
+                            <!-- <div>Bakım<i class="fa-solid fa-x"></i></div> -->
+                        </div>
+                        <div class="form-group">Açıklama-Notlar:
+                            <textarea name="" id="" cols="10" rows="3"></textarea>
+                        </div>
+                    </div>
+                   <div class="form-group">
+                    <button type="submit" class="btn save form-btn">Kaydet</button>
+                    <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                   </div>
+                </form>
+            </div>
+           
+        </div>
         <div class="information-modal-wrapper"></div>
         </div>
 
 
 
-        
+
         <script type="module" src="/js/requests.js"></script>
         <script type="module" src="/js/employee-details.js"></script>
         <script type="module" src="/js/inner_modules/tables.js"></script>

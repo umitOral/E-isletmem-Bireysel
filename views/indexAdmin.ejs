@@ -19,7 +19,7 @@
 
                 <main>
                     <h1>Ana Sayfa</h1>
-                    
+
                     <div class="insights">
                         <div id="appointments">
 
@@ -61,7 +61,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
 
                                 </table>
@@ -72,202 +72,218 @@
 
                     </div>
                 </main>
+                <div class="information-modal-wrapper"></div>
+                <div class="modal hidden" id="modal_add_operation">
+                    <div class="inner_modal">
+                        <h2>İşlem Ekle</h2>
 
-                <div class="modal modal_add_operation">
-
-                    <h2>İşlem Ekle</h2>
-
-                    <form action="./addOperation" id="add_operation_form" onsubmit="return false" method="POST"
-                        enctype="multipart/form-data">
+                        <form action="./addOperation" id="add_operation_form" onsubmit="return false" method="POST"
+                            enctype="multipart/form-data">
 
 
-                        <div>
-                            <span>İşlem:</span>
-                            <select class="service_type_add">
+                            <div>
+                                <span>İşlem:</span>
+                                <select class="service_type_add">
 
-                                <option value="" selected disabled hidden>İşlem seçiniz</option>
-                                <% locals.company.services.forEach(element=> { %>
-                                    <% if (element.activeorNot===true) { %>
-                                        <option data-price="<%= element.servicePrice %>" value="<%= element._id %>">
-                                            <%= element.serviceName %>
+                                    <option value="" selected disabled hidden>İşlem seçiniz</option>
+                                    <% locals.company.services.forEach(element=> { %>
+                                        <% if (element.activeorNot===true) { %>
+                                            <option data-price="<%= element.servicePrice %>" value="<%= element._id %>">
+                                                <%= element.serviceName %>
+                                            </option>
+                                            <% } %>
+                                                <% }) %>
+                                </select>
+
+
+                                <div class="selected_proccess_type_add">
+                                    <table id="selected_proccess_table">
+                                        <thead>
+                                            <th>Hizmet</th>
+                                            <th>Seans Sayısı</th>
+                                            <th>Fiyat</th>
+                                            <th>İndirim Tutarı</th>
+                                        </thead>
+
+                                        <tbody>
+                                        </tbody>
+                                        <tfoot>
+
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Yüzde İndirimi: </td>
+                                                <td><input type="number" id="percent_discount" class="tdform-group"
+                                                        max="100"></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td>toplam:</td>
+                                                <td id="total_value"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="processes_datas form-group">
+
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn save form-btn" id="add_operation">Kaydet</button>
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                            </div>
+
+
+                        </form>
+
+                    </div>
+
+                </div>
+                <div class="modal hidden" id="modal add-data-modal">
+                    <div class="inner_modal">
+                        <h2>Seansa Veri Ekle</h2>
+                        <form action="" id="add-data-form" data-operationid="" data-sessionid="" data-dataid="">
+                            <div class="form-group">Veri Adı:
+                                <select name="datas" id="datas_select_input">
+                                    <% locals.company.serviceDatas.forEach(element=> { %>
+                                        <option value="<%= element._id %>">
+                                            <%= element.dataName %>
                                         </option>
-                                        <% } %>
-                                            <% }) %>
-                            </select>
 
+                                        <% }) %>
+                                </select>
 
-                            <div class="selected_proccess_type_add">
-                                <table id="selected_proccess_table">
-                                    <thead>
-                                        <th>Hizmet</th>
-                                        <th>Seans Sayısı</th>
-                                        <th>Fiyat</th>
-                                        <th>İndirim Tutarı</th>
-                                    </thead>
+                                Opsiyon:
+                                <select name="datasOption" id="datasOptions_select_input">
+                                    <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
+                                        <option value="">
+                                            <%= element %>
+                                        </option>
 
-                                    <tbody>
-                                    </tbody>
-                                    <tfoot>
-
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Yüzde İndirimi: </td>
-                                            <td><input type="number" id="percent_discount" class="tdInputs" max="100"></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>toplam:</td>
-                                            <td id="total_value"></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                        <% }) %>
+                                </select>
+                                Sayısal Değer:
+                                <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
                             </div>
-                            <div class="processes_datas inputs">
-
+                            <div class="form-group">
+                                <button type="submit" class="btn save form-btn"
+                                    id="add-data-save-button">Kaydet</button>
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
                             </div>
-
-                        </div>
-
-
-                        <button type="submit" id="add_operation">Kaydet</button>
-                        <button type="button" class="cancel_button">Vazgeç</button>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal add-data-modal">
-                    <form action="" id="add-data-form" data-operationid="" data-sessionid="" data-dataid="">
-                        <div>
-                            <h2>Seansa Veri Ekle</h2>
-                        </div>
-                        <div class="inputs">Veri Adı:
-                            <select name="datas" id="datas_select_input">
-                                <% locals.company.serviceDatas.forEach(element=> { %>
-                                    <option value="<%= element._id %>">
-                                        <%= element.dataName %>
-                                    </option>
+                <div class="modal hidden" id="add-dataToOperation-modal">
+                    <div class="inner_modal">
+                        <h2>İşleme Veri Ekle</h2>
+                        <form action="" id="add-dataToOperation-form" data-operationid="" data-sessionid="">
+                            <div class="form-group">Veri Adı:
+                                <select name="datas" id="datas_select_input2">
+                                    <% locals.company.serviceDatas.forEach(element=> { %>
+                                        <option value="<%= element._id %>">
+                                            <%= element.dataName %>
+                                        </option>
+                                        <% }) %>
+                                </select>
 
-                                    <% }) %>
-                            </select>
+                                Opsiyon:
+                                <select name="datasOption" id="datasOptions_select_input2">
+                                    <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
+                                        <option value="">
+                                            <%= element %>
+                                        </option>
 
-                            Opsiyon:
-                            <select name="datasOption" id="datasOptions_select_input">
-                                <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
-                                    <option value="">
-                                        <%= element %>
-                                    </option>
+                                        <% }) %>
+                                </select>
+                                Sayısal Değer:
+                                <input name="dataOptionNumberValue" class="dataOptionNumberValue" type="Number">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn save form-btn"
+                                    id="add-dataToOperation-save-button">Kaydet</button>
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                            </div>
+                        </form>
+                    </div>
 
-                                    <% }) %>
-                            </select>
-                            Sayısal Değer:
-                            <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
-                        </div>
-                        <button type="submit" class="save_button" id="add-data-save-button">Kaydet</button>
-                        <button type="button" class="cancel_button">Vazgeç</button>
-                    </form>
 
 
                 </div>
-                <div class="modal add-dataToOperation-modal">
-                    <form action="" id="add-dataToOperation-form" data-operationid="" data-sessionid="" >
-                        <div>
-                            <h2>İşleme Veri Ekle</h2>
-                        </div>
-                        <div class="inputs">Veri Adı:
-                            <select name="datas" id="datas_select_input2">
-                                <% locals.company.serviceDatas.forEach(element=> { %>
-                                    <option value="<%= element._id %>">
-                                        <%= element.dataName %>
-                                    </option>
-                                    <% }) %>
-                            </select>
-
-                            Opsiyon:
-                            <select name="datasOption" id="datasOptions_select_input2">
-                                <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
-                                    <option value="">
-                                        <%= element %>
-                                    </option>
-
-                                    <% }) %>
-                            </select>
-                            Sayısal Değer:
-                            <input name="dataOptionNumberValue" class="dataOptionNumberValue" type="Number">
-                        </div>
-                        <button type="submit" class="save_button" id="add-dataToOperation-save-button">Kaydet</button>
-                        <button type="button" class="cancel_button">Vazgeç</button>
-                    </form>
-
-
+                <div class="modal hidden" id="edit-data-modal">
+                    <div class="inner_modal">
+                        <h2>Seans Verisi düzenle</h2>
+                        <form action="" id="edit-data-form" data-dataid="" data-operationid="">
+                            <div class="form-group">Veri Adı:
+                                <input type="text" name="dataNameEdit" id="dataNameEdit" value="" readonly="">
+                            </div>
+                            <div class="form-group">Opsiyon:
+                                <select name="edit_data_option" id="edit_data_option"></select>
+                                <option value=""></option>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn save form-btn"
+                                    id="edit-data-save-button">Kaydet</button>
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal edit-data-modal">
-                    <form action="" id="edit-data-form" data-dataid="" data-operationid="">
-                        <div>
-                            <h2>Seans Verisi düzenle</h2>
-                        </div>
-                        <div class="inputs">Veri Adı:
-                            <input type="text" name="dataNameEdit" id="dataNameEdit" value="" readonly="">
-                        </div>
-                        <div class="inputs">Opsiyon:
-                            <select name="edit_data_option" id="edit_data_option"></select>
-                            <option value=""></option>
-                        </div>
-                        <button type="submit" class="save_button" id="edit-data-save-button">Kaydet</button>
-                        <button type="button" class="cancel_button">Vazgeç</button>
-                    </form>
-
-
-                </div>
-                <div class="modal edit-data-operation-modal">
-                    <form action="" id="edit-data-operation-form" data-dataid="" data-operationid="" >
-                        <div>
-                            <h2>Operasyon Verisi düzenle</h2>
-                        </div>
-                        <div class="inputs">Veri Adı:
+                <div class="modal hidden" id="edit-data-operation-modal">
+                    <div class="inner_modal">
+                        <h2>Operasyon Verisi düzenle</h2>
+                        <form action="" id="edit-data-operation-form" data-dataid="" data-operationid=""></form>
+                        <div class="form-group">Veri Adı:
                             <input type="text" name="dataNameEdit" id="operationDataNameEdit" value="" readonly="">
                         </div>
-                        <div class="inputs">Opsiyon:
+                        <div class="form-group">Opsiyon:
                             <select name="edit_data_option" id="edit_operation_data_option"></select>
                             <option value=""></option>
                         </div>
-                        <button type="submit" class="save_button" id="edit-operation-data-save-button">Kaydet</button>
-                        <button type="button" class="cancel_button">Vazgeç</button>
-                    </form>
+                        <div class="form-group">
+                            <button type="submit" class="btn save form-btn"
+                                id="edit-operation-data-save-button">Kaydet</button>
+                            <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                        </div>
+
+                        </form>
+                    </div>
 
 
+
                 </div>
-                <div class="modal add-description-modal">
-                    <form action="" id="add-description-form" data-operationid="" data-sessionid="">
-                        <div>
-                            <h2>Seansa Açıklama Ekle</h2>
-                        </div>
-                        <div class="inputs">Açıklama:
-                            <input type="text" id="add-add-description" name="adddescription">
-                            
-                        </div>
-                        <button type="submit" class="save_button" id="add-description-save-button">Kaydet</button>
-                        <button type="button" class="cancel_button">Vazgeç</button>
-                    </form>
-        
-        
+                <div class="modal hidden" id="add-description-modal">
+                    <div class="inner_modal">
+                        <h2>Seansa Açıklama Ekle</h2>
+                        <form action="" id="add-description-form" data-operationid="" data-sessionid="">
+                            <div class="form-group">Açıklama:
+                                <input type="text" id="add-add-description" name="adddescription">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn save form-btn"
+                                    id="add-description-save-button">Kaydet</button>
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal add-descriptioToOperation-modal">
-                    <form action="" id="add-descriptioToOperation-form" data-operationid="" >
-                        <div>
-                            <h2>İşleme Açıklama Ekle</h2>
-                        </div>
-                        <div class="inputs">Açıklama:
-                            <input type="text" id="add-add-descriptioToOperation" name="descriptioToOperation">
-                            
-                        </div>
-                        <button type="submit" class="save_button" id="add-descriptioToOperation-save-button">Kaydet</button>
-                        <button type="button" class="cancel_button">Vazgeç</button>
-                    </form>
-        
-        
+                <div class="modal hidden" id="add-descriptioToOperation-modal">
+                    <div class="inner_modal">
+                        <h2>İşleme Açıklama Ekle</h2>
+                        <form action="" id="add-descriptioToOperation-form" data-operationid="">
+                            <div class="form-group">Açıklama:
+                                <input type="text" id="add-add-descriptioToOperation" name="descriptioToOperation">
+
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn save form-btn" id="add-descriptioToOperation-save-button">Kaydet</button>
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="information-modal-wrapper"></div>
 
         </section>
         <script src="/js/sidebar.js"></script>

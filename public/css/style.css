@@ -39,6 +39,7 @@
   --padding-1: 1.2rem;
 
   --box-shadow: 0 2rem 1rem var(--color-light);
+  --border-style-1:1px solid rgba(128, 128, 128, 0.55);
 }
 
 * {
@@ -253,8 +254,21 @@ hr {
   
 }
 
-.inputs input,
-textarea,
+.form-group input,
+.form-group textarea,
+.form-group select {
+  border: 1px solid rgba(128, 128, 128, 0.394);
+  display: block;
+  background-color: #f4f6f8;
+  border-radius: var(--border-radius-1);
+  padding: 0.5rem;
+  color: var(--color-dark-variant);
+  cursor: pointer;
+  width: 100%;
+}
+
+/*  */
+
 select {
   border: 1px solid rgba(128, 128, 128, 0.394);
   display: block;
@@ -263,12 +277,7 @@ select {
   padding: 0.5rem;
   color: var(--color-dark-variant);
   cursor: pointer;
-}
-
-/*  */
-
-select * {
-  background-color: white;
+  
 }
 select:hover {
   background-color: rgba(128, 128, 128, 0.116);
@@ -720,7 +729,40 @@ tfoot td {
   display: flex;
   align-items: center;
 }
+.modal.hidden {
+  display: none;
+}
+.slider-modal{
+  width: 80% !important;
+}
+.save {
+  background-color:var(--color-success) ;
+}
 
+.cancel {
+  background-color: var(--color-danger);
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff9d;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.75s;
+
+}
+.inner_modal{
+  border:var(--border-style-1);
+  border-radius: var(--border-radius-1);
+  background-color: white;
+  width: 30%;
+}
 tbody td.details a {
   display: block;
   padding: 1rem;
@@ -797,31 +839,24 @@ table thead {
 }
 
 /* modals general settings */
-.modal {
-  border: 1px solid rgb(202, 201, 201);
 
-  background-color: white;
-  border-radius: var(--border-radius-1);
-  
-  width: 630px;
-  max-width: 90%;
-
-  position: absolute;
-  top: 100px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  z-index: 998;
-  display: none;
+.btn {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  color: var(--color-white);
+  font-weight: 400;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
-
-.modal.showed_modal {
-  display: block;
+.form-btn {
+  margin-top: 1rem;
+}
+.normal-btn {
   width: max-content;
-  min-width: 450px
 }
+
 .btn-mini{
   margin-top: 0 !important;
   width: max-content !important;
@@ -830,30 +865,8 @@ table thead {
 .btn-mini:hover{
   border: 1px solid green;
 }
-.modal button {
-  margin-top: 1rem;
-
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  color: var(--color-white);
-
-  font-weight: 400;
-  font-size: 1.2rem;
-  background-color: var(--color-success);
-  cursor: pointer;
-}
 
 
-.modal button.cancel_button {
-  background-color: var(--color-danger);
-}
-
-.modal span {
-  font-weight: 500;
-  display: block;
-}
 
 .modal h2 {
   text-align: center;
@@ -1054,6 +1067,10 @@ header .head {
 
 /* mobile ------------------------------------------------------------------------------------ */
 @media (max-width: 768px) {
+  .inner_modal{
+    
+    width: 80%;
+  }
   .information-modal-wrapper{
     position: fixed;
     top:80px;

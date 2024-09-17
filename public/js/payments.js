@@ -8,14 +8,14 @@ import { UI } from "./ui.js";
 const ui = new UI();
 ui.closeNotification()
 
-const modalPayment = document.querySelector(".modal_payment");
-const modalExpenses = document.querySelector(".expenses_payment");
+const modalPayment = document.querySelector("#modal_payment");
+const modalExpenses = document.querySelector("#expenses_payment");
 const filterPaymentsButton = document.querySelector(".payments-filter-button");
 const addPaymentButton = document.querySelector(".payments-add-button");
 const addExpensesButton = document.querySelector(".expenses-add-button");
-const cancelButtons = document.querySelectorAll(".cancel_button");
+const cancelButtons = document.querySelectorAll(".cancel");
 
-const editPaymentModal = document.querySelector(".modal_edit_payment");
+const editPaymentModal = document.querySelector("#modal_edit_payment");
 const totalValue = document.querySelector("#total_value");
 
 const userSelect = document.querySelector("#fromUser");
@@ -54,8 +54,11 @@ function eventListeners() {
   paymentsTable.addEventListener("click", handleTableBody);
 }
 
-cancelButtons.forEach((cancelbutton) => {
-  cancelbutton.addEventListener("click", cancelAddPayment);
+cancelButtons.forEach((element) => {
+  element.addEventListener("click",()=>{
+    ui.closeAllModals()
+  })
+ 
 });
 
  function filterPayment() {
@@ -104,7 +107,7 @@ function handleEditModal(e) {
     .getwithUrl("./payments/" + e.target.dataset.paymentid)
     .then((response) => {
       console.log(response);
-      editPaymentModal.classList.add("showed_modal");
+      editPaymentModal.classList.remove("hidden");
       selected_proccess_table_edit.innerHTML = "";
 
       if (response.data.cashOrCard === "Nakit") {
@@ -202,7 +205,7 @@ const editPaymentForm = document.querySelector(
   ".modal_edit_payment #edit-payment-form"
 );
 const saveEditModal = document.querySelector(
-  ".modal_edit_payment .save_update_btn"
+  "#modal_edit_payment #save_update_btn"
 );
 
 const selected_proccess_table_edit = document.querySelector(
@@ -223,7 +226,7 @@ saveEditModal.addEventListener("click",(e) => {
     .then((response) => {
       console.log("1")
       ui.showNotification(true, response.message);
-      editPaymentModal.classList.toggle("showed_modal");
+      editPaymentModal.classList.add("hidden");
       setTimeout(() => {
         filterPayment();
       }, 1000);
@@ -249,18 +252,11 @@ function handleTableBody(e) {
 }
 
 function addPaymentModalShow() {
-  modalPayment.classList.add("showed_modal");
+  modalPayment.classList.remove("hidden");
 }
 
 function addExpensesModalShow() {
-  modalExpenses.classList.add("showed_modal");
-}
-
-function cancelAddPayment(e) {
-  e.preventDefault();
-  modalPayment.classList.remove("showed_modal");
-  modalExpenses.classList.remove("showed_modal");
-  editPaymentModal.classList.remove("showed_modal");
+  modalExpenses.classList.remove("hidden");
 }
 
 // start date

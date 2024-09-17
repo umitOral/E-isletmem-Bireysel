@@ -5,6 +5,17 @@ import { UI } from "./ui.js";
 const ui = new UI();
 ui.closeNotification()
 
+
+const allModals=document.querySelectorAll(".modal")
+const cancelBtns=document.querySelectorAll(".btn.cancel.form-btn")
+console.log(cancelBtns)
+
+cancelBtns.forEach(element => {
+  element.addEventListener("click",()=>{
+    ui.closeAllModals()
+  })
+});
+
 const loader = document.querySelector(".loader_wrapper.hidden");
 const calendar = document.querySelector(".calendar"),
   calendarHead = document.querySelector(".calendar-head"),
@@ -353,7 +364,7 @@ todayBtn.addEventListener("click", () => {
 
 const closeAddSessionBtn = document.querySelector("#cancel-add-appointment");
 
-const modalAddSession = document.querySelector(".modal_add_session");
+const modalAddSession = document.querySelector("#modal_add_session");
 
 const doctorIDs = document.querySelectorAll(".doctor-id");
 
@@ -461,7 +472,7 @@ addSessionBtn.addEventListener("click", function (e) {
   if (checkedElements.length === 0) {
     ui.showNotification(false,"lütfen randevu saati seçiniz");
   } else {
-    modalAddSession.classList.add("showed_modal");
+    modalAddSession.classList.remove("hidden")
 
     showAddEventModal(checkedElements);
   }
@@ -513,7 +524,7 @@ function showAddEventModal(e) {
     e[0].parentElement.parentElement.dataset.starthour
   );
 
-  modalAddSession.classList.add("showed_modal");
+  modalAddSession.classList.remove("hidden");
 }
 
 
@@ -589,7 +600,7 @@ addSessionForm.addEventListener("submit", (e) => {
      getAllSessions(selectedDate)})
 
     .catch((err) => console.log(err));
-  modalAddSession.classList.remove("showed_modal");
+  modalAddSession.classList.add("hidden");
 });
 
 // ///////////////////////////////////

@@ -4,7 +4,6 @@ export class UI {
   }
 
   closeNotification(){
-    console.log("hhh")
     const wrapper = document.querySelector(".information-modal-wrapper")
     
     wrapper.addEventListener("click", (e) => {
@@ -12,6 +11,13 @@ export class UI {
             e.target.parentElement.remove()
         }
     })
+  }
+  closeAllModals(){
+    console.log("aferin")
+    const allModals=document.querySelectorAll(".modal")
+    allModals.forEach(element => {
+      element.classList.add("hidden")
+    });
   }
 
   showNotification(success, message) {
@@ -177,75 +183,12 @@ export class UI {
                 <option value="delete">İşlemi Sil</option>
                 <option value="add-data">İşleme Veri Ekle</option>
                 <option value="add-session">Seans Arttır</option>
+                <option value="show-all-sessions">Seansları Göster</option>
                 <option value="add-discount">İndirim Tanımla</option>
                 </select>
               </td>
               
-              <td><i class="fa-solid fa-arrow-turn-down show-sessions" title="seansları göster"></i></td>
               
-          </tr>
-
-          <tr class="inner-table">
-          <td>
-              <table>
-                <tr>
-                    <th>Seans</th>
-                    <th>Personel</th>
-                    <th>Seans Durumu</th>
-                    <th>Tarih</th>
-                    <th>Seans Verisi</th>
-                </tr>
-                
-                
-                  ${element.sessionOfOperation
-                    .map(
-                      (item, index) => `
-                      <tr>
-                    <td>seans-${index + 1}</td>
-                    <td>${item.sessionState}</td>
-                    <td>${item.sessionState}</td>
-                   
-                    
-                    <td>${(() => {
-                      if (item.sessionDate) {
-                        return `${new Date(item.sessionDate).toLocaleDateString(
-                          "tr-TR"
-                        )}`;
-                      } else {
-                        return `Bekleniyor`;
-                      }
-                    })()}</td>
-                    <td>${item.sessionDatas
-                      .map(
-                        (item) => `
-                                    ${item.dataName}: ${item.data}
-                                  `
-                      )
-                      .join("")}
-                    </td>
-                    
-                    <td>${(() => {
-                      if (item.sessionDescription) {
-                        return `
-                                  ${item.sessionDescription}
-                                `;
-                      } else {
-                        return `Not Yok`;
-                      }
-                    })()}
-                    </td>
-                   </tr>
-                  
-                  `
-                    )
-                    .join("")}
-                  
-                
-
-              </table>
-          </td> 
-                  
-     
           </tr>
           `;
     }

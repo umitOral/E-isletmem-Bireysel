@@ -12,8 +12,9 @@ const userData = document.querySelector("#userName");
 const userPhone = document.querySelector("#userPhone");
 const addOperationModalBtn = document.querySelector("#add_operation_modal");
 const addOperationForm = document.querySelector("#add_operation_form");
-const cancelButtons = document.querySelectorAll(".cancel_button");
 const serviceAddSelect = document.querySelector(".service_type_add");
+const allModals = document.querySelectorAll(".modal");
+const cancelBtns = document.querySelectorAll(".cancel.form-btn");
 
 
 
@@ -31,8 +32,8 @@ const datasOptionsSelectInput2 = document.querySelector(
 );
 const oldOperationBtn = document.querySelector("#old_operation");
 
-const addOperationModal = document.querySelector(".modal_add_operation");
-const addDescriptionModal = document.querySelector(".add-description-modal");
+const addOperationModal = document.querySelector("#modal_add_operation");
+const addDescriptionModal = document.querySelector("#add-description-modal");
 const addDescriptioToOperationModal = document.querySelector(".add-descriptioToOperation-modal");
 const addDataModal = document.querySelector(".add-data-modal");
 const addDataToOperationModal = document.querySelector(".add-dataToOperation-modal");
@@ -86,10 +87,16 @@ function eventListeners() {
   percentDiscountInput.addEventListener("input",calculateTotal);
   
   addOperationForm.addEventListener("submit", addOperation);
-  cancelButtons.forEach((element) => {
-    element.addEventListener("click", closeModal);
-  });
 }
+
+// cancel the modals
+cancelBtns.forEach((element) => {
+  element.addEventListener("click", (e) => {
+    allModals.forEach(element => {
+      element.classList.add("hidden")
+    });
+  });
+});
 
 serviceAddSelect.addEventListener("change", (e) => {
   selectedServices.push({
@@ -402,18 +409,9 @@ function getAllAppointmentofSingleDoctor() {
 
 function addOperationHandle() {
   console.log(selectedAppointment);
-  addOperationModal.classList.add("showed_modal");
+  addOperationModal.classList.remove("hidden");
 }
-function closeModal() {
-  addOperationModal.classList.remove("showed_modal");
-  addDataModal.classList.remove("showed_modal");
-  editDataModal.classList.remove("showed_modal");
-  editOperationDataModal.classList.remove("showed_modal");
-  addDescriptionModal.classList.remove("showed_modal");
-  addDescriptioToOperationModal.classList.remove("showed_modal");
-  addDataToOperationModal.classList.remove("showed_modal")
-  // addOperationDataModal.classList.remove("showed_modal")
-}
+
 
 function addOperation() {
   let data = {
@@ -463,7 +461,7 @@ function editSessionData(e) {
       console.log(err);
       ui.showNotification(err.succes, err.message);
     });
-  addOperationModal.classList.remove("showed_modal");
+  addOperationModal.classList.add("hidden");
 }
 function editOperationData(e) {
   e.preventDefault();

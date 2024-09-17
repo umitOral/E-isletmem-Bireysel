@@ -5,7 +5,9 @@
     <%- include('partials/head.ejs') %>
 
         <link rel="stylesheet" href="/css/user-details.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <!-- js ----------- -->
         <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
@@ -47,52 +49,53 @@
                             <div class="contents">
 
                                 <div class="userInformationsContent showed_content  generals ">
-                                    <h2>Genel Bilgiler</h2>
-                                    <hr>
-                                    <div class="inputs ">
-                                        <span>Marka:</span>
-                                        <input type="text" name="brandName" id="name"
-                                            value="<%= company.brandName %>" readonly>
+                                    <div>
+                                        <h2>Genel Bilgiler</h2>
                                     </div>
-                                    <div class="inputs ">
+                                    <div class="form-group ">
+                                        <span>Marka:</span>
+                                        <input type="text" name="brandName" id="name" value="<%= company.brandName %>"
+                                            readonly>
+                                    </div>
+                                    <div class="form-group ">
                                         <span>Şirket İsmi:</span>
                                         <input type="text" name="companyName" id="surname"
                                             value="<%= company.companyName %>" readonly>
                                     </div>
 
 
-                                    <div class="inputs ">
+                                    <div class="form-group ">
                                         <span>Mail</span>
-                                        <input type="email" name="email" id="" value="<%= company.email %>" readonly>
+                                        <input type="email" name="email"  value="<%= company.email %>" readonly>
                                     </div>
-                                    <div class="inputs ">
+                                    <div class="form-group ">
                                         <span>Telefon:</span>
-                                        <input type="text" name="phone" id="" value="<%= company.phone %>" readonly>
+                                        <input type="text" name="phone"  value="<%= company.phone %>" readonly>
                                     </div>
 
-                                    <div class="inputs">
+                                    <div class="form-group">
                                         <span>Adres:</span>
                                         <input type="text" name="address" value="<%= company.address %>" readonly>
                                     </div>
-                                    <div class="inputs">
+                                    <div class="form-group">
                                         <span>Fatura Adresi:</span>
                                         <input type="text" name="billingAddress" value="<%= company.billingAddress %>"
                                             readonly>
                                     </div>
-                                    <div class="inputs">
+                                    <div class="form-group">
                                         <span>Başlangıç Saati:</span>
-                                        <input type="text" name="workHours" value="<%=locals.company.workHours.workStart %>"
-                                            readonly>
+                                        <input type="text" name="workHours"
+                                            value="<%=locals.company.workHours.workStart %>" readonly>
                                     </div>
-                                    <div class="inputs">
+                                    <div class="form-group">
                                         <span>Bitiş Saati:</span>
-                                        <input type="text" name="workHours" value="<%= locals.company.workHours.workEnd%>"
-                                            readonly>
+                                        <input type="text" name="workHours"
+                                            value="<%= locals.company.workHours.workEnd%>" readonly>
                                     </div>
-                                    <div class="inputs">
+                                    <div class="form-group">
                                         <span>Seans Süresi:</span>
-                                        <input type="text" name="workHours" value="<%=locals.company.workHours.workPeriod%>"
-                                            readonly>
+                                        <input type="text" name="workHours"
+                                            value="<%=locals.company.workHours.workPeriod%>" readonly>
                                     </div>
 
 
@@ -102,27 +105,34 @@
                                 </div>
 
                                 <div class="userInformationsContent payments">
-                                    <h2>Sms ayarları</h2>
+                                    <div><h2>Sms ayarları</h2></div>
                                 </div>
                                 <div class="userInformationsContent payments">
-                                    <form action="./settings/<%= company._id %>/updateCompany" method="POST"
-                                        id="change-password-form" enctype="multipart/form-data">
+                                    <div>
                                         <h2>Şifre ayarları</h2>
-                                        <hr>
-
-                                        <div class="inputs ">
-                                            <span>Yeni Şifre:</span>
-                                            <input type="password" name="password" id="password" value="">
-                                        </div>
-                                        <div class="inputs ">
-                                            <span>Yeni Şifre Tekrar:</span>
-                                            <input type="password" name="password2" id="password2" value="">
-                                        </div>
-
-                                        <button type="submit">Şifre Kaydet</button>
-
-
-                                    </form>
+                                    </div>
+                                    <div>
+                                        <form action="./settings/<%= company._id %>/updateCompany" method="POST"
+                                            id="change-password-form" enctype="multipart/form-data">
+                                            
+                                            <div class="form-group">
+                                                <span>Yeni Şifre:</span>
+                                                <input type="password" name="password" id="password" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <span>Yeni Şifre Tekrar:</span>
+                                                <input type="password" name="password2" id="password2" value="">
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn save form-btn normal-btn">Şifre Kaydet</button>
+                                            </div>
+    
+                                            
+    
+    
+                                        </form>
+                                    </div>
+                                    
 
                                 </div>
 
@@ -134,69 +144,62 @@
 
                     </div>
                 </main>
-                <div class=" modal modal_user">
-
-                    <h2>Genel Bilgileri Düzenle</h2>
-
-                    <form action="./settings/<%= company._id %>/updateCompanyInformations" method="POST"
-                        enctype="multipart/form-data" id="informations-form">
-                        <div class="inputs ">
-                            <span>Marka:</span>
-                            <input type="text" name="brandName" id="" value="<%= company.brandName %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Şirket Adı:</span>
-                            <input type="text" name="companyName" id="" value="<%= company.companyName %>">
-                        </div>
-
-
-                        <div class="inputs ">
-                            <span>Email</span>
-                            <input type="text" name="email" id="" value="<%= company.email %>"
-                                placeholder="<%= company.address %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Telefon</span>
-                            <input type="text" name="phone" id="" value="<%= company.phone %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Adres</span>
-                            <input type="text" name="address" id="" value="<%= company.address %>"
-                                placeholder="<%= company.address %>">
-                        </div>
-                        <div class="inputs ">
-                            <span>Fatura Adresi:</span>
-                            <textarea name="billingAddress" id="" cols="70"
-                                rows="2"><%= company.billingAddress %></textarea>
-                        </div>
-
-                        <div class="inputs ">
-                            <span>Başlangıç Saati:</span>
-                            <input type="time" name="workStart" id="" value="<%= locals.company.workHours.workStart%>">
-                            <span>Bitiş Saati:</span>
-                            <input type="time" name="workEnd" id="" value="<%=locals.company.workHours.workEnd %>">
-                            <span>Seans aralığı:</span>
-                            <select name="workPeriod" id="" >
-                                <option value="10">10dk</option>
-                                <option value="15">15dk</option>
-                                <option value="20">20dk</option>
-                                <option value="30">30dk</option>
-                                <option value="60">60dk</option>
-                            </select>
-
-                        </div>
-
-
-                        <button type="submit" id="edit-user">Kaydet</button>
-                        <span class="cancel_button">Vazgeç</span>
-                    </form>
-                </div>
-
-
         </section>
-
-
-        </main>
+        <div class=" modal hidden" id="modal_user">
+            <div class="inner_modal">
+                <h2>Genel Bilgileri Düzenle</h2>
+                <form action="./settings/<%= company._id %>/updateCompanyInformations" method="POST"
+                    enctype="multipart/form-data" id="informations-form">
+                    <div class="form-group ">
+                        <span>Marka:</span>
+                        <input type="text" name="brandName"  value="<%= company.brandName %>">
+                    </div>
+                    <div class="form-group ">
+                        <span>Şirket Adı:</span>
+                        <input type="text" name="companyName"  value="<%= company.companyName %>">
+                    </div>
+    
+    
+                    <div class="form-group ">
+                        <span>Email</span>
+                        <input type="text" name="email"  value="<%= company.email %>"
+                            placeholder="<%= company.address %>">
+                    </div>
+                    <div class="form-group ">
+                        <span>Telefon</span>
+                        <input type="text" name="phone"  value="<%= company.phone %>">
+                    </div>
+                    <div class="form-group ">
+                        <span>Adres</span>
+                        <input type="text" name="address" value="<%= company.address %>"
+                            placeholder="<%= company.address %>">
+                    </div>
+                    <div class="form-group ">
+                        <span>Fatura Adresi:</span>
+                        <textarea name="billingAddress" cols="70" rows="2"><%= company.billingAddress %></textarea>
+                    </div>
+    
+                    <div class="form-group ">
+                        <span>Başlangıç Saati:</span>
+                        <input type="time" name="workStart" value="<%= locals.company.workHours.workStart%>">
+                        <span>Bitiş Saati:</span>
+                        <input type="time" name="workEnd"  value="<%=locals.company.workHours.workEnd %>">
+                        <span>Seans aralığı:</span>
+                        <select name="workPeriod" >
+                            <option value="10">10dk</option>
+                            <option value="15">15dk</option>
+                            <option value="20">20dk</option>
+                            <option value="30">30dk</option>
+                            <option value="60">60dk</option>
+                        </select>
+    
+                    </div>
+    
+    
+                    <button type="submit" class="btn save form-btn" id="edit-user">Kaydet</button>
+                    <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                </form>
+            </div>
         </div>
         <div class="information-modal-wrapper"></div>
 

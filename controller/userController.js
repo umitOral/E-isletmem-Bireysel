@@ -654,6 +654,34 @@ const deleteOperation = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
+const getSessionsofOperation = async (req, res, next) => {
+  try {
+    console.log("getSessionsofOperation");
+    Operation.findById(req.params.operationId).then(
+      async (response) => {
+        console.log(response)
+        if (response.sessionOfOperation.length === 0) {
+          res.status(200).json({
+            succes: false,
+            data:{},
+            message: "işleme ait seanslar bulunmamaktadır.",
+          });
+        
+        } else {
+          res.status(200).json({
+            succes: true,
+            data:response,
+            message: "işleme ait seanslar çekildi.",
+          });
+        }
+      }
+    );
+
+
+  } catch (error) {
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  }
+};
 
 const deletePhoto = async (req, res, next) => {
   console.log(req.params);
@@ -880,6 +908,7 @@ export {
   activateEmployee,
   deletePhoto,
   deleteOperation,
+  getSessionsofOperation,
   getAllPhotos,
   addOperation,
   getUsersAllOperations,

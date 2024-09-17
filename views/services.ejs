@@ -10,7 +10,7 @@
 
 <body>
     <%- include("partials/aside.ejs") %>
-    
+
         <section id="content">
             <!---------- left aside ------------->
             <%- include('partials/header.ejs') %>
@@ -24,15 +24,15 @@
                     </div>
                     <div class="search">
                         <form autocomplete="off" action="./search">
-                            <div class="autocomplete inputs">
+                            <div class="autocomplete form-group">
                                 <input id="myInput" type="text" name="services" placeholder="Hizmet Seç">
                                 <input type="submit" value="Ara">
                             </div>
 
                         </form>
                         <div id="add_service_btn"><button class="buttons">Hizmet Ekle +</button></div>
-                        
-                        
+
+
 
                     </div>
 
@@ -41,9 +41,9 @@
                         <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
                         <div class="print-selection">
                             <label>Yazdır &nbsp; &#10140</label>
-                            <label for="" class="to_pdf" >PDF<span
+                            <label for="" class="to_pdf">PDF<span
                                     class="material-symbols-sharp">picture_as_pdf</span></label>
-                            
+
                             <label for="" class="to_xlsx">XLSX<span
                                     class="material-symbols-sharp">description</span></label>
                         </div>
@@ -66,13 +66,14 @@
                                             <%= service.serviceName %>
                                         </td>
                                         <td>
-                                            <% service.serviceData.forEach(element => { %>
+                                            <% service.serviceData.forEach(element=> { %>
                                                 <%= element %>
-                                            <% }) %>
+                                                    <% }) %>
                                         </td>
                                         <td>
                                             <div class="inputs" data-servicesID="<%= service._id %>">
-                                                <input type="number" class="price_inputs" value="<%= service.servicePrice %>">
+                                                <input type="number" class="price_inputs"
+                                                    value="<%= service.servicePrice %>">
                                                 <i class="ph ph-floppy-disk input_save_buttons"></i>
                                             </div>
                                         </td>
@@ -85,12 +86,15 @@
 
                                         </td>
                                         <% if(service.activeorNot){ %>
-                                            <td><a class="button" href="./services/<%= service._id %>/deactivateService">Pasif Et</a></td>
+                                            <td><a class="button"
+                                                    href="./services/<%= service._id %>/deactivateService">Pasif Et</a>
+                                            </td>
                                             <% } else{ %>
-                                                <td><a href="./services/<%= service._id %>/activateService">Aktif Et</a></td>
+                                                <td><a href="./services/<%= service._id %>/activateService">Aktif Et</a>
+                                                </td>
                                                 <% } %>
 
-                                                    
+
                                     </tr>
                                     <% }) %>
 
@@ -101,43 +105,42 @@
                         </table>
 
                     </div>
-                   
-                    
-                    <div class="add_service modal">
-                        <h2>Yeni Hizmet Ekle</h2>
-                        <form action="./services/addService"  method="POST" id="register-form">
-                            <div class="inputs ">
-                                <span>Hizmet Adı:</span>
-                                <input type="text" name="serviceName" id="user-name" required
-                                    placeholder="Hizmet adı giriniz">
-                            </div>
-
-                            <div class="inputs" >
-                                <span>Fiyat</span>
-                                <input type="number" name="servicePrice" id="surname" placeholder="hizmet için fiyat giriniz" required>
-                            </div>
-                            
-
-
-
-                            <button type="submit" class="save_button" id="add-user">Kaydet</button>
-                            <button type="button" class="cancel_button" >Vazgeç</button>
-                        </form>
-                    </div>
-
 
                 </main>
-                <div class="information-modal-wrapper"></div>
+
+
         </section>
+        <div class="modal hidden" id="add_service">
+            <div class="inner_modal">
+                <h2>Yeni Hizmet Ekle</h2>
+                <form action="./services/addService" method="POST" id="register-form">
+                    <div class="form-group ">
+                        <span>Hizmet Adı:</span>
+                        <input type="text" name="serviceName" id="user-name" required placeholder="Hizmet adı giriniz">
+                    </div>
+
+                    <div class="form-group">
+                        <span>Fiyat</span>
+                        <input type="number" name="servicePrice" id="surname" placeholder="hizmet için fiyat giriniz"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="add-user">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="information-modal-wrapper"></div>
 
 
-        
         <script type="module" src="/js/main.js"></script>
         <script src="/js/sidebar.js"></script>
         <script type="module" src="/js/services.js"></script>
 
-        
-        
+
+
 
 
 </body>

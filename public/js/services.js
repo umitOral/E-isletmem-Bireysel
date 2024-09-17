@@ -1,6 +1,6 @@
 
 import { Request } from "./requests.js";
-import {UI} from './ui.js'
+import { UI } from './ui.js'
 
 const request = new Request();
 const ui = new UI();
@@ -8,36 +8,32 @@ ui.closeNotification()
 
 
 const saveButtons = document.querySelectorAll(".input_save_buttons");
-
-
-const cancelButtonModal = document.querySelectorAll(".cancel_button");
-
-
+const cancelBtns= document.querySelectorAll(".cancel.form-btn");
 const priceInputs = document.querySelectorAll(".price_inputs");
 
 
 priceInputs.forEach((input) => {
   input.addEventListener("input", () => {
-    
+console.log("haho")
     input.nextElementSibling.classList.add("showed");
   });
 });
 
 saveButtons.forEach((button) => {
-  button.addEventListener("click", ()=>{
-   
-    const newPrice=button.previousElementSibling.value
-    
-    let data={
-        servicePrice:newPrice
+  button.addEventListener("click", () => {
+
+    const newPrice = button.previousElementSibling.value
+
+    let data = {
+      servicePrice: newPrice
     }
-    request.postWithUrl("./services/"+button.parentElement.dataset.servicesid+"/editService",data)
-    .then((response)=>{
-      console.log(response)
-        ui.showNotification(response.success,response.message)
+    request.postWithUrl("./services/" + button.parentElement.dataset.servicesid + "/editService", data)
+      .then((response) => {
+        console.log(response)
+        ui.showNotification(response.success, response.message)
         button.classList.remove("showed");
-    })
-    .catch(err=>ui.showNotification(false,err));
+      })
+      .catch(err => ui.showNotification(false, err));
   });
 });
 
@@ -47,35 +43,23 @@ saveButtons.forEach((button) => {
 //modal actions
 
 const addServicesButton = document.querySelector("#add_service_btn")
-
-const allModals = document.querySelectorAll(".modal")
-
-const modalCancelBtn= document.querySelectorAll(".cancel_button")
-const modalServiceAdd = document.querySelector(".add_service")
+const modalServiceAdd = document.querySelector("#add_service")
 
 
 
 addServicesButton.addEventListener("click", showModalAddServices)
 
-modalCancelBtn.forEach(element => {
-  element.addEventListener("click", closeModal)
+cancelBtns.forEach(element => {
+  element.addEventListener("click", () => {
+    ui.closeAllModals()
+  })
 });
 
 
 function showModalAddServices() {
-  allModals.forEach(element => {
-    element.classList.remove("showed_modal")
-  });
-    modalServiceAdd.classList.add("showed_modal")
+  modalServiceAdd.classList.remove("hidden")
 }
 
 
-function closeModal(e) {
-  e.preventDefault()
-  allModals.forEach(element => {
-    element.classList.remove("showed_modal")
-  });
-    
-}
 
 

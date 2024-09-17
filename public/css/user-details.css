@@ -231,9 +231,7 @@
   border-top-right-radius: var(--card-border-radius);
   text-align: center;
 }
-.inputs{
-  width: 98%;
-}
+
 
 .userInformationsContent input {
   border: 1px solid rgba(128, 128, 128, 0.394);
@@ -477,9 +475,7 @@ i:hover{
 
 /* add user modal ---- */
 
-.modal {
-  display: none;
-}
+
 .modal_slider {
   height: 80%;
  width: 100%;
@@ -523,37 +519,6 @@ margin-bottom: 0.5rem;
   width: 75%;
 }
 
-
-
-.modal button {
-  margin-top: 1rem;
-
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  color: var(--color-white);
-
-  font-weight: 400;
-  font-size: 1.2rem;
-  background-color: var(--color-success);
-  cursor: pointer;
-}
-
-.cancel_button {
-  background-color: var(--color-danger);
-  margin-top: 1rem;
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  color: var(--color-white);
-  text-align: center;
-  font-weight: 400;
-  font-size: 1.2rem;
-
-  cursor: pointer;
-}
 
 .modal span {
   font-weight: 500;

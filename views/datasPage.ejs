@@ -24,14 +24,14 @@
                     </div>
                     <div class="search">
                         <form autocomplete="off" action="./search">
-                            <div class="autocomplete inputs">
+                            <div class="autocomplete form-group">
                                 <input id="myInput" type="text" name="services" placeholder="Hizmet Seç">
                                 <input type="submit" value="Ara">
                             </div>
 
                         </form>
 
-                        <div id="add_data_btn"><button>Veri Ekle +</button></div>
+                        <div><button id="add_data_btn">Veri Ekle +</button></div>
 
 
                     </div>
@@ -72,10 +72,10 @@
                                                     <tr>
                                                         <td>
                                                             <%= dataOptions%>
-                                                            <i class="fa-regular fa-pen-to-square"></i>
+                                                                <i class="fa-regular fa-pen-to-square"></i>
                                                         </td>
-                                                        
-                                                        
+
+
                                                     </tr>
                                                     <% }) %>
 
@@ -95,51 +95,64 @@
 
 
 
-                    <div class="add_data modal">
-                        <h2>Yeni Veri Ekle</h2>
-                        <form action="./datas/addData" method="POST" id="data-form">
-                            <div class="inputs ">
-                                <span>Veri Adı:</span>
-                                <input type="text" name="dataName" id="user-name" required
-                                    placeholder="Örn: cilt kalitesi,cilt rengi..">
-                            </div>
 
-                            <button type="submit" class="save_button" id="add-user">Kaydet</button>
-                            <button type="button" class="cancel_button">Vazgeç</button>
-                        </form>
-                    </div>
-                    <div class="add_option modal">
-                        <h2>Yeni Opsiyon Ekle</h2>
-                        <form action="./datas/addOptiontoData" method="POST" id="dataOption_form">
-                            <div class="inputs ">
-                                <span>Opsiyon Adı:</span>
-                                <input type="text" name="dataOption" id="user-name" required
-                                    placeholder="Örn: seyrek,zayıf ..">
-                            </div>
-
-                            <button type="submit" class="save_button" id="add-user">Kaydet</button>
-                            <button type="button" class="cancel_button">Vazgeç</button>
-                        </form>
-                    </div>
-                    <div class="edit_option modal">
-                        <h2>Opsiyon Düzenle</h2>
-                        <form action="./datas/editOption" method="POST" id="dataEdit_form">
-                            <div class="inputs ">
-                                <span>Opsiyon Adı:</span>
-                                <input type="text" name="dataOption" id="user-name" required
-                                    placeholder="">
-                            </div>
-
-                            <button type="submit" class="save_button" id="add-user">Kaydet</button>
-                            <button type="button" class="cancel_button">Vazgeç</button>
-                        </form>
-                    </div>
 
                 </main>
-                <div class="information-modal-wrapper"></div>
+
         </section>
+        <div class="information-modal-wrapper"></div>
+        <div class="modal hidden" id="add_data">
+            <div class="inner_modal">
+                <h2>Yeni Veri Ekle</h2>
+                <form action="./datas/addData" method="POST" id="data-form">
+                    <div class="form-group ">
+                        <span>Veri Adı:</span>
+                        <input type="text" name="dataName" id="user-name" required
+                            placeholder="Örn: cilt kalitesi,cilt rengi..">
+                    </div>
 
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="add-user">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
 
+        </div>
+        <div class="modal hidden" id="add_option">
+            <div class="inner_modal">
+                <h2>Yeni Opsiyon Ekle</h2>
+                <form action="./datas/addOptiontoData" method="POST" id="dataOption_form">
+                    <div class="form-group ">
+                        <span>Opsiyon Adı:</span>
+                        <input type="text" name="dataOption" id="user-name" required placeholder="Örn: seyrek,zayıf ..">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="add-user">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="modal hidden" id="edit_option">
+            <div class="inner_modal">
+                <h2>Opsiyon Düzenle</h2>
+                <form action="./datas/editOption" method="POST" id="dataEdit_form">
+                    <div class="form-group ">
+                        <span>Opsiyon Adı:</span>
+                        <input type="text" name="dataOption" id="user-name" required placeholder="">
+                    </div>
+    <div class="form-group">
+        
+        <button type="submit" class="btn save form-btn" id="add-user">Kaydet</button>
+        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+    </div>
+                </form>
+            </div>
+            
+        </div>
 
         <script type="module" src="/js/main.js"></script>
         <script src="/js/sidebar.js"></script>

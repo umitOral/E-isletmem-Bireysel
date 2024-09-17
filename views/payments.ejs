@@ -21,10 +21,10 @@
                     </div>
                     <div class="payments-filter">
                         <form class="payment-form" action="">
-                            <div class="inputs">Başlangıç tarihi:
+                            <div class="form-group">Başlangıç tarihi:
                                 <input type="date" name="startDate" class="startDate">
                             </div>
-                            <div class="inputs">Bitiş tarihi:
+                            <div class="form-group">Bitiş tarihi:
                                 <input type="date" name="endDate" class="endDate">
                             </div>
 
@@ -75,35 +75,35 @@
                                     <td></td>
                                     <td colspan="2">Toplam Ciro:</td>
                                     <td class="total-income">
-                                        
+
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Toplam Gider:</td>
                                     <td class="total-expenses">
-                                       
+
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Toplam Nakit:</td>
                                     <td class="total-cash">
-                                        
+
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Toplam Kredi Kartı:</td>
                                     <td class="total-crediTCard">
-                                        
+
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td colspan="2">Net Kasa </td>
                                     <td class="netCash">
-                                        
+
                                     </td>
                                 </tr>
                             </tfoot>
@@ -112,193 +112,198 @@
                         </table>
                     </div>
 
-                    <div class="modal modal_payment">
-                        <h2>Ödeme Ekle</h2>
-                        <form action="./payments/addPayment" id="add_payment" method="POST">
-                            <div class="inputs">
-                                Hasta:
-                                <select name="fromUser" id="fromUser" class="inputs" required>
-                                    <option value="" selected disable hidden> Hasta seçiniz</option>
-                                    <% users.forEach(user=> { %>
-                                        <option value="<%= user._id %>">
-                                            <%= user.name %>
-                                                <%= user.surname %>
-                                        </option>
-                                        <% }) %>
-
-                                </select>
-                            </div>
-                            <div class="inputs">
-                                İşlem:
-                                <select name="" id="operations_select">
-                                    <option value="" selected hidden disabled>Müşteri seçiniz.</option>
-                                </select>
-                            </div>
-                            <!-- <div class="inputs">
-                                Ürün:
-                                <input type="text" placeholder="Ürün okutunuz">
-                            </div> -->
-
-
-                            <div class="selected_proccess_type_add">
-                                <table class="selected_proccess_table">
-                                    <thead>
-                                        <td>Ürün/Hizmet</td>
-                                        <td>Adet</td>
-                                        <td>Fiyat</td>
-                                        <td>İndirim(TL)</td>
-                                        <td>İndirim(%)</td>
-                                        <td>Son Fiyat</td>
-                                        <td>Ödenen</td>
-                                        <td>Ödenecek Tutar</td>
-
-
-                                    </thead>
-                                    <tbody>
-
-
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>toplam:</td>
-                                            <td id="total_value"></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-
-
-
-                            <div class="payment_options ">
-                                <span>Tahsilat:</span>
-                                <div>
-                                    <input type="radio" id="credit_card_ratio" name="cashOrCard" value="Kredi Kartı"
-                                        required>
-                                      <label for="credit_card_ratio">Kredi Kartı</label>
-                                </div>
-                                <div>
-                                    <input type="radio" id="cash_ratio" name="cashOrCard" value="Nakit">
-                                      <label for="cash_ratio">Nakit</label>
-                                </div>
-                                <div>
-                                    <label for="description">Notlar:</label>
-                                    <textarea name="description" id="" cols="10" rows="3"></textarea>
-                                     
-                                </div>
-
-                            </div>
-
-                            <button type="submit" class="save_button">Kaydet</button>
-                            <button type="button" class="cancel_button">Vazgeç</button>
-
-
-                        </form>
-                    </div>
-                    <div class="modal expenses_payment">
-                        <h2>Masraf Ekle</h2>
-                        <form action="./payments/addExpense" method="POST">
-
-
-                            <div class="inputs ">
-                                <span>Masraf Miktarı:</span>
-                                <input type="number" name="totalPrice" class="totalExpenseValue" id="" required>
-                            </div>
-
-                            <div class="payment_options ">
-                                <span>Tahsilat:</span>
-                                <div>
-                                    <input type="radio" id="expense_credit_card_ratio" name="cashOrCard"
-                                        value="Kredi Kartı">
-                                      <label for="expense_credit_card_ratio">Kredi Kartı</label>
-                                </div>
-                                <div>
-                                    <input type="radio" id="expense_cash_ratio_ratio" name="cashOrCard" value="Nakit">
-                                      <label for="expense_cash_ratio">Nakit</label>
-                                </div>
-                                <div>
-                                    <label for="description">Notlar:</label>
-                                    <textarea name="description" id="" cols="10" rows="3"></textarea>
-                                     
-                                </div>
-
-                            </div>
-
-                            <button type="submit" class="save_button">Kaydet</button>
-                            <button class="cancel_button" type="button">Vazgeç</button>
-
-
-                        </form>
-                    </div>
-                    <div class="modal modal_edit_payment">
-                        <h2>Ödeme Düzenle</h2>
-                        <form action="" method="POST" id="edit-payment-form">
-                            <div class="inputs" id="payment_user_edit">
-                                <input type="text" value="aaa" readonly>
-                            </div>
-
-                            <div class="selected_proccess_type_edit">
-                                <table class="selected_proccess_table_edit">
-                                    <thead>
-                                        <td>Ürün/Hizmet</td>
-                                        <td>Adet</td>
-                                        <td>Fiyat</td>
-                                        <td>İndirim(TL)</td>
-                                        <td>İndirim(%)</td>
-                                        <td>Son Fiyat</td>
-                                        <td>Ödenen</td>
-                                    </thead>
-                                    <tbody>
-
-
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>toplam:</td>
-                                            <td id="total_value_edit"></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-
-                            <div class="payment_options ">
-                                <span>Tahsilat:</span>
-                                <div>
-                                    <input type="radio" id="credit_card_ratio_edit" name="cashOrCard"
-                                        value="Kredi Kartı">
-                                      <label for="credit_card_ratio_edit">Kredi Kartı</label>
-                                </div>
-                                <div>
-                                    <input type="radio" id="cash_ratio_edit" name="cashOrCard" value="Nakit">
-                                      <label for="cash_ratio_edit">Nakit</label>
-                                </div>
-                            </div>
-
-                            <div class="inputs">
-                                <label for="description">Notlar:</label>
-                                <textarea name="description" id="description_for_edit" cols="10" rows="3"></textarea>
-                                 
-                            </div>
-                            <button type="submit" class="save_update_btn">Kaydet</button>
-                            <button type="button" class="cancel_button">Vazgeç</button>
-
-
-                        </form>
-                    </div>
 
 
                 </main>
         </section>
         <div class="information-modal-wrapper"></div>
 
+        <div class="modal hidden" id="modal_payment">
+            <div class="inner_modal">
+                <h2>Ödeme Ekle</h2>
+                <form action="./payments/addPayment" id="add_payment" method="POST">
+                    <div class="form-group">
+                        Hasta:
+                        <select name="fromUser" id="fromUser" class="form-group" required>
+                            <option value="" selected disable hidden> Hasta seçiniz</option>
+                            <% users.forEach(user=> { %>
+                                <option value="<%= user._id %>">
+                                    <%= user.name %>
+                                        <%= user.surname %>
+                                </option>
+                                <% }) %>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        İşlem:
+                        <select name="" id="operations_select">
+                            <option value="" selected hidden disabled>Müşteri seçiniz.</option>
+                        </select>
+                    </div>
+                    <!-- <div class="form-group">
+                        Ürün:
+                        <input type="text" placeholder="Ürün okutunuz">
+                    </div> -->
+
+
+                    <div class="selected_proccess_type_add">
+                        <table class="selected_proccess_table">
+                            <thead>
+                                <td>Ürün/Hizmet</td>
+                                <td>Adet</td>
+                                <td>Fiyat</td>
+                                <td>İndirim(TL)</td>
+                                <td>İndirim(%)</td>
+                                <td>Son Fiyat</td>
+                                <td>Ödenen</td>
+                                <td>Ödenecek Tutar</td>
+
+
+                            </thead>
+                            <tbody>
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>toplam:</td>
+                                    <td id="total_value"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="payment_options ">
+                        <span>Tahsilat:</span>
+                        <div>
+                            <input type="radio" id="credit_card_ratio" name="cashOrCard" value="Kredi Kartı" required>
+                              <label for="credit_card_ratio">Kredi Kartı</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="cash_ratio" name="cashOrCard" value="Nakit">
+                              <label for="cash_ratio">Nakit</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Notlar:</label>
+                            <textarea name="description" id="" cols="10" rows="3"></textarea>
+                             
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+        <div class="modal hidden" id="expenses_payment">
+            <div class="inner_modal">
+                <h2>Masraf Ekle</h2>
+                <form action="./payments/addExpense" method="POST">
+    
+    
+                    <div class="form-group ">
+                        <span>Masraf Miktarı:</span>
+                        <input type="number" name="totalPrice" class="totalExpenseValue" id="" required>
+                    </div>
+    
+                    <div class="payment_options ">
+                        <span>Tahsilat:</span>
+                        <div>
+                            <input type="radio" id="expense_credit_card_ratio" name="cashOrCard" value="Kredi Kartı">
+                              <label for="expense_credit_card_ratio">Kredi Kartı</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="expense_cash_ratio_ratio" name="cashOrCard" value="Nakit">
+                              <label for="expense_cash_ratio">Nakit</label>
+                        </div>
+                        <div>
+                            <label for="description">Notlar:</label>
+                            <textarea name="description" id="" cols="10" rows="3"></textarea>
+                             
+                        </div>
+    
+                    </div>
+    
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn">Kaydet</button>
+                    <button type="button" class="btn cancel form-btn" type="button">Vazgeç</button>
+                    </div>
+    
+                </form>
+            </div>
+            
+        </div>
+        <div class="modal hidden" id="modal_edit_payment">
+            <div class="inner_modal">
+                <h2>Ödeme Düzenle</h2>
+                <form action="" method="POST" id="edit-payment-form">
+                    <div class="form-group" id="payment_user_edit">
+                        <input type="text" value="aaa" readonly>
+                    </div>
+    
+                    <div class="selected_proccess_type_edit">
+                        <table class="selected_proccess_table_edit">
+                            <thead>
+                                <td>Ürün/Hizmet</td>
+                                <td>Adet</td>
+                                <td>Fiyat</td>
+                                <td>İndirim(TL)</td>
+                                <td>İndirim(%)</td>
+                                <td>Son Fiyat</td>
+                                <td>Ödenen</td>
+                            </thead>
+                            <tbody>
+    
+    
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>toplam:</td>
+                                    <td id="total_value_edit"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+    
+                    <div class="payment_options ">
+                        <span>Tahsilat:</span>
+                        <div>
+                            <input type="radio" id="credit_card_ratio_edit" name="cashOrCard" value="Kredi Kartı">
+                              <label for="credit_card_ratio_edit">Kredi Kartı</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="cash_ratio_edit" name="cashOrCard" value="Nakit">
+                              <label for="cash_ratio_edit">Nakit</label>
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="description">Notlar:</label>
+                        <textarea name="description" id="description_for_edit" cols="10" rows="3"></textarea>
+                         
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="save_update_btn">Kaydet</button>
+                    <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+    
+    
+                </form>
+            </div>
+            
+        </div>
+
 
         <!----------- end of sidebar ----------->
-
-
-
 
 
 

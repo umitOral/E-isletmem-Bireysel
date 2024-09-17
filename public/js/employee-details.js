@@ -22,27 +22,20 @@ const permissionsTabButton = document.querySelector(
 );
 
 const editBtn = document.querySelector(".edit-informations-btn");
-const editUserButton = document.getElementById("edit-user");
-const addImageButton = document.querySelector("button.add");
-const loader = document.querySelector(".loader_wrapper.hidden");
-const addImageSaveButton = document.querySelector("#add-img-save-button");
-const deleteImageBtn = document.querySelectorAll(
-  ".small_images_options span:last-child"
-);
+const editUserForm = document.getElementById("user-edit-form");
 
 const cancelModal = document.querySelectorAll(".modal .cancel_button");
+const cancelBtns = document.querySelectorAll(".cancel");
 
 // modals
-const modalUser = document.querySelector(".modal_user");
-const modalSession = document.querySelector(".modal_session");
-const modalPayment = document.querySelector(".modal_payment");
 
-const modalProccess = document.querySelector(".modal_proccess");
+const allModals = document.querySelectorAll(".modal");
+const modalUser = document.querySelector("#modal_user");
 
 eventListeners();
 
 function eventListeners() {
-  editUserButton.addEventListener("click", editUser);
+  editUserForm.addEventListener("submit", editUser);
   editBtn.addEventListener("click", showInformationsModal);
   appointmentsTabButton.addEventListener("click", getEmployeesAppointments);
   permissionsTabButton.addEventListener("click", getEmployeesPermissions);
@@ -55,8 +48,13 @@ cancelModal.forEach((element) => {
   });
 });
 
-const userName = document.getElementById("user-name");
-const usersurName = document.getElementById("user-surname");
+cancelBtns.forEach(element => {
+  element.addEventListener("click",()=>{
+    allModals.forEach(element => {
+      element.classList.add("hidden")
+    });
+  })
+});
 
 function editUser(e) {
   e.preventDefault();
@@ -78,7 +76,7 @@ function editUser(e) {
     .then((response) => {
       console.log(response);
       ui.showNotification(true, response.message);
-      modalUser.classList.remove("showed_modal");
+      modalUser.classList.add("hidden");
       setTimeout(() => {
         window.location.reload();
       }, 800);
@@ -103,33 +101,13 @@ showContentsBtn.forEach((element, index) => {
   });
 });
 
-// images area ----------------
 
-const imagesSmall = document.querySelectorAll(
-  ".userInformationsContent.images .small_images img"
-);
-const imageBig = document.querySelector(
-  ".userInformationsContent.images #big_image_wrapper img "
-);
-
-imagesSmall.forEach((element) => {
-  element.onclick = () => {
-    imagesSmall.forEach((element) => {
-      element.classList.remove("focused");
-    });
-    element.classList.add("focused");
-    let src = element.getAttribute("src");
-
-    imageBig.setAttribute("src", src);
-  };
-});
 
 // user details modal -----------------
 
-const saveModal = document.querySelectorAll(".modal .save_button");
 
 function showInformationsModal() {
-  modalUser.classList.add("showed_modal");
+  modalUser.classList.remove("hidden");
 }
 
 function getEmployeesAppointments() {
@@ -208,26 +186,8 @@ function handleEvents(e) {
   }
 }
 
-cancelModal.forEach((element) => {
-  element.addEventListener("click", (e) => {
-    e.preventDefault();
-    modalUser.classList.remove("showed_modal");
-    modalSession.classList.remove("showed_modal");
-    modalPayment.classList.remove("showed_modal");
 
-    modalUser.classList.remove("showed_modal");
-    modalProccess.classList.remove("showed_modal");
-    console.log("dada");
-  });
-});
-saveModal.forEach((element) => {
-  element.onclick = () => {
-    modalUser.classList.remove("showed_modal");
-    modalSession.classList.remove("showed_modal");
-    modalPayment.classList.remove("showed_modal");
-    loader.classList.toggle("showed");
-  };
-});
+
 
 // table sorting
 

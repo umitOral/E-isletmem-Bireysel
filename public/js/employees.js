@@ -4,9 +4,9 @@ import { Request } from "./requests.js";
 const request = new Request();
 ui.closeNotification()
 
-
-const savebutton = document.querySelector(".save_button");
 const form = document.querySelector("#register-form");
+const allModals = document.querySelectorAll(".modal");
+const cancelButtons = document.querySelectorAll(".cancel");
 
 eventListeners();
 function eventListeners() {
@@ -44,19 +44,22 @@ function createEmployee(e) {
 }
 
 const addCustomerButton = document.querySelector(".add_customer_btn");
-const modalCustomerAdd = document.querySelector(".add_customer");
-const modalCustomerCancel = document.querySelector(".cancel_button");
+const modalCustomerAdd = document.querySelector("#add_customer");
+
 
 addCustomerButton.addEventListener("click", showModalAddCostumer);
-modalCustomerCancel.addEventListener("click", closeModalAddCostumer);
+cancelButtons.forEach(element => {
+  element.addEventListener("click",()=>{
+    allModals.forEach(element => {
+      element.classList.add("hidden")
+    });
+  })
+});
 
 function showModalAddCostumer() {
-  modalCustomerAdd.classList.add("showed_modal");
+  modalCustomerAdd.classList.remove("hidden");
 }
-function closeModalAddCostumer(e) {
-  e.preventDefault()
-  modalCustomerAdd.classList.remove("showed_modal");
-}
+
 
 
 const adminColumn=document.querySelector("#userList")
