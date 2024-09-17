@@ -22,13 +22,12 @@
 
                     <div class="search">
                         <form autocomplete="off" action="./personels/search">
-                            <div class="autocomplete inputs" style="width:300px;">
+                            <div class="autocomplete form-group" style="width:300px;">
                                 <input id="myInput" type="text" name="user" placeholder="Personel Seç">
                                 <input type="submit" value="Ara">
                             </div>
 
                         </form>
-                        <div class="add_customer_btn">Yeni Personel Ekle +</div>
                     </div>
                     <div class="print">
 
@@ -93,50 +92,6 @@
                     
 
                 </main>
-                <div class="add_customer modal">
-                    <h2>Yeni Personel Ekle</h2>
-                    <form action="./personels/createEmployee" method="POST" id="register-form">
-                        <div class="inputs ">
-                            <span>İsim</span>
-                            <input type="text" name="name" id="user-name" required
-                                placeholder="Lütfen bir kullanıcı adı giriniz">
-                        </div>
-
-                        <div class="inputs ">
-                            <span>Soyisim</span>
-                            <input type="text" name="surname" id="surname">
-                        </div>
-                        
-                        <div class="inputs ">
-                            <span>Doğum Tarihi</span>
-                            <input type="date" name="birtdhDate" id="birtdhDate">
-                        </div>
-                        <div class="inputs ">
-                            <span>Adres</span>
-                            <input type="text" name="address" id="address">
-
-                        </div>
-                        <div class="inputs ">
-                            <span>Telefon</span>
-                            <input type="number" name="phone" id="phone">
-                        </div>
-                        <div class="inputs ">
-                            <span>Mail</span>
-                            <input type="email" name="email" id="email">
-                        </div>
-
-                        <div class="inputs ">
-                            <span>Fatura Bilgisi:</span>
-                            <textarea name="billingAddress" id="billingAddress" cols="70" rows="2"></textarea>
-                        </div>
-                        <div class="inputs ">
-                            <span>Açıklama</span>
-                            <textarea name="notes" id="notes" cols="70" rows="2"></textarea>
-                        </div>
-                        <button type="submit" class="save_button" id="add-user">Kaydet</button>
-                        <button class="cancel_button">Vazgeç</button>
-                    </form>
-                </div>
             </section>
 
 
