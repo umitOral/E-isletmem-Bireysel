@@ -20,7 +20,7 @@ const editUserButton = document.getElementById("edit-user");
 
 const loader = document.querySelector(".loader_wrapper.hidden");
 
-const cancelModal = document.querySelectorAll(".cancel.form-btn");
+const cancelBtns = document.querySelectorAll(".cancel.form-btn");
 const cancelAddPhoto = document.querySelector("#cancel-add-photo");
 
 const addDataModal = document.querySelector("#add-data-modal");
@@ -51,7 +51,8 @@ const modalOrders = document.querySelector("#modal_order");
 const userID = document.querySelector(".user-informations").dataset.userıd;
 
 let modalEditData = document.querySelector("#edit-data-modal");
-const  allSessionsofOperationModal = document.querySelector(".allSessionsofOperationModal");
+const allSessionsofOperationModal = document.querySelector("#allSessionsofOperationModal");
+const allSessionsofOperationModalContent = document.querySelector(".allsessionOfOperationContent table tbody");
 
 // responsed datas
 
@@ -66,9 +67,9 @@ function eventListeners() {
   editBtn.addEventListener("click", showInformationsModal);
 }
 
-cancelModal.forEach((element) => {
+cancelBtns.forEach((element) => {
   element.addEventListener("click", (e) => {
-    element.parentElement.parentElement.parentElement.parentElement.classList.add("hidden");
+    ui.closeAllModals()
   });
 });
 
@@ -302,28 +303,29 @@ function getAllAppointments() {
 
         <td>
             ${new Date(session.startHour).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
                 -
                 ${new Date(session.endHour).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
                     
         </td>
 
         <td>
             ${session.doctor.name}
             ${session.doctor.surname}
+            
         </td>
         <td>
           ${session.operations.map(
-            (item, i) => `
+          (item, i) => `
                 ${item.operation.operationName}
                 seans:${item.session}
           `
-          )}
+        )}
         </td>
 
         
@@ -334,8 +336,7 @@ function getAllAppointments() {
 
         <td>
           <select name="" class="updateStateAppointment">
-          <option value="" disable hidden selected >${
-            session.appointmentState
+          <option value="" disable hidden selected >${session.appointmentState
           }</option>
           ${APPOINTMENT_STATUS.map(
             (item) => `
@@ -461,8 +462,8 @@ function handleDeleteOperationBtn(e) {
   calculateTotal();
 }
 function handleAppointmentBtn(e) {
-  
-    
+
+
   let controlindex = selectedOperations.findIndex(
     (item) =>
       item.operationName ===
@@ -472,7 +473,7 @@ function handleAppointmentBtn(e) {
   selectedOperations[controlindex].totalAppointments = Number(
     e.target.value
   );
-  
+
 
   console.log(selectedOperations);
 }
@@ -501,6 +502,7 @@ function getAllPayments() {
 
 paymentTable.addEventListener("change", (e) => {
   if (e.target.classList.contains("operations-edit-select")) {
+
   }
 });
 
@@ -508,13 +510,13 @@ paymentTable.addEventListener("change", (e) => {
 
 const showOperationsBtn = document.querySelector(".show-content.operations");
 showOperationsBtn.addEventListener("click", getAllOperations);
-let allOperations={}
+let allOperations = {}
 function getAllOperations() {
   request
     .getwithUrl("./" + userID + "/getUsersAllOperations")
     .then((response) => {
       console.log(response);
-      allOperations=response
+      allOperations = response
       ui.addResponseToTable(orderTable, response.data);
 
       handleOperationEditBtn();
@@ -596,6 +598,8 @@ function handleOperationEditBtn() {
     element.addEventListener("change", (e) => {
       const operationId =
         e.target.parentElement.parentElement.dataset.operationid;
+
+
       if (e.target.options[e.target.options.selectedIndex].value === "delete") {
         if (confirm("işlem silinecek onaylıyor musunuz?")) {
           request
@@ -609,6 +613,7 @@ function handleOperationEditBtn() {
             .catch((err) => ui.showNotification(false, err.message));
         }
       }
+
       if (
         e.target.options[e.target.options.selectedIndex].value === "add-data"
       ) {
@@ -636,20 +641,33 @@ function handleOperationEditBtn() {
           e.target.parentElement.parentElement.dataset.operationid;
       }
       if (
-        e.target.options[e.target.options.selectedIndex].value ==="show-all-sessions"
+        e.target.options[e.target.options.selectedIndex].value === "show-all-sessions"
       ) {
         request
-            .getwithUrl("./" + userID + "/getSessionsofOperation/" + operationId)
-            .then((response) => {
-              console.log(response);
-              ui.showNotification(response.succes, response.message);
+          .getwithUrl("./" + userID + "/getSessionsofOperation/" + operationId)
+          .then((response) => {
+            console.log(response);
+            ui.showNotification(response.succes, response.message);
+            allSessionsofOperationModalContent.innerHTML=""
+            response.data.sessionOfOperation.map((element) => {
+              allSessionsofOperationModalContent.innerHTML +=
+                `
+                        <tr>
+                            <td>${new Date(element.sessionDate).toLocaleDateString()}</td>
+                            <td>${element.sessionState}</td>
+                            <td>${element.sessionDatas}</td>
+                        </tr>
+                        `
 
-              getAllOperations();
             })
-            .catch((err) => ui.showNotification(false, err.message));
-            allSessionsofOperationModal.classList.toggle("showed_modal");
+
+
+          })
+          .catch((err) => ui.showNotification(false, err.message));
+        allSessionsofOperationModal.classList.toggle("hidden");
 
       }
+      e.target.selectedIndex=0
     });
   });
 }
@@ -736,9 +754,8 @@ function handleEditPaymentModal(e) {
 
       response.operationsDetails.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
-        <tr data-id="${response.data.operations[index]._id}" data-price="${
-          response.data.operations[index].paymentValue
-        }" >
+        <tr data-id="${response.data.operations[index]._id}" data-price="${response.data.operations[index].paymentValue
+          }" >
             <td>${element.operationName}</td>
                 
             <td>
@@ -757,17 +774,14 @@ function handleEditPaymentModal(e) {
             </td>
             <td>
             
-            ${
-              (element.operationPrice - element.discount) *
-              ((100 - element.percentDiscount) / 100)
-            }
+            ${(element.operationPrice - element.discount) *
+          ((100 - element.percentDiscount) / 100)
+          }
             </td>
             <td>
-              <input class="payment_value" value=" ${
-                response.data.operations[index].paymentValue
-              }" placeholder="${
-          response.data.operations[index].paymentValue
-        }"></input>
+              <input class="payment_value" value=" ${response.data.operations[index].paymentValue
+          }" placeholder="${response.data.operations[index].paymentValue
+          }"></input>
             </td>
             
             <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
@@ -843,8 +857,8 @@ saveEditModal.addEventListener("submit", (e) => {
   request
     .postWithUrl(
       "../payments/" +
-        e.target.parentElement.dataset.paymentid +
-        "/editPayment",
+      e.target.parentElement.dataset.paymentid +
+      "/editPayment",
       data
     )
     .then((response) => {
@@ -873,10 +887,10 @@ function handleAppointmentEditBtn() {
       request
         .getwithUrl(
           "../" +
-            "appointments/" +
-            appointmentID +
-            "/updateStateAppointment/?state=" +
-            e.target.value
+          "appointments/" +
+          appointmentID +
+          "/updateStateAppointment/?state=" +
+          e.target.value
         )
         .then((response) => {
           console.log(response);
@@ -942,7 +956,7 @@ addDataSaveButton.addEventListener("click", (e) => {
       datasSelectInput.options[
         datasSelectInput.options.selectedIndex
       ].textContent.trim(),
-    data: datasOptionsSelectInput.selectedIndex!==-1
+    data: datasOptionsSelectInput.selectedIndex !== -1
       ? datasOptionsSelectInput.options[datasOptionsSelectInput.selectedIndex].value
       : dataOptionNumberValue.value,
   };
@@ -952,12 +966,14 @@ addDataSaveButton.addEventListener("click", (e) => {
   request
     .postWithUrl(
       "../operations/" +
-        addDataForm.dataset.operationid +
-        "/addDataToOperation",
+      addDataForm.dataset.operationid +
+      "/addDataToOperation",
       data
     )
     .then((response) => {
-      ui.showNotification(true, response.message);
+
+      ui.showNotification(response.success, response.message);
+      addDataModal.classList.add("hidden")
       addDataModal.classList.remove("showed_modal");
       getAllOperations();
     })
@@ -974,8 +990,8 @@ addDSessionSaveButton.addEventListener("click", (e) => {
   request
     .postWithUrl(
       "../operations/" +
-        addSessionForm.dataset.operationid +
-        "/addSessionToOperation",
+      addSessionForm.dataset.operationid +
+      "/addSessionToOperation",
       data
     )
     .then((response) => {
@@ -1040,10 +1056,10 @@ function editDatasBtn() {
         request
           .getwithUrl(
             "/admin/datas/deleteOption/" +
-              e.target.parentElement.dataset.dataid +
-              "/" +
-              e.target.parentElement.parentElement.parentElement.dataset
-                .operationid
+            e.target.parentElement.dataset.dataid +
+            "/" +
+            e.target.parentElement.parentElement.parentElement.dataset
+              .operationid
           )
           .then((response) => {
             getAllOperations();
@@ -1082,7 +1098,7 @@ function editDatasBtn() {
               `;
             }
           );
-          
+
         })
         .catch((err) => console.log(err));
 
@@ -1099,9 +1115,9 @@ function editDatasBtn() {
         request
           .postWithUrl(
             "/admin/operations/" +
-              operationId +
-              "/editDataofOperation/" +
-              dataId,
+            operationId +
+            "/editDataofOperation/" +
+            dataId,
             data
           )
           .then((response) => {
