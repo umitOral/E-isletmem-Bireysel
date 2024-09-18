@@ -266,6 +266,18 @@ hr {
   cursor: pointer;
   width: 100%;
 }
+.form-group.vertical {
+  width: max-content;
+}
+.vertical  {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.form-group span{
+font-weight: 600;
+}
+
 
 /*  */
 

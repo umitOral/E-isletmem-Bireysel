@@ -60,6 +60,11 @@ function editUser(e) {
   e.preventDefault();
 
   const form = document.querySelector("#user-edit-form");
+let workHours=[]
+  form.workhours.forEach(element => {
+    workHours.push(element.value)
+  });
+  
   console.log(form.action);
   request
     .postWithUrl(form.action, {
@@ -70,16 +75,17 @@ function editUser(e) {
       sex: form.sex.value,
       address: form.address.value,
       phone: form.phone.value,
-
+workHours:workHours,
       birthDate: form.birthDate.value,
+      bonusPercentage: form.bonusPercentage.value,
     })
     .then((response) => {
       console.log(response);
       ui.showNotification(true, response.message);
       modalUser.classList.add("hidden");
-      setTimeout(() => {
-        window.location.reload();
-      }, 800);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 800);
     })
     .catch((err) => ui.showNotification(false, err));
 }

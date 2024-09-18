@@ -10,7 +10,7 @@ const createEmployees = async (req, res, next) => {
   try {
     const userEmail = req.body.email;
     req.body.company = res.locals.company;
-    const searchEmail = await Employee.findOne({ email: userEmail,company:res.locals.company});
+    const searchEmail = await Employee.findOne({ email: userEmail, company: res.locals.company });
     console.log(userEmail);
     if (searchEmail) {
       res.json({
@@ -43,7 +43,9 @@ const createEmployees = async (req, res, next) => {
 };
 const editInformationsEmployees = async (req, res) => {
   try {
+    console.log("hahı");
     console.log(req.body);
+    req.body.workHours = { workStart: req.body.workHours[0], workEnd: req.body.workHours[1],}
     await Employee.findByIdAndUpdate(req.params.id, req.body);
     res.status(200).json({
       success: true,
@@ -93,7 +95,7 @@ const updateEmployeesPermissions = async (req, res, next) => {
   try {
     let employee = await Employee.findById(req.params.id);
     if (employee.permissions.includes(req.body.permissionkey)) {
-      employee.permissions = employee.permissions.filter((x) => x !==req.body.permissionkey );
+      employee.permissions = employee.permissions.filter((x) => x !== req.body.permissionkey);
     } else {
       employee.permissions.push(req.body.permissionkey)
     }
@@ -103,7 +105,7 @@ const updateEmployeesPermissions = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "izin değiştirildi",
-      data:req.body.permissionkey,
+      data: req.body.permissionkey,
       link: "employees",
     });
   } catch (error) {

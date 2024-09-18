@@ -54,7 +54,6 @@
                                     <div>
                                         <h2>Bilgiler</h2>
                                     </div>
-                                    <div class="contentBody">
                                         <div class="form-group ">
                                             <span>İsim</span>
                                             <input type="text" name="name" id="name" value="<%= singleUser.name %>"
@@ -72,7 +71,7 @@
                                                 value="<%= singleUser.role %>">
                                         </div>
                                         <div class="options">
-                                            <span>Aktiflik:</span>
+                                            <span>Çalışma durumu:</span>
 
                                             <% if(singleUser.activeOrNot==true){ %>
                                                 <div>
@@ -111,14 +110,30 @@
                                                     <% } %>
 
                                         </div>
-                                        <div class="form-group ">
+                                        
+                                        <div class="form-group">
+                                            <span>Çalışma saatleri:</span>
+                                            <div class="vertical">
+                                                <div class="vertical">Başlangıç:
+                                                    <input readonly type="time" name="" id=""
+                                                    value="<%= singleUser.workHours.workStart %>">
+                                                </div>
+                                                <div class="vertical">Bitiş:
+                                                    <input readonly type="time" name="" id=""
+                                                    value="<%= singleUser.workHours.workEnd %>">
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                            
+                                        <div class="form-group">
                                             <span>Doğum Tarihi</span>
 
                                             <input type="date" name="" id="" <% if (singleUser.birthDate) { %>
                                             value="<%= singleUser.birthDate%>"
                                                 <% } %> readonly>
                                         </div>
-                                        <div class="form-group ">
+                                        <div class="form-group">
                                             <span>Mail</span>
                                             <input type="email" name="" id="" value="<%= singleUser.email %>" readonly>
                                         </div>
@@ -127,19 +142,21 @@
                                             <span>Adres:</span>
                                             <input type="text" value="<%= singleUser.address %>" readonly>
                                         </div>
-                                        <div class="form-group ">
+                                        <div class="form-group">
                                             <span>Telefon</span>
                                             <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
                                         </div>
 
-                                        <div class="form-group ">
+                                        <div class="form-group">
                                             <span>Kayıt Tarihi:</span>
                                             <input type="text" name="" id=""
                                                 value="<%= new Date(singleUser.registerDate).toLocaleDateString("tr-TR") %>" readonly>
                                         </div>
-
-
-                                    </div>
+                                        <div class="form-group">
+                                            <span>Prim Yüzdesi</span>
+                                            <input type="number" name="" id="bonusPercentage"
+                                                value="<%=singleUser.bonusPercentage %>" readonly>
+                                        </div>
                                     <span class="edit-informations-btn">Düzenle</span>
 
 
@@ -241,7 +258,20 @@
 
                     </div>
 
-
+                    <div class="form-group">
+                        <span>Çalışma saatleri:</span>
+                        <div class="vertical">
+                            <div class="vertical">Başlangıç:
+                                <input type="time" name="workhours" id="workhours-start"
+                                value="<%= singleUser.workHours.workStart %>">
+                            </div>
+                            <div class="vertical">Bitiş:
+                                <input type="time" name="workhours" id="workhours-end"
+                                value="<%= singleUser.workHours.workEnd %>">
+                            </div>
+                        </div>
+                       
+                    </div>
                     <div class="options">
                         <span>Cinsiyet:</span>
                         <% if(singleUser.sex==="male" ){ %>
@@ -270,7 +300,7 @@
                     <div class="form-group ">
                         <span>Doğum Tarihi:</span>
 
-                        <input type="date" name="birthDate" id="" <% if (singleUser.birthDate) { %>
+                        <input type="date" name="birthDate" id="birthDate" <% if (singleUser.birthDate) { %>
                         value="<%= singleUser.birthDate %>"
                             <% } %> readonly>
                     </div>
@@ -280,12 +310,16 @@
                     </div>
                     <div class="form-group ">
                         <span>Adres</span>
-                        <input type="text" name="address" id="" value="<%= singleUser.address %>"
+                        <input type="text" name="address" id="address" value="<%= singleUser.address %>"
                             placeholder="<%= singleUser.address %>">
                     </div>
                     <div class="form-group ">
                         <span>Telefon</span>
-                        <input type="number" name="phone" id="" value="<%= singleUser.phone %>">
+                        <input type="number" name="phone" id="phone" value="<%= singleUser.phone %>">
+                    </div>
+                    <div class="form-group ">
+                        <span>Prim Yüzdesi</span>
+                        <input type="number" name="bonusPercentage" id="bonusPercentage" value="<%= singleUser.bonusPercentage %>">
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn save form-btn" id="edit-user">Kaydet</button>

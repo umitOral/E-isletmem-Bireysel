@@ -16,9 +16,23 @@ const employeeSchema = new Schema({
   address: { type: String, require: false },
   registerDate: { type: Date, default: new Date() },
   notes: { type: String, require: false },
+  bonusPercentage: { type: Number },
   permissions: [
     
   ],
+  workHours: {
+    type: Object,
+    workStart: {
+      type: String,
+    },
+    workEnd: {
+      type: String,
+    },
+    default: {
+      workStart: "08:00",
+      workEnd: "18:00",
+    },
+  },
   company: {
     type: Schema.Types.ObjectId,
     ref: "Company",

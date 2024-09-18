@@ -201,14 +201,7 @@
   display: none;
 }
 
-.generals span {
-  font-weight: 600;
-}
 
-.generals input {
-  background-color: rgba(241, 238, 238, 0.2);
-  margin-left: 10px;
-}
 
 .userInformationsContent.showed_content {
   display: flex;
@@ -233,16 +226,6 @@
 }
 
 
-.userInformationsContent input {
-  border: 1px solid rgba(128, 128, 128, 0.394);
-  display: block;
-  
-  background-color: #f4f6f88b;
-  border-radius: var(--border-radius-1);
-  padding: 0.5rem;
-  
-  color: var(--color-dark-variant);
-}
 .modalBigImage{
   display:none
   
