@@ -461,7 +461,7 @@
         <div class="modal hidden" id="add-data-modal">
             <div class="inner_modal">
                 <h2>Veri Ekle</h2>
-            
+
                 <form action="" id="add-data-form" data-operationid="">
                     <div class="form-group">Veri Adı:
                         <select name="datas" id="datas_select_input">
@@ -470,10 +470,10 @@
                                 <option value="<%= element._id %>">
                                     <%= element.dataName %>
                                 </option>
-    
+
                                 <% }) %>
                         </select>
-    
+
                         <div style="display: none;">
                             Opsiyon:
                             <select name="datasOption" id="datasOptions_select_input">
@@ -482,7 +482,7 @@
                                     <option value="">
                                         <%= element %>
                                     </option>
-    
+
                                     <% }) %>
                             </select>
                         </div>
@@ -497,7 +497,7 @@
                     </div>
                 </form>
             </div>
-             
+
         </div>
         <div class="modal hidden" id="add-session-modal">
             <div class="inner_modal">
@@ -506,7 +506,7 @@
 
                     <div class="form-group">Eklenecek Seans:
                         <input type="Number" min="1" id="add-session" name="addsession">
-    
+
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn save form-btn" id="add-session-save-button">Kaydet</button>
@@ -514,32 +514,32 @@
                     </div>
                 </form>
             </div>
-               
-            
-            
+
+
+
         </div>
 
         <div class="modal hidden" id="add_discount_modal">
             <div class="inner_modal">
-                 
+
                 <h2>İndirim Tanımla</h2>
-            
-            <form action="" id="add-discount-form" data-operationid="">
 
-                <div class="form-group">İndirim Miktarı(%)
-                    <input type="text" name="percentDiscountValue" id="percentDiscountValue" value="">
-                </div>
-                <div class="form-group">İndirim Miktarı(TL)
-                    <input type="text" name="discountValue" id="discountValue" value="">
-                </div>
+                <form action="" id="add-discount-form" data-operationid="">
 
-                <form-gro>
-                    <button type="submit" class="btn save form-btn" id="add-discount-save-button">Kaydet</button>
-                <button type="button" class="btn cancel form-btn">Vazgeç</button>
-                </form-gro>
-            </form>
+                    <div class="form-group">İndirim Miktarı(%)
+                        <input type="text" name="percentDiscountValue" id="percentDiscountValue" value="">
+                    </div>
+                    <div class="form-group">İndirim Miktarı(TL)
+                        <input type="text" name="discountValue" id="discountValue" value="">
+                    </div>
+
+                    <form-gro>
+                        <button type="submit" class="btn save form-btn" id="add-discount-save-button">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </form-gro>
+                </form>
             </div>
-           
+
 
         </div>
         <div class="modal hidden" id="edit-data-modal">
@@ -559,104 +559,102 @@
                     </div>
                 </form>
             </div>
-            
+
 
         </div>
         <div class="modal hidden" id="modal_edit_payment">
             <div class="inner_modal">
                 <h2>Ödeme Düzenle</h2>
-            <form action="" method="POST" id="edit-payment-form">
-                <div class="form-group" id="payment_user_edit">
-                    <input type="text" value="aaa" readonly>
-                </div>
-
-                <div class="selected_proccess_type_edit">
-                    <table class="selected_proccess_table_edit">
-                        <thead>
-                            <td>Ürün/Hizmet</td>
-                            <td>Adet</td>
-                            <td>Fiyat</td>
-                            <td>İndirim(TL)</td>
-                            <td>İndirim(%)</td>
-                            <td>Son Fiyat</td>
-                            <td>Ödenen</td>
-                        </thead>
-                        <tbody>
-
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>toplam:</td>
-                                <td id="total_value_edit"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <div class="payment_options ">
-                    <span>Tahsilat:</span>
-                    <div>
-                        <input type="radio" id="credit_card_ratio_edit" name="cashOrCard" value="Kredi Kartı">
-                          <label for="credit_card_ratio_edit">Kredi Kartı</label>
+                <form action="" method="POST" id="edit-payment-form">
+                    <div class="form-group" id="payment_user_edit">
+                        <input type="text" value="aaa" readonly>
                     </div>
-                    <div>
-                        <input type="radio" id="cash_ratio_edit" name="cashOrCard" value="Nakit">
-                          <label for="cash_ratio_edit">Nakit</label>
+
+                    <div class="selected_proccess_type_edit">
+                        <table class="selected_proccess_table_edit">
+                            <thead>
+                                <td>Ürün/Hizmet</td>
+                                <td>Adet</td>
+                                <td>Fiyat</td>
+                                <td>İndirim(TL)</td>
+                                <td>İndirim(%)</td>
+                                <td>Son Fiyat</td>
+                                <td>Ödenen</td>
+                            </thead>
+                            <tbody>
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>toplam:</td>
+                                    <td id="total_value_edit"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="description">Notlar:</label>
-                    <textarea name="description" id="description_for_edit" cols="10" rows="3"></textarea>
-                     
-                </div>
-                <div class="form-group">
-                <button type="submit" class="btn save form-btn" id="">Kaydet</button>
-                <button type="button" class="btn cancel form-btn">Vazgeç</button>
-                </div>
-                
+                    <div class="payment_options ">
+                        <span>Tahsilat:</span>
+                        <div>
+                            <input type="radio" id="credit_card_ratio_edit" name="cashOrCard" value="Kredi Kartı">
+                              <label for="credit_card_ratio_edit">Kredi Kartı</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="cash_ratio_edit" name="cashOrCard" value="Nakit">
+                              <label for="cash_ratio_edit">Nakit</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Notlar:</label>
+                        <textarea name="description" id="description_for_edit" cols="10" rows="3"></textarea>
+                         
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
 
 
-            </form>
+
+                </form>
             </div>
-            
+
         </div>
 
         <div class="modal hidden" id="modal_slider">
             <div class="inner_modal slider-modal">
-                <div>
-                    <div class="operation-image-informations">
-                        <span class="operation-name">Mezoterapi</span>
-                        <span class="operation-date">12.04.1992</span>
-                    </div>
-                    <i class="fa-solid fa-square-xmark"></i>
+
+                <div class="operation-image-informations">
+                    <span class="operation-name">Mezoterapi</span>
                 </div>
-                <div class="images-area">
-                    <div class="small_images">
-    
-                    </div>
-    
-    
-                    <!-- zoomist-container -->
-                    <div class="zoomist-container slider">
-                        <!-- zoomist-wrapper is required -->
-                        <div class="zoomist-wrapper">
-                            <!-- zoomist-image is required -->
-                            <div class="zoomist-image">
-                                <!-- you can add anything you want to zoom here. -->
-                                <img src="/photos/images-preview.jpg" alt="cat" />
-                            </div>
+                
+                <!-- zoomist-container -->
+                <div class="zoomist-container slider">
+                    <!-- zoomist-wrapper is required -->
+                    <div class="zoomist-wrapper">
+                        <!-- zoomist-image is required -->
+                        <div class="zoomist-image">
+                            <!-- you can add anything you want to zoom here. -->
+                            <img src="/photos/images-preview.jpg" alt="cat" />
                         </div>
                     </div>
-    
                 </div>
-            </div>
-           
+                <div class="small_images">
 
-           
+                </div>
+                <i class="fa-solid fa-xmark"></i>
+
+            </div>
+
+
+        </div>
+
+
+
 
         </div>
 

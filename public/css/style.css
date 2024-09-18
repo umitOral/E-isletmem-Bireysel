@@ -745,7 +745,8 @@ tfoot td {
   display: none;
 }
 .slider-modal{
-  width: 80% !important;
+  width: 100% !important;
+  height: 100%;
 }
 .save {
   background-color:var(--color-success) ;

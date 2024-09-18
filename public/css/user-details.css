@@ -311,7 +311,7 @@ i:hover{
  .small_images img {
   transition: all 0.2s ease-out;
   cursor: pointer;
-  border-radius: 1.5rem;
+  border-radius: 0.5rem;
 }
 
  .small_images img:hover {
@@ -324,11 +324,9 @@ i:hover{
 .small_images_options{
   display: flex;
   justify-content: center;
-  position: relative;
+  position: absolute;
   gap: 1rem;
-  top: -45px;
-  font-size: 16px;
-  background-color: white;
+  bottom: -0;
 }
 .small_images_options span{
  padding: 0.5rem;
@@ -469,45 +467,70 @@ i:hover{
   display: flex;
   justify-content: center;
   gap: 1rem;
+  position: relative;
+  top: 0;
+  margin: 0 auto;
+  z-index: 999;
+}
+.zoomist-container.slider{
+  margin: 0 auto;
+  width: 100%;
+}
+.operation-name{
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.5rem;
 }
 .modal_slider>div:first-child {
 display: flex;
 margin-bottom: 0.5rem;
 }
 
-.modal_slider i.fa-solid.fa-square-xmark {
+.slider-modal i.fa-solid.fa-xmark {
+  position: absolute;
+  top: 0;
+  right: 10px;
   cursor: pointer;
   color: red;
+  border:2px solid red;
   font-size: 2rem;
+  padding: 0.1rem 0.4rem;
+  z-index: 999;
 }
-.modal_slider i.fa-solid.fa-square-xmark:hover {
+.slider-modal i.fa-solid.fa-xmark:hover {
   color: rgb(171, 4, 4);
   
 }
 
-.images-area {
-  display: flex;
-  height: 95%;
-}
-.images-area img{
-  width: 100%;
+.single_image img{
+  width: 100px;
   height: auto;
+  object-fit: cover;
 }
-.images-area .small_images {
-  width: 20%;
-  height: 100%;
-  overflow-x: hidden;
+.small_images {
+  width: 100%;
+  overflow: auto;
+  position: absolute;
+  bottom: 0;
+  z-index: 999;
+  display: flex;
+  
+  gap: 2rem;
 }
-.images-area .zoomist-container{
+.upload_time{
+  background: white;
+}
+.single_image{
+  display: flex;
+  justify-content: center;
+  width: 100px;
+  height: 120px;
+}
+.zoomist-container{
   width: 75%;
 }
 
 
-.modal span {
-  font-weight: 500;
-  display: block;
-  
-}
 .small_images_options span:last-child{
   background-color: red;
   cursor: pointer;

@@ -178,14 +178,18 @@ async function getOperationImages(operationID) {
       if (response.photos.length !== 0) {
         response.photos.forEach((photo, index) => {
           allSmallImages.innerHTML += `
+          <div class="single_image">
           <img src="${photo.url}" alt="aaa">
           <div class="small_images_options">
-              <span>
+              
+              <span class="upload_time">
                   ${photo.uploadTime} .Gün
               </span>
               <span data-photoid="${photo._id}" data-operationid="${operationID}"  class="delete-photo">
               Sil
               </span>
+              
+          </div>
           </div>
           `;
         });
@@ -984,7 +988,7 @@ addDSessionSaveButton.addEventListener("click", (e) => {
 
 // show pics
 const operationName = document.querySelector(".operation-name");
-const operationDate = document.querySelector(".operation-date");
+
 function showImagesBtn() {
   const showImagesBtns = document.querySelectorAll(".fa-regular.fa-images");
   showImagesBtns.forEach((element) => {
@@ -994,9 +998,8 @@ function showImagesBtn() {
       );
       modalSlider.classList.remove("hidden");
       operationName.textContent =
-        e.target.parentElement.parentElement.children[2].textContent;
-      operationDate.textContent =
         e.target.parentElement.parentElement.children[1].textContent;
+
       const zoomist = new Zoomist(".slider", {
         maxScale: 5,
         slider: true,
@@ -1116,7 +1119,7 @@ function editDatasBtn() {
 // close the slider modal
 
 const xBtn = document.querySelector(
-  "#modal_slider i.fa-solid.fa-square-xmark "
+  "#modal_slider i.fa-solid.fa-xmark"
 );
 xBtn.addEventListener("click", () => {
   modalSlider.classList.add("hidden");
