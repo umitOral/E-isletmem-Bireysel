@@ -62,18 +62,24 @@ const getUsersAllSessions = async (req, res, next) => {
 const findUsers = async (req, res, next) => {
   try {
     //search
+    console.log(req.query)
     let query = User.find();
+    const searchObject = {};
     if (req.query) {
-      const searchObject = {};
-      const regex = new RegExp(req.query.user, "i");
-      searchObject["name"] = regex;
+      for (const key in req.query) {
+        const element = req.query[key];
+        if (element.length!==0) {
+          searchObject[key]=element
+        }
+
+      }
+      console.log(searchObject)
       searchObject["company"] = res.locals.company._id;
       searchObject["role"] = "customer";
 
-      // searchObject["title"] = regex
       query = query.where(searchObject);
     }
-
+  
     //pagination
     // 1 2 3 4 5..6 7 8
 
@@ -83,12 +89,8 @@ const findUsers = async (req, res, next) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const total = await User.count()
-      .where("role")
-      .equals("customer")
-      .where("company")
-      .equals(res.locals.company._id);
-    const lastpage = Math.round(total / limit);
+      
+    const lastpage = Math.round(query.length / limit);
     const pagination = {};
     pagination["page"] = page;
     pagination["lastpage"] = lastpage;
@@ -99,7 +101,7 @@ const findUsers = async (req, res, next) => {
         limit: limit,
       };
     }
-    if (endIndex < total) {
+    if (endIndex < query.length) {
       pagination.next = {
         page: page + 1,
         limit: limit,
@@ -113,11 +115,10 @@ const findUsers = async (req, res, next) => {
     res.status(200).render("search-results", {
       header: "hastalar",
       data,
-      total,
       count: data.length,
       pagination: pagination,
       link: "users",
-      defaultSearchValue: req.query.user,
+      searchObject
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -223,8 +224,8 @@ const createUser = async (req, res, next) => {
     const userPhone = req.body.phone;
     req.body.company = res.locals.company;
 
-    const searchEmail = await User.findOne({ email: userEmail,company:res.locals.company});
-    const searchPhone = await User.findOne({ phone: userPhone,company:res.locals.company});
+    const searchEmail = await User.findOne({ email: userEmail, company: res.locals.company });
+    const searchPhone = await User.findOne({ phone: userPhone, company: res.locals.company });
     console.log(searchEmail)
     if (searchEmail) {
       return next(
@@ -663,14 +664,14 @@ const getSessionsofOperation = async (req, res, next) => {
         if (response.sessionOfOperation.length === 0) {
           res.status(200).json({
             succes: false,
-            data:{},
+            data: {},
             message: "işleme ait seanslar bulunmamaktadır.",
           });
-        
+
         } else {
           res.status(200).json({
             succes: true,
-            data:response,
+            data: response,
             message: "işleme ait seanslar çekildi.",
           });
         }

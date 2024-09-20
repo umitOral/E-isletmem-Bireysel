@@ -257,6 +257,7 @@ const getUsersPage = async (req, res, next) => {
         limit: limit,
       };
     }
+    console.log(users)
 
     res.status(200).render("users", {
       users,

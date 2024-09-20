@@ -26,8 +26,10 @@
                     <div class="search">
                         <form autocomplete="off" action="./search?page=1&limit=3">
                             <div class="autocomplete form-group">
-                                <input id="myInput" type="text" name="user" placeholder="Hasta Seç" value="<%= defaultSearchValue %>">
-                                
+                                <input id="myInput" type="text" name="name" placeholder="Hasta ismi" value="<%= searchObject.name %>">
+                                <input id="myInput" type="text" name="surname" placeholder="Soyad" value="<%= searchObject.surname %>">
+                                <input id="myInput" type="text" name="phone" placeholder="telefon">
+                                <input id="myInput" type="text" name="identify" placeholder="TC">
                                 <input type="submit" value="Ara">
                             </div>
 
@@ -56,6 +58,7 @@
                                 <th>İsim<i class="ph-bold ph-arrow-up"></i></th>
                                 <th>Soyisim<i class="ph-bold ph-arrow-up"></i></td>
                                 <th>Telefon<i class="ph-bold ph-arrow-up"></i></th>
+                                <th>TC.No<i class="ph-bold ph-arrow-up"></i></th>
                                 
                             </thead>
                             <tbody id="userList">
@@ -68,8 +71,11 @@
                                         <td>
                                             <%= user.surname %>
                                         </td>
+                                        <td>
+                                            <%= user.phone %>
+                                        </td>
                                         
-                                        <td><span class="continue"> <%= user.phone %></span> </td>
+                                        <td><span> <%=user.identify%></span> </td>
                                         <td><a href="./<%= user._id %>">Detay</a></td>
                                     </tr>
                                     <% }) %>
@@ -82,7 +88,7 @@
                         
                     </div>
                     <div class="pagination-describe">
-                        Toplam <%= total %> hasta içerisinden <%= count %> kişi listelendi
+                        Toplam <%= count %> Sonuç içerisinden <%= count %> kişi listelendi
                     </div>
                     <div class="pagination">
                         
