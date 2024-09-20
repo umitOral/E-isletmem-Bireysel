@@ -58,6 +58,7 @@ import {
 import {
   addData,
   addOptiontoData,
+  deleteOptionofData,
   editOptionofData,
   getData,
   deleteOption,
@@ -232,6 +233,7 @@ router.route("/services/addService").post(checkPriviliges("service_add"),addServ
 router.route("/datas/").get(checkPriviliges("data_view"),getDatasPage);
 router.route("/datas/:dataID").get(checkPriviliges("data_view"),getData);
 router.route("/datas/addOptiontoData/:id").post(checkPriviliges("option_add"),addOptiontoData);
+router.route("/datas/deleteOptionofData/:id/:optionName").get(checkPriviliges("option_add"),deleteOptionofData);
 router.route("/datas/editOption/:dataId/:optionName").post(checkPriviliges("data_update"),editOptionofData);
 router.route("/datas/deleteOption/:dataID/:operationID").get(checkPriviliges("data_delete"),deleteOption);
 router.route("/datas/addData").post(checkPriviliges("data_add"),addData);

@@ -21,6 +21,27 @@ tr .inputs {
     cursor: pointer;
     display: none;
 }
+button {
+    border: 1px solid rgba(128, 128, 128, 0.394);
+    display: block;
+    background-color: #f4f6f8;
+    border-radius: var(--border-radius-1);
+    padding: 0.5rem;
+    color: var(--color-dark-variant);
+    cursor: pointer;
+    width: 100%;
+}
+i {
+cursor: pointer;
+}
+.fa-trash,.fa-pen-to-square{
+    border: 1px solid gray;
+    border-radius: var(--border-radius-1);
+    padding: 0.2rem;
+}
+.fa-trash:hover,.fa-pen-to-square:hover{
+    background-color: rgb(225, 224, 224);
+}
 .inputs i.showed{
     display: block;
 }

@@ -25,7 +25,7 @@
   --color-dark: #363949;
   --color-light: rgba(132, 139, 200, 0.18);
   --color-primary-variant: #111e88;
-  --color-dark-variant: #677483;
+  --color-dark-variant: #1d1f21;
   --color-border-color: #bcbec15d;
 
   --color-background: #f6f6f9;
@@ -855,14 +855,17 @@ table thead {
 
 .btn {
   width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  color: var(--color-white);
-  font-weight: 400;
-  font-size: 1.2rem;
+  padding: 0.7rem;
+  border-radius: var(--border-radius-1);
+  border: 1px solid rgba(128, 128, 128, 0.394);
+display: block;
   cursor: pointer;
+  color: var(--color-dark-variant);
 }
+.btn.success {
+  background-color: var(--color-success);
+}
+
 .form-btn {
   margin-top: 1rem;
 }

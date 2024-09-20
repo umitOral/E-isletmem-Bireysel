@@ -1,6 +1,7 @@
 import Operation from "../models/OperationsModel.js";
 import Session from "../models/sessionModel.js";
 import Company from "../models/companyModel.js";
+import { CustomError } from "../helpers/error/CustomError.js";
 
 const addData = async (req, res) => {
   try {
@@ -41,6 +42,31 @@ const addOptiontoData = async (req, res) => {
     res.status(500).json({
       succes: false,
       message: "usercontroller error",
+    });
+  }
+};
+const deleteOptionofData = async (req, res) => {
+  try {
+    console.log(req.params);
+    
+    await Company.updateOne(
+      { _id: res.locals.company._id },
+      { $pull: { "serviceDatas.$[elm].dataOptions": req.params.optionName} },
+      { arrayFilters: [{ "elm._id": req.params.id }], upsert: true }
+    )
+      .then((response) => res.status(201).json({
+        succes:true,
+        message:"opsiyon başarıyla silindi"
+      }))
+      .catch((err) =>{
+        return new CustomError("silinirken bir hata yaşandı",500,err)
+      });
+
+   
+  } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: error,
     });
   }
 };
@@ -125,6 +151,6 @@ export {
   addOptiontoData,
   editOptionofData,
   getData,
-  
+  deleteOptionofData,
   deleteOption,
 };

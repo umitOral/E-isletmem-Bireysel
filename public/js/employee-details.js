@@ -83,9 +83,9 @@ workHours:workHours,
       console.log(response);
       ui.showNotification(true, response.message);
       modalUser.classList.add("hidden");
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 800);
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
     })
     .catch((err) => ui.showNotification(false, err));
 }

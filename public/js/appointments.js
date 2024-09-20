@@ -26,7 +26,7 @@ const calendar = document.querySelector(".calendar"),
 
 const appointmentListDate = document.querySelector(".appointment-list");
 const addUserBtn = document.querySelector("#add-user-btn");
-const addUserModal = document.querySelector(".add_customer");
+const addUserModal = document.querySelector("#add_customer");
 const addUserForm = document.querySelector("#add-user-form");
 const userSelect = document.querySelector("#user-select");
 const dataList=document.querySelector("#user-names")
@@ -45,7 +45,7 @@ showDatesAtPage();
 getAllSessions();
 
 addUserBtn.addEventListener("click",()=>{
-  addUserModal.classList.add("showed_modal")
+  addUserModal.classList.remove("hidden")
 })
 addUserForm.addEventListener("submit",(e)=>{
   e.preventDefault()
@@ -68,7 +68,7 @@ addUserForm.addEventListener("submit",(e)=>{
     dataList.innerHTML+=`
     <option data-userid="${response.data._id}" data-userdata="${response.data.name+response.data.surname}" value="${response.data.name+" "+response.data.surname}"></option>
     `
-    addUserModal.classList.remove("showed_modal")
+    addUserModal.classList.add("hidden")
   })
   .catch(err=>console.log(err))
 })
