@@ -12,6 +12,15 @@ export class UI {
         }
     })
   }
+  deleteZeroFromPhone(){
+    const phoneInput = document.querySelector("#phone");
+    
+    phoneInput.addEventListener("input", (e) => {
+      if (e.target.value.startsWith("0")) {
+        e.target.value=e.target.value.substring(1)
+      }
+    })
+  }
   closeAllModals(){
     console.log("aferin")
     const allModals=document.querySelectorAll(".modal")

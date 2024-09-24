@@ -5,6 +5,7 @@ import { UI } from "./ui.js";
 
 const ui = new UI();
 ui.closeNotification()
+ui.ui.deleteZeroFromPhone()
 
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
@@ -38,6 +39,7 @@ let addSessionForm = document.querySelector("#add-session-form");
 let addDiscountForm = document.querySelector("#add-discount-form");
 
 let datasSelectInput = document.querySelector("#datas_select_input");
+
 
 // modals
 const allModals = document.querySelectorAll(".modal");
@@ -121,6 +123,7 @@ datasSelectInput.addEventListener("change", (e) => {
     })
     .catch((err) => console.log(err));
 });
+
 
 function deleteButtonFunction(selector) {
   let deleteImageBtn = document.querySelectorAll(".delete-photo");

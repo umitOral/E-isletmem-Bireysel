@@ -3,10 +3,12 @@ const ui = new UI();
 import { Request } from "./requests.js";
 const request = new Request();
 ui.closeNotification()
+ui.deleteZeroFromPhone()
 
 const form = document.querySelector("#register-form");
 const allModals = document.querySelectorAll(".modal");
 const cancelButtons = document.querySelectorAll(".cancel");
+
 
 eventListeners();
 function eventListeners() {

@@ -3,16 +3,20 @@ const ui = new UI();
 import { Request } from "./requests.js";
 const request = new Request();
 ui.closeNotification()
+ui.deleteZeroFromPhone()
 
 const savebutton = document.querySelector(".save_button");
 const allModals = document.querySelectorAll(".modal");
 const cancelButtons = document.querySelectorAll(".cancel");
 const form = document.querySelector("#register-form");
 
+
 eventListeners();
 function eventListeners() {
   form.addEventListener("submit", createUser);
+  
 }
+
 
 cancelButtons.forEach(element => {
   element.addEventListener( "click",()=>{
