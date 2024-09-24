@@ -5,7 +5,7 @@ import { UI } from "./ui.js";
 
 const ui = new UI();
 ui.closeNotification()
-ui.ui.deleteZeroFromPhone()
+ui.deleteZeroFromPhone()
 
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
