@@ -190,19 +190,19 @@ function deletePayment(e) {
 }
 
 const paymentCreditCartRatio = document.querySelector(
-  ".modal_edit_payment  #credit_card_ratio_edit"
+  "#modal_edit_payment  #credit_card_ratio_edit"
 );
 const paymentCCashRatio = document.querySelector(
-  ".modal_edit_payment  #cash_ratio_edit"
+  "#modal_edit_payment  #cash_ratio_edit"
 );
 const paymentUserEdit = document.querySelector(
-  ".modal_edit_payment  #payment_user_edit input"
+  "#modal_edit_payment  #payment_user_edit input"
 );
 const paymentDescriptionEdit = document.querySelector(
-  ".modal_edit_payment  #description_for_edit"
+  "#modal_edit_payment  #description_for_edit"
 );
 const editPaymentForm = document.querySelector(
-  ".modal_edit_payment #edit-payment-form"
+  "#modal_edit_payment #edit-payment-form"
 );
 const saveEditModal = document.querySelector(
   "#modal_edit_payment #save_update_btn"
@@ -229,7 +229,7 @@ saveEditModal.addEventListener("click",(e) => {
       editPaymentModal.classList.add("hidden");
       setTimeout(() => {
         filterPayment();
-      }, 1000);
+      }, 500);
     })
     .catch((err) => console.log(err));
   e.preventDefault();

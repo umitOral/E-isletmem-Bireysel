@@ -11,7 +11,8 @@
 .payments-filter-button {
     padding: 0.75rem;
 }
-#modal_payment .inner_modal {
+
+#modal_payment .inner_modal,#modal_edit_payment .inner_modal {
 width:min-content;
 }
 
