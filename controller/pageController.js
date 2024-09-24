@@ -163,39 +163,51 @@ const getPricesPage = (req, res, next) => {
 const getservicesPage = async (req, res, next) => {
   try {
     let company = res.locals.company;
+    console.log("burası")
+    let services = await company.services;
+    // console.log(services)
+    console.log(req.query)
 
-    const services = await company.services;
+
+    if (req.query.serviceName) {
+      
+      if (req.query.serviceName !== "") {
+        
+        services = services.filter((item) => item.serviceName.includes(req.query.serviceName.toLowerCase()))
+      }
+    }
+
 
     res.status(200).render("services", {
+      serviceName: req.query.serviceName,
       services,
-
       link: "services",
     });
+
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       succes: false,
-      message: "pagecontroller",
+      message: error,
     });
   }
 };
 const getDatasPage = async (req, res, next) => {
   try {
-    
-    let serviceDatas=res.locals.company.serviceDatas
-  
-if (req.query.dataName) {
-  if (req.query.dataName!=="") {
-    serviceDatas=serviceDatas.filter((item)=>item.dataName.includes(req.query.dataName.toLowerCase()))
-  }
-}
 
-    console.log(serviceDatas)
-  
-    
+    let serviceDatas = res.locals.company.serviceDatas
+
+    if (req.query.dataName) {
+      if (req.query.dataName !== "") {
+        serviceDatas = serviceDatas.filter((item) => item.dataName.includes(req.query.dataName.toLowerCase()))
+      }
+    }
+
+
     res.status(200).render("datasPage", {
       link: "services",
-      serviceDatas:serviceDatas,
-      dataName:req.query.dataName
+      serviceDatas: serviceDatas,
+      dataName: req.query.dataName
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -206,7 +218,7 @@ const getRegisterPage = (req, res, next) => {
   try {
     res.status(200).render("front/register", {
       link: "register",
-      RECAPTCHA_SITEKEY:process.env.RECAPTCHA_SITEKEY
+      RECAPTCHA_SITEKEY: process.env.RECAPTCHA_SITEKEY
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -216,7 +228,7 @@ const getContactPage = (req, res, next) => {
   try {
     res.status(200).render("front/contact-us", {
       link: "register",
-      RECAPTCHA_SITEKEY:process.env.RECAPTCHA_SITEKEY
+      RECAPTCHA_SITEKEY: process.env.RECAPTCHA_SITEKEY
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
