@@ -10,6 +10,7 @@ import { Ticket } from "../models/ticketModel.js";
 
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
+import { query } from "express";
 
 let now = new Date();
 let day = now.getDate();
@@ -179,8 +180,22 @@ const getservicesPage = async (req, res, next) => {
 };
 const getDatasPage = async (req, res, next) => {
   try {
+    
+    let serviceDatas=res.locals.company.serviceDatas
+  
+if (req.query.dataName) {
+  if (req.query.dataName!=="") {
+    serviceDatas=serviceDatas.filter((item)=>item.dataName.includes(req.query.dataName.toLowerCase()))
+  }
+}
+
+    console.log(serviceDatas)
+  
+    
     res.status(200).render("datasPage", {
       link: "services",
+      serviceDatas:serviceDatas,
+      dataName:req.query.dataName
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
