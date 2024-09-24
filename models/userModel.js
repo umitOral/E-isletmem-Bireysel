@@ -29,6 +29,10 @@ const userSchema = new Schema({
     company: {
         type: Schema.Types.ObjectId,
         ref: "Company"
+    },
+    identity:{
+        type:Number,
+        trim:true,
     }
 
 
