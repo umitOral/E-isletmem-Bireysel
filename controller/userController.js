@@ -69,7 +69,7 @@ const findUsers = async (req, res, next) => {
       for (const key in req.query) {
         const element = req.query[key];
         if (element.length!==0) {
-          searchObject[key]=element
+          searchObject[key]={$regex :element}
         }
 
       }
