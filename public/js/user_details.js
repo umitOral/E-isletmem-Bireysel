@@ -248,6 +248,12 @@ function imagesSmallHandled() {
   });
 }
 
+let horizontal = document.querySelector(".small_images");
+horizontal.addEventListener("wheel", (e)=>{
+e.preventDefault();
+horizontal.scrollLeft += e.deltaY;
+})
+
 // user details modal -----------------
 
 const saveModal = document.querySelectorAll(".modal .save_button");
@@ -543,29 +549,30 @@ orderModalBtn.addEventListener("click", () => {
 
 // add order section
 
-// const addOrderBtn = document.querySelector("#add-order");
+const addOperationForm = document.querySelector("#add-operation");
 
-// addOrderBtn.addEventListener("click", () => {
-//   let data = {
-//     selectedOperations,
-//     discount: Number(percentDiscount.value),
-//   };
+addOperationForm.addEventListener("submit", () => {
+  let data = {
+    selectedOperations,
+    discount: Number(percentDiscount.value),
+  };
 
-//   request
-//     .postWithUrl("./" + userID + "/addOperation", data)
-//     .then((response) => {
-//       ui.showNotification(response.succes, response.message);
-//       modalOrders.classList.toggle("showed_modal");
-//       selectedProcessTable.innerHTML = "";
-//       selectedOperations = [];
-//       percentDiscount.value = 0;
-//       proccessType.innerHTML += `<option value="" selected disabled hidden>İşlem seçiniz</option>`;
+  request
+    .postWithUrl("./" + userID + "/addOperation", data)
+    .then((response) => {
+      ui.showNotification(response.succes, response.message);
+      modalOrders.classList.add("hidden");
+      selectedProcessTable.innerHTML = "";
+      selectedOperations = [];
+      percentDiscount.value = 0;
+      proccessType.innerHTML += `<option value="" selected disabled hidden>İşlem seçiniz</option>`;
 
-//       calculateTotal();
-//       getAllOperations();
-//     })
-//     .catch((err) => console.log(err));
-// });
+      calculateTotal();
+      
+      getAllOperations();
+    })
+    .catch((err) => console.log(err));
+});
 
 // add picture
 
@@ -1173,7 +1180,7 @@ function addPicture(e) {
       loader.classList.toggle("showed");
       if (response.success === true) {
       }
-      modalImage.classList.remove("showed_modal");
+      modalImage.classList.add("hidden");
       ui.showNotification(true, response.message);
       uploadFiles = [];
       imageInput.value = "";

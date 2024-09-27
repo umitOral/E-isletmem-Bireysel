@@ -401,7 +401,7 @@
             <div class="inner_modal">
                 <h2>İşlem Ekle</h2>
 
-                <form action="./<%= singleUser._id %>/addOperation" onsubmit="return false" method="POST"
+                <form id="add-operation" action="./<%= singleUser._id %>/addOperation" onsubmit="return false" method="POST" 
                     enctype="multipart/form-data">
 
 
@@ -460,7 +460,7 @@
                     <div class="processes_datas form-group">
                     </div>
                     <div class="form-group">
-                        <button class="btn save form-btn" type="submit" id="edit-user">Kaydet</button>
+                        <button class="btn save form-btn" type="submit" id="add-operation">Kaydet</button>
                         <button type="button" class="btn cancel form-btn">Vazgeç</button>
                     </div>
 

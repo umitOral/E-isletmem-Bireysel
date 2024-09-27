@@ -507,6 +507,9 @@ margin-bottom: 0.5rem;
   height: auto;
   object-fit: cover;
 }
+.zoomist-zoomer{
+display: none;
+}
 .small_images {
   width: 100%;
   overflow: auto;
