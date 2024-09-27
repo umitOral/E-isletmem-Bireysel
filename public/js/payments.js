@@ -261,19 +261,19 @@ function addExpensesModalShow() {
 
 // start date
 // lazım olacak
-function toDateInputValue(dateObject){
-  const local = new Date(dateObject);
-  local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
-  return local.toJSON().slice(0,10);
-};
+// function toDateInputValue(dateObject){
+//   const local = new Date(dateObject);
+//   local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+//   return local.toJSON().slice(0,10);
+// };
 
 function startingDate() {
+let newDate=new Date()
+console.log(newDate)
 
-  startDate.value = toDateInputValue(new Date());
-
-  let newDate=new Date()
-  newDate.setDate(newDate.getDate()+1)
-  endDate.value = toDateInputValue(newDate);
+  startDate.value = newDate.toISOString().substr(0, 10);
+  
+  endDate.value =startDate.value;
  
 }
 

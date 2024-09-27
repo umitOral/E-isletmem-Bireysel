@@ -234,6 +234,7 @@ const editPayment = async (req, res, next) => {
 };
 const getSearchedPayments = async (req, res, next) => {
   try {
+    console.log(req.query)
     function toDateInputValue(dateObject) {
       const local = new Date(dateObject);
       local.setMinutes(
@@ -241,10 +242,15 @@ const getSearchedPayments = async (req, res, next) => {
       );
       return local;
     }
+    let endDate=new Date(req.query.endDate)
+    let startDate=new Date(req.query.startDate)
+    startDate.setDate(startDate.getDate()-1)
+    startDate.setHours(24,0,0)
+    endDate.setHours(24,0,0)
+    // console.log(startDate)
+    //  startDate = toDateInputValue(new Date(startDate));
 
-    let startDate = toDateInputValue(new Date(req.query.startDate));
-
-    let endDate = toDateInputValue(new Date(req.query.endDate));
+    // let endDate = toDateInputValue(new Date(req.query.endDate));
 
     console.log(startDate);
     console.log(endDate);
