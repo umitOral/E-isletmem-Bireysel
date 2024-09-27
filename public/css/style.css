@@ -191,6 +191,7 @@ hr {
   top:80px;
   right: 10px;
   width: 20%;
+  z-index: 999;
 }
 .information {
   display: flex;

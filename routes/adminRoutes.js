@@ -5,11 +5,11 @@ import {
   getSettingsPage,
   getAdminPage,
   getUsersPage,
-  deneme,
   getAppointmentsPage,
   getUserPage,
   getSingleEmployeePage,
   getservicesPage,
+  getProductsPage,
   getEmployeesPage,
   getPaymentsPage,
   getDatasPage,
@@ -55,6 +55,9 @@ import {
   activateService,
   deactivateService,
 } from "../controller/serviceControllers.js";
+import {
+  addProduct,searchProduct,deneme
+} from "../controller/productControllers.js";
 import {
   addData,
   addOptiontoData,
@@ -222,21 +225,25 @@ router.route("/appointments").get(getAppointmentsPage);
 
 router.route("/logout").get(logOut);
 
-router.route("/services/").get(checkPriviliges("service_view"),getservicesPage);
-router.route("/services/search").get(checkPriviliges("service_view"),findServices);
+router.route("/services/").get(checkPriviliges("service_view"), getservicesPage);
+router.route("/products/").get(checkPriviliges("product_view"), getProductsPage);
+router.route("/products/addProduct").post(checkPriviliges("product_add"), addProduct);
+router.route("/products/searchProduct").post(checkPriviliges("product_add"), searchProduct);
+router.route("/products/deneme").post(checkPriviliges("product_add"), deneme);
+router.route("/services/search").get(checkPriviliges("service_view"), findServices);
 
-router.route("/services/:id/editService").post(checkPriviliges("service_update"),editService);
-router.route("/services/:id/deactivateService").get(checkPriviliges("service_update"),deactivateService);
-router.route("/services/:id/activateService").get(checkPriviliges("service_update"),activateService);
-router.route("/services/addService").post(checkPriviliges("service_add"),addService);
+router.route("/services/:id/editService").post(checkPriviliges("service_update"), editService);
+router.route("/services/:id/deactivateService").get(checkPriviliges("service_update"), deactivateService);
+router.route("/services/:id/activateService").get(checkPriviliges("service_update"), activateService);
+router.route("/services/addService").post(checkPriviliges("service_add"), addService);
 
-router.route("/datas/").get(checkPriviliges("data_view"),getDatasPage);
-router.route("/datas/:dataID").get(checkPriviliges("data_view"),getData);
-router.route("/datas/addOptiontoData/:id").post(checkPriviliges("option_add"),addOptiontoData);
-router.route("/datas/deleteOptionofData/:id/:optionName").get(checkPriviliges("option_add"),deleteOptionofData);
-router.route("/datas/editOption/:dataId/:optionName").post(checkPriviliges("data_update"),editOptionofData);
-router.route("/datas/deleteOption/:dataID/:operationID").get(checkPriviliges("data_delete"),deleteOption);
-router.route("/datas/addData").post(checkPriviliges("data_add"),addData);
+router.route("/datas/").get(checkPriviliges("data_view"), getDatasPage);
+router.route("/datas/:dataID").get(checkPriviliges("data_view"), getData);
+router.route("/datas/addOptiontoData/:id").post(checkPriviliges("option_add"), addOptiontoData);
+router.route("/datas/deleteOptionofData/:id/:optionName").get(checkPriviliges("option_add"), deleteOptionofData);
+router.route("/datas/editOption/:dataId/:optionName").post(checkPriviliges("data_update"), editOptionofData);
+router.route("/datas/deleteOption/:dataID/:operationID").get(checkPriviliges("data_delete"), deleteOption);
+router.route("/datas/addData").post(checkPriviliges("data_add"), addData);
 
 router
   .route("/settings/")
@@ -254,6 +261,6 @@ router.use(
   appointmentsRoutes
 );
 
-router.use("/statics",checkPriviliges("statics_view"),staticsRoutes)
+router.use("/statics", checkPriviliges("statics_view"), staticsRoutes)
 
 export default router;

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/users.css">
+        <link rel="stylesheet" href="/css/services.css">
+
+</head>
+
+<body>
+    <%- include("partials/aside.ejs") %>
+
+        <section id="content">
+            <!---------- left aside ------------->
+            <%- include('partials/header.ejs') %>
+
+
+                <!----------- end of sidebar ----------->
+
+                <main>
+                    <div class="header">
+                        <h1> Ürünler</h1>
+                    </div>
+                    <div class="search">
+                        <form autocomplete="off" action="./product/searchProduct" id="search-product-form">
+                            <div class="autocomplete form-group">
+                                <input id="myInput" type="text" name="barcode" value="" placeholder="<%= "Ürün Barkodu"%>" autofocus>
+                                <input type="submit" value="Ara">
+                            </div>
+
+                        </form>
+                        <div id="add_product_btn"><button class="buttons">Barkodsuz Ürün Ekle +</button></div>
+
+
+                    </div>
+
+                    <div class="print">
+
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Yazdır &nbsp; &#10140</label>
+                            <label for="" class="to_pdf">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
+                        </div>
+
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+
+                                <th>Ürün adı<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Fiyat<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Stok<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Aktiflik<i class="fa-solid fa-arrow-up"></i></th>
+                                <th></th>
+                            </thead>
+                            <tbody id="userList">
+                                <% products.forEach(product=> { %>
+                                    <tr>
+
+                                        <td>
+                                            <%= product.productName %>
+                                        </td>
+                                        
+                                        <td>
+                                            <div class="inputs" data-productID="<%= product._id %>">
+                                                <input type="number" class="price_inputs"
+                                                    value="<%= product.price %>">tl
+                                                <i class="ph ph-floppy-disk input_save_buttons"></i>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inputs" data-productID="<%= product._id %>">
+                                                <input type="number" class="price_inputs"
+                                                    value="<%= product.stock %>">adet
+                                                <i class="ph ph-floppy-disk input_save_buttons"></i>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inputs">
+                                                <% if(product.activeorNot===true){ %>
+                                                    <span class="continue">Aktif</span>
+                                                    <% } else{ %>
+                                                        <span class="finish">Pasif</span>
+                                                        <% } %>
+    
+                                                        <% if(product.activeorNot){ %>
+                                                            <a class="button"
+                                                                    href="./services/<%= product._id %>/deactivateService">Pasif Et</a>
+                                                            
+                                                            <% } else{ %>
+                                                                <a href="./services/<%= product._id %>/activateService">Aktif Et</a>
+                                                                
+                                                                <% } %>
+                                            </div>
+                                            
+                                        </td>
+                                        <td>
+                                            <select name="" id="">
+                                                <option value="" disable hidden>seçenekler</option>
+                                                <option value="">Ürün detay</option>
+                                                <option value="">xxx</option>
+                                            </select>
+                                        </td>
+                                       
+
+
+                                    </tr>
+                                    <% }) %>
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+
+                </main>
+
+
+        </section>
+        <div class="modal hidden" id="add_product">
+            <div class="inner_modal">
+                <h2>Yeni Ürün Ekle</h2>
+                <form action="./products/addProduct" method="POST" id="add-product-form">
+                    <div class="form-group ">
+                        <span>Ürün Markası:</span>
+                        <input type="text" name="brand" id="product-brand" required placeholder="Ürün Markası giriniz" readonly>
+                    </div>
+                    <div class="form-group ">
+                        <span>Ürün Adı:</span>
+                        <input type="text" name="productName" id="product-name" required placeholder="Ürün adı giriniz" readonly>
+                    </div>
+                    <div class="form-group ">
+                        <span>Ürün Kategorisi:</span>
+                        <input type="text" name="category" id="product-category" required placeholder="kategori giriniz" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <span>Satış Fiyatı</span>
+                        <input type="number" name="price" id="product-price" placeholder="Ürün için fiyat giriniz" required>
+                    </div>
+                    <div class="form-group">
+                        <span>Stok</span>
+                        <input type="number" name="stock" id="product-stock" placeholder="Elinizdeki stoğu giriniz"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <span>Barkod</span>
+                        <input type="number" name="barcode" id="barcode" data-type="" placeholder="Ürünün barkodunu okutun" readonly>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="add-product">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="information-modal-wrapper"></div>
+
+
+        <script type="module" src="/js/main.js"></script>
+        <script src="/js/sidebar.js"></script>
+        <script type="module" src="/js/products.js"></script>
+
+
+
+
+
+</body>
+
+</html>

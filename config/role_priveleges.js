@@ -183,6 +183,24 @@ export const role_privileges = {
       description: "Service Update",
     },
     {
+      key: "product_view",
+      name: "Ürün Görüntüleme",
+      group: "PRODUCTS",
+      description: "Product View",
+    },
+    {
+      key: "product_add",
+      name: "Ürün Ekleme",
+      group: "PRODUCTS",
+      description: "Product Add",
+    },
+    {
+      key: "product_update",
+      name: "Ürün Düzenleme",
+      group: "PRODUCTS",
+      description: "Product Update",
+    },
+    {
       key: "statics_view",
       name: "İstatistik Görüntüleme",
       group: "STATICS",

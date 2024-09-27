@@ -54,7 +54,6 @@
                             <thead>
 
                                 <th>Hizmet<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Veri<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Fiyat<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Aktiflik<i class="fa-solid fa-arrow-up"></i></th>
                             </thead>
@@ -65,11 +64,7 @@
                                         <td>
                                             <%= service.serviceName %>
                                         </td>
-                                        <td>
-                                            <% service.serviceData.forEach(element=> { %>
-                                                <%= element %>
-                                                    <% }) %>
-                                        </td>
+                                        
                                         <td>
                                             <div class="inputs" data-servicesID="<%= service._id %>">
                                                 <input type="number" class="price_inputs"

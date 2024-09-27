@@ -6,7 +6,6 @@ import { orderSuccesEmail } from "./mailControllers.js";
 import { SERVICES_LIST,DATAS_LIST,ROLES_LIST} from "../config/status_list.js";
 import { role_privileges} from "../config/role_priveleges.js";
 
-import axios from "axios";
 import CryptoJS from "crypto-js";
 
 import Iyzipay from "iyzipay";

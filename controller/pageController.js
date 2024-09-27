@@ -11,6 +11,7 @@ import { Ticket } from "../models/ticketModel.js";
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { query } from "express";
+import { getProductModel } from "../tenantDb.js";
 
 let now = new Date();
 let day = now.getDate();
@@ -186,6 +187,24 @@ const getservicesPage = async (req, res, next) => {
 
   } catch (error) {
     console.log(error)
+    res.status(500).json({
+      succes: false,
+      message: error,
+    });
+  }
+};
+const getProductsPage = async (req, res, next) => {
+  try {
+    let tenantId = res.locals.company._id;
+    let productModel=await getProductModel(tenantId)
+    const products=await productModel.find()
+    res.status(200).render("products", {
+      products,
+      link: "products",
+    });
+
+  } catch (error) {
+    
     res.status(500).json({
       succes: false,
       message: error,
@@ -532,5 +551,6 @@ export {
   getSingleEmployeePage,
   getDatasPage,
   deneme,
-  getcompanyPaymentResult
+  getcompanyPaymentResult,
+  getProductsPage
 };
