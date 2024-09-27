@@ -270,7 +270,7 @@ const createUser = async (req, res, next) => {
                 name: response.name,
                 surname: response.surname,
               },
-              message: "Kulllanıcı başarıyla kaydedildi.",
+              message: "hasta başarıyla kaydedildi.",
             });
           }
         );
