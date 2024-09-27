@@ -320,6 +320,7 @@ i:hover{
 
  .small_images img.focused {
   border: 3px solid rgb(231, 6, 6);
+  opacity: 1;
 }
 .small_images_options{
   display: flex;
@@ -524,6 +525,7 @@ display: none;
   background: white;
 }
 .single_image{
+  opacity: 0.6;
   display: flex;
   justify-content: center;
   width: 100px;
