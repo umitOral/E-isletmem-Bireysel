@@ -7,6 +7,7 @@
   --color-main-lighter2: #94f2f2;
   --color-main-lighter2: #94f2f2;
   --color-main-lighter3: #b6f2f2;
+  --color-main-lighter4: #04d9d916;
   --color-main-gray: #f2f2f2;
   --hue: 223;
   --bg: hsl(var(--hue), 10%, 90%);
@@ -64,6 +65,10 @@ html {
 }
 input {
   font-family: "Poppins", sans-serif;
+}
+
+.search{
+  padding-left: 1rem
 }
 
 .tdInputs{
@@ -184,7 +189,7 @@ button {
   justify-content: center;
 }
 hr {
-  margin: 1rem 0;
+  /* margin: 1rem 0; */
 }
 .information-modal-wrapper{
   position: fixed;
@@ -396,6 +401,12 @@ b {
 }
 .header {
   margin: 0.5rem 0;
+}
+.header h1 {
+  padding: 0.5rem;
+  background-color:var(--color-main-lighter3);
+  border-top-left-radius: var(--card-border-radius);
+  border-top-right-radius: var(--card-border-radius);
 }
 header {
   border-radius: var(--border-radius-2);
@@ -661,7 +672,7 @@ header div div i {
 main {
   display: flex;
   flex-direction: column;
-  padding: 24px;
+
 
   background-color: white;
   border-radius: var(--card-border-radius);
@@ -1106,6 +1117,10 @@ header .head {
     width: 80%;
     right: 0;
    
+  }
+
+  .horizontal-form{
+    display: block;
   }
   header .head {
     display: block;

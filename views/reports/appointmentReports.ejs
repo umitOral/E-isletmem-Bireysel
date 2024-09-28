@@ -75,6 +75,29 @@
                         </form>
 
                     </div>
+                    <br>
+                    <hr>
+                    <br>
+                    <div class="search">
+                        <form autocomplete="off" action="./" class="horizontal-form">
+                            
+                            <div class="form-group">Toplu İşlemler:
+                                <select name="" id="">
+                                    <option value="sil" selected hidden disabled>Seçiniz</option>
+                                    <option value="sil">Mesaj gönder</option>
+                                    <option value="sil">Sil</option>
+                                </select>
+                            </div>
+
+                            
+                            <div class="form-group" style="align-self: end;">
+                                <input type="submit" class="save" value="Uygula">
+                            </div>
+
+
+                        </form>
+
+                    </div>
 
                     <div class="print">
 
@@ -93,6 +116,9 @@
                         <table>
                             <thead>
 
+                                <th>
+                                    <div></div><input type="checkbox" name="" id="">
+                                </th>
                                 <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>Saat<i class="fa-solid fa-arrow-up"></i></td>
                                 <th>Hasta<i class="fa-solid fa-arrow-up"></i></td>
@@ -104,6 +130,9 @@
                                 <% reports.forEach(element=> { %>
                                     <tr data-appointmentİd=" <%= element._id %>">
 
+                                        <td>
+                                            <input type="checkbox" name="" id="">
+                                        </td>
                                         <td>
                                             <%= element.date.toLocaleDateString()%>
                                         </td>
@@ -147,39 +176,39 @@
                     </div>
 
                     <div class="pagination-describe">
-                        Toplam <%= total %> Sonuç içerisinden <%= count %> Sonuç listelendi
+                        <%= pagination.lastpage %> Sayfa, Toplam <%= total %> Sonuç bulundu
                     </div>
                     <div class="pagination">
 
                         <% if (pagination.previous ) { %>
                             <a
                                 href="./appointmentReportsPage?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
-                                    Sayfa<<<<
-                                        <% } %>
+                                    Sayfa<<<< <% } %>
 
-                                            <% if (pagination.page>1) { %>
-                                                <a href="./appointmentReportsPage?page=<%= pagination.page-1 %>&limit=<%=pagination.previous.limit %>"><span>
-                                                        <%= pagination.page-1 %>
+                                        <% if (pagination.page>1) { %>
+                                            <a
+                                                href="./appointmentReportsPage?page=<%= pagination.page-1 %>&limit=<%=pagination.previous.limit %>"><span>
+                                                    <%= pagination.page-1 %>
+                                                </span></a>
+                                            <% } %>
+
+                                                <a href="#"><span class="page-active">
+                                                        <%= pagination.page %>
                                                     </span></a>
-                                                <% } %>
 
-                                                    <a href="#"><span
-                                                            class="page-active">
-                                                            <%= pagination.page %>
+                                                <% if (pagination.page<pagination.lastpage) { %>
+                                                    <a
+                                                        href="./appointmentReportsPage?page=<%= pagination.page+1 %>&limit=<%=pagination.next.limit %>"><span>
+                                                            <%= pagination.page+1 %>
                                                         </span></a>
-
-                                                    <% if (pagination.page<pagination.lastpage) { %>
-                                                        <a href="./appointmentReportsPage?page=<%= pagination.page+1 %>&limit=<%=pagination.next.limit %>"><span>
-                                                                <%= pagination.page+1 %>
-                                                            </span></a>
-                                                        <% } %>
+                                                    <% } %>
 
 
-                                                            <% if (pagination.next) { %>
-                                                                <a
-                                                                    href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
-                                                                        >>Sonraki Sayfa</span></a>
-                                                                <% } %>
+                                                        <% if (pagination.next) { %>
+                                                            <a
+                                                                href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
+                                                                    >>Sonraki Sayfa</span></a>
+                                                            <% } %>
 
                     </div>
 
