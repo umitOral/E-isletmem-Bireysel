@@ -16,6 +16,7 @@ const createAppointment = async (req,res,next) => {
     req.body.appointmentData.startHour = new Date(
       `${req.body.appointmentData.date},${req.body.appointmentData.startHour}`
     );
+    req.body.appointmentData.company = res.locals.company
     req.body.appointmentData.endHour = new Date(
       `${req.body.appointmentData.date},${req.body.appointmentData.endHour}`
     );

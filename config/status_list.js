@@ -1,6 +1,6 @@
 const APPOINTMENT_STATUS = {
   FINISH: "tamamlandı",
-  COMPANYCANCEL: "İşletme iptali",
+  COMPANYCANCEL: "işletme iptali",
   USERCANCEL: "hasta iptali",
 };
 const APPOINTMENT_STATUS_AUTOMATIC = {
@@ -22,9 +22,9 @@ const PAYMENT_STATUS = {
   NOTPAID: "ödenmedi"
 };
 
-const SERVICES_LIST = ["Kaş alma", "microblading", "ayak bakımı",
-  "tırnak bakımı", "peeling", "Manikür", "Pedikür", "Kalıcı Makyaj", "kalıcı oje", "İpek Kirpik", "Cilt Bakımı",
-  "lazer epilasyon", "Kirpik Lifting", "Protez Tırnak", "Bölgesel İncelme", "Yüz Bakımı", "Cilt Gençleştirme", "masaj 1 saat"];
+const SERVICES_LIST = ["kaş alma", "microblading", "ayak bakımı",
+  "tırnak bakımı", "peeling", "manikür", "pedikür", "kalıcı Makyaj", "kalıcı oje", "ipek kirpik", "cilt Bakımı",
+  "lazer epilasyon", "kirpik Lifting", "protez Tırnak", "bölgesel İncelme", "yüz Bakımı", "cilt Gençleştirme", "masaj 1 saat"];
 
 const DATAS_LIST = [{
   dataName: "deri yağlanması",

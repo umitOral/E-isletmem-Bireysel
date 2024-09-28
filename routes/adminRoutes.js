@@ -97,6 +97,7 @@ import { verifyRoles, checkPriviliges } from "../middlewares/authMiddleware.js";
 import { ROLES_LIST } from "../config/status_list.js";
 
 import appointmentsRoutes from "./appointmentsRoutes.js";
+import reportsRoutes from "./reportsRoutes.js";
 import staticsRoutes from "./staticsRoutes.js";
 
 const router = express.Router();
@@ -223,6 +224,7 @@ router.route("/employees/:id/editInformations").post(editInformationsEmployees);
 
 router.route("/appointments").get(getAppointmentsPage);
 
+
 router.route("/logout").get(logOut);
 
 router.route("/services/").get(checkPriviliges("service_view"), getservicesPage);
@@ -260,7 +262,13 @@ router.use(
   checkPriviliges("appointment_view"),
   appointmentsRoutes
 );
+router.use(
+  "/reports",
+  checkPriviliges("reports_view"),
+  reportsRoutes
+);
 
 router.use("/statics", checkPriviliges("statics_view"), staticsRoutes)
+
 
 export default router;

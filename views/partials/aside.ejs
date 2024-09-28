@@ -4,7 +4,7 @@
     </div>
     <div class="head">
         <a href="/admin"><img src="/photos/logo.png" alt=""></a>
-        
+
     </div>
     <div class="nav">
         <div class="menu">
@@ -27,12 +27,12 @@
                     </a>
                 </li>
                 <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
-                    <li onclick="alert('yetkili değilsiniz');return false" class="deactivate"  title="Sadece Yönetici">
+                    <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Sadece Yönetici">
                         <a href="/admin/employees" <% if (link==="employees" ) { %>class="active"<% } %>>
                                 <i class="icon ph-bold ph-stethoscope"></i>
                                 <span class="text">Personeller</span>
-                                
-                                
+
+
                                 <i class="ph ph-star"></i>
                         </a>
                     </li>
@@ -51,7 +51,8 @@
                                         <span class="text">Seanslar</span>
                                 </a>
                             </li>
-                            <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
+                            <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){
+                                %>
                                 <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                                     <a href="/admin/services" <% if (link==="services" ) { %>class="active"<% } %>>
                                             <i class="icon ph-bold ph-eyedropper"></i>
@@ -66,7 +67,7 @@
                                                 <i class="arrow ph-bold ph-caret-down"></i>
                                         </a>
                                         <ul class="sub-menu">
-                                                            
+
                                             <li>
                                                 <a href="/admin/services">
                                                     <span class="text">Hizmetler</span>
@@ -82,10 +83,10 @@
                                                     <span class="text">Ürünler</span>
                                                 </a>
                                             </li>
-                                            
+
 
                                         </ul>
-                                    </li>   
+                                    </li>
                                     <% } %>
 
 
@@ -118,13 +119,47 @@
                                                                 <i class="arrow ph-bold ph-caret-down"></i>
                                                         </a>
                                                         <ul class="sub-menu">
-                                                            
+
                                                             <li>
                                                                 <a href="/admin/statics/users-statics">
                                                                     <span class="text">Kullanıcı İstatistikleri</span>
                                                                 </a>
                                                             </li>
-                                                            
+
+
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" <% if (link==="reports" ) { %>
+                                                            class="active"
+                                                            <% } %>>
+                                                            <i class="icon ph-bold ph-files"></i>
+                                                                <span class="text">Raporlar</span>
+                                                                <i class="arrow ph-bold ph-caret-down"></i>
+                                                        </a>
+                                                        <ul class="sub-menu">
+
+                                                            <li>
+                                                                <a href="/admin/reports/appointmentReportsPage">
+                                                                    <span class="text">Randevu Raporları</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="/admin/reports/userReportsPage">
+                                                                    <span class="text">Hasta Raporları</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="/admin/reports/employeeReportsPage">
+                                                                    <span class="text">Kullanıcı Raporları</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="/admin/reports/paymentReportsPage">
+                                                                    <span class="text">Kasa Raporları</span>
+                                                                </a>
+                                                            </li>
+
 
                                                         </ul>
                                                     </li>
@@ -135,49 +170,49 @@
             <ul>
                 <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
                     <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
-                    <a href="#" <% if (link==="settings" ) { %>
-                        class="active"
-                        <% } %>>
-                            <i class="icon ph-bold ph-gear"></i>
-                            <span class="text">AYARLAR</span>
-                            <i class="arrow ph-bold ph-caret-down"></i>
-                    </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="/admin/settings">
-                                <span class="text">Şirket Bilgileri</span>
-                            </a>
-                        </li>
-                <% } else{ %>
-                    <li>
-                    <a href="#" <% if (link==="settings" ) { %>
-                        class="active"
-                        <% } %>>
-                            <i class="icon ph-bold ph-gear"></i>
-                            <span class="text">AYARLAR</span>
-                            <i class="arrow ph-bold ph-caret-down"></i>
-                    </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="/admin/settings">
-                                <span class="text">Şirket Bilgileri</span>
-                            </a>
-                        </li>
-                    <% } %>
-
-                
+                        <a href="#" <% if (link==="settings" ) { %>
+                            class="active"
+                            <% } %>>
+                                <i class="icon ph-bold ph-gear"></i>
+                                <span class="text">AYARLAR</span>
+                                <i class="arrow ph-bold ph-caret-down"></i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/admin/settings">
+                                    <span class="text">Şirket Bilgileri</span>
+                                </a>
+                            </li>
+                            <% } else{ %>
+                                <li>
+                                    <a href="#" <% if (link==="settings" ) { %>
+                                        class="active"
+                                        <% } %>>
+                                            <i class="icon ph-bold ph-gear"></i>
+                                            <span class="text">AYARLAR</span>
+                                            <i class="arrow ph-bold ph-caret-down"></i>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <li>
+                                            <a href="/admin/settings">
+                                                <span class="text">Şirket Bilgileri</span>
+                                            </a>
+                                        </li>
+                                        <% } %>
 
 
-                    </ul>
-                </li>
-            </ul>
+
+
+                                    </ul>
+                                </li>
+                        </ul>
         </div>
     </div>
     <div class="menu">
         <p class="title">Hesap</p>
         <ul>
             <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
-                <li  onclick="alert('yetkili değilsiniz');return false" class="deactivate">
+                <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                     <a href="#" <% if (link==="companyPaymentPage" ) { %>
                         class="active"
                         <% } %>>
@@ -228,7 +263,7 @@
                     </li>
                     <% } %>
 
-                        
+
 
                         <li>
                             <a href="/admin/logout">

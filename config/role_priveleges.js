@@ -206,6 +206,12 @@ export const role_privileges = {
       group: "STATICS",
       description: "Statics View",
     },
+    {
+      key: "reports_view",
+      name: "Rapor Görüntüleme",
+      group: "REPORTS",
+      description: "Reports View",
+    },
   ],
 };
 

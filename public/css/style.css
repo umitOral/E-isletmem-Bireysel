@@ -270,6 +270,9 @@ hr {
 .form-group.vertical {
   width: max-content;
 }
+.form-group.horizontal select {
+  padding: 0.7rem;
+}
 .vertical  {
   display: flex;
   gap: 1rem;
@@ -279,6 +282,15 @@ hr {
 font-weight: 600;
 }
 
+.horizontal-form{
+display: flex;
+align-items: center;
+gap: 1rem;
+}
+
+ .chosen-single{
+  padding:0.5rem important!;
+}
 
 /*  */
 
@@ -832,7 +844,7 @@ table thead {
   border-radius: var(--border-radius-1);
 }
 .pagination span.page-active {
-  background-color: var(--color-dark-variant2);
+  background-color: var(--color-main);
 }
 
 .pagination span:hover {

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+        <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+    <%- include("../partials/aside.ejs") %>
+        <section id="content">
+            <%- include('../partials/header.ejs') %>
+                <!---------- left aside ------------->
+
+
+                <main>
+
+                    <div class="header">
+                        <h1> Randevu Raporları</h1>
+                    </div>
+
+
+                    <div class="search">
+                        <form autocomplete="off" action="./appointmentReportsPage" class="horizontal-form">
+
+                            <div class="form-group">Başlangıç tarihi:
+                                <input type="date" name="startDate" class="startDate"
+                                    value="<%= new Date().toISOString().substr(0, 10) %>">
+                            </div>
+                            <div class="form-group">Bitiş tarihi:
+                                <input type="date" name="endDate" class="endDate"
+                                    value="<%= new Date().toISOString().substr(0, 10) %>">
+                            </div>
+                            <div class="form-group horizontal">Personel:
+                                <select class="chosen-select" name="personelInput" id="personelInput"
+                                    data-placeholder="Personel seçiniz." multiple>
+
+                                    <% employes.forEach(element=> { %>
+                                        <option value="<%= element._id %>">
+                                            <%= element.name+" "+element.surname %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class=" form-group horizontal">Durum:
+                                                <select class="chosen-select" name="status" id="status"
+                                                    data-placeholder="Durum seçiniz." multiple>
+
+                                                    <% STATUS.forEach(element=> { %>
+                                                        <option value="<%= element %>">
+                                                            <%= element %>
+                                                        </option>
+                                                        <% }) %>
+
+                                                </select>
+                                                <%= %>
+                            </div>
+
+
+
+
+                            <div class="form-group" style="align-self: end;">
+                                <input type="submit" class="save" value="Ara">
+                            </div>
+
+
+                        </form>
+
+                    </div>
+
+                    <div class="print">
+
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Yazdır&nbsp; &#10140</label>
+                            <label for="" class="to_pdf">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
+                        </div>
+
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+
+                                <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Saat<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Hasta<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Personel<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Notlar<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Durum<i class="fa-solid fa-arrow-up"></i></td>
+                            </thead>
+                            <tbody id="userList">
+                                <% reports.forEach(element=> { %>
+                                    <tr data-appointmentİd=" <%= element._id %>">
+
+                                        <td>
+                                            <%= element.date.toLocaleDateString()%>
+                                        </td>
+                                        <td>
+                                            <%=element.startHour.toLocaleTimeString([],{hour: "2-digit" ,
+                                                minute: "2-digit"
+                                                ,})+"-"+element.endHour.toLocaleTimeString([],{hour: "2-digit" ,
+                                                minute: "2-digit" ,})%>
+                                        </td>
+                                        <td>
+                                            <%= element.user.name+" "+element.user.surname %>
+                                        </td>
+                                        <td><span class="">
+                                            <% if (element.doctor) { %>
+                                             <%= element.doctor.name+" "+element.doctor.surname %>
+                                            <% } %>
+                                            </span> </td>
+                                        <td>
+                                            <span class="">
+                                                <%=element.description%>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="">
+                                                <%=element.appointmentState%>
+                                            </span>
+                                        </td>
+
+                                        <td class=" details"><a href="./users/<%= element._id %>">Detay</a>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+
+                    <div class="pagination-describe">
+                        Toplam <%= total %> Sonuç içerisinden <%= count %> Sonuç listelendi
+                    </div>
+                    <div class="pagination">
+
+                        <% if (pagination.previous ) { %>
+                            <a
+                                href="./appointmentReportsPage?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
+                                    Sayfa<<<<
+                                        <% } %>
+
+                                            <% if (pagination.page>1) { %>
+                                                <a href="./appointmentReportsPage?page=<%= pagination.page-1 %>&limit=<%=pagination.previous.limit %>"><span>
+                                                        <%= pagination.page-1 %>
+                                                    </span></a>
+                                                <% } %>
+
+                                                    <a href="#"><span
+                                                            class="page-active">
+                                                            <%= pagination.page %>
+                                                        </span></a>
+
+                                                    <% if (pagination.page<pagination.lastpage) { %>
+                                                        <a href="./appointmentReportsPage?page=<%= pagination.page+1 %>&limit=<%=pagination.next.limit %>"><span>
+                                                                <%= pagination.page+1 %>
+                                                            </span></a>
+                                                        <% } %>
+
+
+                                                            <% if (pagination.next) { %>
+                                                                <a
+                                                                    href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
+                                                                        >>Sonraki Sayfa</span></a>
+                                                                <% } %>
+
+                    </div>
+
+                </main>
+
+                </seciton>
+                <div class="modal hidden" id="add_customer">
+                    <div class="inner_modal">
+                        <h2>Yeni Hasta Ekle</h2>
+                        <form action="./users/createUser" method="POST" id="register-form">
+                            <div class="form-group ">
+                                <span>İsim</span>
+                                <input type="text" name="name" id="user-name" required placeholder="İsim giriniz">
+                            </div>
+
+                            <div class="form-group ">
+                                <span>Soyisim</span>
+                                <input type="text" name="surname" id="surname" placeholder="soyisim giriniz" required>
+                            </div>
+                            <div class="form-group ">
+                                <span>Telefon</span>
+                                <input placeholder="başında '0' olmadan girin" type="tel" name="phone" id="phone"
+                                    required pattern="[0-9]{10}" maxlength="10">
+                            </div>
+                            <div class="options">
+                                <span>Cinsiyet:</span>
+                                <div>
+                                    <input type="radio" id="sex-women" name="sex" value="female">
+                                    &nbsp; <label for="sex-women">Kadın</label>
+
+                                    <input type="radio" id="sex-man" name="sex" value="male">
+                                    &nbsp; <label for="sex-man">Erkek</label>
+
+                                </div>
+
+                            </div>
+                            <div class="form-group ">
+                                <span>Doğum Tarihi</span>
+                                <input type="date" name="birtdhDate" id="birtdhDate">
+                            </div>
+                            <div class="form-group ">
+                                <span>Adres</span>
+                                <input type="text" name="address" id="address">
+
+                            </div>
+
+                            <div class="form-group ">
+                                <span>Mail</span>
+                                <input type="email" name="email" id="email">
+                            </div>
+
+                            <div class="form-group ">
+                                <span>Fatura Bilgisi:</span>
+                                <textarea name="billingAddress" id="billingAddress" rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <span>Açıklama</span>
+                                <textarea name="notes" id="notes" rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn save form-btn" id="add-user">Kaydet</button>
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="information-modal-wrapper"></div>
+
+                <script type="module" src="/js/main.js"></script>
+
+                <script type="module" src="/js/inner_modules/tables.js"></script>
+                <script type="module" src="/js/inner_modules/print.js"></script>
+                <script type="module" src="/js/reports.js"></script>
+
+                <script src="/js/sidebar.js"></script>
+
+
+
+</body>
+
+</html>

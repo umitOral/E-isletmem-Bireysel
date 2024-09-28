@@ -22,6 +22,10 @@ const sessionSchema = new Schema(
 
     description: { type: String },
 
+    company: {
+      type: Schema.Types.ObjectId,
+      ref: "Company",
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
