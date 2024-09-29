@@ -209,10 +209,11 @@
 
 
                                                         <% if (pagination.next) { %>
-                                                            <a
-                                                                href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
+                                                            <a href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>&<% for(let x in query){  %><%= x+"="+query[x]+"&"%><%} %>"><span>
                                                                     >>Sonraki Sayfa</span></a>
                                                             <% } %>
+
+                                                            
 
                     </div>
 
@@ -282,7 +283,7 @@
 
                 <div class="information-modal-wrapper"></div>
 
-                <script type="module" src="/js/main.js"></script>
+                <script type="module" src="/js/reports.js"></script>
                 <script type="module" src="/js/inner_modules/tables.js"></script>
                 <script type="module" src="/js/inner_modules/print.js"></script>
                 <script type="module" src="/js/reports.js"></script>

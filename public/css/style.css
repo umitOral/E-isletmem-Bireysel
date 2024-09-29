@@ -400,7 +400,7 @@ b {
   color: var(--color-warning);
 }
 .header {
-  margin: 0.5rem 0;
+  margin-bottom: 1rem;
 }
 .header h1 {
   padding: 0.5rem;

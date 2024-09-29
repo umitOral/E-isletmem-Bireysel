@@ -327,7 +327,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
     //pagination
     console.log(req.query)
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 2;
+    const limit = parseInt(req.query.limit) || 5;
 
     let searchObject={
       company:res.locals.company._id
@@ -375,7 +375,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
     if (req.query.status) {
       searchObject.appointmentState={ $in: status }
     }
-    console.log(searchObject)
+    
     
 
     const startIndex = (page - 1) * limit;
@@ -431,6 +431,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
       total,
       count: reports.length,
       pagination,
+      query:req.query,
       link: "reports",
     });
   } catch (error) {
