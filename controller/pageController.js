@@ -431,7 +431,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
       total,
       count: reports.length,
       pagination,
-      link: "users",
+      link: "reports",
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
