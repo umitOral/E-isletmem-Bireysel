@@ -108,17 +108,16 @@ const getUserReports = async (req, res, next) => {
     const pagination = {};
     pagination["page"] = page;
     pagination["lastpage"] = lastpage;
+    pagination["limit"] = limit;
 
     if (startIndex > 0) {
       pagination.previous = {
-        page: page - 1,
-        limit: limit,
+        page: page - 1
       };
     }
     if (endIndex < total) {
       pagination.next = {
         page: page + 1,
-        limit: limit,
       };
     }
 

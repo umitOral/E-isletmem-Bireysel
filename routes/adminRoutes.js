@@ -56,8 +56,13 @@ import {
   deactivateService,
 } from "../controller/serviceControllers.js";
 import {
-  addProduct,searchProduct,deneme
+  addProduct,searchProduct
 } from "../controller/productControllers.js";
+
+import {
+  topluIslemler
+} from "../controller/admincontrollers.js";
+
 import {
   addData,
   addOptiontoData,
@@ -103,7 +108,7 @@ import staticsRoutes from "./staticsRoutes.js";
 const router = express.Router();
 
 router.route("/").get(getAdminPage);
-router.route("/deneme").get(deneme);
+router.route("/topluIslemler").get(topluIslemler);
 router.route("/users").get(checkPriviliges("user_view"), getUsersPage);
 
 router.route("/users/search").get(checkPriviliges("user_view"), findUsers);
@@ -231,7 +236,6 @@ router.route("/services/").get(checkPriviliges("service_view"), getservicesPage)
 router.route("/products/").get(checkPriviliges("product_view"), getProductsPage);
 router.route("/products/addProduct").post(checkPriviliges("product_add"), addProduct);
 router.route("/products/searchProduct").post(checkPriviliges("product_add"), searchProduct);
-router.route("/products/deneme").post(checkPriviliges("product_add"), deneme);
 router.route("/services/search").get(checkPriviliges("service_view"), findServices);
 
 router.route("/services/:id/editService").post(checkPriviliges("service_update"), editService);

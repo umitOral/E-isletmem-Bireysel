@@ -122,6 +122,7 @@
                                         </div>
                                     </div>
                                 </th>
+                                
                                 <th>Kayıt Tarih<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>İsim<i class="fa-solid fa-arrow-up"></i></td>
                                 <th>Soyisim<i class="fa-solid fa-arrow-up"></i></td>
@@ -132,41 +133,50 @@
                                 <th>Doğum Günü<i class="fa-solid fa-arrow-up"></i></td>
                             </thead>
                             <tbody >
-                                <% reports.forEach(element=> { %>
+                                <% reports.forEach((element,index)=> { %>
                                     <tr data-appointmentİd=" <%= element._id %>">
 
                                         <td>
+                                           <div style="display: flex; align-items: center; justify-content: center; gap:0.5rem;">
+                                            <label for=""><%= index+1 %></label>
                                             <input type="checkbox" name="" id="">
+                                           </div>
+                                        </td>
+                                        
+                                        <td>
+                                            <%= element.createdAt.toLocaleTimeString([],{hours:"2-digit",minutes:"2-digit"})%>
                                         </td>
                                         <td>
-                                            <%= element.date.toLocaleDateString()%>
+                                           <%= element.name %>
                                         </td>
                                         <td>
-                                            <%=element.startHour.toLocaleTimeString([],{hour: "2-digit" ,
-                                                minute: "2-digit"
-                                                ,})+"-"+element.endHour.toLocaleTimeString([],{hour: "2-digit" ,
-                                                minute: "2-digit" ,})%>
+                                            <%= element.surname %>
                                         </td>
                                         <td>
-                                            <%= element.user.name+" "+element.user.surname %>
+                                            <%= element.sex %>
                                         </td>
-                                        <td><span class="">
-                                            <% if (element.doctor) { %>
-                                             <%= element.doctor.name+" "+element.doctor.surname %>
-                                            <% } %>
-                                            </span> </td>
                                         <td>
-                                            <span class="">
-                                                <%=element.description%>
-                                            </span>
+                                            <%= element.phone %>
                                         </td>
+                                        <td>
+                                            <%= element.email %>
+                                        </td>
+
                                         <td>
                                             <span class="">
                                                 <%=element.appointmentState%>
                                             </span>
                                         </td>
+                                        <td>
+                                            <span class="">
+                                                <% if (element.birthDate) { %>
+                                                    <%=new Date(element.birthDate).toLocaleDateString()%>
+                                                <% } %>
+                                               
+                                            </span>
+                                        </td>
 
-                                        <td class=" details"><a href="./users/<%= element._id %>">Detay</a>
+                                        <td class=" details"><a href="../users/<%= element._id %>">Detay</a>
                                         </td>
                                     </tr>
                                     <% }) %>
@@ -182,9 +192,12 @@
                     </div>
 
                     <div class="pagination-describe">
-                        <%= pagination.lastpage %> Sayfa, Toplam <%= total %> Sonuç bulundu
+                        <div>
+                            <span id="lastpage"><%= lastpage %></span> Sayfa, Toplam <span id="total"><%= total %></span> Sonuç bulundu
+                        </div>
+                        
                     </div>
-                    <div class="pagination">
+                    <div class="pagination" id="pagination">
 
                         <% if (pagination.previous ) { %>
                             <a
@@ -211,7 +224,7 @@
 
 
                                                         <% if (pagination.next) { %>
-                                                            <a href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>&<% for(let x in query){  %><%= x+"="+query[x]+"&"%><%} %>"><span>
+                                                            <a href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
                                                                     >>Sonraki Sayfa</span></a>
                                                             <% } %>
 

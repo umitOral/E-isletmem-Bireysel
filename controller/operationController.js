@@ -76,7 +76,6 @@ const updateOperationStatus = async (req,res,next) => {
 };
 const deleteOperationsData = async (req,res,next) => {
   try {
-    console.log("deneme");
     console.log(req.params);
 
     let responseData = {};
@@ -105,7 +104,7 @@ const deleteOperationsData = async (req,res,next) => {
 };
 const deleteSessionData = async (req,res,next) => {
   try {
-    console.log("deneme");
+
     console.log(req.params);
 
     let responseData = {};

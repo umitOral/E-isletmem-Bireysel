@@ -10,20 +10,25 @@ const createEmployees = async (req, res, next) => {
   try {
     const userEmail = req.body.email;
     req.body.company = res.locals.company;
-    const searchEmail = await Employee.findOne({ email: userEmail, company: res.locals.company });
-    console.log(userEmail);
-    if (searchEmail) {
-      res.json({
-        success: false,
-        message: "bu mail adresi kullanılmaktadır.",
-      });
-    } else {
-      await Employee.create(req.body);
-      res.json({
-        success: true,
-        message: "Kulllanıcı başarıyla kaydedildi.",
-      });
+    if (req.body.email!=="") {
+      console.log("burası")
+      const searchEmail = await Employee.findOne({ email: userEmail, company: res.locals.company });
+      if (searchEmail) {
+        res.json({
+          success: false,
+          message: "bu mail adresi kullanılmaktadır.",
+        });
+      } else {
+        await Employee.create(req.body);
+        res.json({
+          success: true,
+          message: "Kulllanıcı başarıyla kaydedildi.",
+        });
+      }
     }
+    
+    
+
 
     // await Company.updateOne(
     //   { _id: res.locals.company._id },

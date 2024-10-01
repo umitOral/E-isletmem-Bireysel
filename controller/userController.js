@@ -223,10 +223,13 @@ const createUser = async (req, res, next) => {
     const userEmail = req.body.email;
     const userPhone = req.body.phone;
     req.body.company = res.locals.company;
-
-    const searchEmail = await User.findOne({ email: userEmail, company: res.locals.company });
+    let searchEmail;
+    if (req.body.email!=="") {
+       searchEmail = await User.findOne({ email: userEmail, company: res.locals.company });
+    }
+    
     const searchPhone = await User.findOne({ phone: userPhone, company: res.locals.company });
-    console.log(searchEmail)
+    
     if (searchEmail) {
       return next(
         new CustomError(
