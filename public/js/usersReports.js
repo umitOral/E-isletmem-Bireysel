@@ -10,6 +10,9 @@ const print = new Print();
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
 
+
+let bulkOperationsForm=document.querySelector("#bulkOperations")
+
 const pdf_btn = document.querySelector(".to_pdf");
 const xlsx_btn = document.querySelector(".to_xlsx");
 
@@ -208,3 +211,25 @@ tableElements.forEach((table) => {
     });
   });
 });
+
+
+// bulk operations
+bulkOperationsForm.addEventListener("submit",(e)=>{
+e.preventDefault()
+let operationType=bulkOperationsForm.operationType.options[bulkOperationsForm.operationType.selectedIndex].value
+
+let selectedUsers=[]
+const checkBoxes = table.querySelectorAll('input[type=checkbox]:not(:first-child):checked')
+checkBoxes.forEach(element => {
+  
+  selectedUsers.push(element.parentElement.parentElement.parentElement.dataset.appointmentİd)
+});
+if (operationType==="sendMessage") {
+  let data={
+    selectedUsers
+  }
+  alert("toplu sms çok yakında hayata geçecektir.")
+console.log(selectedUsers)
+}
+  
+})

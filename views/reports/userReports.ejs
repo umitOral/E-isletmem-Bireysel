@@ -78,13 +78,12 @@
                     <hr>
                     <br>
                     <div class="search">
-                        <form autocomplete="off" action="./" class="horizontal-form">
+                        <form autocomplete="off" id="bulkOperations" action="./" class="horizontal-form">
 
                             <div class="form-group">Toplu İşlemler:
-                                <select name="" id="">
-                                    <option value="sil" selected hidden disabled>Seçiniz</option>
-                                    <option value="sil">Mesaj gönder</option>
-                                    <option value="sil">Sil</option>
+                                <select name="operationType" id="operationType">
+                                    <option value="" selected hidden disabled>Seçiniz</option>
+                                    <option value="sendMessage">Mesaj gönder</option>
                                 </select>
                             </div>
 

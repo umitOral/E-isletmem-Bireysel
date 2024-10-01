@@ -12,6 +12,35 @@ export class UI {
         }
     })
   }
+
+  tableRowSelection(table){
+    const tables = document.querySelectorAll("table")
+    const checkAllBox = table.querySelector("input[type=checkbox]:first-child")
+    const tableRows = table.querySelectorAll("tbody tr")
+    const checkBoxes = table.querySelectorAll('input[type=checkbox]:not(:first-child)')
+
+    checkBoxes.forEach(element => {
+      element.addEventListener("click",()=>{
+        
+        console.log(element)
+      })
+    });
+   
+  
+      checkAllBox.addEventListener("change",()=>{
+        checkBoxes.forEach(element => {
+          if (checkAllBox.checked===true) {
+            element.checked=true
+          }else{
+            element.checked=false
+          }
+        });
+      })
+
+    
+ 
+   
+  }
   deleteZeroFromPhone(){
     const phoneInput = document.querySelector("#phone");
     

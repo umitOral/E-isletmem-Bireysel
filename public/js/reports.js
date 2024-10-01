@@ -1,4 +1,6 @@
-console.log("reports")
+import { UI } from './ui.js'
+const ui=new UI()
+
 $(".chosen-select").chosen({width: "100%"})
 
 import { Print } from "./inner_modules/print.js";
@@ -6,10 +8,13 @@ const print = new Print();
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
 
+const ReportTable = document.querySelector(".table");
 const pdf_btn = document.querySelector(".to_pdf");
 const xlsx_btn = document.querySelector(".to_xlsx");
 
-const table = document.querySelector("table");
+
+const table = document.querySelector("#user-report-table");
+ui.tableRowSelection(table)
 
 
 pdf_btn.onclick = () => {
@@ -33,4 +38,8 @@ tableElements.forEach((table) => {
       })
     });
   });
+
+
+  // row seelcting Process
+
   
