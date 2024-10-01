@@ -34,7 +34,7 @@ function createUser(e) {
     email: form.email.value,
     phone:form.phone.value,
     sex: form.sex.value,
-    birtdhDate: form.birtdhDate.value,
+    birthDate: form.birthDate.value,
     address: form.address.value,
     billingAddress: form.billingAddress.value,
   };

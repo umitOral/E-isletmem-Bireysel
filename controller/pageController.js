@@ -438,6 +438,122 @@ const getAppointmentReportsPage = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+const getUserReportsPage = async (req, res, next) => {
+  try {
+    //pagination
+    console.log(req.query)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+
+    let searchObject={
+      company:res.locals.company._id
+    }
+    let personels;
+    let status;
+    let startDate;
+    let endDate;
+    
+   
+    
+    
+    if (req.query.endDate) {
+       endDate=new Date(req.query.endDate)
+       endDate.setHours(24,0,0)
+    }else{
+        endDate=new Date()
+       endDate.setHours(24,0,0)
+    }
+    if (req.query.startDate) {
+      startDate=new Date(req.query.startDate)
+      startDate.setDate(startDate.getDate()-1)
+      startDate.setHours(24,0,0)
+    }else{
+      startDate=new Date()
+      startDate.setDate(startDate.getDate()-1)
+      startDate.setHours(24,0,0)
+    }
+    
+    if (typeof(req.query.personelInput)==="string") {
+       personels=[req.query.personelInput]
+    }else{
+      personels=req.query.personelInput
+    }
+    
+    if (typeof(req.query.status)==="string") {
+       status=[req.query.status]
+    }else{
+      status=req.query.status
+    }
+
+    if (req.query.personelInput) {
+      searchObject.doctor={ $in: personels }
+    }
+    if (req.query.status) {
+      searchObject.appointmentState={ $in: status }
+    }
+    
+    
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    let reports = await Session.find(searchObject)
+      
+      .where('date').gt(startDate).lt(endDate)
+      .populate("user", ["name", "surname"])
+      .populate("doctor", ["name", "surname"])
+      .skip(startIndex)
+      .limit(limit)
+      .sort({ date: -1 });
+
+    let employes = await Employee.find({
+      company:res.locals.company._id,
+      activeOrNot:true
+    })
+    
+
+
+    let total =await  Session.find(searchObject)
+    .where('date').gt(startDate).lt(endDate)
+
+   total=total.length
+
+
+    const lastpage = Math.ceil(total / limit);
+    const pagination = {};
+    pagination["page"] = page;
+    pagination["lastpage"] = lastpage;
+
+    if (startIndex > 0) {
+      pagination.previous = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+    if (endIndex < total) {
+      pagination.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+
+    let STATUS={...APPOINTMENT_STATUS,...APPOINTMENT_STATUS_AUTOMATIC}
+    STATUS= Object.values(STATUS)
+    console.log(pagination)
+    res.status(200).render("reports/userReports", {
+      reports,
+      STATUS,
+      employes,
+      total,
+      count: reports.length,
+      pagination,
+      query:req.query,
+      link: "reports",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 
 const deneme = async (req, res, next) => {
   try {
@@ -675,5 +791,6 @@ export {
   deneme,
   getcompanyPaymentResult,
   getProductsPage,
-  getAppointmentReportsPage
+  getAppointmentReportsPage,
+  getUserReportsPage
 };

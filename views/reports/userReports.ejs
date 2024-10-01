@@ -25,43 +25,42 @@
                 <main>
 
                     <div class="header">
-                        <h1> Randevu Raporları</h1>
+                        <h1> Hasta Raporları</h1>
                     </div>
 
 
                     <div class="search">
-                        <form autocomplete="off" action="./appointmentReportsPage" class="horizontal-form">
+                        <form autocomplete="off" action="" class="horizontal-form" id="user-reports-search">
 
-                            <div class="form-group">Başlangıç tarihi:
+                            <div class="form-group">Kayıt tarihi Başlangıç:
                                 <input type="date" name="startDate" class="startDate"
                                     value="<%= new Date().toISOString().substr(0, 10) %>">
                             </div>
-                            <div class="form-group">Bitiş tarihi:
-                                <input type="date" name="endDate" class="endDate"
+                            <div class="form-group">Kayıt tarihi Bitiş:
+                                <input type="date" name="endDate" class=""
                                     value="<%= new Date().toISOString().substr(0, 10) %>">
                             </div>
-                            <div class="form-group horizontal">Personel:
-                                <select class="chosen-select" name="personelInput" id="personelInput"
-                                    data-placeholder="Personel seçiniz." multiple>
-
-                                    <% employes.forEach(element=> { %>
-                                        <option value="<%= element._id %>">
-                                            <%= element.name+" "+element.surname %></option>
-                                        <% }) %>
-                                    </select>
-                                </div>
-                                <div class=" form-group horizontal">Durum:
-                                                <select class="chosen-select" name="status" id="status"
-                                                    data-placeholder="Durum seçiniz." multiple>
-
-                                                    <% STATUS.forEach(element=> { %>
-                                                        <option value="<%= element %>">
-                                                            <%= element %>
-                                                        </option>
-                                                        <% }) %>
+                            <div class="form-group">Doğum Tarihi:
+                                <input type="date" name="birthDate" class=""
+                                    value="">
+                            </div>
+                            <div class="form-group">Cinsiyet:
+                                <select class="chosen-select" name="sex" id="sex">
+                                    <option value=""  selected disable hidden>Seçiniz</option>
+                                    <option value="male">Erkek</option>
+                                    <option value="female">Kadın</option>
+                                </select>
+                            </div>
+                            
+                                <div class=" form-group horizontal">Randevu geçmişi:
+                                                <select class="chosen-select" name="firstAppointment" id="firstAppointment"
+                                                    data-placeholder="Durum seçiniz.">
+                                                    <option value="" selected disable hidden>Seçiniz</option>
+                                                  <option value="true">Var</option>
+                                                  <option value="false">Yok</option>
 
                                                 </select>
-                                                <%= %>
+                                                
                             </div>
 
 
@@ -114,7 +113,7 @@
                     </div>
 
                     <div class="table-wrapper">
-                        <table>
+                        <table id="user-report-table">
                             <thead>
                                 <th>
                                     <div>
@@ -123,14 +122,16 @@
                                         </div>
                                     </div>
                                 </th>
-                                <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Saat<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Hasta<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Personel<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Notlar<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Durum<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Kayıt Tarih<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>İsim<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Soyisim<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Cinsiyet<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Telefon<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Email<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Randevu geçmişi<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Doğum Günü<i class="fa-solid fa-arrow-up"></i></td>
                             </thead>
-                            <tbody id="userList">
+                            <tbody >
                                 <% reports.forEach(element=> { %>
                                     <tr data-appointmentİd=" <%= element._id %>">
 
@@ -170,6 +171,7 @@
                                     </tr>
                                     <% }) %>
 
+                                       
 
 
                             </tbody>
@@ -264,6 +266,7 @@
                                 <span>Mail</span>
                                 <input type="email" name="email" id="email">
                             </div>
+                            
 
                             <div class="form-group ">
                                 <span>Fatura Bilgisi:</span>
@@ -283,7 +286,7 @@
 
                 <div class="information-modal-wrapper"></div>
 
-                <script type="module" src="/js/reports.js"></script>
+                <script type="module" src="/js/usersReports.js"></script>
                 <script type="module" src="/js/inner_modules/tables.js"></script>
                 <script type="module" src="/js/inner_modules/print.js"></script>
                 <script type="module" src="/js/reports.js"></script>

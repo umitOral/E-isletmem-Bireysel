@@ -289,7 +289,7 @@ const editInformations = async (req, res, next) => {
       email: req.body.email,
       address: req.body.address,
       sex: req.body.sex,
-      birtdhDate: req.body.birtdhDate,
+      birthDate: req.body.birthDate,
       phone: req.body.phone,
       company: req.body.company,
       billingAddress: req.body.billingAddress,

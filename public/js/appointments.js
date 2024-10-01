@@ -56,7 +56,7 @@ addUserForm.addEventListener("submit",(e)=>{
     email: addUserForm.email.value,
     phone:addUserForm.phone.value,
     sex: addUserForm.sex.value,
-    birtdhDate: addUserForm.birtdhDate.value,
+    birthDate: addUserForm.birthDate.value,
     address: addUserForm.address.value,
     billingAddress: addUserForm.billingAddress.value,
   }

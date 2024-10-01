@@ -936,7 +936,7 @@ display: block;
 
   padding: 0.5rem;
   cursor: pointer;
-  z-index: 999;
+  z-index: 998;
 }
 
 *::-webkit-scrollbar {
