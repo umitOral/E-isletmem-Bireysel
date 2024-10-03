@@ -12,7 +12,7 @@ tr .inputs {
     padding: 0.5rem;
     color: var(--color-dark-variant);
     cursor: pointer;
-    width: max-content;
+    /* width: max-content; */
 }
 .inputs i{
     font-size: 1.3rem;

@@ -36,16 +36,15 @@ const getTenantDb = async (tenantId) => {
 }
 
 
-const getProductModelGeneral = async () => {
+const getProductModelGeneral = async (modelName) => {
     const dbName = `general`
     db = db ? db : await connect(url)
-
     let generalDb = db.useDb(dbName, { useCache: true })
-    return generalDb.model("products", productSchema)
+    return generalDb.model(modelName, productSchema)
 }
-const getProductModel= async (tenantId) => {
+const getProductModel= async (modelName,tenantId) => {
     let tenantDb = await getTenantDb(tenantId)
-    return tenantDb.model("products", productSchema)
+    return tenantDb.model(modelName, productSchema)
 }
 
 

@@ -10,6 +10,7 @@ import {
   getSingleEmployeePage,
   getservicesPage,
   getProductsPage,
+  getSmsPage,
   getEmployeesPage,
   getPaymentsPage,
   getDatasPage,
@@ -58,6 +59,12 @@ import {
 import {
   addProduct,searchProduct
 } from "../controller/productControllers.js";
+import {
+  addSms,
+  activateSms,
+  deactivateSms,
+  editSms
+} from "../controller/smsControllers.js";
 
 import {
   topluIslemler
@@ -237,6 +244,13 @@ router.route("/products/").get(checkPriviliges("product_view"), getProductsPage)
 router.route("/products/addProduct").post(checkPriviliges("product_add"), addProduct);
 router.route("/products/searchProduct").post(checkPriviliges("product_add"), searchProduct);
 router.route("/services/search").get(checkPriviliges("service_view"), findServices);
+
+router.route("/sms").get(checkPriviliges("product_view"), getSmsPage);
+router.route("/sms/addSms").post(checkPriviliges("product_view"), addSms);
+router.route("/sms/:id/activateSms").get(checkPriviliges("product_view"), activateSms);
+router.route("/sms/:id/deactivateSms").get(checkPriviliges("product_view"), deactivateSms);
+router.route("/sms/:id/editSms").post(checkPriviliges("product_view"), editSms);
+
 
 router.route("/services/:id/editService").post(checkPriviliges("service_update"), editService);
 router.route("/services/:id/deactivateService").get(checkPriviliges("service_update"), deactivateService);

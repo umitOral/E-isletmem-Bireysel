@@ -75,6 +75,15 @@ const companySchema = new Schema(
         serviceData: [],
       },
     ],
+    sms: [
+      {
+        smsName: {
+          type: String,
+        },
+        activeorNot: { type: Boolean, default: true },
+        content:String,
+      },
+    ],
   },
   { timestamps: true }
 );

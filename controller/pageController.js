@@ -14,10 +14,11 @@ import { Ticket } from "../models/ticketModel.js";
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { query } from "express";
-import { getProductModel } from "../tenantDb.js";
+import { getProductModel, getProductModelGeneral } from "../tenantDb.js";
 import Session from "../models/sessionModel.js";
 import {APPOINTMENT_STATUS,APPOINTMENT_STATUS_AUTOMATIC} from "../config/status_list.js";
 import { searchProduct } from "./productControllers.js";
+
 
 let now = new Date();
 let day = now.getDate();
@@ -212,6 +213,25 @@ const getProductsPage = async (req, res, next) => {
 
   } catch (error) {
 
+    res.status(500).json({
+      succes: false,
+      message: error,
+    });
+  }
+};
+const getSmsPage = async (req, res, next) => {
+  try {
+    
+    const company = await Company.findById(res.locals.company._id)
+    const sms=company.sms
+    
+    res.status(200).render("smsPage", {
+      sms,
+      link: "services",
+    });
+
+  } catch (error) {
+    console.log(error)
     res.status(500).json({
       succes: false,
       message: error,
@@ -749,5 +769,6 @@ export {
   getcompanyPaymentResult,
   getProductsPage,
   getAppointmentReportsPage,
-  getUserReportsPage
+  getUserReportsPage,
+  getSmsPage
 };
