@@ -63,7 +63,8 @@ import {
   addSms,
   activateSms,
   deactivateSms,
-  editSms
+  editSms,
+  sendBulkSms
 } from "../controller/smsControllers.js";
 
 import {
@@ -245,11 +246,13 @@ router.route("/products/addProduct").post(checkPriviliges("product_add"), addPro
 router.route("/products/searchProduct").post(checkPriviliges("product_add"), searchProduct);
 router.route("/services/search").get(checkPriviliges("service_view"), findServices);
 
-router.route("/sms").get(checkPriviliges("product_view"), getSmsPage);
-router.route("/sms/addSms").post(checkPriviliges("product_view"), addSms);
-router.route("/sms/:id/activateSms").get(checkPriviliges("product_view"), activateSms);
-router.route("/sms/:id/deactivateSms").get(checkPriviliges("product_view"), deactivateSms);
-router.route("/sms/:id/editSms").post(checkPriviliges("product_view"), editSms);
+router.route("/sms").get(checkPriviliges("sms_view"), getSmsPage);
+router.route("/sms/addSms").post(checkPriviliges("sms_add"), addSms);
+router.route("/sms/sendBulkSms").post(checkPriviliges("sms_bulk_send"), sendBulkSms);
+router.route("/sms/:id/activateSms").get(checkPriviliges("sms_update"), activateSms);
+router.route("/sms/:id/deactivateSms").get(checkPriviliges("sms_update"), deactivateSms);
+router.route("/sms/:id/editSms").post(checkPriviliges("sms_update"), editSms);
+
 
 
 router.route("/services/:id/editService").post(checkPriviliges("service_update"), editService);

@@ -212,6 +212,36 @@ export const role_privileges = {
       group: "REPORTS",
       description: "Reports View",
     },
+    {
+      key: "sms_view",
+      name: "Sms Görüntüleme",
+      group: "SMS",
+      description: "Sms View",
+    },
+    {
+      key: "sms_update",
+      name: "Sms Düzenleme",
+      group: "SMS",
+      description: "Sms Update",
+    },
+    {
+      key: "sms_add",
+      name: "Sms Şablon Ekleme",
+      group: "SMS",
+      description: "Sms Add",
+    },
+    {
+      key: "sms_single_send",
+      name: "Tekil Sms Gaönderme",
+      group: "SMS",
+      description: "Sms Send",
+    },
+    {
+      key: "sms_bulk_send",
+      name: "Toplu Sms Gaönderme",
+      group: "SMS",
+      description: "Sms Send Bulk",
+    },
   ],
 };
 

@@ -93,5 +93,28 @@ const editSms = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
+const sendBulkSms = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    console.log("bulk sms");
+    req.body.message.replace("{{isim}}");
+    let messages = [];
+    for (const element of req.body.users) {
+      await User.findById(element)
+        .then((response) => {
+          messages.push({
+            user: response.phone,
+            message: req.body.message.replace("{{isim}}", response.name),
+          });
+        })
+        .catch((err) => console.log(err));
+    }
+    console.log(messages)
 
-export { addSms, activateSms, deactivateSms, editSms };
+    res.json({ success: true, message: "mesaj içeriği değiştirildi" });
+  } catch (error) {
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  }
+};
+
+export { addSms, activateSms, deactivateSms, editSms, sendBulkSms };

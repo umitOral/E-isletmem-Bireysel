@@ -78,8 +78,6 @@
                     <hr>
                     <br>
                     <div class="search">
-                        <form autocomplete="off" id="bulkOperations" action="./" class="horizontal-form">
-
                             <div class="form-group">Toplu İşlemler:
                                 <select name="operationType" id="operationType">
                                     <option value="" selected hidden disabled>Seçiniz</option>
@@ -87,13 +85,6 @@
                                 </select>
                             </div>
 
-
-                            <div class="form-group" style="align-self: end;">
-                                <input type="submit" class="save" value="Uygula">
-                            </div>
-
-
-                        </form>
 
                     </div>
 
@@ -117,7 +108,7 @@
                                 <th>
                                     <div>
                                         <div style="display: flex;flex-direction: column;">Hepsini Seç
-                                            <input type="checkbox" name="" id="">
+                                            <input type="checkbox" name="" id="check-all">
                                         </div>
                                     </div>
                                 </th>
@@ -133,7 +124,7 @@
                             </thead>
                             <tbody >
                                 <% reports.forEach((element,index)=> { %>
-                                    <tr data-appointmentİd=" <%= element._id %>">
+                                    <tr data-userID="<%= element._id %>">
 
                                         <td>
                                            <div style="display: flex; align-items: center; justify-content: center; gap:0.5rem;">
@@ -234,60 +225,30 @@
                 </main>
 
                 </seciton>
-                <div class="modal hidden" id="add_customer">
+                <div class="modal hidden" id="send_sms_modal">
                     <div class="inner_modal">
-                        <h2>Yeni Hasta Ekle</h2>
-                        <form action="./users/createUser" method="POST" id="register-form">
-                            <div class="form-group ">
-                                <span>İsim</span>
-                                <input type="text" name="name" id="user-name" required placeholder="İsim giriniz">
-                            </div>
-
-                            <div class="form-group ">
-                                <span>Soyisim</span>
-                                <input type="text" name="surname" id="surname" placeholder="soyisim giriniz" required>
-                            </div>
-                            <div class="form-group ">
-                                <span>Telefon</span>
-                                <input placeholder="başında '0' olmadan girin" type="tel" name="phone" id="phone"
-                                    required pattern="[0-9]{10}" maxlength="10">
-                            </div>
-                            <div class="options">
-                                <span>Cinsiyet:</span>
-                                <div>
-                                    <input type="radio" id="sex-women" name="sex" value="female">
-                                    &nbsp; <label for="sex-women">Kadın</label>
-
-                                    <input type="radio" id="sex-man" name="sex" value="male">
-                                    &nbsp; <label for="sex-man">Erkek</label>
-
-                                </div>
-
-                            </div>
-                            <div class="form-group ">
-                                <span>Doğum Tarihi</span>
-                                <input type="date" name="birthDate" id="birthDate">
-                            </div>
-                            <div class="form-group ">
-                                <span>Adres</span>
-                                <input type="text" name="address" id="address">
-
-                            </div>
-
-                            <div class="form-group ">
-                                <span>Mail</span>
-                                <input type="email" name="email" id="email">
+                        <h2>Toplu Sms</h2>
+                        <form action="../sms/sendSms" method="POST" id="send-sms-form">
+                            <div class="form-group ">Mesaj Şablonu:
+                                <select name="smsName" id="smsName">
+                                    <option value="" selected disabled hidden>Seçiniz</option>
+                                    <% locals.company.sms.forEach(sms => { %>
+                                       
+                                     <option data-smsContent="<%= sms.content %>" value="<%= sms.smsName %>"><%= sms.smsName %></option>
+                                    <% }) %>
+                                    <option data-smsContent="" value="" >Özel Sms</option>
+                                </select>
                             </div>
                             
-
-                            <div class="form-group ">
-                                <span>Fatura Bilgisi:</span>
-                                <textarea name="billingAddress" id="billingAddress" rows="2"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <span>Açıklama</span>
-                                <textarea name="notes" id="notes" rows="2"></textarea>
-                            </div>
+                                <div class="form-group">
+                                    <span>Mesaj:</span>
+                                    <% locals.company.sms.forEach(element => { %>
+                                    <input placeholder="" class="message-contents" style="display:none" type="text" name="content" value="<%= element.content %>">
+                                    <% }) %>
+                                    <input placeholder="" class="message-contents" style="display:none" type="text" name="content" value="" aria-placeholder="aaa">
+                                </div>
+                          
+                            
                             <div class="form-group">
                                 <button type="submit" class="btn save form-btn" id="add-user">Kaydet</button>
                                 <button type="button" class="btn cancel form-btn">Vazgeç</button>

@@ -9,15 +9,26 @@ import { Print } from "./inner_modules/print.js";
 const print = new Print();
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
+const cancelBtns = document.querySelectorAll(".btn.cancel.form-btn");
+const operationTypeSelect = document.getElementById("operationType");
+const smsNameSelect = document.getElementById("smsName");
+const checkAll = document.getElementById("check-all");
 
+cancelBtns.forEach((element) => {
+  element.addEventListener("click", () => {
+    ui.closeAllModals();
+  });
+});
 
-let bulkOperationsForm=document.querySelector("#bulkOperations")
+let bulkOperations = document.querySelector("#bulkOperations");
 
 const pdf_btn = document.querySelector(".to_pdf");
 const xlsx_btn = document.querySelector(".to_xlsx");
 
 const table = document.querySelector("table");
 const searchForm = document.querySelector("#user-reports-search");
+const sendSmsModal = document.querySelector("#send_sms_modal");
+const sendSmsForm = document.querySelector("#send-sms-form");
 
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -59,13 +70,18 @@ function datasToTable(data) {
   while (tableBody.children[0]) {
     tableBody.children[0].remove();
   }
-  data.reports.forEach((element,index) => {
+  data.reports.forEach((element, index) => {
     tableBody.innerHTML += `
     <tr data-userId="${element._id}">
                                        
                                        <td>
                                         <div style="display: flex; align-items: center; justify-content: center; gap:0.5rem;">
-                                              <label for="">${(data.pagination.page-1)*data.pagination.limit+index+1}</label>
+                                              <label for="">${
+                                                (data.pagination.page - 1) *
+                                                  data.pagination.limit +
+                                                index +
+                                                1
+                                              }</label>
                                               <input type="checkbox" name="" id="">
                                           </div>
                                        
@@ -133,7 +149,7 @@ function datasToPagination(pagination) {
   // create
   if (pagination.previous) {
     paginationArea.innerHTML += `
-      <span class="pagination-buttons" data-pageNumber="${pagination.page-1}">
+      <span class="pagination-buttons" data-pageNumber="${pagination.page - 1}">
       Önceki Sayfa<<
       </span>
     
@@ -142,8 +158,10 @@ function datasToPagination(pagination) {
 
   if (pagination.page > 1) {
     paginationArea.innerHTML += `
-        <span class="pagination-buttons" data-pageNumber="${pagination.page-1}">
-        ${pagination.page-1}
+        <span class="pagination-buttons" data-pageNumber="${
+          pagination.page - 1
+        }">
+        ${pagination.page - 1}
           </span>
         
       `;
@@ -156,12 +174,12 @@ function datasToPagination(pagination) {
     `;
 
   if (pagination.page < pagination.lastpage) {
-        paginationArea.innerHTML += `
+    paginationArea.innerHTML += `
            
         <span class="pagination-buttons" data-pageNumber="${
           pagination.page + 1
         }">
-        ${pagination.page+1}
+        ${pagination.page + 1}
         </span>
      
  `;
@@ -212,24 +230,90 @@ tableElements.forEach((table) => {
   });
 });
 
-
-// bulk operations
-bulkOperationsForm.addEventListener("submit",(e)=>{
-e.preventDefault()
-let operationType=bulkOperationsForm.operationType.options[bulkOperationsForm.operationType.selectedIndex].value
-
-let selectedUsers=[]
-const checkBoxes = table.querySelectorAll('input[type=checkbox]:not(:first-child):checked')
-checkBoxes.forEach(element => {
+checkAll.addEventListener("click",(e)=>{
   
-  selectedUsers.push(element.parentElement.parentElement.parentElement.dataset.appointmentİd)
-});
-if (operationType==="sendMessage") {
-  let data={
-    selectedUsers
+  const checkBoxes = table.querySelectorAll(
+    "input[type=checkbox]:not(:first-child)"
+  );
+  console.log(checkBoxes)
+  console.log(e.target.checked)
+  if (e.target.checked===true) {
+    console.log(1)
+    checkBoxes.forEach(element => {
+      element.checked=true
+    });
+  } else {
+    console.log(2)
+    checkBoxes.forEach(element => {
+      element.checked=false
+    });
   }
-  alert("toplu sms çok yakında hayata geçecektir.")
-console.log(selectedUsers)
-}
   
 })
+
+let selectedUsers = [];
+// bulk operations
+
+
+operationTypeSelect.addEventListener("change", () => {
+  selectedUsers = [];
+
+  const checkBoxes = table.querySelectorAll(
+    "input[type=checkbox]:not(:first-child):checked"
+  );
+
+  checkBoxes.forEach((element) => {
+    selectedUsers.push(
+      element.parentElement.parentElement.parentElement.dataset.userid
+    );
+  });
+  console.log(selectedUsers);
+  let operationType =
+    operationTypeSelect.options[operationTypeSelect.options.selectedIndex]
+      .value;
+
+  operationTypeSelect.options.selectedIndex = 0;
+  if (selectedUsers.length === 0) {
+    ui.showNotification(false, "listeden hasta seçiniz");
+  } else {
+    if (operationType === "sendMessage") {
+      sendSmsModal.classList.remove("hidden");
+    }
+  }
+});
+
+smsNameSelect.addEventListener("change", () => {
+  console.log("doruu")
+  const allmessageContents = document.querySelectorAll(".message-contents");
+  allmessageContents.forEach(element => {
+    element.style = "display:none";
+  });
+  console.log(smsNameSelect.options.selectedIndex)
+  allmessageContents[smsNameSelect.options.selectedIndex-1].style="display:block"
+  
+});
+
+sendSmsForm.addEventListener("submit", (e) => {
+  let messageContents = document.querySelectorAll(".message-contents");
+  e.preventDefault();
+
+  let data = {
+    users: selectedUsers,
+    message: messageContents[smsNameSelect.options.selectedIndex-1].value,
+  };
+  request
+    .postWithUrl("../sms/sendBulkSms", data)
+    .then((response) => {
+      ui.showNotification(response.success, response.message);
+      console.log(response);
+      selectedUsers = [];
+      sendSmsModal.classList.add("hidden")
+      
+    })
+    .catch((err) => {
+      ui.showNotification(err.success, err.message);
+      console.log(err);
+      selectedUsers = [];
+      sendSmsModal.classList.add("hidden")
+    });
+});
