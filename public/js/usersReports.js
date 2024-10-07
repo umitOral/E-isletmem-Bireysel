@@ -222,38 +222,37 @@ xlsx_btn.onclick = () => {
 const tableElements = document.querySelectorAll("table");
 
 tableElements.forEach((table) => {
-  table.querySelectorAll("thead th i").forEach((head, columnIndex) => {
-    head.addEventListener("click", () => {
-      console.log("xxx");
-      tables.sortingStart(table, columnIndex + 1);
-    });
+  table.querySelectorAll("thead th").forEach((head, columnIndex) => {
+    if (head.lastChild.classList.contains("fa-solid")) {
+      head.addEventListener("click", () => {
+        console.log(columnIndex);
+        tables.sortingStart(table, columnIndex);
+      });
+    }
   });
 });
 
-checkAll.addEventListener("click",(e)=>{
-  
+checkAll.addEventListener("click", (e) => {
   const checkBoxes = table.querySelectorAll(
     "input[type=checkbox]:not(:first-child)"
   );
-  console.log(checkBoxes)
-  console.log(e.target.checked)
-  if (e.target.checked===true) {
-    console.log(1)
-    checkBoxes.forEach(element => {
-      element.checked=true
+  console.log(checkBoxes);
+  console.log(e.target.checked);
+  if (e.target.checked === true) {
+    console.log(1);
+    checkBoxes.forEach((element) => {
+      element.checked = true;
     });
   } else {
-    console.log(2)
-    checkBoxes.forEach(element => {
-      element.checked=false
+    console.log(2);
+    checkBoxes.forEach((element) => {
+      element.checked = false;
     });
   }
-  
-})
+});
 
 let selectedUsers = [];
 // bulk operations
-
 
 operationTypeSelect.addEventListener("change", () => {
   selectedUsers = [];
@@ -283,14 +282,14 @@ operationTypeSelect.addEventListener("change", () => {
 });
 
 smsNameSelect.addEventListener("change", () => {
-  console.log("doruu")
+  console.log("doruu");
   const allmessageContents = document.querySelectorAll(".message-contents");
-  allmessageContents.forEach(element => {
+  allmessageContents.forEach((element) => {
     element.style = "display:none";
   });
-  console.log(smsNameSelect.options.selectedIndex)
-  allmessageContents[smsNameSelect.options.selectedIndex-1].style="display:block"
-  
+  console.log(smsNameSelect.options.selectedIndex);
+  allmessageContents[smsNameSelect.options.selectedIndex - 1].style =
+    "display:block";
 });
 
 sendSmsForm.addEventListener("submit", (e) => {
@@ -299,7 +298,7 @@ sendSmsForm.addEventListener("submit", (e) => {
 
   let data = {
     users: selectedUsers,
-    message: messageContents[smsNameSelect.options.selectedIndex-1].value,
+    message: messageContents[smsNameSelect.options.selectedIndex - 1].value,
   };
   request
     .postWithUrl("../sms/sendBulkSms", data)
@@ -307,13 +306,12 @@ sendSmsForm.addEventListener("submit", (e) => {
       ui.showNotification(response.success, response.message);
       console.log(response);
       selectedUsers = [];
-      sendSmsModal.classList.add("hidden")
-      
+      sendSmsModal.classList.add("hidden");
     })
     .catch((err) => {
       ui.showNotification(err.success, err.message);
       console.log(err);
       selectedUsers = [];
-      sendSmsModal.classList.add("hidden")
+      sendSmsModal.classList.add("hidden");
     });
 });
