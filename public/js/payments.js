@@ -293,6 +293,9 @@ userSelect.addEventListener("change", () => {
     .getwithUrl("./users/" + userID + "/getUsersHasPaymentOperations")
     .then((response) => {
       console.log(response);
+      while (operationsSelect.firstChild) {
+        operationsSelect.firstChild.remove();
+      }
       if (response.operations.length === 0) {
         let opt = document.createElement("option");
         opt.setAttribute("selected", "");

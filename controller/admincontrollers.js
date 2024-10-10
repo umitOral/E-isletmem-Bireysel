@@ -1,24 +1,20 @@
-import User from "../models/userModel.js";
+import Payment from "../models/paymentsModel.js";
 const topluIslemler = async (req, res, next) => {
   try {
-
     console.log("admin operations");
-    await User.find({sex:{$ne:"female"}}).then((response) => {
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "deneme işlemi",
-          total:response.length,
-          data: response,
-        })
-        .catch((err) => {
-          res.status(401).json({
-            success: true,
-            message: "başarısız",
-            data: err,
-          });
-        });
+    await Payment.updateMany(
+      { cashOrCard: "Nakit" },
+      {
+        $set:{cashOrCard:"nakit"}
+      }
+      
+    ).then((response) => {
+      res.status(200).json({
+        success: true,
+        message: "toplu işlem başarılı",
+        total: response.length,
+        data: response,
+      });
     });
 
     // let barcode = Number(req.body.barcode)
@@ -63,7 +59,7 @@ const topluIslemler = async (req, res, next) => {
 
     //   })
   } catch (error) {
-    res.json({
+    res.status(400).json({
       success: false,
       message: "ürün bulunurken bir sorun oluştu",
       error: error,

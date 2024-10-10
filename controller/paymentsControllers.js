@@ -137,6 +137,7 @@ const deletePayment = async (req, res, next) => {
 
 const editPayment = async (req, res, next) => {
   try {
+    console.log(req.body)
     let requestPayments = req.body.operations.map((item) => item.operationId);
 
     let payment = await Payment.findById(req.body.paymentId);
@@ -171,7 +172,7 @@ const editPayment = async (req, res, next) => {
 
         console.log(totalPrice);
         await Payment.findByIdAndUpdate(req.body.paymentId, {
-          $set: { totalPrice: totalPrice },
+          $set: { totalPrice: totalPrice,description:req.body.description,cashOrCard:req.body.cashOrCard},
         });
       } else {
         // let _id = new mongoose.Types.ObjectId(req.body.paymentId);
@@ -207,6 +208,7 @@ const editPayment = async (req, res, next) => {
             $set: {
               "operations.$[operation].paymentValue":
                 req.body.operations[indexcontrol].paymentValue,
+                description:req.body.description,cashOrCard:req.body.cashOrCard
             },
           },
           {

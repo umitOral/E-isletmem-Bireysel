@@ -459,6 +459,17 @@ const getAppointmentReportsPage = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+const paymentReportsPage = async (req, res, next) => {
+  try {
+   let users= await User.find({})
+    res.status(200).render("reports/paymentReports", {
+      users,
+      link: "reports",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 const getUserReportsPage = async (req, res, next) => {
   try {
     //pagination
@@ -770,5 +781,6 @@ export {
   getProductsPage,
   getAppointmentReportsPage,
   getUserReportsPage,
-  getSmsPage
+  getSmsPage,
+  paymentReportsPage
 };

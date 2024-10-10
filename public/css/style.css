@@ -60,6 +60,7 @@ input::placeholder {
   opacity: 0.5;
 }
 
+
 html {
   font-size: 14px;
 }
@@ -775,6 +776,9 @@ tfoot td {
 .save {
   background-color:var(--color-success) ;
 }
+.notr {
+  background-color:var(--color-border-color) ;
+}
 
 .cancel {
   background-color: var(--color-danger);
@@ -800,14 +804,20 @@ tfoot td {
   background-color: white;
   width: 30%;
 }
-tbody td.details a {
-  display: block;
-  padding: 1rem;
-}
-tbody td.details a:hover {
-  background-color: rgba(128, 128, 128, 0.144);
+.table-button {
+  padding: 0.5rem;
   border-radius: 1rem;
+  cursor: pointer;
 }
+.table-button:hover{
+  background: #bcbec17d;
+}
+.table-button:active{
+  background: #bcbec1a4;
+
+}
+
+
 table tbody tr:last-child td {
   border: none;
 }

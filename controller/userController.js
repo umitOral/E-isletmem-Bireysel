@@ -766,6 +766,7 @@ const getUsersHasPaymentOperations = async (req, res, next) => {
     const operations = await Operation.find({
       user: req.params.id,
       paymentStatus: "ödenmedi",
+      operationPrice:{$ne:0}
     });
 
     res.json({

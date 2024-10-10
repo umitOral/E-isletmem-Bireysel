@@ -17,7 +17,8 @@ const paymentSchema = new Schema(
     },
     cashOrCard: {
       type: String,
-      default: "Nakit",
+      default: "nakit",
+      lowercase: true
     },
     description: {
       type: String,

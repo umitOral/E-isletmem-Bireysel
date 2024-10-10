@@ -1,6 +1,7 @@
 import { CustomError } from '../helpers/error/CustomError.js'
 import User from "../models/userModel.js";
 import Session from "../models/sessionModel.js";
+import Payment from '../models/paymentsModel.js';
 
 const getUserReports = async (req, res, next) => {
   try {
@@ -226,8 +227,93 @@ const getAppointmentReports = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+const getPaymentReports = async (req, res, next) => {
+  try {
+    console.log("payment reports")
+    console.log(req.body)
+    const page = parseInt(req.body.page) || 1;
+    const limit = parseInt(req.body.limit) || 5;
+    
+
+    let searchObject = {
+      company: res.locals.company._id,
+    }
+
+    if (req.body.cashOrCard !== "") {
+      searchObject.cashOrCard =req.body.cashOrCard
+    }
+    if (req.body.users.length !== 0) {
+      searchObject.fromUser ={ $in:req.body.users}
+    }
+
+
+    let endDate = new Date(req.body.endDate)
+    endDate.setHours(24, 0, 0)
+
+
+
+    let startDate = new Date(req.body.startDate)
+    startDate.setDate(startDate.getDate() - 1)
+    startDate.setHours(24, 0, 0)
+
+    // pagination    
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    let reports = await Payment.find(searchObject).lean()
+
+      .where('createdAt').gt(startDate).lt(endDate)
+      .populate("fromUser", ["name", "surname"])
+      .populate("operations.operationId")
+      .skip(startIndex)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+    
+
+    let total = await Payment.find(searchObject)
+      .where('createdAt').gt(startDate).lt(endDate)
+
+    total = total.length
+    console.log(total)
+
+
+    const lastpage = Math.ceil(total / limit);
+    const pagination = {};
+    pagination["page"] = page;
+    pagination["lastpage"] = lastpage;
+    pagination["limit"] = limit;
+
+    if (startIndex > 0) {
+      pagination.previous = {
+        page: page - 1
+      };
+    }
+    if (endIndex < total) {
+      pagination.next = {
+        page: page + 1,
+      };
+    }
+
+
+    res.status(200).json({
+      success: true,
+      message: "rapor oluşturuldu",
+      data: {
+        reports,
+        total,
+        pagination,
+      }
+    });
+
+
+
+  } catch (error) {
+    console.log(error)
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 
 
 export {
-  getUserReports,getAppointmentReports
+  getUserReports,getAppointmentReports,getPaymentReports
 }

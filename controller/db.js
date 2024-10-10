@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+import { CustomError } from "../helpers/error/CustomError.js";
 
 const connect = async () => {
   try {
+    console.log( "connect fonksiyonu")
 
     if (process.env.MODE === "development") {
      
@@ -39,3 +41,4 @@ const connect = async () => {
 };
 
 export default connect;
+
