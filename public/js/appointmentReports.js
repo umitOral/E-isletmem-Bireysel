@@ -1,3 +1,5 @@
+$(".chosen-select").chosen({ width: "100%" });
+
 console.log("reports");
 $(".chosen-select").chosen({ width: "100%" });
 
@@ -6,10 +8,10 @@ const request = new Request();
 import { UI } from "./ui.js";
 const ui = new UI();
 
-
 const cancelBtns = document.querySelectorAll(".btn.cancel.form-btn");
 const operationTypeSelect = document.getElementById("operationType");
-const smsNameSelect = document.getElementById("smsName");
+let paginationBtns = document.querySelectorAll(".pagination-buttons");
+
 const checkAll = document.getElementById("check-all");
 
 cancelBtns.forEach((element) => {
@@ -18,33 +20,32 @@ cancelBtns.forEach((element) => {
   });
 });
 
-
-
-const table = document.querySelector("#user-report-table");
-const searchForm = document.querySelector("#user-reports-search");
-const sendSmsModal = document.querySelector("#send_sms_modal");
-const sendSmsForm = document.querySelector("#send-sms-form");
-
+const table = document.querySelector("#appointment-report-table");
+const searchForm = document.querySelector("#appointment-reports-search");
 
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  getReports();
+  getAppointments();
 });
 
-function getReports(page) {
+function getAppointments(page) {
+  let options = searchForm.status.selectedOptions;
+  var values = Array.from(options).map(({ value }) => value);
+  console.log(options);
+  console.log(values);
   let data = {
     page: page || 1,
     startDate: searchForm.startDate.value,
     endDate: searchForm.endDate.value,
-    birthDate: searchForm.birthDate.value,
-    sex: searchForm.sex.options[searchForm.sex.selectedIndex].value,
-    firstAppointment:
-      searchForm.firstAppointment.options[
-        searchForm.firstAppointment.selectedIndex
-      ].value,
+    personelInput: Array.from(searchForm.personelInput.selectedOptions).map(
+      ({ value }) => value
+    ),
+    status: Array.from(searchForm.status.selectedOptions).map(
+      ({ value }) => value
+    ),
   };
   request
-    .postWithUrl("./userReportsPage", data)
+    .postWithUrl("./appointmentsReportsPage", data)
     .then((response) => {
       ui.showNotification(response.success, response.message);
       console.log(response);
@@ -58,7 +59,7 @@ function getReports(page) {
 }
 
 function datasToTable(data) {
-  let tableBody = document.querySelector("#user-report-table tbody");
+  let tableBody = document.querySelector("#appointment-report-table tbody");
   let lastpage = document.querySelector("#lastpage");
   let total = document.querySelector("#total");
 
@@ -84,54 +85,47 @@ function datasToTable(data) {
                                        </td>
                                        <td>
                                        ${new Date(
-                                         element.createdAt
+                                         element.date
                                        ).toLocaleDateString()}
                                        </td>
                                        <td>
-                                       ${element.name}
-                                       </td>
-                                       <td>
-                                       ${element.surname}
-                                       </td>
-                                       
+                                       ${new Date(
+                                         element.startHour
+                                       ).toLocaleTimeString([], {
+                                         hour: "2-digit",
+                                         minute: "2-digit",
+                                       })}-
+                                       ${new Date(
+                                         element.endHour
+                                       ).toLocaleTimeString([], {
+                                         hour: "2-digit",
+                                         minute: "2-digit",
+                                       })}
                                       
-                                       ${(() => {
-                                         if (element.sex === "female") {
-                                           return `<td>Kadın</td>`;
-                                         } else {
-                                           return `<td>Erkek</td>`;
-                                         }
-                                       })()}
-                                       
-                                       <td>
-                                       ${element.phone}
-                                       </td>
-                                       <td>
-                                       ${element.email}
-                                       </td>
-                                       <td>
-                                       
-                                       ${(() => {
-                                         if (element.firstAppointment) {
-                                           if (
-                                             (element.firstAppointment = false)
-                                           ) {
-                                             return `yok`;
-                                           } else {
-                                             return `var`;
-                                           }
-                                         } else {
-                                           return `-`;
-                                         }
-                                       })()}
                                        </td>
                                        <td>
                                        ${
-                                         new Date(
-                                           element.birthDate
-                                         ).toLocaleDateString() || "-"
+                                         element.user.name +
+                                         " " +
+                                         element.user.surname
                                        }
                                        </td>
+                                       <td>
+                                       ${
+                                         element.doctor.name +
+                                         " " +
+                                         element.doctor.surname
+                                       }
+                                       </td>
+                                          <td>
+                                       ${element.description}
+                                       </td>
+                                       <td>
+                                       ${element.appointmentState}
+                                       </td>
+                                       
+                                       
+                                     
                                    </tr>
 `;
     lastpage.innerHTML = `${data.pagination.lastpage}`;
@@ -146,7 +140,7 @@ function datasToPagination(pagination) {
   if (pagination.previous) {
     paginationArea.innerHTML += `
       <span class="pagination-buttons" data-pageNumber="${pagination.page - 1}">
-      Önceki Sayfa<<
+       <i class="fa-solid fa-angle-left"></i>
       </span>
     
   `;
@@ -186,12 +180,11 @@ function datasToPagination(pagination) {
                <span class="pagination-buttons" data-pageNumber="${
                  pagination.page + 1
                }">
-                  >>Sonraki Sayfa
+                  <i class="fa-solid fa-angle-right"></i>
                </span>
             
         `;
   }
-
   paginatioButtonsHandle();
 }
 
@@ -200,15 +193,14 @@ function paginatioButtonsHandle() {
   paginationBtns.forEach((element) => {
     element.addEventListener("click", (e) => {
       console.log(e.target.dataset.pagenumber);
-      getReports(e.target.dataset.pagenumber);
+      getAppointments(e.target.dataset.pagenumber);
     });
   });
 }
 
 
-
 checkAll.addEventListener("click", (e) => {
-  ui.tableRowSelection(table)
+  ui.tableRowSelection(table);
 });
 
 let selectedUsers = [];
@@ -236,42 +228,6 @@ operationTypeSelect.addEventListener("change", () => {
     ui.showNotification(false, "listeden hasta seçiniz");
   } else {
     if (operationType === "sendMessage") {
-      sendSmsModal.classList.remove("hidden");
     }
   }
-});
-
-smsNameSelect.addEventListener("change", () => {
-  console.log("doruu");
-  const allmessageContents = document.querySelectorAll(".message-contents");
-  allmessageContents.forEach((element) => {
-    element.style = "display:none";
-  });
-  console.log(smsNameSelect.options.selectedIndex);
-  allmessageContents[smsNameSelect.options.selectedIndex - 1].style =
-    "display:block";
-});
-
-sendSmsForm.addEventListener("submit", (e) => {
-  let messageContents = document.querySelectorAll(".message-contents");
-  e.preventDefault();
-
-  let data = {
-    users: selectedUsers,
-    message: messageContents[smsNameSelect.options.selectedIndex - 1].value,
-  };
-  request
-    .postWithUrl("../sms/sendBulkSms", data)
-    .then((response) => {
-      ui.showNotification(response.success, response.message);
-      console.log(response);
-      selectedUsers = [];
-      sendSmsModal.classList.add("hidden");
-    })
-    .catch((err) => {
-      ui.showNotification(err.success, err.message);
-      console.log(err);
-      selectedUsers = [];
-      sendSmsModal.classList.add("hidden");
-    });
 });

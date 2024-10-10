@@ -30,7 +30,7 @@
 
 
                     <div class="search">
-                        <form autocomplete="off" action="./appointmentReportsPage" class="horizontal-form">
+                        <form autocomplete="off" action="./appointmentReportsPage" class="horizontal-form" id="appointment-reports-search">
 
                             <div class="form-group">Başlangıç tarihi:
                                 <input type="date" name="startDate" class="startDate"
@@ -79,23 +79,15 @@
                     <hr>
                     <br>
                     <div class="search">
-                        <form autocomplete="off" action="./" class="horizontal-form">
+                     
 
                             <div class="form-group">Toplu İşlemler:
-                                <select name="" id="">
+                                <select name="operationType" id="operationType">
                                     <option value="sil" selected hidden disabled>Seçiniz</option>
                                     <option value="sil">Mesaj gönder</option>
-                                    <option value="sil">Sil</option>
                                 </select>
                             </div>
 
-
-                            <div class="form-group" style="align-self: end;">
-                                <input type="submit" class="save" value="Uygula">
-                            </div>
-
-
-                        </form>
 
                     </div>
 
@@ -114,12 +106,12 @@
                     </div>
 
                     <div class="table-wrapper">
-                        <table>
+                        <table id="appointment-report-table">
                             <thead>
                                 <th>
                                     <div>
                                         <div style="display: flex;flex-direction: column;">Hepsini Seç
-                                            <input type="checkbox" name="" id="">
+                                            <input type="checkbox" name="" id="check-all">
                                         </div>
                                     </div>
                                 </th>
@@ -165,8 +157,6 @@
                                             </span>
                                         </td>
 
-                                        <td class=" details"><a href="./users/<%= element._id %>">Detay</a>
-                                        </td>
                                     </tr>
                                     <% }) %>
 
@@ -180,37 +170,40 @@
                     </div>
 
                     <div class="pagination-describe">
-                        <%= pagination.lastpage %> Sayfa, Toplam <%= total %> Sonuç bulundu
+                        <div>
+                            <span id="lastpage"><%=  %></span> Sayfa, Toplam <span id="total"><%=  %></span> Sonuç bulundu
+                        </div>
                     </div>
-                    <div class="pagination">
+                    
+                    <div class="pagination" id="pagination">
 
                         <% if (pagination.previous ) { %>
-                            <a
-                                href="./appointmentReportsPage?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
-                                    Sayfa<<<< <% } %>
+                            <span class="pagination-buttons" data-pageNumber="<%= pagination.page - 1 %>">
+                                Önceki Sayfa<<
+                                </span>
+                            <% } %>
 
                                         <% if (pagination.page>1) { %>
-                                            <a
-                                                href="./appointmentReportsPage?page=<%= pagination.page-1 %>&limit=<%=pagination.previous.limit %>"><span>
-                                                    <%= pagination.page-1 %>
-                                                </span></a>
+                                            <span class="pagination-buttons" data-pageNumber="<%= pagination.page %>">
+                                              <%= pagination.page - 1 %>
+                                                </span>
                                             <% } %>
 
-                                                <a href="#"><span class="page-active">
-                                                        <%= pagination.page %>
-                                                    </span></a>
+                                            <span class="pagination-buttons page-active" data-pageNumber="<%= pagination.page %>">
+                                                <%= pagination.page %>
+                                              </span>
 
                                                 <% if (pagination.page<pagination.lastpage) { %>
-                                                    <a
-                                                        href="./appointmentReportsPage?page=<%= pagination.page+1 %>&limit=<%=pagination.next.limit %>"><span>
-                                                            <%= pagination.page+1 %>
-                                                        </span></a>
+                                                    <span class="pagination-buttons" data-pageNumber="<%= pagination.page +1%>">
+                                                      <%= pagination.page+1 %>
+                                                      </span>
                                                     <% } %>
 
 
                                                         <% if (pagination.next) { %>
-                                                            <a href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>&<% for(let x in query){  %><%= x+"="+query[x]+"&"%><%} %>"><span>
-                                                                    >>Sonraki Sayfa</span></a>
+                                                            <span class="pagination-buttons" data-pageNumber="<%= pagination.page +1%>">
+                                                                 >>Sonraki Sayfa
+                                                              </span>
                                                             <% } %>
 
                                                             
@@ -283,9 +276,9 @@
 
                 <div class="information-modal-wrapper"></div>
 
-                <script type="module" src="/js/reports.js"></script>
                 <script type="module" src="/js/inner_modules/tables.js"></script>
                 <script type="module" src="/js/inner_modules/print.js"></script>
+                <script type="module" src="/js/appointmentReports.js"></script>
                 <script type="module" src="/js/reports.js"></script>
 
                 <script src="/js/sidebar.js"></script>

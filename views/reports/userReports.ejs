@@ -190,32 +190,32 @@
                     <div class="pagination" id="pagination">
 
                         <% if (pagination.previous ) { %>
-                            <a
-                                href="./appointmentReportsPage?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
-                                    Sayfa<<<< <% } %>
+                            <span class="pagination-buttons" data-pageNumber="<%= pagination.page - 1 %>">
+                                Önceki Sayfa<<
+                                </span>
+                            <% } %>
 
                                         <% if (pagination.page>1) { %>
-                                            <a
-                                                href="./appointmentReportsPage?page=<%= pagination.page-1 %>&limit=<%=pagination.previous.limit %>"><span>
-                                                    <%= pagination.page-1 %>
-                                                </span></a>
+                                            <span class="pagination-buttons" data-pageNumber="<%= pagination.page %>">
+                                              <%= pagination.page - 1 %>
+                                                </span>
                                             <% } %>
 
-                                                <a href="#"><span class="page-active">
-                                                        <%= pagination.page %>
-                                                    </span></a>
+                                            <span class="pagination-buttons page-active" data-pageNumber="<%= pagination.page %>">
+                                                <%= pagination.page %>
+                                              </span>
 
                                                 <% if (pagination.page<pagination.lastpage) { %>
-                                                    <a
-                                                        href="./appointmentReportsPage?page=<%= pagination.page+1 %>&limit=<%=pagination.next.limit %>"><span>
-                                                            <%= pagination.page+1 %>
-                                                        </span></a>
+                                                    <span class="pagination-buttons" data-pageNumber="<%= pagination.page +1%>">
+                                                      <%= pagination.page+1 %>
+                                                      </span>
                                                     <% } %>
 
 
                                                         <% if (pagination.next) { %>
-                                                            <a href="./appointmentReportsPage?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
-                                                                    >>Sonraki Sayfa</span></a>
+                                                            <span class="pagination-buttons" data-pageNumber="<%= pagination.page +1%>">
+                                                                 >>Sonraki Sayfa
+                                                              </span>
                                                             <% } %>
 
                                                             

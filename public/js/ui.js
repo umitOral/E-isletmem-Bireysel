@@ -14,15 +14,15 @@ export class UI {
   }
 
   tableRowSelection(table){
+    console.log("checkbox sele")
     const tables = document.querySelectorAll("table")
     const checkAllBox = table.querySelector("input[type=checkbox]:first-child")
     const tableRows = table.querySelectorAll("tbody tr")
     const checkBoxes = table.querySelectorAll('input[type=checkbox]:not(:first-child)')
 
     checkBoxes.forEach(element => {
-      element.addEventListener("click",()=>{
-        
-        console.log(element)
+      element.addEventListener("click",(e)=>{
+        e.target.parentElement.parentElement.parentElement.classList="background:#0000ff0d"
       })
     });
    
