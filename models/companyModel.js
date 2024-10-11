@@ -6,9 +6,9 @@ import jwt from "jsonwebtoken";
 const Schema = mongoose.Schema;
 const companySchema = new Schema(
   {
-    brandName: { type: String, require: true },
-    companyName: { type: String, require: false },
-    email: { type: String, require: true, index: { unique: true } },
+    brandName: { type: String, require: true,lowercase: true},
+    companyName: { type: String, require: false,lowercase: true},
+    email: { type: String, require: true, index: { unique: true },lowercase: true},
 
     password: {
       type: String,
