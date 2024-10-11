@@ -15,11 +15,11 @@ const companySchema = new Schema(
       require: true,
       minLength: [4, "şifre uzunluğu en az 4 karakter olmalıdır."],
     },
-    phone: { type: String, require: false },
-    address: { type: String, require: false },
-    billingAddress: { type: String, require: false },
+    phone: { type: String},
+    address: { type: String ,lowercase:true },
+    billingAddress: { type: String, lowercase:true },
     registerDate: { type: Date, default: Date.now },
-    notes: { type: String, require: false },
+    notes: { type: String, require: false,lowercase:true},
     debtStatus: { type: Number, require: 0 },
     employees: [
       {
