@@ -277,7 +277,7 @@ const getSearchedPayments = async (req, res, next) => {
     payments.forEach((payment) => {
       if (payment.totalPrice > 0) {
         totalIncome += payment.totalPrice;
-        if (payment.cashOrCard === "Nakit") {
+        if (payment.cashOrCard === "nakit") {
           totalCash += payment.totalPrice;
         } else {
           totalCreditCard += payment.totalPrice;
