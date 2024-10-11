@@ -17,7 +17,7 @@ const contents = document.querySelectorAll(".userInformationsContent");
 
 const addPictureForm = document.querySelector("#add_picture_form");
 const editBtn = document.querySelector(".edit-informations-btn");
-const editUserButton = document.getElementById("edit-user");
+
 
 const loader = document.querySelector(".loader_wrapper.hidden");
 
@@ -65,7 +65,7 @@ eventListeners();
 function eventListeners() {
   addPictureForm.addEventListener("submit", addPicture);
   addDiscountForm.addEventListener("submit", (e) => addDiscount(e));
-  editUserButton.addEventListener("click", editUser);
+ 
   editBtn.addEventListener("click", showInformationsModal);
 }
 
@@ -150,23 +150,7 @@ function deleteButtonFunction(selector) {
 const userName = document.getElementById("user-name");
 const usersurName = document.getElementById("user-surname");
 
-function editUser() {
-  const name = userName.value || userName.placeholder;
-  const surName = usersurName.value || usersurName.placeholder;
 
-  request
-    .put(userID, {
-      name: name,
-      surname: surName,
-    })
-    .then((response) => {
-      console.log(response);
-      ui.showNotification(true, response.message);
-    })
-    .catch((err) => ui.showNotification(false, response.message));
-
-  e.preventDefault();
-}
 
 async function getOperationImages(operationID) {
   const allSmallImages = document.querySelector(".small_images");

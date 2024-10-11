@@ -34,7 +34,7 @@ import {
   getUsersHasPaymentOperations,
   getUsersAllOperations,
   editInformations,
-  findUsers,
+  findUser,
   findSingleUser,
   findEmployees,
   deactivateEmployee,
@@ -119,7 +119,7 @@ router.route("/").get(getAdminPage);
 router.route("/topluIslemler").get(topluIslemler);
 router.route("/users").get(checkPriviliges("user_view"), getUsersPage);
 
-router.route("/users/search").get(checkPriviliges("user_view"), findUsers);
+router.route("/users/findUser").post(checkPriviliges("user_view"), findUser);
 router
   .route("/users/search/findSingleUser")
   .get(checkPriviliges("user_view"), findSingleUser);

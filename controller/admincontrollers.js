@@ -1,14 +1,18 @@
-import Payment from "../models/paymentsModel.js";
+import User from "../models/paymentsModel.js";
 const topluIslemler = async (req, res, next) => {
   try {
     console.log("admin operations");
-    await Payment.updateMany(
-      { cashOrCard: "Nakit" },
-      {
-        $set:{cashOrCard:"nakit"}
-      }
-      
-    ).then((response) => {
+    await User.aggregate(
+      [
+        {
+          $project:
+            {
+              name: { $toLower: "$name" },
+            }
+        }
+      ]
+   ).then((response) => {
+    console.log(response)
       res.status(200).json({
         success: true,
         message: "toplu işlem başarılı",

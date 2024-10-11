@@ -22,8 +22,6 @@ import {
 import Subscription from "../models/subscriptionModel.js";
 import { response } from "express";
 
-
-
 const deactivateEmployee = async (req, res, next) => {
   try {
     console.log("başarılı");
@@ -59,66 +57,35 @@ const getUsersAllSessions = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const findUsers = async (req, res, next) => {
+const findUser = async (req, res, next) => {
   try {
     //search
-    console.log(req.query)
-    let query = User.find();
-    const searchObject = {};
-    if (req.query) {
-      for (const key in req.query) {
-        const element = req.query[key];
-        if (element.length!==0) {
-          searchObject[key]={$regex :element}
-        }
 
-      }
-      console.log(searchObject)
-      searchObject["company"] = res.locals.company._id;
-      searchObject["role"] = "customer";
-
-      query = query.where(searchObject);
+    
+    let searchObject={
+      company: res.locals.company._id
     }
-  
-    //pagination
-    // 1 2 3 4 5..6 7 8
-
-    const page = parseInt(req.query.page) || 1;
-    const limit = 3;
-
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-
-      
-    const lastpage = Math.round(query.length / limit);
-    const pagination = {};
-    pagination["page"] = page;
-    pagination["lastpage"] = lastpage;
-
-    if (startIndex > 0) {
-      pagination.previous = {
-        page: page - 1,
-        limit: limit,
-      };
+    if (req.body.name!=="") {
+      searchObject.name={'$regex' : '^'+req.body.name+'$', '$options' : 'i'}
     }
-    if (endIndex < query.length) {
-      pagination.next = {
-        page: page + 1,
-        limit: limit,
-      };
+    if (req.body.surname!=="") {
+      searchObject.surname=req.body.surname
+    } 
+    if (req.body.phone!=="") {
+      searchObject.phone=req.body.phone
+    }
+    if (req.body.identity!=="") {
+      searchObject.identity=req.body.identity
     }
 
-    query = query.skip(startIndex).limit(limit);
+    console.log(searchObject);
+    let users = await User.find(searchObject);
 
-    const data = await query;
-
-    res.status(200).render("search-results", {
-      header: "hastalar",
-      data,
-      count: data.length,
-      pagination: pagination,
+    res.status(200).json({
+      data: users,
       link: "users",
-      searchObject
+      success: true,
+      message:"hastalar başarıyla çekildi"
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -218,18 +185,24 @@ const findEmployees = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   try {
-    console.log("burası2")
-    console.log(req.body)
+    console.log("burası2");
+    console.log(req.body);
     const userEmail = req.body.email;
     const userPhone = req.body.phone;
     req.body.company = res.locals.company;
     let searchEmail;
-    if (req.body.email!=="") {
-       searchEmail = await User.findOne({ email: userEmail, company: res.locals.company });
+    if (req.body.email !== "") {
+      searchEmail = await User.findOne({
+        email: userEmail,
+        company: res.locals.company,
+      });
     }
-    
-    const searchPhone = await User.findOne({ phone: userPhone, company: res.locals.company });
-    
+
+    const searchPhone = await User.findOne({
+      phone: userPhone,
+      company: res.locals.company,
+    });
+
     if (searchEmail) {
       return next(
         new CustomError(
@@ -244,8 +217,7 @@ const createUser = async (req, res, next) => {
           400
         )
       );
-    }
-    else {
+    } else {
       await User.create(req.body).then((response) => {
         jwt.verify(
           req.cookies.userData,
@@ -293,6 +265,7 @@ const editInformations = async (req, res, next) => {
       address: req.body.address,
       sex: req.body.sex,
       birthDate: req.body.birthDate,
+      identity:req.body.identity,
       phone: req.body.phone,
       company: req.body.company,
       billingAddress: req.body.billingAddress,
@@ -314,7 +287,7 @@ const loginUser = async (req, res, next) => {
     if (employee) {
       const company = await Company.findOne({ _id: employee.company });
       same = await bcrypt.compare(req.body.password, employee.password);
-      console.log(company)
+      console.log(company);
       if (same) {
         const token = createToken(company._id, employee._id);
 
@@ -434,7 +407,6 @@ const uploadPictures = async (req, res, next) => {
 
 const addDataToOperation = async (req, res, next) => {
   try {
-
     console.log(req.body);
     console.log(req.params);
 
@@ -661,27 +633,22 @@ const deleteOperation = async (req, res, next) => {
 const getSessionsofOperation = async (req, res, next) => {
   try {
     console.log("getSessionsofOperation");
-    Operation.findById(req.params.operationId).then(
-      async (response) => {
-        console.log(response)
-        if (response.sessionOfOperation.length === 0) {
-          res.status(200).json({
-            succes: false,
-            data: {},
-            message: "işleme ait seanslar bulunmamaktadır.",
-          });
-
-        } else {
-          res.status(200).json({
-            succes: true,
-            data: response,
-            message: "işleme ait seanslar çekildi.",
-          });
-        }
+    Operation.findById(req.params.operationId).then(async (response) => {
+      console.log(response);
+      if (response.sessionOfOperation.length === 0) {
+        res.status(200).json({
+          succes: false,
+          data: {},
+          message: "işleme ait seanslar bulunmamaktadır.",
+        });
+      } else {
+        res.status(200).json({
+          succes: true,
+          data: response,
+          message: "işleme ait seanslar çekildi.",
+        });
       }
-    );
-
-
+    });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
@@ -766,7 +733,7 @@ const getUsersHasPaymentOperations = async (req, res, next) => {
     const operations = await Operation.find({
       user: req.params.id,
       paymentStatus: "ödenmedi",
-      operationPrice:{$ne:0}
+      operationPrice: { $ne: 0 },
     });
 
     res.json({
@@ -825,13 +792,10 @@ const getAllPhotos = async (req, res, next) => {
 };
 const getUsersAllPayments = async (req, res, next) => {
   try {
-
-
-    const payments = await Payment.find({ fromUser: req.params.id })
-    payments.forEach(element => {
-      console.log(element.operations.operationId)
+    const payments = await Payment.find({ fromUser: req.params.id });
+    payments.forEach((element) => {
+      console.log(element.operations.operationId);
     });
-
 
     if (payments.length === 0) {
       res.json({ success: true, message: "ödeme bulunamadı", data: payments });
@@ -906,7 +870,7 @@ export {
   logOut,
   uploadPictures,
   editInformations,
-  findUsers,
+  findUser,
   findSingleUser,
   deactivateEmployee,
   findEmployees,

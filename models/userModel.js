@@ -47,7 +47,7 @@ const userSchema = new Schema(
       ref: "Company",
     },
     identity: {
-      type: Number,
+      type: String,
       trim: true,
     },
   },

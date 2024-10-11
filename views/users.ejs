@@ -27,12 +27,12 @@
 
 
                     <div class="search">
-                        <form autocomplete="off" action="./users/search">
+                        <form autocomplete="off" action="./users/search" id="search-form">
                             <div class="autocomplete form-group">
                                 <input id="myInput" type="text" name="name" placeholder="Hasta Seç">
                                 <input id="myInput" type="text" name="surname" placeholder="Soyad">
-                                <input id="myInput" type="text" name="phone" placeholder="telefon">
-                                <input id="myInput" type="text" name="identify" placeholder="TC">
+                                <input id="myInput" type="text" name="phone" placeholder="telefon" max="10">
+                                <input id="myInput" type="text" name="identity" placeholder="TC" maxlength="11">
                                 <input type="submit" value="Ara">
                             </div>
 
@@ -55,7 +55,7 @@
 
                     </div>
                     <div class="table-wrapper">
-                        <table>
+                        <table id="user-table">
                             <thead>
 
                                 <th>İsim<i class="fa-solid fa-arrow-up"></i></th>
@@ -90,42 +90,9 @@
                     </div>
 
                     <div class="pagination-describe">
-                        Toplam <%= total %> hasta içerisinden <%= count %> kişi listelendi
+                        
                     </div>
-                    <div class="pagination">
-
-                        <% if (pagination.previous ) { %>
-                            <a
-                                href="./users?page=<%= pagination.previous.page %>&limit=<%= pagination.previous.limit %>"><span>Önceki
-                                    Sayfa<<<< /a>
-                                        <% } %>
-
-                                            <% if (pagination.page>1) { %>
-                                                <a href="./users?page=<%= pagination.page-1 %>&limit=<%=3 %>"><span>
-                                                        <%= pagination.page-1 %>
-                                                    </span></a>
-                                                <% } %>
-
-                                                    <a href="./users?page=<%= pagination.page %>&limit=<%=3 %>"><span
-                                                            class="page-active">
-                                                            <%= pagination.page %>
-                                                        </span></a>
-
-                                                    <% if (pagination.page<pagination.lastpage) { %>
-                                                        <a href="./users?page=<%= pagination.page+1 %>&limit=<%=3 %>"><span>
-                                                                <%= pagination.page+1 %>
-                                                            </span></a>
-                                                        <% } %>
-
-
-                                                            <% if (pagination.next) { %>
-                                                                <a
-                                                                    href="./users?page=<%= pagination.next.page %>&limit=<%= pagination.next.limit %>"><span>
-                                                                        >>Sonraki Sayfa</span></a>
-                                                                <% } %>
-
-                    </div>
-
+                    
                 </main>
 
                 </seciton>

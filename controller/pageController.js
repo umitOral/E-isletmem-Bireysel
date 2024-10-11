@@ -293,50 +293,25 @@ const getAdminPage = async (req, res, next) => {
 
 const getUsersPage = async (req, res, next) => {
   try {
-    //pagination
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.page) || 5;
+    console.log(req.body)
+    console.log(req.query)
 
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+    //pagination
+
+    let limit=10;
+
 
     let users = await User.find({
       company: res.locals.company._id,
       role: "customer",
     })
-      .skip(startIndex)
       .limit(limit)
       .sort({ updatedAt: -1 });
 
-    let total = await User.count({
-      company: res.locals.company._id,
-      role: "customer",
-    });
-
-    const lastpage = Math.ceil(total / limit);
-    const pagination = {};
-    pagination["page"] = page;
-    pagination["lastpage"] = lastpage;
-
-    if (startIndex > 0) {
-      pagination.previous = {
-        page: page - 1,
-        limit: limit,
-      };
-    }
-    if (endIndex < total) {
-      pagination.next = {
-        page: page + 1,
-        limit: limit,
-      };
-    }
-   
 
     res.status(200).render("users", {
       users,
-      total,
-      count: users.length,
-      pagination,
+      succes:true,
       link: "users",
     });
   } catch (error) {
