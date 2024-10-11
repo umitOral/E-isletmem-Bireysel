@@ -27,6 +27,7 @@ let selectedOperationsforEdit = [];
 let editedPayment = "";
 
 let selectedOperations = [];
+let selectedPaymentIndex;
 
 cancelBtns.forEach((element) => {
   element.addEventListener("click", () => {
@@ -43,7 +44,7 @@ searchForm.addEventListener("submit", (e) => {
 });
 
 function getPayments(page) {
- 
+ console.log("burası")
   let data = {
     page:page||1,
     startDate: searchForm.startDate.value,
@@ -54,7 +55,7 @@ function getPayments(page) {
     cashOrCard: searchForm.cashOrCard.options[searchForm.cashOrCard.options.selectedIndex].value
     
   };
-  console.log(data)
+ 
   request
     .postWithUrl("./paymentsReportsPage", data)
     .then((response) => {
@@ -72,8 +73,9 @@ function getPayments(page) {
 
 function detailsBtnhandLe() {
   let btns=document.querySelectorAll(".payment-details-btn")
-  btns.forEach(element => {
+  btns.forEach((element,index) => {
     element.addEventListener("click",(e)=>{
+      selectedPaymentIndex=index+1
       handleEditModal(e.target.parentElement.parentElement.dataset.paymentid)
     })
   });
@@ -102,8 +104,7 @@ const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
 );
 
-function handleEditModal(paymentId) {
-  
+function handleEditModal(paymentId,index) {
   editedPayment = paymentId;
 
   request
@@ -169,7 +170,7 @@ function handleEditModal(paymentId) {
       response.data.operations.forEach((element) => {
         selectedOperationsforEdit.push(element);
       });
-      console.log(selectedOperationsforEdit);
+     
       calculatetTotalPriceforEdit();
     })
     .catch((err) => {
@@ -354,10 +355,19 @@ saveEditModal.addEventListener("click",(e) => {
     request
     .postWithUrl("../payments/" + editedPayment + "/editPayment", data)
     .then((response) => {
-      console.log("1")
+      console.log(response)
       ui.showNotification(true, response.message);
       editPaymentModal.classList.add("hidden");
-      getPayments()
+      table.rows[selectedPaymentIndex].children[3].innerHTML=`
+        ${response.data.totalPrice}
+      `
+      table.rows[selectedPaymentIndex].children[4].innerHTML=`
+        ${response.data.cashOrCard}
+      `
+      table.rows[selectedPaymentIndex].children[5].innerHTML=`
+        ${response.data.description}
+      `
+      
      
     })
     .catch((err) => console.log(err));
@@ -365,7 +375,6 @@ saveEditModal.addEventListener("click",(e) => {
 });
 
 function calculatetTotalPriceforEdit() {
-  console.log("calculating2");
 
   let totalValueforEdit = document.querySelector("#total_value_edit");
   let paymentValues = selectedOperationsforEdit.map(

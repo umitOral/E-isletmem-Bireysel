@@ -139,11 +139,12 @@ const editPayment = async (req, res, next) => {
   try {
     console.log(req.body)
     let requestPayments = req.body.operations.map((item) => item.operationId);
-
     let payment = await Payment.findById(req.body.paymentId);
     let paymentOperations = payment.operations;
+    let requestedPayment;
 
-    paymentOperations.forEach(async (operation, index) => {
+
+    for (const operation of paymentOperations) {
       let indexcontrol = requestPayments.findIndex(
         (item) => item === operation.operationId.toString()
       );
@@ -173,7 +174,7 @@ const editPayment = async (req, res, next) => {
         console.log(totalPrice);
         await Payment.findByIdAndUpdate(req.body.paymentId, {
           $set: { totalPrice: totalPrice,description:req.body.description,cashOrCard:req.body.cashOrCard},
-        });
+        }).then(response=>requestedPayment=response);
       } else {
         // let _id = new mongoose.Types.ObjectId(req.body.paymentId);
 
@@ -222,12 +223,15 @@ const editPayment = async (req, res, next) => {
           .map((item) => item.paymentValue)
           .reduce((a, b) => a + b);
         await modifiedPayment.save();
+        requestedPayment=modifiedPayment
       }
-    });
+    }
+
 
     res.json({
       success: true,
       message: "ödeme düzenlendi.",
+      data:requestedPayment
     });
   } catch (error) {return next(
     new CustomError("bilinmeyen hata", 500, error)
