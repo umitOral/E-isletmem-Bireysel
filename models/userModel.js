@@ -17,7 +17,7 @@ const userSchema = new Schema(
       lowercase: true,
     },
     activeOrNot: { type: Boolean, default: true },
-    email: { type: String, lowercase: true },
+    email: { type: String, lowercase: true,index:{unique:true}},
     sex: {
       type: String,
       enum: ["male", "female"],
@@ -28,8 +28,8 @@ const userSchema = new Schema(
     password: { type: String },
     phone: {
       type: String,
-      require: true,
-      unique: [true, "telefon bilgisi gereklidir"],
+      require:[true, "telefon bilgisi gereklidir"],
+      unique:true ,
     },
     userCompany: { type: String, default: "", lowercase: true },
     address: { type: String, lowercase: true },
@@ -65,6 +65,15 @@ userSchema.pre("save", function (next) {
     next();
   });
 });
+
+userSchema.pre('findOneAndUpdate', function (next) {
+  this.options.runValidators = true
+  next()
+})
+userSchema.pre('findByIdAndUpdate', function (next) {
+  this.options.runValidators = true
+  next()
+})
 
 const User = mongoose.model("User", userSchema);
 export default User;

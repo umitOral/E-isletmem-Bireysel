@@ -257,23 +257,65 @@ const createUser = async (req, res, next) => {
 };
 const editInformations = async (req, res, next) => {
   try {
-    console.log(req.body);
-    await User.findByIdAndUpdate(req.params.id, {
-      name: req.body.name,
-      surname: req.body.surname,
-      email: req.body.email,
-      address: req.body.address,
-      sex: req.body.sex,
-      birthDate: req.body.birthDate,
-      identity:req.body.identity,
-      phone: req.body.phone,
-      company: req.body.company,
-      billingAddress: req.body.billingAddress,
-      notes: req.body.notes,
-      userCompany: req.body.userCompany,
-    });
-    res.redirect("back");
+   
+    let searchEmail;
+    let searchPhone;
+    let user=await User.findById(req.params.id)
+
+    if (user.email!==req.body.email&& req.body.email!=="") {
+      searchEmail = await User.findOne({
+        email: req.body.email,
+        company: res.locals.company,
+      });
+    }
+
+    if (user.phone!==req.body.phone&& req.body.phone!=="") {
+       searchPhone = await User.findOne({
+        phone: req.body.phone,
+        company: res.locals.company,
+      });
+    }
+   
+    if (searchEmail) {
+      return next(
+        new CustomError(
+          "Bu mail adresi ile kayıtlı kullanıcı bulunmaktadır",
+          400
+        )
+      );
+    } else if (searchPhone) {
+      return next(
+        new CustomError(
+          "Bu Telefon adresi ile kayıtlı kullanıcı bulunmaktadır",
+          400
+        )
+      );
+    } else {
+      await User.findByIdAndUpdate(req.params.id, {
+        name: req.body.name,
+        surname: req.body.surname,
+        email: req.body.email,
+        address: req.body.address,
+        sex: req.body.sex,
+        birthDate: req.body.birthDate,
+        identity:req.body.identity,
+        phone: req.body.phone,
+        company: req.body.company,
+        billingAddress: req.body.billingAddress,
+        notes: req.body.notes,
+        userCompany: req.body.userCompany,
+      });
+      res.json({
+        succes:true,
+        message:"bilgiler başarıyla değiştirildi"
+        
+      });
+      
+    }
+
+  
   } catch (error) {
+    console.log(error)
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };

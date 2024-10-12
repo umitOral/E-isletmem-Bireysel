@@ -1,26 +1,9 @@
-import User from "../models/paymentsModel.js";
+import User from "../models/userModel.js";
 const topluIslemler = async (req, res, next) => {
   try {
-    console.log("admin operations");
-    await User.aggregate(
-      [
-        {
-          $project:
-            {
-              name: { $toLower: "$name" },
-            }
-        }
-      ]
-   ).then((response) => {
-    console.log(response)
-      res.status(200).json({
-        success: true,
-        message: "toplu işlem başarılı",
-        total: response.length,
-        data: response,
-      });
-    });
 
+
+    
     // let barcode = Number(req.body.barcode)
     // let productModel = await getProductModelGeneral()
     // await productModel.findOne({ $or: [{ upc: barcode }, { ean: barcode }] })

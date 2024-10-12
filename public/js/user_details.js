@@ -4,8 +4,8 @@ const request = new Request();
 import { UI } from "./ui.js";
 
 const ui = new UI();
-ui.closeNotification()
-ui.deleteZeroFromPhone()
+ui.closeNotification();
+ui.deleteZeroFromPhone();
 
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
@@ -14,10 +14,12 @@ import Zoomist from "https://cdn.jsdelivr.net/npm/zoomist@2/zoomist.js";
 const imageInput = document.querySelector(".upload_file");
 const showContentsBtn = document.querySelectorAll(".show-content");
 const contents = document.querySelectorAll(".userInformationsContent");
+const userInformationForm = document.querySelector(
+  "#edit-userInformation-form"
+);
 
 const addPictureForm = document.querySelector("#add_picture_form");
 const editBtn = document.querySelector(".edit-informations-btn");
-
 
 const loader = document.querySelector(".loader_wrapper.hidden");
 
@@ -40,7 +42,6 @@ let addDiscountForm = document.querySelector("#add-discount-form");
 
 let datasSelectInput = document.querySelector("#datas_select_input");
 
-
 // modals
 const allModals = document.querySelectorAll(".modal");
 
@@ -53,8 +54,12 @@ const modalOrders = document.querySelector("#modal_order");
 const userID = document.querySelector(".user-informations").dataset.userıd;
 
 let modalEditData = document.querySelector("#edit-data-modal");
-const allSessionsofOperationModal = document.querySelector("#allSessionsofOperationModal");
-const allSessionsofOperationModalContent = document.querySelector(".allsessionOfOperationContent table tbody");
+const allSessionsofOperationModal = document.querySelector(
+  "#allSessionsofOperationModal"
+);
+const allSessionsofOperationModalContent = document.querySelector(
+  ".allsessionOfOperationContent table tbody"
+);
 
 // responsed datas
 
@@ -65,13 +70,14 @@ eventListeners();
 function eventListeners() {
   addPictureForm.addEventListener("submit", addPicture);
   addDiscountForm.addEventListener("submit", (e) => addDiscount(e));
- 
+
   editBtn.addEventListener("click", showInformationsModal);
+  userInformationForm.addEventListener("submit", userInformationEdit);
 }
 
 cancelBtns.forEach((element) => {
   element.addEventListener("click", (e) => {
-    ui.closeAllModals()
+    ui.closeAllModals();
   });
 });
 
@@ -124,6 +130,27 @@ datasSelectInput.addEventListener("change", (e) => {
     .catch((err) => console.log(err));
 });
 
+function userInformationEdit(e) {
+  e.preventDefault();
+  let data = new FormData(this);
+
+  request
+    .postWithUrlformData("../users/" + userID + "/editInformations", data)
+    .then((response) => {
+      if (response.succes) {
+        ui.showNotification(true, response.message);
+        setTimeout(() => {
+          window.location.reload()
+        }, 500);
+      } else {
+        ui.showNotification(false, response.message);
+      }
+
+      console.log(response);
+    })
+    .catch((err) => {console.log(err)
+      ui.showNotification(false, err.message)});
+}
 
 function deleteButtonFunction(selector) {
   let deleteImageBtn = document.querySelectorAll(".delete-photo");
@@ -149,8 +176,6 @@ function deleteButtonFunction(selector) {
 
 const userName = document.getElementById("user-name");
 const usersurName = document.getElementById("user-surname");
-
-
 
 async function getOperationImages(operationID) {
   const allSmallImages = document.querySelector(".small_images");
@@ -233,10 +258,10 @@ function imagesSmallHandled() {
 }
 
 let horizontal = document.querySelector(".small_images");
-horizontal.addEventListener("wheel", (e)=>{
-e.preventDefault();
-horizontal.scrollLeft += e.deltaY;
-})
+horizontal.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  horizontal.scrollLeft += e.deltaY;
+});
 
 // user details modal -----------------
 
@@ -296,14 +321,14 @@ function getAllAppointments() {
 
         <td>
             ${new Date(session.startHour).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
                 -
                 ${new Date(session.endHour).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
                     
         </td>
 
@@ -314,11 +339,11 @@ function getAllAppointments() {
         </td>
         <td>
           ${session.operations.map(
-          (item, i) => `
+            (item, i) => `
                 ${item.operation.operationName}
                 seans:${item.session}
           `
-        )}
+          )}
         </td>
 
         
@@ -329,7 +354,8 @@ function getAllAppointments() {
 
         <td>
           <select name="" class="updateStateAppointment">
-          <option value="" disable hidden selected >${session.appointmentState
+          <option value="" disable hidden selected >${
+            session.appointmentState
           }</option>
           ${APPOINTMENT_STATUS.map(
             (item) => `
@@ -455,18 +481,13 @@ function handleDeleteOperationBtn(e) {
   calculateTotal();
 }
 function handleAppointmentBtn(e) {
-
-
   let controlindex = selectedOperations.findIndex(
     (item) =>
       item.operationName ===
       e.target.parentElement.parentElement.dataset.operationname
   );
   console.log(controlindex);
-  selectedOperations[controlindex].totalAppointments = Number(
-    e.target.value
-  );
-
+  selectedOperations[controlindex].totalAppointments = Number(e.target.value);
 
   console.log(selectedOperations);
 }
@@ -495,7 +516,6 @@ function getAllPayments() {
 
 paymentTable.addEventListener("change", (e) => {
   if (e.target.classList.contains("operations-edit-select")) {
-
   }
 });
 
@@ -503,13 +523,13 @@ paymentTable.addEventListener("change", (e) => {
 
 const showOperationsBtn = document.querySelector(".show-content.operations");
 showOperationsBtn.addEventListener("click", getAllOperations);
-let allOperations = {}
+let allOperations = {};
 function getAllOperations() {
   request
     .getwithUrl("./" + userID + "/getUsersAllOperations")
     .then((response) => {
       console.log(response);
-      allOperations = response
+      allOperations = response;
       ui.addResponseToTable(orderTable, response.data);
 
       handleOperationEditBtn();
@@ -552,7 +572,7 @@ addOperationForm.addEventListener("submit", () => {
       proccessType.innerHTML += `<option value="" selected disabled hidden>İşlem seçiniz</option>`;
 
       calculateTotal();
-      
+
       getAllOperations();
     })
     .catch((err) => console.log(err));
@@ -592,7 +612,6 @@ function handleOperationEditBtn() {
     element.addEventListener("change", (e) => {
       const operationId =
         e.target.parentElement.parentElement.dataset.operationid;
-
 
       if (e.target.options[e.target.options.selectedIndex].value === "delete") {
         if (confirm("işlem silinecek onaylıyor musunuz?")) {
@@ -635,33 +654,31 @@ function handleOperationEditBtn() {
           e.target.parentElement.parentElement.dataset.operationid;
       }
       if (
-        e.target.options[e.target.options.selectedIndex].value === "show-all-sessions"
+        e.target.options[e.target.options.selectedIndex].value ===
+        "show-all-sessions"
       ) {
         request
           .getwithUrl("./" + userID + "/getSessionsofOperation/" + operationId)
           .then((response) => {
             console.log(response);
             ui.showNotification(response.succes, response.message);
-            allSessionsofOperationModalContent.innerHTML=""
+            allSessionsofOperationModalContent.innerHTML = "";
             response.data.sessionOfOperation.map((element) => {
-              allSessionsofOperationModalContent.innerHTML +=
-                `
+              allSessionsofOperationModalContent.innerHTML += `
                         <tr>
-                            <td>${new Date(element.sessionDate).toLocaleDateString()}</td>
+                            <td>${new Date(
+                              element.sessionDate
+                            ).toLocaleDateString()}</td>
                             <td>${element.sessionState}</td>
                             <td>${element.sessionDatas}</td>
                         </tr>
-                        `
-
-            })
-
-
+                        `;
+            });
           })
           .catch((err) => ui.showNotification(false, err.message));
         allSessionsofOperationModal.classList.toggle("hidden");
-
       }
-      e.target.selectedIndex=0
+      e.target.selectedIndex = 0;
     });
   });
 }
@@ -713,9 +730,7 @@ const paymentDescriptionEdit = document.querySelector(
 const editPaymentForm = document.querySelector(
   ".modal_edit_payment #edit-payment-form"
 );
-const saveEditModal = document.querySelector(
-  "#modal_edit_payment"
-);
+const saveEditModal = document.querySelector("#modal_edit_payment");
 
 const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
@@ -748,8 +763,9 @@ function handleEditPaymentModal(e) {
 
       response.operationsDetails.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
-        <tr data-id="${response.data.operations[index]._id}" data-price="${response.data.operations[index].paymentValue
-          }" >
+        <tr data-id="${response.data.operations[index]._id}" data-price="${
+          response.data.operations[index].paymentValue
+        }" >
             <td>${element.operationName}</td>
                 
             <td>
@@ -768,14 +784,17 @@ function handleEditPaymentModal(e) {
             </td>
             <td>
             
-            ${(element.operationPrice - element.discount) *
-          ((100 - element.percentDiscount) / 100)
-          }
+            ${
+              (element.operationPrice - element.discount) *
+              ((100 - element.percentDiscount) / 100)
+            }
             </td>
             <td>
-              <input class="payment_value" value=" ${response.data.operations[index].paymentValue
-          }" placeholder="${response.data.operations[index].paymentValue
-          }"></input>
+              <input class="payment_value" value=" ${
+                response.data.operations[index].paymentValue
+              }" placeholder="${
+          response.data.operations[index].paymentValue
+        }"></input>
             </td>
             
             <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
@@ -851,8 +870,8 @@ saveEditModal.addEventListener("submit", (e) => {
   request
     .postWithUrl(
       "../payments/" +
-      e.target.parentElement.dataset.paymentid +
-      "/editPayment",
+        e.target.parentElement.dataset.paymentid +
+        "/editPayment",
       data
     )
     .then((response) => {
@@ -881,10 +900,10 @@ function handleAppointmentEditBtn() {
       request
         .getwithUrl(
           "../" +
-          "appointments/" +
-          appointmentID +
-          "/updateStateAppointment/?state=" +
-          e.target.value
+            "appointments/" +
+            appointmentID +
+            "/updateStateAppointment/?state=" +
+            e.target.value
         )
         .then((response) => {
           console.log(response);
@@ -950,9 +969,11 @@ addDataSaveButton.addEventListener("click", (e) => {
       datasSelectInput.options[
         datasSelectInput.options.selectedIndex
       ].textContent.trim(),
-    data: datasOptionsSelectInput.selectedIndex !== -1
-      ? datasOptionsSelectInput.options[datasOptionsSelectInput.selectedIndex].value
-      : dataOptionNumberValue.value,
+    data:
+      datasOptionsSelectInput.selectedIndex !== -1
+        ? datasOptionsSelectInput.options[datasOptionsSelectInput.selectedIndex]
+            .value
+        : dataOptionNumberValue.value,
   };
 
   console.log(data);
@@ -960,14 +981,13 @@ addDataSaveButton.addEventListener("click", (e) => {
   request
     .postWithUrl(
       "../operations/" +
-      addDataForm.dataset.operationid +
-      "/addDataToOperation",
+        addDataForm.dataset.operationid +
+        "/addDataToOperation",
       data
     )
     .then((response) => {
-
       ui.showNotification(response.success, response.message);
-      addDataModal.classList.add("hidden")
+      addDataModal.classList.add("hidden");
       addDataModal.classList.remove("showed_modal");
       getAllOperations();
     })
@@ -984,8 +1004,8 @@ addDSessionSaveButton.addEventListener("click", (e) => {
   request
     .postWithUrl(
       "../operations/" +
-      addSessionForm.dataset.operationid +
-      "/addSessionToOperation",
+        addSessionForm.dataset.operationid +
+        "/addSessionToOperation",
       data
     )
     .then((response) => {
@@ -1050,10 +1070,10 @@ function editDatasBtn() {
         request
           .getwithUrl(
             "/admin/datas/deleteOption/" +
-            e.target.parentElement.dataset.dataid +
-            "/" +
-            e.target.parentElement.parentElement.parentElement.dataset
-              .operationid
+              e.target.parentElement.dataset.dataid +
+              "/" +
+              e.target.parentElement.parentElement.parentElement.dataset
+                .operationid
           )
           .then((response) => {
             getAllOperations();
@@ -1081,18 +1101,15 @@ function editDatasBtn() {
       await request
         .getwithUrl("/admin/datas/" + dataId)
         .then((response) => {
-          console.log(response)
+          console.log(response);
           let indexcontrol = response.serviceDatas.findIndex(
             (item) => item.dataName === e.target.parentElement.dataset.dataname
           );
-          response.serviceDatas[indexcontrol].dataOptions.forEach(
-            (element) => {
-              editDatasOptionSelect.innerHTML += `
+          response.serviceDatas[indexcontrol].dataOptions.forEach((element) => {
+            editDatasOptionSelect.innerHTML += `
               <option value="${element}">${element}</option>
               `;
-            }
-          );
-
+          });
         })
         .catch((err) => console.log(err));
 
@@ -1109,9 +1126,9 @@ function editDatasBtn() {
         request
           .postWithUrl(
             "/admin/operations/" +
-            operationId +
-            "/editDataofOperation/" +
-            dataId,
+              operationId +
+              "/editDataofOperation/" +
+              dataId,
             data
           )
           .then((response) => {
@@ -1121,16 +1138,13 @@ function editDatasBtn() {
           })
           .then((err) => console.log(err));
       });
-
     });
   });
 }
 
 // close the slider modal
 
-const xBtn = document.querySelector(
-  "#modal_slider i.fa-solid.fa-xmark"
-);
+const xBtn = document.querySelector("#modal_slider i.fa-solid.fa-xmark");
 xBtn.addEventListener("click", () => {
   modalSlider.classList.add("hidden");
 });
