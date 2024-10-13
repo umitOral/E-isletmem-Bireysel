@@ -293,9 +293,7 @@ const getAdminPage = async (req, res, next) => {
 
 const getUsersPage = async (req, res, next) => {
   try {
-    console.log(req.body)
-    console.log(req.query)
-
+    console.log("burası")
     //pagination
 
     let limit=10;
