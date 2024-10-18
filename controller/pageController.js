@@ -6,6 +6,8 @@ import { ROLES_LIST } from "../config/status_list.js";
 import Sessions from "../models/sessionModel.js";
 import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
+import Product from "../models/productModel.js";
+import { productGeneralSchema } from "../models/productGeneralModel.js";
 
 
 import Subscription from "../models/subscriptionModel.js";
@@ -14,10 +16,12 @@ import { Ticket } from "../models/ticketModel.js";
 import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { query } from "express";
-import { getProductModel, getProductModelGeneral } from "../tenantDb.js";
+
 import Session from "../models/sessionModel.js";
 import {APPOINTMENT_STATUS,APPOINTMENT_STATUS_AUTOMATIC} from "../config/status_list.js";
 import { searchProduct } from "./productControllers.js";
+import { getTenantDb } from "./db.js";
+import { BRAND_LIST } from "../config/brands.js";
 
 
 let now = new Date();
@@ -203,10 +207,29 @@ const getservicesPage = async (req, res, next) => {
 };
 const getProductsPage = async (req, res, next) => {
   try {
-    let tenantId = res.locals.company._id;
-    let productModel = await getProductModel(tenantId)
-    const products = await productModel.find()
+    
+    const products = await Product.find({})
     res.status(200).render("products", {
+      products,
+      BRAND_LIST:BRAND_LIST,
+      link: "products",
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      succes: false,
+      message: error,
+    });
+  }
+};
+const getAllProductsPage = async (req, res, next) => {
+  try {
+    
+    const GeneralProductModel=getTenantDb(process.env.DB_NAME_GENERAL,"productGeneral",productGeneralSchema)
+    const products = await GeneralProductModel.find({})
+
+    res.status(200).render("allProducts", {
       products,
       link: "products",
     });
@@ -755,5 +778,6 @@ export {
   getAppointmentReportsPage,
   getUserReportsPage,
   getSmsPage,
-  paymentReportsPage
+  paymentReportsPage,
+  getAllProductsPage
 };

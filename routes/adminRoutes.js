@@ -10,6 +10,7 @@ import {
   getSingleEmployeePage,
   getservicesPage,
   getProductsPage,
+  getAllProductsPage,
   getSmsPage,
   getEmployeesPage,
   getPaymentsPage,
@@ -57,7 +58,7 @@ import {
   deactivateService,
 } from "../controller/serviceControllers.js";
 import {
-  addProduct,searchProduct
+  addProduct,addProduct2,searchProduct,addPassiveProduct
 } from "../controller/productControllers.js";
 import {
   addSms,
@@ -241,10 +242,15 @@ router.route("/appointments").get(getAppointmentsPage);
 router.route("/logout").get(logOut);
 
 router.route("/services/").get(checkPriviliges("service_view"), getservicesPage);
+router.route("/services/search").get(checkPriviliges("service_view"), findServices);
+
 router.route("/products/").get(checkPriviliges("product_view"), getProductsPage);
+router.route("/allProducts/").get(checkPriviliges("product_view"), getAllProductsPage);
+// router.route("/products/add").get(checkPriviliges("product_view"), addProduct2); add bulk product to generalproduct
 router.route("/products/addProduct").post(checkPriviliges("product_add"), addProduct);
 router.route("/products/searchProduct").post(checkPriviliges("product_add"), searchProduct);
-router.route("/services/search").get(checkPriviliges("service_view"), findServices);
+router.route("/products/addPassiveProduct").post(checkPriviliges("product_add"), addPassiveProduct);
+
 
 router.route("/sms").get(checkPriviliges("sms_view"), getSmsPage);
 router.route("/sms/addSms").post(checkPriviliges("sms_add"), addSms);

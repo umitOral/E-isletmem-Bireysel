@@ -1,9 +1,30 @@
 import User from "../models/userModel.js";
+import { getTenantDb } from "../controller/db.js";
+import {
+  ProductGeneral,
+  productGeneralSchema,
+} from "../models/productGeneralModel.js";
 const topluIslemler = async (req, res, next) => {
   try {
+   
+   
 
+ 
 
-    
+    await ProductGeneral
+      .find()
+      .then(async(response) => {
+        
+       
+          res.status(200).json({
+            success: true,
+            message: "içerden sorgulandı",
+            data: response,
+          });
+       
+
+      });
+
     // let barcode = Number(req.body.barcode)
     // let productModel = await getProductModelGeneral()
     // await productModel.findOne({ $or: [{ upc: barcode }, { ean: barcode }] })

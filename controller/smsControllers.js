@@ -1,7 +1,7 @@
 import Company from "../models/companyModel.js";
 import User from "../models/userModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
-import { getProductModel } from "../tenantDb.js";
+
 
 const addSms = async (req, res, next) => {
   try {

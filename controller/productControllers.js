@@ -1,98 +1,170 @@
 import Company from "../models/companyModel.js";
 import User from "../models/userModel.js";
-import { CustomError } from '../helpers/error/CustomError.js'
+import { CustomError } from "../helpers/error/CustomError.js";
+import {
+  productGeneralSchema,
+  ProductGeneral,
+} from "../models/productGeneralModel.js";
+import { getTenantDb } from "../controller/db.js";
 
-import { getProductModelGeneral, getProductModel } from "../tenantDb.js";
 import axios from "axios";
+import Product from "../models/productModel.js";
 
-const addProduct = async (req, res, next) => {
+const addProduct2 = async (req, res, next) => {
   try {
-    console.log("add product")
-    console.log(req.body)
-    let tenantId = res.locals.company._id
-    if (req.body.barcodeType === "ean") {
-      req.body.ean = req.body.barcode
-    } else {
-      req.body.upc = req.body.barcode
-    }
+    console.log("add product");
+    let data = [];
 
-    let productModel = await getProductModel(tenantId)
-    const product = await productModel.create(req.body)
-      .then(response => {
+    let modifiedData = [];
+    data.forEach((element) => {
+      modifiedData.push({
+        id: element.product.id,
+        name: element.product.name,
+        barcodes: element.barcodes,
+      });
+    });
+
+    let GeneralProductsModel = getTenantDb(
+      process.env.DB_NAME_GENERAL,
+      "productGeneral",
+      productGeneralSchema
+    );
+    await GeneralProductsModel.insertMany(modifiedData, { ordered: false })
+      .then((response) => {
         res.json({
           success: true,
-          message: "ürün eklendi"
-        })
+          message: "ürün eklendi",
+          data: response,
+        });
       })
-      .catch(err => {
+      .catch((err) => {
         res.json({
           success: false,
-          message: err.message
-        })
-      })
-
-
+          message: err.message,
+        });
+      });
   } catch (error) {
     res.json({
       success: false,
       message: "ürün eklenirken bir sorun oluştu",
-      error: error
-    })
+      error: error,
+    });
   }
-}
-const searchProduct = async (req, res, next) => {
-
+};
+const addPassiveProduct = async (req, res, next) => {
   try {
-    console.log(req.body)
-    let barcode = Number(req.body.barcode)
-    let productModel = await getProductModelGeneral()
-
-    await productModel.findOne({ $or: [{ upc: barcode }, { ean: barcode }] })
-      .then(response => {
-        if (response) {
-          res.status(200).json({
-            success: true,
-            message: "içerden sorgulandı",
-            data: response
+    console.log("addPassiveProduct");
+    
+    req.body.barcodes = [
+      {
+        barcode:req.body.barcode,
+       
+      },
+    ];
+    
+    Product.create(req.body)
+      .then((response) => {
+        console.log(response);
+        res.json({
+          success: true,
+          message: "ürün eklendi",
+        });
+      })
+      .catch((err) => {
+        res.json({
+          success: false,
+          message: err.message,
+        });
+      });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "ürün eklenirken bir sorun oluştu",
+      error: error,
+    });
+  }
+};
+const addProduct = async (req, res, next) => {
+  try {
+    console.log("add product");
+    console.log(req.body);
+    await Product.findOne({ "barcodes.barcode": req.body.barcode })
+    .then(response=>{
+      if (response!==null) {
+        res.json({
+          success: false,
+          message: "bu barkodla kayıtlı ürün bulunmaktadır.",
+        });
+      }
+      else{
+         ProductGeneral
+        .create(req.body)
+        .then((response) => {
+          Product.create(req.body)
+          .then(()=>{
+            res.json({
+              success: true,
+              message: "ürün eklendi",
+            });
           })
-        } else {
-          console.log("burası")
-          axios.get(`https://api.upcitemdb.com/prod/trial/lookup?upc=${barcode}`)
-            .then(function (response) {
-              console.log(response.data);
-              response.data.items[0].productName = response.data.items[0].title
-              productModel.create(response.data.items[0])
+        })
+      }
+    })
+
+  
+      
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "ürün eklenirken bir sorun oluştu",
+      error: error,
+    });
+  }
+};
+const searchProduct = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    let barcode = Number(req.body.barcode);
+    await Product.findOne({ "barcodes": req.body.barcode }).then(
+      async (response) => {
+        if (response === null) {
+          await ProductGeneral.findOne({
+            "barcodes.barcode": req.body.barcode,
+          }).then((response) => {
+            if (response === null) {
+              res.status(200).json({
+                success: false,
+                productFind:false,
+                message:
+                  "Veri tabanımızda ürün bulunamadı. barkodlu ürün olarak ekleyiniz.",
+                data: response,
+              });
+            } else {
               res.status(200).json({
                 success: true,
-                message: "dışardan sorgulandı",
-                data: response.data.items[0]
-              })
-
-            })
-            .catch(function (error) {
-              console.log(error);
-            })
+                productFind:false,
+                message: "Pasif Ürün bulundu",
+                data: response,
+              });
+            }
+          });
+        } else {
+          res.status(200).json({
+            success: true,
+            productFind:true,
+            message: "Aktif Ürün bulundu",
+            data: response,
+          });
         }
-      })
-      .catch(err => {
-
-      })
-
-
-
+      }
+    );
   } catch (error) {
     res.json({
       success: false,
       message: "ürün bulunurken bir sorun oluştu",
-      error: error
-    })
+      error: error,
+    });
   }
-}
-
-
-
-export {
-  searchProduct,
-  addProduct,
-
 };
+
+export { searchProduct, addProduct, addProduct2, addPassiveProduct };

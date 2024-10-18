@@ -30,7 +30,7 @@
                             </div>
 
                         </form>
-                        <div id="add_product_btn"><button class="buttons">Barkodsuz Ürün Ekle +</button></div>
+                        <div id="add_product_btn"><button class="buttons">Barkodlu Ürün Ekle +</button></div>
 
 
                     </div>
@@ -49,70 +49,16 @@
 
                     </div>
                     <div class="table-wrapper">
-                        <table>
+                        <table id="product-table">
                             <thead>
 
-                                <th>Ürün adı<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Fiyat<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Stok<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Aktiflik<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Ürün adı</th>
+                                <th>Fiyat</th>
+                                <th>Stok</th>
                                 <th></th>
                             </thead>
-                            <tbody id="userList">
-                                <% products.forEach(product=> { %>
-                                    <tr>
-
-                                        <td>
-                                            <%= product.productName %>
-                                        </td>
-                                        
-                                        <td>
-                                            <div class="inputs" data-productID="<%= product._id %>">
-                                                <input type="number" class="price_inputs"
-                                                    value="<%= product.price %>">tl
-                                                <i class="ph ph-floppy-disk input_save_buttons"></i>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inputs" data-productID="<%= product._id %>">
-                                                <input type="number" class="price_inputs"
-                                                    value="<%= product.stock %>">adet
-                                                <i class="ph ph-floppy-disk input_save_buttons"></i>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inputs">
-                                                <% if(product.activeorNot===true){ %>
-                                                    <span class="continue">Aktif</span>
-                                                    <% } else{ %>
-                                                        <span class="finish">Pasif</span>
-                                                        <% } %>
-    
-                                                        <% if(product.activeorNot){ %>
-                                                            <a class="button"
-                                                                    href="./services/<%= product._id %>/deactivateService">Pasif Et</a>
-                                                            
-                                                            <% } else{ %>
-                                                                <a href="./services/<%= product._id %>/activateService">Aktif Et</a>
-                                                                
-                                                                <% } %>
-                                            </div>
-                                            
-                                        </td>
-                                        <td>
-                                            <select name="" id="">
-                                                <option value="" disable hidden>seçenekler</option>
-                                                <option value="">Ürün detay</option>
-                                                <option value="">xxx</option>
-                                            </select>
-                                        </td>
-                                       
-
-
-                                    </tr>
-                                    <% }) %>
-
-
+                            <tbody>
+         
                             </tbody>
 
 
@@ -130,29 +76,29 @@
                 <form action="./products/addProduct" method="POST" id="add-product-form">
                     <div class="form-group ">
                         <span>Ürün Markası:</span>
-                        <input type="text" name="brand" id="product-brand" required placeholder="Ürün Markası giriniz" readonly>
+                        <input required="" type="text" list="brands" name="brands" id="brands-select" autocomplete="off" placeholder="Marka Seçiniz">
+                        <!-- <input type="text" name="brand" id="product-brand" required placeholder="Ürün Markası giriniz"> -->
+                        <datalist id="brands">
+                            <% BRAND_LIST.forEach(element=> { %>
+                                <option data-brandName="<%= element %>" value="<%= element %>">
+                                </option>
+                                <% }) %>
+
+                        </datalist>
                     </div>
                     <div class="form-group ">
                         <span>Ürün Adı:</span>
-                        <input type="text" name="productName" id="product-name" required placeholder="Ürün adı giriniz" readonly>
+                        <input type="text" name="name" id="product-name" required placeholder="Ürün adı giriniz" required>
                     </div>
-                    <div class="form-group ">
-                        <span>Ürün Kategorisi:</span>
-                        <input type="text" name="category" id="product-category" required placeholder="kategori giriniz" readonly>
-                    </div>
-
+                   
                     <div class="form-group">
                         <span>Satış Fiyatı</span>
-                        <input type="number" name="price" id="product-price" placeholder="Ürün için fiyat giriniz" required>
+                        <input type="number" name="price" id="product-price" placeholder="Ürün için fiyat giriniz">
                     </div>
-                    <div class="form-group">
-                        <span>Stok</span>
-                        <input type="number" name="stock" id="product-stock" placeholder="Elinizdeki stoğu giriniz"
-                            required>
-                    </div>
+                    
                     <div class="form-group">
                         <span>Barkod</span>
-                        <input type="number" name="barcode" id="barcode" data-type="" placeholder="Ürünün barkodunu okutun" readonly>
+                        <input type="number" name="barcode" id="barcode" data-type="" placeholder="Ürünün barkodunu okutun" required>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn save form-btn" id="add-product">Kaydet</button>

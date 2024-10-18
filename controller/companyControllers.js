@@ -36,7 +36,7 @@ const createCompany = async (req, res, next) => {
       req.body.services.push({
         serviceName: process,
         servicePrice: 99,
-        activeorNot: false,
+        activeorNot: true,
       });
     });
 

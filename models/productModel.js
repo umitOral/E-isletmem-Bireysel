@@ -1,26 +1,24 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose from "mongoose";
 
-const Schema = mongoose.Schema
-const productSchema = new Schema({
+const Schema = mongoose.Schema;
+const productSchema = new Schema(
+  {
     name: { type: String, require: true },
-    activeOrNot:{type:Boolean,default:true},
-    price:{type:Number},
-    qr:{type:String},
-    images: [{
-        url:String,
-        public_id:String,
-        uploadTime:Number
-    }],
-},
-{
-    timestamps:true
-})
+    price: { type: Number },
+    stocks: [{ unitCost: Number, piece: Number, date: Date }],
+    brand:{type:String},
+    barcodes: [
+      {
+        type: String,
+        unique: true,
+        required: true
+      }
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-
-
-
-
-
-const User = mongoose.model("User", userSchema)
-export default User
+const Product = mongoose.model("Product", productSchema);
+export default Product;

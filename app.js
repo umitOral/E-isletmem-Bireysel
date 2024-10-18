@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
 import fileUpload from "express-fileupload"; ///çoook önemli enctype="multipart/form-data" forma eklenecek
 import { v2 as cloudinary } from "cloudinary";
-import connect from "./controller/db.js";
+import {connectGeneralDb} from "./controller/db.js";
 import dotenv from "dotenv";
 import pageRoute from "./routes/pageRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
@@ -12,7 +12,6 @@ import superAdminRoutes from "./routes/superAdminRoutes.js";
 import api from "./routes/api.js";
 import { ErrorHandler } from "./middlewares/errorHandlerMiddleware.js";
 
-// import { getTenantModel } from "./admindb.js";
 
 import * as authMiddleware from "./middlewares/authMiddleware.js";
 
@@ -26,7 +25,7 @@ dotenv.config();
 const app = express();
 
 //db connection
-connect()
+connectGeneralDb(process.env.DB_NAME)
 
 
 
@@ -83,50 +82,7 @@ app.use(
 );
 //error handlers
 app.use(ErrorHandler);
-// app.get("/admin/tenant", async (req, res) => {
-//   try {
 
-//     let tenantId = req.query.tenantId
-   
-//     let tenantModel = await getTenantModel()
-//     const tenant = new tenantModel({ id: tenantId, name: tenantId })
-//     let doc = await tenantModel.findOneAndUpdate({ id: tenantId }, { id: tenantId, name: tenantId })
-//     if (!doc) {
-//       tenant.save()
-//       .then()
-//       .catch(err=>console.log(err))
-//     }
-//     res.send(JSON.stringify(tenant))
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
-// app.get("/admin/customer", async (req, res) => {
-//   try {
-
-//     let tenantId = res.locals.company._id
-//     let customerName = req.query.customerName
-//     let tenantModel = await getTenantModel()
-
-//     let tenant = tenantModel.findOne({ id: tenantId })
-//     if (!tenant) {
-//       return res.send("tenant bulunamadı")
-//     }
-
-//     let customerModel=await getCustomerModel(tenantId)
-//     const customer=new customerModel({customerName})
-//     let doc=await customerModel.findOneAndUpdate({customerName:customerName},{customerName:customerName})
-//     if (!doc) {
-//       customer.save()
-//       .then()
-//       .catch(err=>console.log(err))
-//     }
-//     res.send(JSON.stringify(customer))
-
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
 
 app.get("*", (req, res) => { res.status(404).render("404") })
 

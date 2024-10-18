@@ -840,6 +840,10 @@ table thead {
   border-radius: var(--border-radius-2);
   padding: 0.5rem;
 }
+.hoverable:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
 
 /* table pagination */
 .pagination {
