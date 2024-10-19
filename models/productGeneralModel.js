@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const productGeneralSchema = new Schema(
   {
-    id: { type: Number, index: { unique: true } },
+    id: { type: Number, },
     name: { type: String, require: true },
     price: { type: Number },
     brand:{String},
     barcodes: [
       {
-        barcode: String,
+        barcode: {type:String, index: { unique: true }},
         skrsStatus: Boolean,
       },
     ],

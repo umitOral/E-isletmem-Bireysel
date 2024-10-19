@@ -1,30 +1,53 @@
 import User from "../models/userModel.js";
-import { getTenantDb } from "../controller/db.js";
-import {
-  ProductGeneral,
-  productGeneralSchema,
-} from "../models/productGeneralModel.js";
+
+import { ProductGeneral } from "../models/productGeneralModel.js";
+const addbulkproducttoGeneral = async (req, res, next) => {
+  try {
+    console.log("add product");
+    let data = [];
+
+    let modifiedData = [];
+    data.forEach((element) => {
+      modifiedData.push({
+        id: element.product.id,
+        name: element.product.name,
+        barcodes: element.barcodes,
+      });
+    });
+
+    // await ProductGeneral.insertMany(modifiedData, { ordered: false })
+    //   .then((response) => {
+    //     res.json({
+    //       success: true,
+    //       message: "ürün eklendi",
+    //       data: response,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     res.json({
+    //       success: false,
+    //       message: err.message,
+    //     });
+    //   });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "ürün eklenirken bir sorun oluştu",
+      error: error,
+    });
+  }
+};
 const topluIslemler = async (req, res, next) => {
   try {
-   
-   
-
- 
-
-    await ProductGeneral
-      .find()
-      .then(async(response) => {
-        
-       
-          res.status(200).json({
-            success: true,
-            message: "içerden sorgulandı",
-            data: response,
-          });
-       
-
-      });
-
+    let response = await ProductGeneral.find();
+    response.forEach((element) => {
+      element.barcodes = element.barcodes[0].barcode;
+    });
+    res.status(200).json({
+      success: true,
+      message: "içerden sorgulandı",
+      data: response,
+    });
     // let barcode = Number(req.body.barcode)
     // let productModel = await getProductModelGeneral()
     // await productModel.findOne({ $or: [{ upc: barcode }, { ean: barcode }] })
@@ -75,4 +98,4 @@ const topluIslemler = async (req, res, next) => {
   }
 };
 
-export { topluIslemler };
+export { topluIslemler, addbulkproducttoGeneral };

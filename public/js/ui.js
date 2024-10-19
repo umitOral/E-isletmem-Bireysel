@@ -51,7 +51,6 @@ export class UI {
     })
   }
   closeAllModals(){
-    console.log("aferin")
     const allModals=document.querySelectorAll(".modal")
     allModals.forEach(element => {
       element.classList.add("hidden")

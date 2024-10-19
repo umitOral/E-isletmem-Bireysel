@@ -52,8 +52,10 @@
                         <table id="product-table">
                             <thead>
 
+                                <th>Ürün Markası</th>
                                 <th>Ürün adı</th>
-                                <th>Fiyat</th>
+                                <th>Satış Fiyatı</th>
+                                <th>Birim Maliyet</th>
                                 <th>Stok</th>
                                 <th></th>
                             </thead>
@@ -70,6 +72,80 @@
 
 
         </section>
+        <div class="modal hidden" id="fix_stock">
+            <div class="inner_modal">
+                <h2>Stok Düzelt</h2>
+                
+                <form action="./products/fixStock" method="POST" id="fix-stock-form">
+                    <div style="color: red; border: 1px solid red; text-align: center;">!!Lütfen dikkatli olunuz. Girdiğiniz rakam ürünün stoğu olarak güncellenecektir.</div>
+                    <div class="form-group ">
+                        <span>Adet:</span>
+                        <input  type="Number" name="quantity" id="quantity"  placeholder="Adet giriniz." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="modal hidden" id="add_stock">
+            <div class="inner_modal">
+                <h2>Stok ekle</h2>
+                <form action="./products/addStock" method="POST" id="add-stock-form">
+                    <div class="form-group ">
+                        <span>Adet:</span>
+                        <input  type="Number" name="quantity" id="quantity"  placeholder="Adet giriniz." required>
+                    </div>
+                    <div class="form-group ">
+                        <span>Birim Maliyet:</span>
+                        <input  type="Number" name="unitCost" id="unitCost" value="0"  placeholder="Birim maliyet giriniz.">
+                    </div>
+                 
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="edit-product">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="modal hidden" id="edit_product">
+            <div class="inner_modal">
+                <h2>Ürün Düzenle</h2>
+                <form action="./products/editProduct" method="POST" id="edit-product-form">
+                    <div class="form-group ">
+                        <span>Ürün Markası:</span>
+                        <input required="" type="text" list="brands" name="brand" id="brands-select" autocomplete="off" placeholder="Marka Seçiniz">
+                        <!-- <input type="text" name="brand" id="product-brand" required placeholder="Ürün Markası giriniz"> -->
+                        <datalist id="brands">
+                            <% BRAND_LIST.forEach(element=> { %>
+                                <option data-brandName="<%= element %>" value="<%= element %>">
+                                </option>
+                                <% }) %>
+
+                        </datalist>
+                    </div>
+                    <div class="form-group ">
+                        <span>Ürün Adı:</span>
+                        <input type="text" name="name" id="name" required placeholder="Ürün adı giriniz" required>
+                    </div>
+                   
+                    <div class="form-group">
+                        <span>Satış Fiyatı</span>
+                        <input type="number" name="price" id="product-price" placeholder="Ürün için fiyat giriniz">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="edit-product">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
         <div class="modal hidden" id="add_product">
             <div class="inner_modal">
                 <h2>Yeni Ürün Ekle</h2>
@@ -90,18 +166,25 @@
                         <span>Ürün Adı:</span>
                         <input type="text" name="name" id="product-name" required placeholder="Ürün adı giriniz" required>
                     </div>
-                   
+                    <div class="form-group">
+                        <span>Barkod</span>
+                        <input type="number" name="barcode" id="barcode" data-type="" placeholder="Ürünün barkodunu okutun" required>
+                    </div>
                     <div class="form-group">
                         <span>Satış Fiyatı</span>
                         <input type="number" name="price" id="product-price" placeholder="Ürün için fiyat giriniz">
                     </div>
                     
                     <div class="form-group">
-                        <span>Barkod</span>
-                        <input type="number" name="barcode" id="barcode" data-type="" placeholder="Ürünün barkodunu okutun" required>
+                        <span>Maliyet Fiyatı</span>
+                        <input type="number" name="unitCost" id="unitCost"  placeholder="Maliyet fiyat giriniz">
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn save form-btn" id="add-product">Kaydet</button>
+                        <span>Stok</span>
+                        <input type="number" name="quantity" id="quantity"placeholder="Elinizdeki stoğu giriniz">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn" id="">Kaydet</button>
                         <button type="button" class="btn cancel form-btn">Vazgeç</button>
                     </div>
                 </form>

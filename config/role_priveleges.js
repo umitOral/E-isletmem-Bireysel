@@ -189,6 +189,12 @@ export const role_privileges = {
       description: "Product View",
     },
     {
+      key: "product_edit",
+      name: "Ürün Düzenleme",
+      group: "PRODUCTS",
+      description: "Product Edit",
+    },
+    {
       key: "product_add",
       name: "Ürün Ekleme",
       group: "PRODUCTS",

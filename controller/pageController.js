@@ -208,9 +208,7 @@ const getservicesPage = async (req, res, next) => {
 const getProductsPage = async (req, res, next) => {
   try {
     
-    const products = await Product.find({})
     res.status(200).render("products", {
-      products,
       BRAND_LIST:BRAND_LIST,
       link: "products",
     });
