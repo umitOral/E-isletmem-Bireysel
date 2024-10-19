@@ -6,7 +6,7 @@ import { Request } from "./requests.js";
 const request = new Request();
 import { UI } from "./ui.js";
 const ui = new UI();
-ui.closeNotification()
+ui.closeNotification();
 
 const modalPayment = document.querySelector("#modal_payment");
 const modalExpenses = document.querySelector("#expenses_payment");
@@ -35,7 +35,6 @@ const paymentsTable = document.querySelector("#payments_table");
 const startDate = document.querySelector(".startDate");
 const endDate = document.querySelector(".endDate");
 
-
 const paymentTable = document.querySelector("#payments_table");
 
 let selectedOperationsforEdit = [];
@@ -55,36 +54,51 @@ function eventListeners() {
 }
 
 cancelButtons.forEach((element) => {
-  element.addEventListener("click",()=>{
-    ui.closeAllModals()
-  })
- 
+  element.addEventListener("click", () => {
+    for (let index = operationsSelect.options.length - 1; index >= 0; index--) {
+      operationsSelect.options[index].remove();
+    }
+
+    // remove selected operations from uı
+
+    while (selected_proccess_table.firstChild) {
+      selected_proccess_table.firstChild.remove();
+    }
+
+    let opt = document.createElement("option");
+    opt.setAttribute("selected", "");
+    opt.setAttribute("disable", "");
+    opt.setAttribute("hidden", "");
+    opt.textContent = "Hasta Seçiniz";
+    userSelect.add(opt);
+
+    ui.closeAllModals();
+  });
 });
 
- function filterPayment() {
-  console.log("2")
-   request
-    .getwithUrl(
-      `/admin/payments/getSearchedPayments?startDate=${startDate.value}&endDate=${endDate.value}`
-    )
-    .then((response) => {
-      console.log("3")
-      console.log(response);
-      ui.showAllPaymensToUI(response);
-    })
-    .catch((err) => console.log(err));
-    
-}
-
-function filterPaymentStartPage() {
-  console.log(startDate.value)
-  console.log(endDate.value)
+function filterPayment() {
+  console.log("2");
   request
     .getwithUrl(
       `/admin/payments/getSearchedPayments?startDate=${startDate.value}&endDate=${endDate.value}`
     )
     .then((response) => {
-      console.log(response)
+      console.log("3");
+      console.log(response);
+      ui.showAllPaymensToUI(response);
+    })
+    .catch((err) => console.log(err));
+}
+
+function filterPaymentStartPage() {
+  console.log(startDate.value);
+  console.log(endDate.value);
+  request
+    .getwithUrl(
+      `/admin/payments/getSearchedPayments?startDate=${startDate.value}&endDate=${endDate.value}`
+    )
+    .then((response) => {
+      console.log(response);
       ui.showAllPaymensToUI(response);
     })
     .catch((err) => console.log(err));
@@ -162,7 +176,7 @@ function handleEditModal(e) {
            
             `;
       });
-      selectedOperationsforEdit=[]
+      selectedOperationsforEdit = [];
       response.data.operations.forEach((element) => {
         selectedOperationsforEdit.push(element);
       });
@@ -212,7 +226,7 @@ const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
 );
 
-saveEditModal.addEventListener("click",(e) => {
+saveEditModal.addEventListener("click", (e) => {
   let data = {
     paymentId: editedPayment,
     cashOrCard: editPaymentForm.cashOrCard.value,
@@ -221,10 +235,10 @@ saveEditModal.addEventListener("click",(e) => {
   };
   console.log(data);
 
-    request
+  request
     .postWithUrl("./payments/" + editedPayment + "/editPayment", data)
     .then((response) => {
-      console.log("1")
+      console.log("1");
       ui.showNotification(true, response.message);
       editPaymentModal.classList.add("hidden");
       setTimeout(() => {
@@ -268,16 +282,13 @@ function addExpensesModalShow() {
 // };
 
 function startingDate() {
-let newDate=new Date()
-console.log(newDate)
+  let newDate = new Date();
+  console.log(newDate);
 
   startDate.value = newDate.toISOString().substr(0, 10);
-  
-  endDate.value =startDate.value;
- 
+
+  endDate.value = startDate.value;
 }
-
-
 
 function dateRange() {
   const value = startDate.value;
@@ -570,7 +581,7 @@ addPaymentFrom.addEventListener("submit", (e) => {
   request
     .postWithUrl("./payments/addPayment", data)
     .then((response) => {
-      console.log(response)
+      console.log(response);
       ui.showNotification(response.success, response.message);
       setTimeout(() => {
         window.location.reload();
