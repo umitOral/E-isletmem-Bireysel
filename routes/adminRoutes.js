@@ -58,7 +58,7 @@ import {
   deactivateService,
 } from "../controller/serviceControllers.js";
 import {
-  addProduct,searchProduct,addPassiveProduct,editProduct,addStock,fixStock
+  addProduct,searchProduct,addPassiveProduct,editProduct,addStock,fixStock,searchProductInner
 } from "../controller/productControllers.js";
 import {
   addSms,
@@ -251,6 +251,7 @@ router.route("/products/:productId/fixStock").post(checkPriviliges("product_edit
 router.route("/allProducts/").get(checkPriviliges("product_view"), getAllProductsPage);
 router.route("/products/addProduct").post(checkPriviliges("product_add"), addProduct);
 router.route("/products/searchProduct").post(checkPriviliges("product_add"), searchProduct);
+router.route("/products/searchProductInner").post(searchProductInner);
 router.route("/products/addPassiveProduct").post(checkPriviliges("product_add"), addPassiveProduct);
 
 

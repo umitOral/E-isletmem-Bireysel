@@ -156,6 +156,35 @@ const editProduct = async (req, res, next) => {
     });
   }
 };
+const searchProductInner = async (req, res, next) => {
+  try {
+    console.log("searchProductInner");
+    console.log(req.body);
+
+    await Product.findOne({barcodes:req.body.barcode}).then((response) => {
+      if (response===null) {
+        res.json({
+          success: false,
+          message: "ürün bulunamadı",
+          data: null,
+        });
+      } else {
+        res.json({
+          success: true,
+          message: "ürün eklendi",
+          data: response,
+        });
+      }
+      
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: error,
+    });
+  }
+};
 const searchProduct = async (req, res, next) => {
   try {
     console.log(req.body);
@@ -180,7 +209,7 @@ const searchProduct = async (req, res, next) => {
             res.status(200).json({
               success: true,
               productFind: false,
-              message: "Pasif Ürün bulundu",
+              message: "Veri tabanında Ürün bulundu",
               data: response,
             });
           }
@@ -210,4 +239,5 @@ export {
   editProduct,
   addStock,
   fixStock,
+  searchProductInner
 };

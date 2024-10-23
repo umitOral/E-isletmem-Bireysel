@@ -134,6 +134,7 @@ searchProductForm.addEventListener("submit", (e) => {
   request
     .postWithUrl("./products/searchProduct", data)
     .then((response) => {
+      e.target.reset()
       console.log(response);
       let product = response.data;
 

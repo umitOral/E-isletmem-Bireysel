@@ -124,7 +124,7 @@
                 <form action="./payments/addPayment" id="add_payment" method="POST">
                     <div class="form-group">
                         Hasta:
-                        <select name="fromUser" id="fromUser" class="form-group" required>
+                        <select name="fromUser" id="fromUser" class="form-group">
                             <option value="" selected disable hidden> Hasta seçiniz</option>
                             <% users.forEach(user=> { %>
                                 <option value="<%= user._id %>">
@@ -138,13 +138,13 @@
                     <div class="form-group">
                         İşlem:
                         <select name="" id="operations_select">
-                            <option value="" selected hidden disabled>Müşteri seçiniz.</option>
+                            <option value="" selected hidden disabled>Hasta seçiniz.</option>
                         </select>
                     </div>
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                         Ürün:
-                        <input type="text" placeholder="Ürün okutunuz">
-                    </div> -->
+                        <input type="text" id="barcode-input" placeholder="Ürün okutunuz">
+                    </div>
 
 
                     <div class="selected_proccess_type_add">
@@ -162,7 +162,6 @@
 
                             </thead>
                             <tbody>
-
 
                             </tbody>
                             <tfoot>

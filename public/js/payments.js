@@ -18,6 +18,7 @@ const cancelButtons = document.querySelectorAll(".cancel");
 const editPaymentModal = document.querySelector("#modal_edit_payment");
 const totalValue = document.querySelector("#total_value");
 
+const barcodeInput = document.querySelector("#barcode-input");
 const userSelect = document.querySelector("#fromUser");
 const operationsSelect = document.querySelector("#operations_select");
 const addPaymentFrom = document.querySelector("#add_payment");
@@ -38,6 +39,7 @@ const endDate = document.querySelector(".endDate");
 const paymentTable = document.querySelector("#payments_table");
 
 let selectedOperationsforEdit = [];
+let selectedProductsforEdit = [];
 let editedPayment = "";
 
 eventListeners();
@@ -58,7 +60,10 @@ cancelButtons.forEach((element) => {
     for (let index = operationsSelect.options.length - 1; index >= 0; index--) {
       operationsSelect.options[index].remove();
     }
-
+   
+    selectedOperations=[]
+    selectedProducts=[]
+    calculatetTotalPrice()
     // remove selected operations from uı
 
     while (selected_proccess_table.firstChild) {
@@ -71,7 +76,6 @@ cancelButtons.forEach((element) => {
     opt.setAttribute("hidden", "");
     opt.textContent = "Hasta Seçiniz";
     userSelect.add(opt);
-
     ui.closeAllModals();
   });
 });
@@ -143,7 +147,7 @@ function handleEditModal(e) {
             <td>${element.operationName}</td>
                 
             <td>
-            <input type="number" min="0" value="1" readonly >
+           
             </td>
             
 
@@ -176,9 +180,47 @@ function handleEditModal(e) {
            
             `;
       });
+      response.data.products.forEach((element, index) => {
+        selected_proccess_table_edit.innerHTML += `
+        <tr data-id="${element._id}" data-price="${
+          element.price
+        }" >
+             <td>${element.productId.name}</td>
+                  <td>
+                  <input class="tdInputs product-quantity" type="number" min="0" value="${element.quantity}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs deactive" type="number" min="0" value="${element.price}" readonly >
+                  </td>
+                  <td>
+                  <input class="tdInputs discount" type="number" min="0" value="${element.discount}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs percentDiscount" type="number" min="0" value="${element.percentDiscount}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs deactive"  type="number" min="0" value="${element.paymentValue}" readonly >
+                  </td>
+                 
+                  <td>
+                  <input class="payment_value tdInputs" type="number" min="0"
+                    max=""
+                    value="${element.paymentValue}"
+                    step="1">
+                  </td>
+            
+            <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
+        </tr>
+           
+            `;
+      });
       selectedOperationsforEdit = [];
+      selectedProductsforEdit = [];
       response.data.operations.forEach((element) => {
         selectedOperationsforEdit.push(element);
+      });
+      response.data.products.forEach((element) => {
+        selectedProductsforEdit.push(element);
       });
       console.log(selectedOperationsforEdit);
       calculatetTotalPriceforEdit();
@@ -282,10 +324,12 @@ function addExpensesModalShow() {
 // };
 
 function startingDate() {
-  let newDate = new Date();
-  console.log(newDate);
+  var local = new Date();
+  local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
+  local = local.toJSON().slice(0, 10);
+  //
 
-  startDate.value = newDate.toISOString().substr(0, 10);
+  startDate.value = local;
 
   endDate.value = startDate.value;
 }
@@ -331,9 +375,12 @@ userSelect.addEventListener("change", () => {
         }
 
         // remove selected operations from uı
+        let operations = selected_proccess_table.querySelectorAll(
+          "[data-type='operation']"
+        );
 
-        while (selected_proccess_table.firstChild) {
-          selected_proccess_table.firstChild.remove();
+        while (operations.firstChild) {
+          operations.firstChild.remove();
         }
 
         let opt = document.createElement("option");
@@ -363,6 +410,7 @@ userSelect.addEventListener("change", () => {
 
 // selectedOperations Handeled
 let selectedOperations = [];
+let selectedProducts = [];
 
 operationsSelect.addEventListener("change", () => {
   let selectedOption =
@@ -389,12 +437,13 @@ operationsSelect.addEventListener("change", () => {
        data-paidvalue="${selectedOption.dataset.paidvalue}"
        data-discount="${selectedOption.dataset.discount}"
        data-percentDiscount="${selectedOption.dataset.percentdiscount}"
-       data-id="${selectedOption.dataset.id}">
-
+       data-id="${selectedOption.dataset.id}"
+       data-type="operation">
+  
       <td>${selectedOption.textContent.trim()}</td>
                 
       <td>
-      <input class="tdInputs deactive" type="number" min="0" value="1" readonly >
+      
       </td>
       <td>
       <input class="tdInputs deactive" type="number" min="0" value="${
@@ -445,8 +494,8 @@ operationsSelect.addEventListener("change", () => {
       </td>
       
       <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
-  <tr/>
-`;
+  </tr>
+  `;
 
   selectedOption.remove();
 
@@ -455,29 +504,56 @@ operationsSelect.addEventListener("change", () => {
 
 function calculatetTotalPrice() {
   console.log("calculating");
-  console.log(selectedOperations);
-  let totalValue = document.querySelector("#total_value");
-  let paymentValues = selectedOperations.map((element) => element.paymentValue);
 
-  if (paymentValues.length === 0) {
-    totalValue.textContent = 0;
-  } else {
-    totalValue.textContent = paymentValues.reduce((a, b) => a + b).toFixed();
+  let totalValue = document.querySelector("#total_value");
+  let paymentValues = 0;
+  let productPaymentValues = 0;
+  if (selectedOperations.length !== 0) {
+    paymentValues = selectedOperations.map((element) => element.paymentValue);
+    paymentValues = paymentValues.reduce((a, b) => a + b).toFixed();
   }
+  if (selectedProducts.length !== 0) {
+    selectedProducts.forEach(element => {
+      productPaymentValues+=element.paymentValue
+    });
+    productPaymentValues=productPaymentValues
+  }
+
+  totalValue.textContent = Number(paymentValues) + Number(productPaymentValues);
 }
+
 function calculatetTotalPriceforEdit() {
   console.log("calculating2");
 
-  let totalValueforEdit = document.querySelector("#total_value_edit");
-  let paymentValues = selectedOperationsforEdit.map(
-    (element) => element.paymentValue
-  );
+  // let totalValueforEdit = document.querySelector("#total_value_edit");
+  // let paymentValues = selectedOperationsforEdit.map(
+  //   (element) => element.paymentValue
+  // );
 
-  if (paymentValues.length === 0) {
-    totalValueforEdit.textContent = 0;
-  } else {
-    totalValueforEdit.textContent = paymentValues.reduce((a, b) => a + b);
+  // if (paymentValues.length === 0) {
+  //   totalValueforEdit.textContent = 0;
+  // } else {
+  //   totalValueforEdit.textContent = paymentValues.reduce((a, b) => a + b);
+  // }
+
+  
+  let totalValueforEdit = document.querySelector("#total_value_edit");
+  let paymentValues = 0;
+  let productPaymentValues = 0;
+  if (selectedOperationsforEdit.length !== 0) {
+    paymentValues = selectedOperationsforEdit.map((element) => element.paymentValue);
+    paymentValues = paymentValues.reduce((a, b) => a + b).toFixed();
   }
+  if (selectedProductsforEdit.length !== 0) {
+    selectedProductsforEdit.forEach(element => {
+      productPaymentValues+=element.paymentValue
+    });
+    productPaymentValues=productPaymentValues
+  }
+
+  totalValueforEdit.textContent = Number(paymentValues) + Number(productPaymentValues);
+
+
 }
 
 // remove selected operations
@@ -509,6 +585,7 @@ selected_proccess_type_add.addEventListener("click", (e) => {
       (item) =>
         item.operationId === e.target.parentElement.parentElement.dataset.id
     );
+    console.log(index);
     selectedOperations.splice(index, 1);
 
     if (
@@ -522,12 +599,26 @@ selected_proccess_type_add.addEventListener("click", (e) => {
     console.log(selectedOperations);
     calculatetTotalPrice();
   }
+  if (e.target.classList.contains("delete_product_from_basket")) {
+    // remove selected options
+    let index = selectedProducts.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    selectedProducts.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    console.log(selectedProducts);
+    calculatetTotalPrice();
+  }
 
   // //////////////////
 });
 
 selected_proccess_type_add.addEventListener("input", (e) => {
-  if (e.target.classList.contains("payment_value")) {
+  if (
+    e.target.classList.contains("payment_value") &&
+    e.target.parentElement.parentElement.dataset.type === "operation"
+  ) {
     let index = selectedOperations.findIndex(
       (item) =>
         item.operationId === e.target.parentElement.parentElement.dataset.id
@@ -535,6 +626,55 @@ selected_proccess_type_add.addEventListener("input", (e) => {
 
     selectedOperations[index].paymentValue = Number(e.target.value);
 
+    calculatetTotalPrice();
+  }
+  if (
+    e.target.classList.contains("payment_value") &&
+    e.target.parentElement.parentElement.dataset.type === "product"
+  ) {
+    console.log("burası");
+    let index = selectedProducts.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+
+    selectedProducts[index].paymentValue = Number(e.target.value);
+
+    calculatetTotalPrice();
+  }
+  if (
+    e.target.classList.contains("percentDiscount") &&
+    e.target.parentElement.parentElement.dataset.type === "product"
+  ) {
+    let index = selectedProducts.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+
+    selectedProducts[index].percentDiscount = Number(e.target.value);
+    selectedProducts[index].paymentValue = selectedProducts[index].quantity*(selectedProducts[index].price*(100-selectedProducts[index].percentDiscount)/100);
+    e.target.parentElement.parentElement.children[7].children[0].value=selectedProducts[index].paymentValue
+    calculatetTotalPrice();
+  }
+  if (
+    e.target.classList.contains("discount") &&
+    e.target.parentElement.parentElement.dataset.type === "product"
+  ) {
+    let index = selectedProducts.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+
+    selectedProducts[index].discount = Number(e.target.value);
+    selectedProducts[index].paymentValue = (selectedProducts[index].quantity*selectedProducts[index].price)-selectedProducts[index].discount;
+    e.target.parentElement.parentElement.children[7].children[0].value=selectedProducts[index].paymentValue
+    calculatetTotalPrice();
+  }
+  if (e.target.classList.contains("product-quantity")) {
+    let index = selectedProducts.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+
+    selectedProducts[index].quantity = Number(e.target.value);
+    selectedProducts[index].paymentValue = selectedProducts[index].quantity*selectedProducts[index].price;
+    e.target.parentElement.parentElement.children[7].children[0].value=selectedProducts[index].paymentValue
     calculatetTotalPrice();
   }
 });
@@ -566,9 +706,101 @@ selected_proccess_table_edit.addEventListener("input", (e) => {
 });
 
 // add payment
+barcodeInput.addEventListener("keydown", (e) => {
+  
+  if (e.key === "Enter") {
+    e.preventDefault(); // Formun otomatik gönderilmesini engeller
+
+    const enteredBarcode = barcodeInput.value.trim(); // Girdiği değeri alır ve boşlukları siler
+    if (enteredBarcode) {
+      let data = {
+        barcode: e.target.value,
+      };
+      request
+        .postWithUrl("./products/searchProductInner", data)
+        .then((response) => {
+          barcodeInput.value = "";
+          console.log(response);
+          ui.showNotification(response.success, response.message);
+
+          let index = selectedProducts.findIndex(
+            (item) => item._id === response.data._id
+          );
+          console.log(index);
+
+          if (response.success === true) {
+            if (index === -1) {
+              selected_proccess_table.innerHTML += `
+              <tr data-id="${response.data._id}" data-type="product" >
+                  <td>${response.data.name}</td>
+                  <td>
+                  <input class="tdInputs product-quantity" type="number" min="0" value="1" >
+                  </td>
+                  <td>
+                  <input class="tdInputs deactive" type="number" min="0" value="${response.data.price}" readonly >
+                  </td>
+                  <td>
+                  <input class="tdInputs discount" type="number" min="0" value="" >
+                  </td>
+                  <td>
+                  <input class="tdInputs percentDiscount" type="number" min="0" value="" >
+                  </td>
+                  <td>
+                  <input class="tdInputs deactive"  type="number" min="0" value="" readonly >
+                  </td>
+                  <td>
+                  
+                  </td>
+                  <td>
+                  <input class="payment_value tdInputs" type="number" min="0"
+                    max=""
+                    value="${response.data.price}"
+                    step="1">
+                  </td>
+      
+                  <td><i class="fa-solid fa-trash delete_product_from_basket"></i></td>
+      
+              </tr>`;
+              response.data.quantity = 1;
+              response.data.paymentValue =response.data.price;
+              response.data.discount =0;
+              response.data.percentDiscount =0;
+              selectedProducts.push(response.data);
+            } else {
+              selectedProducts[index].quantity =selectedProducts[index].quantity + 1;
+              selectedProducts[index].paymentValue =selectedProducts[index].quantity*selectedProducts[index].price;
+              let productsRow = selected_proccess_table.querySelectorAll("tr");
+              
+              productsRow.forEach((element) => {
+
+
+                if (element.dataset.id === selectedProducts[index]._id) {
+                  console.log("burası2")
+                  element.children[1].children[0].value=Number(element.children[1].children[0].value)+1
+                  element.children[7].children[0].value=selectedProducts[index].paymentValue
+                }
+              });
+              
+            }
+
+            console.log(selectedProducts);
+
+            calculatetTotalPrice();
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          ui.showNotification(false, err);
+        });
+    }
+  }
+});
+
+
 
 addPaymentFrom.addEventListener("submit", (e) => {
   e.preventDefault();
+
   let cashOrCard = addPaymentFrom.querySelector('[name="cashOrCard"]:checked');
   console.log(cashOrCard);
   let data = {
@@ -577,6 +809,7 @@ addPaymentFrom.addEventListener("submit", (e) => {
     cashOrCard: addPaymentFrom.cashOrCard.value,
     description: addPaymentFrom.description.value,
     operations: selectedOperations,
+    products: selectedProducts,
   };
   request
     .postWithUrl("./payments/addPayment", data)

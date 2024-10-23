@@ -81,6 +81,7 @@ input {
 }
 .tdInputs.deactive{
   color: rgba(128, 128, 128, 0.45);
+  border: none;
   
 }
 input[type="radio"] {

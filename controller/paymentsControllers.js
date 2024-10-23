@@ -1,13 +1,21 @@
 import { CustomError } from "../helpers/error/CustomError.js";
 import Operation from "../models/OperationsModel.js";
 import Payment from "../models/paymentsModel.js";
+import Product from "../models/productModel.js";
 
-
-const addPayment = async (req, res,next) => {
+const addPayment = async (req, res, next) => {
   try {
+    // console.log(req.body);
     req.body.company = res.locals.company._id;
+    if (req.body.fromUser==="") {
+      req.body.fromUser=undefined
+    }
+    req.body.products.forEach(element => {
+      element.productId=element._id
+    });
     await Payment.create(req.body)
       .then((response) => {
+        console.log(response)
         req.body.operations.forEach(async (element) => {
           let foundedOperation = await Operation.findOne({
             _id: element.operationId,
@@ -59,8 +67,20 @@ const addPayment = async (req, res,next) => {
             foundedOperation.paidValue + element.paymentValue;
           await foundedOperation.save();
         });
+        if (req.body.products.length !== 0) {
+          req.body.products.forEach(async (element) => {
+            let foundedProduct = await Product.findOne({
+              _id: element._id,
+            });
+
+            foundedProduct.totalStock=foundedProduct.totalStock-element.quantity
+            await foundedProduct.save()
+          });
+        }
+        
       })
       .catch((err) => {
+        console.log(err)
         return new CustomError(err);
       });
 
@@ -69,11 +89,11 @@ const addPayment = async (req, res,next) => {
       message: "Ödeme kaydedildi",
     });
   } catch (error) {
-   
+    return new CustomError(err);
   }
 };
 
-const addExpense = async (req, res,next) => {
+const addExpense = async (req, res, next) => {
   try {
     req.body.company = res.locals.company._id;
     req.body.totalPrice = req.body.totalPrice * -1;
@@ -82,9 +102,7 @@ const addExpense = async (req, res,next) => {
 
     res.redirect("back");
   } catch (error) {
-    return next(
-      new CustomError("bilinmeyen hata", 500, error)
-    );
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
@@ -92,7 +110,8 @@ const getSinglePayment = async (req, res, next) => {
   try {
     const payment = await Payment.findById(req.params.id)
       .populate("fromUser", ["name", "surname"])
-      .populate("operations");
+      .populate("operations")
+      .populate("products.productId");
     const operations = payment.operations.map((element) => element.operationId);
 
     let operationsDetails = await Operation.find({ _id: operations });
@@ -131,18 +150,16 @@ const deletePayment = async (req, res, next) => {
       success: true,
       message: "ödeme silindi",
     });
-  } catch (error) {
+  } catch (error) {}
 };
-}
 
 const editPayment = async (req, res, next) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     let requestPayments = req.body.operations.map((item) => item.operationId);
     let payment = await Payment.findById(req.body.paymentId);
     let paymentOperations = payment.operations;
     let requestedPayment;
-
 
     for (const operation of paymentOperations) {
       let indexcontrol = requestPayments.findIndex(
@@ -173,8 +190,12 @@ const editPayment = async (req, res, next) => {
 
         console.log(totalPrice);
         await Payment.findByIdAndUpdate(req.body.paymentId, {
-          $set: { totalPrice: totalPrice,description:req.body.description,cashOrCard:req.body.cashOrCard},
-        }).then(response=>requestedPayment=response);
+          $set: {
+            totalPrice: totalPrice,
+            description: req.body.description,
+            cashOrCard: req.body.cashOrCard,
+          },
+        }).then((response) => (requestedPayment = response));
       } else {
         // let _id = new mongoose.Types.ObjectId(req.body.paymentId);
 
@@ -209,7 +230,8 @@ const editPayment = async (req, res, next) => {
             $set: {
               "operations.$[operation].paymentValue":
                 req.body.operations[indexcontrol].paymentValue,
-                description:req.body.description,cashOrCard:req.body.cashOrCard
+              description: req.body.description,
+              cashOrCard: req.body.cashOrCard,
             },
           },
           {
@@ -223,24 +245,22 @@ const editPayment = async (req, res, next) => {
           .map((item) => item.paymentValue)
           .reduce((a, b) => a + b);
         await modifiedPayment.save();
-        requestedPayment=modifiedPayment
+        requestedPayment = modifiedPayment;
       }
     }
-
 
     res.json({
       success: true,
       message: "ödeme düzenlendi.",
-      data:requestedPayment
+      data: requestedPayment,
     });
-  } catch (error) {return next(
-    new CustomError("bilinmeyen hata", 500, error)
-  );
+  } catch (error) {
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const getSearchedPayments = async (req, res, next) => {
   try {
-    console.log(req.query)
+    console.log(req.query);
     function toDateInputValue(dateObject) {
       const local = new Date(dateObject);
       local.setMinutes(
@@ -248,11 +268,11 @@ const getSearchedPayments = async (req, res, next) => {
       );
       return local;
     }
-    let endDate=new Date(req.query.endDate)
-    let startDate=new Date(req.query.startDate)
-    startDate.setDate(startDate.getDate()-1)
-    startDate.setHours(24,0,0)
-    endDate.setHours(24,0,0)
+    let endDate = new Date(req.query.endDate);
+    let startDate = new Date(req.query.startDate);
+    startDate.setDate(startDate.getDate() - 1);
+    startDate.setHours(24, 0, 0);
+    endDate.setHours(24, 0, 0);
     // console.log(startDate)
     //  startDate = toDateInputValue(new Date(startDate));
 
@@ -300,9 +320,7 @@ const getSearchedPayments = async (req, res, next) => {
       netCash,
     });
   } catch (error) {
-    return next(
-      new CustomError("bilinmeyen hata", 500, error)
-    );
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
@@ -313,4 +331,4 @@ export {
   addExpense,
   editPayment,
   getSinglePayment,
-}
+};

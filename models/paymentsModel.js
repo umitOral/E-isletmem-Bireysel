@@ -40,6 +40,29 @@ const paymentSchema = new Schema(
         },
       },
     ],
+    products: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        paymentValue: {
+          type: Number,
+        },
+        quantity: {
+          type: Number,
+        },
+        price: {
+          type: Number,
+        },
+        discount: {
+          type: Number,
+        },
+        percentDiscount: {
+          type: Number,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
