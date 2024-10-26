@@ -1,5 +1,5 @@
 import Operation from "../models/OperationsModel.js";
-import Session from "../models/sessionModel.js";
+import Session from "../models/appointmentModel.js";
 import Company from "../models/companyModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 

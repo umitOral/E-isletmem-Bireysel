@@ -32,6 +32,14 @@
   align-items: center;
   flex-wrap: wrap;
 }
+.product-list {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-left: 1rem;
+}
 
 div.search input[type="search"] {
   padding: 1rem;

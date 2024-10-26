@@ -60,6 +60,9 @@ input::placeholder {
   opacity: 0.5;
 }
 
+* {
+  user-select: auto !important;
+}
 
 html {
   font-size: 14px;
@@ -757,7 +760,7 @@ td {
 
 tbody td,
 tfoot td {
-  border-bottom: 1px solid var(--color-light);
+  border: 1px solid var(--color-light);
   color: var(--color-dark-variant);
   height: 3rem;
   text-align: center;
@@ -803,7 +806,21 @@ tfoot td {
   border:var(--border-style-1);
   border-radius: var(--border-radius-1);
   background-color: white;
-  width: 30%;
+  min-width: 30%;
+  width: min-content;
+  position: absolute;
+  top: 20px;
+  max-height: 100vh;
+  overflow-x: auto;
+}
+.selected_proccess_type_edit{
+  width: 100%;
+  overflow: auto
+
+}
+
+thead th {
+  white-space: nowrap
 }
 .table-button {
   padding: 0.5rem;
@@ -819,9 +836,7 @@ tfoot td {
 }
 
 
-table tbody tr:last-child td {
-  border: none;
-}
+
 table tbody tr:hover {
   background-color: rgba(216, 213, 213, 0.1);
 }
@@ -1125,12 +1140,12 @@ header .head {
 @media (max-width: 768px) {
   .inner_modal{
     
-    width: 80%;
+    width: 80% !important;
   }
   .information-modal-wrapper{
     position: fixed;
     top:80px;
-    width: 80%;
+    width: 90%;
     right: 0;
    
   }

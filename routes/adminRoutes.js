@@ -58,7 +58,7 @@ import {
   deactivateService,
 } from "../controller/serviceControllers.js";
 import {
-  addProduct,searchProduct,addPassiveProduct,editProduct,addStock,fixStock,searchProductInner
+  addProduct,searchProduct,addPassiveProduct,editProduct,addStock,fixStock,searchProductInner,searchProductName
 } from "../controller/productControllers.js";
 import {
   addSms,
@@ -118,6 +118,7 @@ const router = express.Router();
 
 router.route("/").get(getAdminPage);
 router.route("/adminControllers/addbulkproducttoGeneral").get(addbulkproducttoGeneral);
+router.route("/adminControllers/topluIslemler").get(topluIslemler);
 router.route("/users").get(checkPriviliges("user_view"), getUsersPage);
 
 router.route("/users/findUser").post(checkPriviliges("user_view"), findUser);
@@ -251,6 +252,7 @@ router.route("/products/:productId/fixStock").post(checkPriviliges("product_edit
 router.route("/allProducts/").get(checkPriviliges("product_view"), getAllProductsPage);
 router.route("/products/addProduct").post(checkPriviliges("product_add"), addProduct);
 router.route("/products/searchProduct").post(checkPriviliges("product_add"), searchProduct);
+router.route("/products/searchProductName").post(checkPriviliges("product_add"), searchProductName);
 router.route("/products/searchProductInner").post(searchProductInner);
 router.route("/products/addPassiveProduct").post(checkPriviliges("product_add"), addPassiveProduct);
 

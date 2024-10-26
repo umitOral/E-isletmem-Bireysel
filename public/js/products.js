@@ -9,6 +9,7 @@ const saveButtons = document.querySelectorAll(".input_save_buttons");
 const cancelBtns = document.querySelectorAll(".cancel.form-btn");
 const priceInputs = document.querySelectorAll(".price_inputs");
 const searchProductForm = document.querySelector("#search-product-form");
+const productListForm = document.querySelector("#product-list-form");
 const addProductButton = document.querySelector("#add_product_btn");
 const modalProductAdd = document.querySelector("#add_product");
 const modalProductEdit = document.querySelector("#edit_product");
@@ -20,9 +21,12 @@ const editProductForm = document.querySelector("#edit-product-form");
 const addProductForm = document.querySelector("#add-product-form");
 const addStockForm = document.querySelector("#add-stock-form");
 const fixStockForm = document.querySelector("#fix-stock-form");
+const modalShowStock = document.querySelector("#show-stocks-modal");
+const formShowStock = document.querySelector("#show-stocks-form");
 
 let productId;
 let selectedRow;
+let selectedProduct;
 
 addStockForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -34,6 +38,7 @@ addStockForm.addEventListener("submit", (e) => {
     .then((response) => {
       ui.showNotification(response.success, response.message);
       if (response.success === true) {
+        selectedProduct=response.data
         modalAddStock.classList.add("hidden");
         addStockForm.reset();
         datasToUI(selectedRow, response.data);
@@ -47,15 +52,15 @@ addStockForm.addEventListener("submit", (e) => {
 
 fixStockForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  
-  let data ={
-    quantity:fixStockForm.quantity.value,
-    unitCost:0
+
+  let data = {
+    quantity: fixStockForm.quantity.value,
+    unitCost: 0,
   };
   request
     .postWithUrl("./products/" + productId + "/fixStock", data)
     .then((response) => {
-      console.log(response)
+      console.log(response);
       ui.showNotification(response.success, response.message);
       if (response.success === true) {
         modalFixStock.classList.add("hidden");
@@ -93,6 +98,7 @@ addProductForm.addEventListener("submit", (e) => {
       }
     })
     .catch((err) => {
+      console.log(err);
       ui.showNotification(err.message, err.message);
       console.log(err);
     });
@@ -134,10 +140,10 @@ searchProductForm.addEventListener("submit", (e) => {
   request
     .postWithUrl("./products/searchProduct", data)
     .then((response) => {
-      e.target.reset()
+      e.target.reset();
       console.log(response);
       let product = response.data;
-
+      selectedProduct = response.data;
       if (response.productFind) {
         productId = product._id;
 
@@ -149,6 +155,9 @@ searchProductForm.addEventListener("submit", (e) => {
             product.barcodes[0].barcode
           }" >
   
+              <td>
+                  ${product.barcodes[0].barcode}
+              </td>
               <td>
                   ${product.brand || "-"}
               </td>
@@ -197,21 +206,136 @@ searchProductForm.addEventListener("submit", (e) => {
     });
 });
 
+// productListForm.addEventListener("submit", (e) => {
+//   e.preventDefault();
+//   let data = { productName: productListForm.productName.value };
+//   request
+//     .postWithUrl("./products/searchProductName", data)
+//     .then((response) => {
+//       e.target.reset();
+//       console.log(response);
+//       let product = response.data;
+
+//       if (response.productFind) {
+//         productId = product._id;
+//         productTable.innerHTML=``
+//         response.data.forEach(product => {
+//           productTable.innerHTML = `
+//           <tr data-productID="${product._id}" data-barcode="${
+//             product.barcodes[0]
+//           }" >
+
+//              <td>
+//                  ${product.barcodes}
+//              </td>
+//              <td>
+//                  ${product.brand || "-"}
+//              </td>
+//              <td>
+//                  ${product.name}
+//              </td>
+
+//              <td>
+
+//                  <span>${product.price || "-"}</span> tl
+
+//              </td>
+//              <td>
+
+//                  ${product.stocks[product.stocks.length - 1].unitCost || "-"}tl
+
+//              </td>
+//              <td>
+
+//                 ${product.totalStock}
+
+//              </td>
+//               <td>
+//                   <select name="" class="product-edit-select">
+//                  <option selected disable hidden>Seçenekler</option>
+//                  <option value="edit-product">Bilgileri Değiştir</option>
+//                  <option value="add-stock">Stok Ekle</option>
+//                  <option value="show-stocks">Stokları Göster</option>
+//                  <option value="fix-stock">Stok Düzelt</option>
+//                  </select>
+//                </td>
+//              </td>
+
+//          </tr>
+//        `;
+//         });
+//       } else {
+//         if (product !== null) {
+//           response.data.forEach((product) => {
+//             productTable.innerHTML = `
+//             <tr data-productID=" ${product._id}" data-barcode="${
+//               product.barcodes[0].barcode
+//             }" >
+
+//                   <td>
+//                       ${product.brand || "-"}
+//                   </td>
+//                   <td>
+//                       ${product.name}
+//                   </td>
+
+//                   <td>
+//                       <div class="inputs" >
+//                           <input type="number" class="price_inputs">tl
+//                           <i class="ph ph-floppy-disk input_save_buttons"></i>
+//                       </div>
+//                   </td>
+//                   <td>
+//                       <div class="inputs">
+//                           <input type="number" name="unitCost" class="price_inputs"
+//                               >tl
+//                           <i class="ph ph-floppy-disk input_save_buttons"></i>
+//                       </div>
+//                   </td>
+//                   <td>
+//                       <div class="inputs" name="quantity">
+//                           <input type="number" class="price_inputs"
+//                               value="">adet
+//                       </div>
+//                   </td>
+//                    <td>
+//                       <span class="continue hoverable" id="add-product">Ekle+</span>
+//                   </td>
+
+//               </tr>
+//             `;
+//           });
+//         } else {
+//           productTable.innerHTML = `
+//         ${response.message}
+//         `;
+//         }
+//         addPassiveProductHandle();
+//       }
+
+//       ui.showNotification(response.success, response.message);
+//     })
+//     .catch((err) => {
+//       ui.showNotification(err.success, err.message);
+//       console.log(err);
+//     });
+// });
+
 function addPassiveProductHandle() {
   const addProductMiniBtn = document.querySelector("#add-product");
   addProductMiniBtn.addEventListener("click", (e) => {
     let data = {
       barcode: e.target.parentElement.parentElement.dataset.barcode,
-      name: e.target.parentElement.parentElement.children[1].textContent.trim(),
+      name: e.target.parentElement.parentElement.children[2].textContent.trim(),
       price:
-        e.target.parentElement.parentElement.children[2].children[0].children[0]
+        e.target.parentElement.parentElement.children[3].children[0].children[0]
           .value,
       stocks: {
         quantity:
-          e.target.parentElement.parentElement.children[4].children[0]
+          e.target.parentElement.parentElement.children[5].children[0]
             .children[0].value,
         unitCost:
-          e.target.parentElement.parentElement.children[3].children[0]
+          e.target.parentElement.parentElement.children[4].children[0]
             .children[0].value,
       },
     };
@@ -240,11 +364,11 @@ function handleProductSelect() {
       e.target.options[e.target.options.selectedIndex].value === "edit-product"
     ) {
       editProductForm.brand.value =
-        e.target.parentElement.parentElement.children[0].textContent.trim();
-      editProductForm.name.value =
         e.target.parentElement.parentElement.children[1].textContent.trim();
+      editProductForm.name.value =
+        e.target.parentElement.parentElement.children[2].textContent.trim();
       editProductForm.price.value =
-        e.target.parentElement.parentElement.children[2].children[0].textContent.trim();
+        e.target.parentElement.parentElement.children[3].children[0].textContent.trim();
       modalProductEdit.classList.remove("hidden");
     }
     if (
@@ -256,6 +380,30 @@ function handleProductSelect() {
       e.target.options[e.target.options.selectedIndex].value === "fix-stock"
     ) {
       modalFixStock.classList.remove("hidden");
+    }
+    if (
+      e.target.options[e.target.options.selectedIndex].value === "show-stocks"
+    ) {
+      modalShowStock.classList.remove("hidden");
+       formShowStock.innerHTML=""
+      selectedProduct.stocks.forEach(element => {
+        formShowStock.innerHTML+=`
+     
+        <div class="form-group ">
+                       <span>Tarih:</span>
+                       <span>${new Date(element.createdAt).toLocaleDateString()}</span>
+                       </br>
+                       Adet:<input  type="Number" name="" id="" value="${element.quantity}" readonly>
+                       Birim Fiyat:<input  type="Number" name="" id="" value="${element.unitCost}" readonly>
+                   </div>
+                   </br>
+                   
+
+     `
+      });
+
+  
+     
     }
     e.target.selectedIndex = 0;
   });
@@ -285,9 +433,12 @@ function datasToUI(target, product) {
            <tr data-productID="${product._id}" data-barcode="${
     product.barcodes[0]
   }" >
-  
+              
               <td>
-                  ${product.brand||"-"}
+                  ${product.barcodes}
+              </td>
+              <td>
+                  ${product.brand || "-"}
               </td>
               <td>
                   ${product.name}
@@ -313,6 +464,7 @@ function datasToUI(target, product) {
                   <option selected disable hidden>Seçenekler</option>
                   <option value="edit-product">Bilgileri Değiştir</option>
                   <option value="add-stock">Stok Ekle</option>
+                  <option value="show-stocks">Stokları Göster</option>
                   <option value="fix-stock">Stok Düzelt</option>
                   </select>
                 </td>
@@ -326,6 +478,7 @@ addProductButton.addEventListener("click", showModalAddProduct);
 
 cancelBtns.forEach((element) => {
   element.addEventListener("click", () => {
+    console.log("close")
     ui.closeAllModals();
   });
 });

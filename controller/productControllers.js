@@ -1,5 +1,7 @@
 import Company from "../models/companyModel.js";
 import User from "../models/userModel.js";
+import fs from "fs";
+
 import { CustomError } from "../helpers/error/CustomError.js";
 import {
   productGeneralSchema,
@@ -9,17 +11,17 @@ import { getTenantDb } from "../controller/db.js";
 
 import axios from "axios";
 import Product from "../models/productModel.js";
+import { BRAND_LIST } from "../config/brands.js";
 
 const addPassiveProduct = async (req, res, next) => {
   try {
     console.log("addPassiveProduct");
-    console.log(req.body);
 
     req.body.barcodes = [req.body.barcode];
-
     req.body.company = res.locals.company._id;
     req.body.totalStock = req.body.stocks.quantity;
-    Product.create(req.body)
+
+    await Product.create(req.body)
       .then((response) => {
         res.json({
           success: true,
@@ -43,14 +45,34 @@ const addPassiveProduct = async (req, res, next) => {
 const addProduct = async (req, res, next) => {
   try {
     console.log("add product");
+    console.log(req.body);
 
     req.body.barcodes = [req.body.barcode];
     req.body.company = res.locals.company._id;
     let product = await ProductGeneral.findOne({
       "barcodes.barcode": req.body.barcode,
     });
-    console.log(req.body);
-    if (product === null) {
+    console.log(product);
+
+    let brandList = BRAND_LIST;
+
+    if (!brandList.includes(req.body.brand)) {
+      console.log("haho");
+      brandList.push(req.body.brand);
+      const updatedList = `const BRAND_LIST = ${JSON.stringify(
+        brandList,
+        null,
+        2
+      )}
+      export {BRAND_LIST}`;
+
+      // Güncellenmiş veriyi brandList.js dosyasına yaz
+      fs.writeFileSync("./config/brands.js", updatedList, "utf8", (err) => {
+        if (err) throw err;
+      });
+    }
+
+    if (product===null) {
       await Product.create(req.body);
       let data = {
         name: req.body.name,
@@ -58,25 +80,23 @@ const addProduct = async (req, res, next) => {
         brand: req.body.brand,
       };
 
-      await ProductGeneral.create(data).then(() => {
+      // Yeni eleman ekle
+      console.log(data)
+      await ProductGeneral.create(data).then((response) => {
         res.json({
           success: true,
           message: "ürün eklendi",
         });
       });
-    } else {
-      res.json({
-        success: false,
-        message: "bu barkodla kayıtlı ürün bulunmaktadır.",
-      });
+    }else{
+        res.json({
+          success: false,
+          message: "bu barkodla kayıtlı ürün bulunmaktadır.",
+        })
     }
   } catch (error) {
     console.log(error);
-    res.json({
-      success: false,
-      message: error,
-      error: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const addStock = async (req, res, next) => {
@@ -112,10 +132,9 @@ const fixStock = async (req, res, next) => {
     console.log(req.body);
 
     let product = await Product.findById(req.params.productId);
-   
-    
+
     product.stocks.push({
-      quantity: (req.body.quantity) - (product.totalStock),
+      quantity: req.body.quantity - product.totalStock,
       unitCost: 0,
     });
     product.totalStock = req.body.quantity;
@@ -161,8 +180,8 @@ const searchProductInner = async (req, res, next) => {
     console.log("searchProductInner");
     console.log(req.body);
 
-    await Product.findOne({barcodes:req.body.barcode}).then((response) => {
-      if (response===null) {
+    await Product.findOne({ barcodes: req.body.barcode }).then((response) => {
+      if (response === null) {
         res.json({
           success: false,
           message: "ürün bulunamadı",
@@ -175,13 +194,60 @@ const searchProductInner = async (req, res, next) => {
           data: response,
         });
       }
-      
     });
   } catch (error) {
     console.log(error);
     res.json({
       success: false,
       message: error,
+    });
+  }
+};
+const searchProductName = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    let productName = req.body.productName;
+
+    await Product.find({
+      company: res.locals.company._id,
+      name: { $regex: productName, $options: "i" },
+    }).then(async (response) => {
+      if (response === null) {
+        await ProductGeneral.findOne({
+          "barcodes.barcode": req.body.barcode,
+        }).then((response) => {
+          if (response === null) {
+            res.status(200).json({
+              success: false,
+              productFind: false,
+              message:
+                "Veri tabanımızda ürün bulunamadı. barkodlu ürün olarak ekleyiniz.",
+              data: response,
+            });
+          } else {
+            res.status(200).json({
+              success: true,
+              productFind: false,
+              message: "Veri tabanında Ürün bulundu",
+              data: response,
+            });
+          }
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          productFind: true,
+          message: "Aktif Ürün bulundu",
+          data: response,
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "ürün bulunurken bir sorun oluştu",
+      error: error,
     });
   }
 };
@@ -234,10 +300,11 @@ const searchProduct = async (req, res, next) => {
 
 export {
   searchProduct,
+  searchProductName,
   addProduct,
   addPassiveProduct,
   editProduct,
   addStock,
   fixStock,
-  searchProductInner
+  searchProductInner,
 };

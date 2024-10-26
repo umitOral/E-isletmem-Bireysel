@@ -3,57 +3,55 @@ export class UI {
     this.table = document.getElementById("userList");
   }
 
-  closeNotification(){
-    const wrapper = document.querySelector(".information-modal-wrapper")
-    
+  closeNotification() {
+    const wrapper = document.querySelector(".information-modal-wrapper");
+
     wrapper.addEventListener("click", (e) => {
-        if (e.target.classList.contains("fa-xmark")) {
-            e.target.parentElement.remove()
-        }
-    })
-  }
-
-  tableRowSelection(table){
-    console.log("checkbox sele")
-    const tables = document.querySelectorAll("table")
-    const checkAllBox = table.querySelector("input[type=checkbox]:first-child")
-    const tableRows = table.querySelectorAll("tbody tr")
-    const checkBoxes = table.querySelectorAll('input[type=checkbox]:not(:first-child)')
-
-    checkBoxes.forEach(element => {
-      element.addEventListener("click",(e)=>{
-        e.target.parentElement.parentElement.parentElement.classList="background:#0000ff0d"
-      })
+      if (e.target.classList.contains("fa-xmark")) {
+        e.target.parentElement.remove();
+      }
     });
-   
-  
-      checkAllBox.addEventListener("change",()=>{
-        checkBoxes.forEach(element => {
-          if (checkAllBox.checked===true) {
-            element.checked=true
-          }else{
-            element.checked=false
-          }
-        });
-      })
-
-    
- 
-   
   }
-  deleteZeroFromPhone(){
+
+  tableRowSelection(table) {
+    console.log("checkbox sele");
+    const tables = document.querySelectorAll("table");
+    const checkAllBox = table.querySelector("input[type=checkbox]:first-child");
+    const tableRows = table.querySelectorAll("tbody tr");
+    const checkBoxes = table.querySelectorAll(
+      "input[type=checkbox]:not(:first-child)"
+    );
+
+    checkBoxes.forEach((element) => {
+      element.addEventListener("click", (e) => {
+        e.target.parentElement.parentElement.parentElement.classList =
+          "background:#0000ff0d";
+      });
+    });
+
+    checkAllBox.addEventListener("change", () => {
+      checkBoxes.forEach((element) => {
+        if (checkAllBox.checked === true) {
+          element.checked = true;
+        } else {
+          element.checked = false;
+        }
+      });
+    });
+  }
+  deleteZeroFromPhone() {
     const phoneInput = document.querySelector("#phone");
-    
+
     phoneInput.addEventListener("input", (e) => {
       if (e.target.value.startsWith("0")) {
-        e.target.value=e.target.value.substring(1)
+        e.target.value = e.target.value.substring(1);
       }
-    })
+    });
   }
-  closeAllModals(){
-    const allModals=document.querySelectorAll(".modal")
-    allModals.forEach(element => {
-      element.classList.add("hidden")
+  closeAllModals() {
+    const allModals = document.querySelectorAll(".modal");
+    allModals.forEach((element) => {
+      element.classList.add("hidden");
     });
   }
 
@@ -103,9 +101,32 @@ export class UI {
             <tr data-paymentid="${element._id}">
                 <td>${new Date(element.createdAt).toLocaleDateString(
                   "tr-TR"
+                )}//${new Date(element.createdAt).toLocaleTimeString(
+                  "tr-TR"
                 )}</td>
                 <td>${element.cashOrCard}</td>
+                <td>
+                    ${element.products.map((item, i) => `
+                    <div data-dataId="${item._id}" data-dataName="${item.dataName}">
+                    ${item.quantity}x${item.productId.name}=${item.paymentValue} <br>
+                    </div>
+                    `
+                      )
+                      .join("")}
+                </td>
+                <td>
+                    ${element.operations.map((item, i) => `
+                      <div>
+                      ${item.operationId.operationName}=${item.paymentValue} <br>
+                    </div>
+                    `
+                      )
+                      .join("")}
+                </td>
+                
+        
                 <td>${element.totalPrice}</td>
+                <td>${element.description}</td>
                 
                 
                 <td>
@@ -521,7 +542,6 @@ export class UI {
       allDoctorEvents.firstChild.remove();
     }
 
-
     allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
       const singleDoctorArea = document.createElement("div");
 
@@ -745,7 +765,7 @@ export class UI {
     const userSelect = document.querySelector("#user-select");
     const orderSelect = document.getElementById("proccess_type_add");
     while (orderSelect.firstChild) {
-      orderSelect.firstChild.remove()
+      orderSelect.firstChild.remove();
     }
     if (data.length === 0) {
       let opt = document.createElement("option");
@@ -771,7 +791,10 @@ export class UI {
         let opt = document.createElement("option");
         opt.setAttribute("data-price", element.operationPrice);
         opt.setAttribute("data-id", element._id);
-        opt.setAttribute("data-nextsessionnumber", element.sessionOfOperation.length+1);
+        opt.setAttribute(
+          "data-nextsessionnumber",
+          element.sessionOfOperation.length + 1
+        );
         opt.textContent = element.operationName;
         opt.value = element.operationName;
         orderSelect.add(opt);

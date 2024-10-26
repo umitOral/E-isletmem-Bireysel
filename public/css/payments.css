@@ -78,6 +78,7 @@ width:min-content;
     flex-direction: column;
    width: 100px;
    position: absolute;
+   right: 0;
    border-radius: var(--border-radius-1);
    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
    display: none;
@@ -91,11 +92,24 @@ width:min-content;
 }
 .edit_payment_small_modal button {
     
-   width: 100px;
+   width: 100%;
    cursor: pointer;
    border: none;
    padding: 0.5rem;
    
+}
+thead td {
+    white-space: nowrap
+}
+tbody td:first-child span{
+    display: inline-block;
+    width: 180px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+tbody td:last-child{
+    width: 10px;
 }
 .edit_payment_small_modal a {
   display: block;

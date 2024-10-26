@@ -1,4 +1,4 @@
-import Session from "../models/sessionModel.js";
+import Session from "../models/appointmentModel.js";
 import Operation from "../models/OperationsModel.js";
 import {CustomError} from "../helpers/error/CustomError.js";
 // import Order from '../models/OrderModel.js';

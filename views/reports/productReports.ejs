@@ -27,14 +27,14 @@
                 <main>
 
                     <div class="header">
-                        <h1> Kasa Raporları</h1>
+                        <h1> Ürün Raporları</h1>
                     </div>
 
 
                     <div class="search">
-                        <form autocomplete="off" action="" class="horizontal-form" id="payment-reports-search">
+                        <form autocomplete="off" action="" class="horizontal-form" id="product-reports-search">
 
-                            <div class="form-group">Başlangıç tarihi:
+                            <div class="form-group">Eklenme tarihi:
                                 <input type="date" name="startDate" class="startDate"
                                     value="<%= new Date().toISOString().substr(0, 10) %>">
                             </div>
@@ -42,24 +42,14 @@
                                 <input type="date" name="endDate" class="endDate"
                                     value="<%= new Date().toISOString().substr(0, 10) %>">
                             </div>
-                            <div class="form-group horizontal">Ödeme Şekli:
-                                <select class="chosen-select" name="cashOrCard" id="cashOrCard"
-                                    data-placeholder="Hasta seçiniz.">
-
-                                    
-                                        <option value="" selected disable hidden>Seçiniz</option>
-                                        <option value="kredi kartı">Kredi Kartı</option>
-                                        <option value="nakit">Nakit</option>
-                                        
-                                    </select>
-                            </div>
-                            <div class="form-group horizontal">Hasta:
+                           
+                            <div class="form-group horizontal">Ürün:
                                 <select class="chosen-select" name="userInput" id="userInput"
-                                    data-placeholder="Hasta seçiniz." multiple>
+                                    data-placeholder="Ürün seçiniz." multiple>
 
-                                    <% users.forEach(element=> { %>
+                                    <% products.forEach(element=> { %>
                                         <option value="<%= element._id %>">
-                                            <%= element.name+" "+element.surname %></option>
+                                            <%= element.name %></option>
                                         <% }) %>
                                     </select>
                             </div>
@@ -80,11 +70,11 @@
                     <div class="search">
                      
 
-                            <div class="form-group">Toplu İşlemler:
+                            <!-- <div class="form-group">Toplu İşlemler:
                                 <select name="operationType" id="operationType">
                                     <option value="sil" selected hidden disabled>Seçiniz</option>
                                 </select>
-                            </div>
+                            </div> -->
 
 
                     </div>
@@ -104,7 +94,7 @@
                     </div>
 
                     <div class="table-wrapper">
-                        <table id="payment-report-table">
+                        <table id="product-report-table">
                             <thead>
                                 <th>
                                     <div>
@@ -113,12 +103,13 @@
                                         </div>
                                     </div>
                                 </th>
-                                <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Personel<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Hasta<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Tutar<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Ödeme Şekli<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Notlar<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Eklenme Tarihi<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Barkod<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Marka<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>İsim<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Fiyat<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Stok<i class="fa-solid fa-arrow-up"></i></td>
+                               
                             </thead>
                             <tbody id="paymentList">
                                
@@ -172,8 +163,9 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            
-                                            <td colspan="6">toplam:</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>toplam:</td>
                                             <td id="total_value_edit"></td>
                                         </tr>
                                     </tfoot>
@@ -213,7 +205,7 @@
 
                 <script type="module" src="/js/inner_modules/tables.js"></script>
                 <script type="module" src="/js/inner_modules/print.js"></script>
-                <script type="module" src="/js/paymentReports.js"></script>
+                <script type="module" src="/js/productReports.js"></script>
                 <script type="module" src="/js/reports.js"></script>
 
                 <script src="/js/sidebar.js"></script>

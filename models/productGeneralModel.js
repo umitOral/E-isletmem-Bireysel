@@ -6,7 +6,7 @@ const productGeneralSchema = new Schema(
     id: { type: Number, },
     name: { type: String, require: true },
     price: { type: Number },
-    brand:{String},
+    brand:{type:String},
     barcodes: [
       {
         barcode: {type:String, index: { unique: true }},

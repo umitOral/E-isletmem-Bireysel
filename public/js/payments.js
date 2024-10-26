@@ -31,7 +31,7 @@ const selected_proccess_type_edit = document.querySelector(
 const selected_proccess_table = document.querySelector(
   ".selected_proccess_table tbody"
 );
-const paymentsTable = document.querySelector("#payments_table");
+const body = document.querySelector("body");
 
 const startDate = document.querySelector(".startDate");
 const endDate = document.querySelector(".endDate");
@@ -52,7 +52,7 @@ function eventListeners() {
   addExpensesButton.addEventListener("click", addExpensesModalShow);
   filterPaymentsButton.addEventListener("click", filterPayment);
   startDate.addEventListener("change", dateRange);
-  paymentsTable.addEventListener("click", handleTableBody);
+  body.addEventListener("click", handleTableBody);
 }
 
 cancelButtons.forEach((element) => {
@@ -60,10 +60,10 @@ cancelButtons.forEach((element) => {
     for (let index = operationsSelect.options.length - 1; index >= 0; index--) {
       operationsSelect.options[index].remove();
     }
-   
-    selectedOperations=[]
-    selectedProducts=[]
-    calculatetTotalPrice()
+
+    selectedOperations = [];
+    selectedProducts = [];
+    calculateTotalPrice();
     // remove selected operations from uı
 
     while (selected_proccess_table.firstChild) {
@@ -133,17 +133,21 @@ function handleEditModal(e) {
       } else {
         paymentCreditCartRatio.checked = true;
       }
-      editPaymentForm.dataset.userid = response.data.fromUser._id;
-      paymentUserEdit.value =
-        response.data.fromUser.name + " " + response.data.fromUser.surname;
-
+      if (!response.data.fromUser) {
+        editPaymentForm.dataset.userid = "";
+        paymentUserEdit.value = "";
+      } else {
+        editPaymentForm.dataset.userid = response.data.fromUser._id;
+        paymentUserEdit.value =
+          response.data.fromUser.name + " " + response.data.fromUser.surname;
+      }
       paymentDescriptionEdit.value = response.data.description;
 
       response.operationsDetails.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
         <tr data-id="${response.data.operations[index]._id}" data-price="${
           response.data.operations[index].paymentValue
-        }" >
+        }" data-type="operation">
             <td>${element.operationName}</td>
                 
             <td>
@@ -168,23 +172,21 @@ function handleEditModal(e) {
             }
             </td>
             <td>
-              <input class="payment_value" value=" ${
+              <input class="payment_value tdInputs" value=" ${
                 response.data.operations[index].paymentValue
               }" placeholder="${
           response.data.operations[index].paymentValue
         }"></input>
             </td>
             
-            <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
+            <td><i class="fa-solid fa-trash delete_operation_from_basket"></i></td>
         </tr>
            
             `;
       });
       response.data.products.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
-        <tr data-id="${element._id}" data-price="${
-          element.price
-        }" >
+        <tr data-id="${element._id}" data-price="${element.price}" data-type="product" >
              <td>${element.productId.name}</td>
                   <td>
                   <input class="tdInputs product-quantity" type="number" min="0" value="${element.quantity}" >
@@ -206,10 +208,10 @@ function handleEditModal(e) {
                   <input class="payment_value tdInputs" type="number" min="0"
                     max=""
                     value="${element.paymentValue}"
-                    step="1">
+                    step="1" disabled>
                   </td>
             
-            <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
+            <td><i class="fa-solid fa-trash delete_product_from_basket"></i></td>
         </tr>
            
             `;
@@ -220,10 +222,19 @@ function handleEditModal(e) {
         selectedOperationsforEdit.push(element);
       });
       response.data.products.forEach((element) => {
-        selectedProductsforEdit.push(element);
+        selectedProductsforEdit.push({
+          _id: element._id,
+          quantity: element.quantity,
+          price: element.price,
+          paymentValue: element.price,
+          discount: element.discount,
+          percentDiscount: element.percentDiscount,
+          productId:element.productId._id
+        });
       });
       console.log(selectedOperationsforEdit);
-      calculatetTotalPriceforEdit();
+      console.log(selectedProductsforEdit);
+      calculateTotalPriceforEdit();
     })
     .catch((err) => {
       console.log(err);
@@ -260,20 +271,18 @@ const paymentDescriptionEdit = document.querySelector(
 const editPaymentForm = document.querySelector(
   "#modal_edit_payment #edit-payment-form"
 );
-const saveEditModal = document.querySelector(
-  "#modal_edit_payment #save_update_btn"
-);
 
 const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
 );
 
-saveEditModal.addEventListener("click", (e) => {
+editPaymentForm.addEventListener("submit", (e) => {
   let data = {
     paymentId: editedPayment,
     cashOrCard: editPaymentForm.cashOrCard.value,
     description: editPaymentForm.description.value,
     operations: selectedOperationsforEdit,
+    products: selectedProductsforEdit,
   };
   console.log(data);
 
@@ -295,11 +304,18 @@ function handleTableBody(e) {
   const smallModals = document.querySelectorAll(".edit_payment_small_modal");
 
   if (e.target.classList.contains("edit_payment")) {
-    smallModals.forEach((modal) => {
-      modal.classList.remove("showed_modal");
-    });
+    console.log("burası");
 
-    e.target.nextSibling.nextSibling.classList.toggle("showed_modal");
+    if (e.target.nextSibling.nextSibling.classList.contains("showed_modal")) {
+      e.target.nextSibling.nextSibling.classList.toggle("showed_modal");
+    } else {
+      smallModals.forEach((modal) => {
+        modal.classList.remove("showed_modal");
+      });
+      e.target.nextSibling.nextSibling.classList.toggle("showed_modal");
+    }
+
+    // e.target.nextSibling.nextSibling.classList.toggle("showed_modal");
   } else {
     smallModals.forEach((modal) => {
       modal.classList.remove("showed_modal");
@@ -363,7 +379,7 @@ userSelect.addEventListener("change", () => {
         while (selected_proccess_table.firstChild) {
           selected_proccess_table.firstChild.remove();
         }
-        calculatetTotalPrice();
+        calculateTotalPrice();
       } else {
         // delete all selectable user operations options from uı
         for (
@@ -499,10 +515,10 @@ operationsSelect.addEventListener("change", () => {
 
   selectedOption.remove();
 
-  calculatetTotalPrice();
+  calculateTotalPrice();
 });
 
-function calculatetTotalPrice() {
+function calculateTotalPrice() {
   console.log("calculating");
 
   let totalValue = document.querySelector("#total_value");
@@ -513,47 +529,36 @@ function calculatetTotalPrice() {
     paymentValues = paymentValues.reduce((a, b) => a + b).toFixed();
   }
   if (selectedProducts.length !== 0) {
-    selectedProducts.forEach(element => {
-      productPaymentValues+=element.paymentValue
+    selectedProducts.forEach((element) => {
+      productPaymentValues += element.paymentValue;
     });
-    productPaymentValues=productPaymentValues
+    productPaymentValues = productPaymentValues;
   }
-
+  console.log(Number(productPaymentValues));
   totalValue.textContent = Number(paymentValues) + Number(productPaymentValues);
 }
 
-function calculatetTotalPriceforEdit() {
+function calculateTotalPriceforEdit() {
   console.log("calculating2");
 
-  // let totalValueforEdit = document.querySelector("#total_value_edit");
-  // let paymentValues = selectedOperationsforEdit.map(
-  //   (element) => element.paymentValue
-  // );
-
-  // if (paymentValues.length === 0) {
-  //   totalValueforEdit.textContent = 0;
-  // } else {
-  //   totalValueforEdit.textContent = paymentValues.reduce((a, b) => a + b);
-  // }
-
-  
   let totalValueforEdit = document.querySelector("#total_value_edit");
   let paymentValues = 0;
   let productPaymentValues = 0;
   if (selectedOperationsforEdit.length !== 0) {
-    paymentValues = selectedOperationsforEdit.map((element) => element.paymentValue);
+    paymentValues = selectedOperationsforEdit.map(
+      (element) => element.paymentValue
+    );
     paymentValues = paymentValues.reduce((a, b) => a + b).toFixed();
   }
   if (selectedProductsforEdit.length !== 0) {
-    selectedProductsforEdit.forEach(element => {
-      productPaymentValues+=element.paymentValue
+    selectedProductsforEdit.forEach((element) => {
+      productPaymentValues += element.paymentValue;
     });
-    productPaymentValues=productPaymentValues
+    productPaymentValues = productPaymentValues;
   }
 
-  totalValueforEdit.textContent = Number(paymentValues) + Number(productPaymentValues);
-
-
+  totalValueforEdit.textContent =
+    Number(paymentValues) + Number(productPaymentValues);
 }
 
 // remove selected operations
@@ -591,13 +596,13 @@ selected_proccess_type_add.addEventListener("click", (e) => {
     if (
       selectedOperations.map((element) => element.paymentValue).length !== 0
     ) {
-      calculatetTotalPrice();
+      calculateTotalPrice();
     } else {
       totalValue.value = 0;
     }
     e.target.parentElement.parentElement.remove();
     console.log(selectedOperations);
-    calculatetTotalPrice();
+    calculateTotalPrice();
   }
   if (e.target.classList.contains("delete_product_from_basket")) {
     // remove selected options
@@ -608,11 +613,45 @@ selected_proccess_type_add.addEventListener("click", (e) => {
     selectedProducts.splice(index, 1);
     e.target.parentElement.parentElement.remove();
     console.log(selectedProducts);
-    calculatetTotalPrice();
+    calculateTotalPrice();
   }
 
   // //////////////////
 });
+selected_proccess_type_edit.addEventListener("input", (e) => {
+  if (e.target.classList.contains("product-quantity")) {
+    let index = selectedProductsforEdit.findIndex(
+      (item) =>
+        item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    console.log(selectedProductsforEdit);
+    selectedProductsforEdit[index].quantity = Number(e.target.value);
+    selectedProductsforEdit[index].paymentValue =
+      selectedProductsforEdit[index].quantity *
+      selectedProductsforEdit[index].price;
+    e.target.parentElement.parentElement.children[6].children[0].value =
+      selectedProductsforEdit[index].paymentValue;
+    calculateTotalPriceforEdit();
+  }
+  if (e.target.classList.contains("discount")) {
+    let index = selectedProductsforEdit.findIndex(
+      (item) =>
+        item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    
+    
+    selectedProductsforEdit[index].discount = Number(e.target.value);
+    selectedProductsforEdit[index].paymentValue =
+    selectedProductsforEdit[index].quantity * selectedProductsforEdit[index].price -
+    selectedProductsforEdit[index].discount;
+  e.target.parentElement.parentElement.children[6].children[0].value =
+  selectedProductsforEdit[index].paymentValue;
+    
+    calculateTotalPriceforEdit();
+  }
+});
+
 
 selected_proccess_type_add.addEventListener("input", (e) => {
   if (
@@ -626,7 +665,7 @@ selected_proccess_type_add.addEventListener("input", (e) => {
 
     selectedOperations[index].paymentValue = Number(e.target.value);
 
-    calculatetTotalPrice();
+    calculateTotalPrice();
   }
   if (
     e.target.classList.contains("payment_value") &&
@@ -639,7 +678,7 @@ selected_proccess_type_add.addEventListener("input", (e) => {
 
     selectedProducts[index].paymentValue = Number(e.target.value);
 
-    calculatetTotalPrice();
+    calculateTotalPrice();
   }
   if (
     e.target.classList.contains("percentDiscount") &&
@@ -650,9 +689,14 @@ selected_proccess_type_add.addEventListener("input", (e) => {
     );
 
     selectedProducts[index].percentDiscount = Number(e.target.value);
-    selectedProducts[index].paymentValue = selectedProducts[index].quantity*(selectedProducts[index].price*(100-selectedProducts[index].percentDiscount)/100);
-    e.target.parentElement.parentElement.children[7].children[0].value=selectedProducts[index].paymentValue
-    calculatetTotalPrice();
+    selectedProducts[index].paymentValue =
+      selectedProducts[index].quantity *
+      ((selectedProducts[index].price *
+        (100 - selectedProducts[index].percentDiscount)) /
+        100);
+    e.target.parentElement.parentElement.children[7].children[0].value =
+      selectedProducts[index].paymentValue;
+    calculateTotalPrice();
   }
   if (
     e.target.classList.contains("discount") &&
@@ -663,51 +707,83 @@ selected_proccess_type_add.addEventListener("input", (e) => {
     );
 
     selectedProducts[index].discount = Number(e.target.value);
-    selectedProducts[index].paymentValue = (selectedProducts[index].quantity*selectedProducts[index].price)-selectedProducts[index].discount;
-    e.target.parentElement.parentElement.children[7].children[0].value=selectedProducts[index].paymentValue
-    calculatetTotalPrice();
+    selectedProducts[index].paymentValue =
+      selectedProducts[index].quantity * selectedProducts[index].price -
+      selectedProducts[index].discount;
+    e.target.parentElement.parentElement.children[7].children[0].value =
+      selectedProducts[index].paymentValue;
+    calculateTotalPrice();
   }
   if (e.target.classList.contains("product-quantity")) {
     let index = selectedProducts.findIndex(
-      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+      (item) =>
+        item.productId ===
+        e.target.parentElement.parentElement.dataset.productid
     );
-
+    console.log(index);
     selectedProducts[index].quantity = Number(e.target.value);
-    selectedProducts[index].paymentValue = selectedProducts[index].quantity*selectedProducts[index].price;
-    e.target.parentElement.parentElement.children[7].children[0].value=selectedProducts[index].paymentValue
-    calculatetTotalPrice();
+    selectedProducts[index].paymentValue =
+      selectedProducts[index].quantity * selectedProducts[index].price;
+    e.target.parentElement.parentElement.children[7].children[0].value =
+      selectedProducts[index].paymentValue;
+    calculateTotalPrice();
   }
 });
 
 selected_proccess_table_edit.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete_items_from_basket")) {
+  if (e.target.classList.contains("delete_product_from_basket")) {
+    let index = selectedOperationsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    selectedProductsforEdit.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    calculateTotalPriceforEdit();
+    console.log(selectedProductsforEdit);
+  }
+  if (e.target.classList.contains("delete_operation_from_basket")) {
     let index = selectedOperationsforEdit.findIndex(
       (item) => item._id === e.target.parentElement.parentElement.dataset.id
     );
     selectedOperationsforEdit.splice(index, 1);
     e.target.parentElement.parentElement.remove();
-    calculatetTotalPriceforEdit();
+    calculateTotalPriceforEdit();
     console.log(selectedOperationsforEdit);
   }
 });
 
 selected_proccess_table_edit.addEventListener("input", (e) => {
-  if (e.target.classList.contains("payment_value")) {
+  if (
+    e.target.classList.contains("payment_value") &&
+    e.target.parentElement.parentElement.dataset.type === "operation"
+  ) {
     let index = selectedOperationsforEdit.findIndex(
       (item) => item._id === e.target.parentElement.parentElement.dataset.id
     );
 
     e.target.addEventListener("input", (e) => {
       selectedOperationsforEdit[index].paymentValue = Number(e.target.value);
-      console.log(selectedOperationsforEdit);
-      calculatetTotalPriceforEdit();
+
+      calculateTotalPriceforEdit();
     });
+  }
+
+  if (
+    e.target.classList.contains("payment_value") &&
+    e.target.parentElement.parentElement.dataset.type === "product"
+  ) {
+    let index = selectedProductsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    console.log(selectedProductsforEdit);
+    selectedProductsforEdit[index].paymentValue = Number(e.target.value);
+
+    calculateTotalPriceforEdit();
   }
 });
 
 // add payment
 barcodeInput.addEventListener("keydown", (e) => {
-  
   if (e.key === "Enter") {
     e.preventDefault(); // Formun otomatik gönderilmesini engeller
 
@@ -724,15 +800,18 @@ barcodeInput.addEventListener("keydown", (e) => {
           ui.showNotification(response.success, response.message);
 
           let index = selectedProducts.findIndex(
-            (item) => item._id === response.data._id
+            (item) => item.productId === response.data._id
           );
           console.log(index);
+          let product = {};
 
           if (response.success === true) {
             if (index === -1) {
               selected_proccess_table.innerHTML += `
-              <tr data-id="${response.data._id}" data-type="product" >
-                  <td>${response.data.name}</td>
+              <tr data-productId="${response.data._id}" data-type="product" >
+                  <td>
+                    <span>${response.data.name}</span>
+                  </td>
                   <td>
                   <input class="tdInputs product-quantity" type="number" min="0" value="1" >
                   </td>
@@ -755,48 +834,50 @@ barcodeInput.addEventListener("keydown", (e) => {
                   <input class="payment_value tdInputs" type="number" min="0"
                     max=""
                     value="${response.data.price}"
-                    step="1">
+                    step="1" disabled> 
                   </td>
       
                   <td><i class="fa-solid fa-trash delete_product_from_basket"></i></td>
       
               </tr>`;
-              response.data.quantity = 1;
-              response.data.paymentValue =response.data.price;
-              response.data.discount =0;
-              response.data.percentDiscount =0;
-              selectedProducts.push(response.data);
+              product.productId = response.data._id;
+              product.quantity = 1;
+              product.price = response.data.price;
+              product.paymentValue = response.data.price;
+              product.discount = 0;
+              product.percentDiscount = 0;
+              selectedProducts.push(product);
             } else {
-              selectedProducts[index].quantity =selectedProducts[index].quantity + 1;
-              selectedProducts[index].paymentValue =selectedProducts[index].quantity*selectedProducts[index].price;
+              selectedProducts[index].quantity =
+                selectedProducts[index].quantity + 1;
+              selectedProducts[index].paymentValue =
+                selectedProducts[index].quantity *
+                selectedProducts[index].price;
               let productsRow = selected_proccess_table.querySelectorAll("tr");
-              
+
               productsRow.forEach((element) => {
-
-
                 if (element.dataset.id === selectedProducts[index]._id) {
-                  console.log("burası2")
-                  element.children[1].children[0].value=Number(element.children[1].children[0].value)+1
-                  element.children[7].children[0].value=selectedProducts[index].paymentValue
+                  console.log("burası2");
+                  element.children[1].children[0].value =
+                    Number(element.children[1].children[0].value) + 1;
+                  element.children[7].children[0].value =
+                    selectedProducts[index].paymentValue;
                 }
               });
-              
             }
 
             console.log(selectedProducts);
 
-            calculatetTotalPrice();
+            calculateTotalPrice();
           }
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           ui.showNotification(false, err);
         });
     }
   }
 });
-
-
 
 addPaymentFrom.addEventListener("submit", (e) => {
   e.preventDefault();

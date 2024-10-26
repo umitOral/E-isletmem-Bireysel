@@ -133,7 +133,7 @@ function handleEditModal(paymentId,index) {
             <td>${element.operationName}</td>
                 
             <td>
-            <input type="number" min="0" value="1" readonly >
+            
             </td>
             
 
@@ -211,9 +211,24 @@ function datasToTable(data) {
                                       
                                        <td>
                                        ${
-                                         element.fromUser.name +
-                                         " " +
-                                         element.fromUser.surname
+                                         (()=>{
+                                          if (element.employee) {
+                                           return element.employee.name+" "+element.employee.surname
+                                          } else {
+                                           return " "
+                                          }
+                                         })()
+                                       }
+                                       </td>
+                                       <td>
+                                       ${
+                                         (()=>{
+                                          if (element.fromUser) {
+                                           return element.fromUser.name+" "+element.fromUser.surname
+                                          } else {
+                                           return " "
+                                          }
+                                         })()
                                        }
                                        </td>
                                        
@@ -358,13 +373,13 @@ saveEditModal.addEventListener("click",(e) => {
       console.log(response)
       ui.showNotification(true, response.message);
       editPaymentModal.classList.add("hidden");
-      table.rows[selectedPaymentIndex].children[3].innerHTML=`
+      table.rows[selectedPaymentIndex].children[4].innerHTML=`
         ${response.data.totalPrice}
       `
-      table.rows[selectedPaymentIndex].children[4].innerHTML=`
+      table.rows[selectedPaymentIndex].children[5].innerHTML=`
         ${response.data.cashOrCard}
       `
-      table.rows[selectedPaymentIndex].children[5].innerHTML=`
+      table.rows[selectedPaymentIndex].children[6].innerHTML=`
         ${response.data.description}
       `
       

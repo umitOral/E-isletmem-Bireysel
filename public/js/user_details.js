@@ -53,6 +53,10 @@ const modalImage = document.querySelector("#modal_image");
 const modalOrders = document.querySelector("#modal_order");
 const userID = document.querySelector(".user-informations").dataset.userıd;
 
+const selected_proccess_type_edit = document.querySelector(
+  ".selected_proccess_type_edit"
+);
+
 let modalEditData = document.querySelector("#edit-data-modal");
 const allSessionsofOperationModal = document.querySelector(
   "#allSessionsofOperationModal"
@@ -64,6 +68,10 @@ const allSessionsofOperationModalContent = document.querySelector(
 // responsed datas
 
 let APPOINTMENT_STATUS = [];
+let selectedOperationsforEdit = [];
+let selectedProductsforEdit = [];
+let editedPayment;
+let selectedPaymentIndex;
 
 eventListeners();
 
@@ -140,7 +148,7 @@ function userInformationEdit(e) {
       if (response.succes) {
         ui.showNotification(true, response.message);
         setTimeout(() => {
-          window.location.reload()
+          window.location.reload();
         }, 500);
       } else {
         ui.showNotification(false, response.message);
@@ -148,8 +156,10 @@ function userInformationEdit(e) {
 
       console.log(response);
     })
-    .catch((err) => {console.log(err)
-      ui.showNotification(false, err.message)});
+    .catch((err) => {
+      console.log(err);
+      ui.showNotification(false, err.message);
+    });
 }
 
 function deleteButtonFunction(selector) {
@@ -496,7 +506,7 @@ function handleAppointmentBtn(e) {
 
 const showPaymentsBtn = document.querySelector(".show-content.payment");
 const orderTable = document.querySelector(".order-table");
-const paymentTable = document.querySelector(".payment-table");
+const paymentTable = document.querySelector("#payment-table");
 
 showPaymentsBtn.addEventListener("click", getAllPayments);
 
@@ -510,14 +520,10 @@ function getAllPayments() {
       handlePaymentEditBtn();
     })
     .catch((err) => {
+      console.log(err);
       ui.showNotification(false, err.message);
     });
 }
-
-paymentTable.addEventListener("change", (e) => {
-  if (e.target.classList.contains("operations-edit-select")) {
-  }
-});
 
 // get all operations
 
@@ -683,12 +689,29 @@ function handleOperationEditBtn() {
   });
 }
 
+const paymentCreditCartRatio = document.querySelector(
+  "#modal_edit_payment  #credit_card_ratio_edit"
+);
+const paymentCCashRatio = document.querySelector(
+  "#modal_edit_payment  #cash_ratio_edit"
+);
+const paymentUserEdit = document.querySelector(
+  "#modal_edit_payment  #payment_user_edit input"
+);
+const paymentDescriptionEdit = document.querySelector(
+  "#modal_edit_payment  #description_for_edit"
+);
+const editPaymentForm = document.querySelector(
+  "#modal_edit_payment #edit-payment-form"
+);
+
 function handlePaymentEditBtn() {
   const editSelectBtns = document.querySelectorAll(".payments-edit-select");
 
-  editSelectBtns.forEach((element) => {
+  editSelectBtns.forEach((element, index) => {
     element.addEventListener("change", (e) => {
       const paymentID = e.target.parentElement.parentElement.dataset.paymentid;
+
       if (
         e.target.options[e.target.options.selectedIndex].value ===
         "delete-payment"
@@ -699,7 +722,7 @@ function handlePaymentEditBtn() {
             .then((response) => {
               console.log(response);
               ui.showNotification(response.succes, response.message);
-              calculatetTotalPriceforEdit();
+              calculateTotalPriceforEdit();
               getAllPayments();
             })
             .catch((err) => ui.showNotification(false, err.message));
@@ -709,36 +732,54 @@ function handlePaymentEditBtn() {
         e.target.options[e.target.options.selectedIndex].value ===
         "edit-payment"
       ) {
+        selectedPaymentIndex = index + 1;
         handleEditPaymentModal(e);
       }
+      e.target.selectedIndex = 0;
     });
   });
 }
 
-const paymentCreditCartRatio = document.querySelector(
-  ".modal_edit_payment  #credit_card_ratio_edit"
-);
-const paymentCCashRatio = document.querySelector(
-  ".modal_edit_payment  #cash_ratio_edit"
-);
-const paymentUserEdit = document.querySelector(
-  ".modal_edit_payment  #payment_user_edit input"
-);
-const paymentDescriptionEdit = document.querySelector(
-  ".modal_edit_payment  #description_for_edit"
-);
-const editPaymentForm = document.querySelector(
-  ".modal_edit_payment #edit-payment-form"
-);
-const saveEditModal = document.querySelector("#modal_edit_payment");
+selected_proccess_type_edit.addEventListener("input", (e) => {
+  if (e.target.classList.contains("product-quantity")) {
+    let index = selectedProductsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    console.log(selectedProductsforEdit);
+    selectedProductsforEdit[index].quantity = Number(e.target.value);
+    selectedProductsforEdit[index].paymentValue =
+      selectedProductsforEdit[index].quantity *
+      selectedProductsforEdit[index].price;
+    e.target.parentElement.parentElement.children[6].children[0].value =
+      selectedProductsforEdit[index].paymentValue;
+    calculateTotalPriceforEdit();
+  }
+  if (e.target.classList.contains("discount")) {
+    let index = selectedProductsforEdit.findIndex(
+      (item) =>
+        item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    
+    
+    selectedProductsforEdit[index].discount = Number(e.target.value);
+    selectedProductsforEdit[index].paymentValue =
+    selectedProductsforEdit[index].quantity * selectedProductsforEdit[index].price -
+    selectedProductsforEdit[index].discount;
+  e.target.parentElement.parentElement.children[6].children[0].value =
+  selectedProductsforEdit[index].paymentValue;
+    
+    calculateTotalPriceforEdit();
+  }
+});
 
 const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
 );
-let selectedOperationsforEdit = [];
+
 function handleEditPaymentModal(e) {
   console.log("burası");
-  let editedPayment = e.target.parentElement.parentElement.dataset.paymentid;
+  editedPayment = e.target.parentElement.parentElement.dataset.paymentid;
   let editPaymentForm = document.querySelector("#edit-payment-form");
 
   request
@@ -749,27 +790,31 @@ function handleEditPaymentModal(e) {
       editPaymentModal.classList.remove("hidden");
       selected_proccess_table_edit.innerHTML = "";
 
-      if (response.data.cashOrCard === "Nakit") {
+      if (response.data.cashOrCard === "nakit") {
         paymentCCashRatio.checked = true;
       } else {
         paymentCreditCartRatio.checked = true;
       }
-      editPaymentForm.dataset.paymentid =
-        e.target.parentElement.parentElement.dataset.paymentid;
-      paymentUserEdit.value =
-        response.data.fromUser.name + " " + response.data.fromUser.surname;
 
+      if (!response.data.fromUser) {
+        editPaymentForm.dataset.userid = "";
+        paymentUserEdit.value = "";
+      } else {
+        editPaymentForm.dataset.userid = response.data.fromUser._id;
+        paymentUserEdit.value =
+          response.data.fromUser.name + " " + response.data.fromUser.surname;
+      }
       paymentDescriptionEdit.value = response.data.description;
 
       response.operationsDetails.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
         <tr data-id="${response.data.operations[index]._id}" data-price="${
           response.data.operations[index].paymentValue
-        }" >
+        }" data-type="operation">
             <td>${element.operationName}</td>
                 
             <td>
-            <input type="number" min="0" value="1" readonly >
+           
             </td>
             
 
@@ -790,25 +835,70 @@ function handleEditPaymentModal(e) {
             }
             </td>
             <td>
-              <input class="payment_value" value=" ${
+              <input class="payment_value tdInputs" value=" ${
                 response.data.operations[index].paymentValue
               }" placeholder="${
           response.data.operations[index].paymentValue
         }"></input>
             </td>
             
-            <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
+            <td><i class="fa-solid fa-trash delete_operation_from_basket"></i></td>
         </tr>
            
             `;
       });
-
+      response.data.products.forEach((element, index) => {
+        selected_proccess_table_edit.innerHTML += `
+        <tr data-id="${element._id}" data-price="${element.price}" data-type="product" >
+             <td>${element.productId.name}</td>
+                  <td>
+                  <input class="tdInputs product-quantity" type="number" min="0" value="${element.quantity}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs deactive" type="number" min="0" value="${element.price}" readonly >
+                  </td>
+                  <td>
+                  <input class="tdInputs discount" type="number" min="0" value="${element.discount}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs percentDiscount" type="number" min="0" value="${element.percentDiscount}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs deactive"  type="number" min="0" value="${element.paymentValue}" readonly >
+                  </td>
+                 
+                  <td>
+                  <input class="payment_value tdInputs" type="number" min="0"
+                    max=""
+                    value="${element.paymentValue}"
+                    step="1" disabled>
+                  </td>
+            
+            <td><i class="fa-solid fa-trash delete_product_from_basket"></i></td>
+        </tr>
+           
+            `;
+      });
       selectedOperationsforEdit = [];
+      selectedProductsforEdit = [];
       response.data.operations.forEach((element) => {
         selectedOperationsforEdit.push(element);
       });
+      response.data.products.forEach((element) => {
+        selectedProductsforEdit.push({
+          _id: element._id,
+          quantity: element.quantity,
+          price: element.price,
+          paymentValue: element.paymentValue,
+          discount: element.discount,
+          percentDiscount: element.percentDiscount,
+          productId: element.productId._id,
+        });
+      });
+      console.log(selectedOperationsforEdit);
+      console.log(selectedProductsforEdit);
 
-      calculatetTotalPriceforEdit();
+      calculateTotalPriceforEdit();
     })
     .catch((err) => {
       console.log(err);
@@ -822,7 +912,7 @@ selected_proccess_table_edit.addEventListener("click", (e) => {
     );
     selectedOperationsforEdit.splice(index, 1);
     e.target.parentElement.parentElement.remove();
-    calculatetTotalPriceforEdit();
+    calculateTotalPriceforEdit();
     console.log(selectedOperationsforEdit);
   }
 });
@@ -836,51 +926,82 @@ selected_proccess_table_edit.addEventListener("input", (e) => {
     e.target.addEventListener("input", (e) => {
       selectedOperationsforEdit[index].paymentValue = Number(e.target.value);
       console.log(selectedOperationsforEdit);
-      calculatetTotalPriceforEdit();
+      calculateTotalPriceforEdit();
     });
   }
 });
 
-function calculatetTotalPriceforEdit() {
+function calculateTotalPriceforEdit() {
   console.log("calculating2");
-
   let totalValueforEdit = document.querySelector("#total_value_edit");
-
-  let paymentValues = selectedOperationsforEdit.map(
-    (element) => element.paymentValue
-  );
-
-  if (paymentValues.length === 0) {
-    totalValueforEdit.textContent = 0;
-  } else {
-    totalValueforEdit.textContent = paymentValues.reduce((a, b) => a + b);
+  let paymentValues = 0;
+  let productPaymentValues = 0;
+  if (selectedOperationsforEdit.length !== 0) {
+    paymentValues = selectedOperationsforEdit.map(
+      (element) => element.paymentValue
+    );
+    paymentValues = paymentValues.reduce((a, b) => a + b).toFixed();
   }
+  if (selectedProductsforEdit.length !== 0) {
+    selectedProductsforEdit.forEach((element) => {
+      productPaymentValues += element.paymentValue;
+    });
+    productPaymentValues = productPaymentValues;
+  }
+
+  totalValueforEdit.textContent =
+    Number(paymentValues) + Number(productPaymentValues);
 }
 
-saveEditModal.addEventListener("submit", (e) => {
+editPaymentForm.addEventListener("submit", (e) => {
   e.preventDefault();
+
   let data = {
-    paymentId: e.target.parentElement.dataset.paymentid,
+    paymentId: editedPayment,
     cashOrCard: editPaymentForm.cashOrCard.value,
     description: editPaymentForm.description.value,
     operations: selectedOperationsforEdit,
+    products: selectedProductsforEdit,
   };
   console.log(data);
 
   request
-    .postWithUrl(
-      "../payments/" +
-        e.target.parentElement.dataset.paymentid +
-        "/editPayment",
-      data
-    )
+    .postWithUrl("../payments/" + editedPayment + "/editPayment", data)
     .then((response) => {
       console.log(response);
       ui.showNotification(true, response.message);
-      editPaymentModal.classList.toggle("showed_modal");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      editPaymentModal.classList.add("hidden");
+      paymentTable.rows[selectedPaymentIndex].children[1].innerHTML=`
+      ${response.data.cashOrCard}
+    `
+      paymentTable.rows[selectedPaymentIndex].children[2].innerHTML = `
+      ${response.data.products
+        .map(
+          (item, i) => `
+        <div data-dataId="${item._id}" data-dataName="${item.dataName}">
+        ${item.quantity}x${item.productId.name}=${item.paymentValue} <br>
+        </div>
+        `
+        )
+        .join("")}
+    `;
+      paymentTable.rows[selectedPaymentIndex].children[3].innerHTML = `
+      ${response.data.operations
+        .map(
+          (item, i) => `
+        <div>
+        ${item.operationId.operationName}=${item.paymentValue} <br>
+      </div>
+      `
+        )
+        .join("")}
+    `;
+      paymentTable.rows[selectedPaymentIndex].children[4].innerHTML = `
+      ${response.data.totalPrice}
+    `;
+      paymentTable.rows[selectedPaymentIndex].children[5].innerHTML = `
+      ${response.data.description}
+    `;
     })
     .catch((err) => console.log(err));
   e.preventDefault();

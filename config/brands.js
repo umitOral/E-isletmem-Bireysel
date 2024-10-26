@@ -278,10 +278,6 @@ const BRAND_LIST = [
   "NARS",
   "NATASHA DENONA",
   "VALENTINO",
-  "VALENTINO MAKE UP"
-];
-
-
-
-
-export { BRAND_LIST };
+  "VALENTINO MAKE UP",
+]
+      export {BRAND_LIST}

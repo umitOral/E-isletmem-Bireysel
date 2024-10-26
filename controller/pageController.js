@@ -1,9 +1,10 @@
 import User from "../models/userModel.js";
 import moment from "moment";
+import fs from "fs";
 import Employee from "../models/EmployeesModel.js";
 import { ROLES_LIST } from "../config/status_list.js";
 
-import Sessions from "../models/sessionModel.js";
+import Sessions from "../models/appointmentModel.js";
 import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
 import Product from "../models/productModel.js";
@@ -17,7 +18,7 @@ import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { query } from "express";
 
-import Session from "../models/sessionModel.js";
+import Session from "../models/appointmentModel.js";
 import {APPOINTMENT_STATUS,APPOINTMENT_STATUS_AUTOMATIC} from "../config/status_list.js";
 import { searchProduct } from "./productControllers.js";
 import { getTenantDb } from "./db.js";
@@ -207,14 +208,16 @@ const getservicesPage = async (req, res, next) => {
 };
 const getProductsPage = async (req, res, next) => {
   try {
+
     
+
     res.status(200).render("products", {
       BRAND_LIST:BRAND_LIST,
       link: "products",
     });
 
   } catch (error) {
-
+    console.log(error)
     res.status(500).json({
       succes: false,
       message: error,
@@ -458,6 +461,17 @@ const paymentReportsPage = async (req, res, next) => {
    let users= await User.find({})
     res.status(200).render("reports/paymentReports", {
       users,
+      link: "reports",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const productReportsPage = async (req, res, next) => {
+  try {
+   let products= await Product.find({})
+    res.status(200).render("reports/productReports", {
+      products,
       link: "reports",
     });
   } catch (error) {
@@ -777,5 +791,6 @@ export {
   getUserReportsPage,
   getSmsPage,
   paymentReportsPage,
-  getAllProductsPage
+  getAllProductsPage,
+  productReportsPage
 };

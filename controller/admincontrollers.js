@@ -1,6 +1,9 @@
 import User from "../models/userModel.js";
 
 import { ProductGeneral } from "../models/productGeneralModel.js";
+import Operation from "../models/OperationsModel.js";
+import Payment from "../models/paymentsModel.js";
+import Product from "../models/productModel.js";
 const addbulkproducttoGeneral = async (req, res, next) => {
   try {
     console.log("add product");
@@ -39,14 +42,14 @@ const addbulkproducttoGeneral = async (req, res, next) => {
 };
 const topluIslemler = async (req, res, next) => {
   try {
-    let response = await ProductGeneral.find();
-    response.forEach((element) => {
-      element.barcodes = element.barcodes[0].barcode;
-    });
+    
+    
+    let response3 = await Product.deleteMany({name:"deneme11"});
+   
     res.status(200).json({
       success: true,
       message: "içerden sorgulandı",
-      data: response,
+      data: response3,
     });
     // let barcode = Number(req.body.barcode)
     // let productModel = await getProductModelGeneral()
@@ -92,7 +95,7 @@ const topluIslemler = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "ürün bulunurken bir sorun oluştu",
+      message: "toplu işlem yapılırken sorun oluştu",
       error: error,
     });
   }

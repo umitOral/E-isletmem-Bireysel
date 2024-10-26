@@ -208,9 +208,9 @@
   flex-direction: column;
 
 }
-.userInformationsContent.showed_content .contentBody{
+.userInformationsContent.showed_content .table-wrapper{
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   height: 65vh;
   width: 100%;
 }

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { OPERATION_STATUS_AUTOMATIC } from "../config/status_list.js";
 
 const Schema = mongoose.Schema;
-const sessionSchema = new Schema(
+const appointmentSchema = new Schema(
   {
     timeIndexes: [
       {
@@ -50,5 +50,5 @@ const sessionSchema = new Schema(
   { timestamps: true }
 );
 
-const Session = mongoose.model("Session", sessionSchema);
-export default Session;
+const Appointment = mongoose.model("Appointment", appointmentSchema);
+export default Appointment;

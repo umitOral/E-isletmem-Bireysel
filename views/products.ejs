@@ -34,6 +34,19 @@
 
 
                     </div>
+                    <br>
+                    <hr>
+                    <br>
+                    <!-- <div class="product-list">
+                        <form autocomplete="off" action="./product/searchProduct" id="product-list-form">
+                            <div class="autocomplete form-group">
+                                <input id="myInput" type="text" name="productName" value="" placeholder="<%= "Ürün İsmi"%>" minlength="5">
+                                <input type="submit" value="Ara">
+                            </div>
+
+                        </form>
+
+                    </div> -->
 
                     <div class="print">
 
@@ -52,6 +65,7 @@
                         <table id="product-table">
                             <thead>
 
+                                <th>Barkod</th>
                                 <th>Ürün Markası</th>
                                 <th>Ürün adı</th>
                                 <th>Satış Fiyatı</th>
@@ -88,6 +102,17 @@
                         <button type="button" class="btn cancel form-btn">Vazgeç</button>
                     </div>
                 </form>
+            </div>
+
+        </div>
+        <div class="modal hidden" id="show-stocks-modal">
+            <div class="inner_modal">
+                <h2>Stoklar</h2>
+                <form action="./products/addStock" method="POST" id="show-stocks-form">
+                </form>
+                <div class="form-group">
+                    <button type="button" class="btn cancel form-btn">Kapat</button>
+                </div>
             </div>
 
         </div>

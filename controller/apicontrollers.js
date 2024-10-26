@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import Employee from "../models/EmployeesModel.js";
-import Session from "../models/sessionModel.js";
+import Appointment from "../models/appointmentModel.js";
 import Company from "../models/companyModel.js";
 import jwt from "jsonwebtoken";
 import { CustomError } from "../helpers/error/CustomError.js";
@@ -94,7 +94,7 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
       if (Object.hasOwnProperty.call(doctors, i)) {
         const element = doctors[i];
 
-        const sessionsofdoctorforactualDay = await Session.find({
+        const sessionsofdoctorforactualDay = await Appointment.find({
           date: actualDate,
           doctor: element,
         })
@@ -140,7 +140,7 @@ const getAllAppointmentofSingleDoctor = async (req, res) => {
   
     const actualDate = new Date(req.params.date + ",Z00:00:00");
     console.log(actualDate)
-        const sessionsOfDoctorSingleDay = await Session.find({
+        const sessionsOfDoctorSingleDay = await Appointment.find({
           date: actualDate,
           doctor:doctor,
         })
@@ -190,7 +190,7 @@ const getDaysFullorNot = async (req, res) => {
         if (Object.hasOwnProperty.call(doctors, i)) {
           const element = doctors[i];
 
-          const sessionsofdoctorforsingleDay = await Session.find({
+          const sessionsofdoctorforsingleDay = await Appointment.find({
             date: new Date(actualDate.setDate(index)),
             doctor: doctors[i],
           }).sort({ startHour: 1 });

@@ -66,8 +66,8 @@
                                     <div>
                                         <h2>Bilgiler</h2>
                                     </div>
-
-                                    <div class="contentBody">
+                                    <div class="table-wrapper">
+                                         
                                         <div class="form-group">
                                             <span>İsim</span>
                                             <input type="text" name="" id="name" value="<%= singleUser.name %>"
@@ -143,6 +143,9 @@
                                             <input type="text" name="" id="" value="<%= singleUser.notes %>" readonly>
                                         </div>
                                     </div>
+
+                                   
+                                    
                                     <span class="edit-informations-btn">Düzenle</span>
 
 
@@ -151,7 +154,7 @@
                                     <div>
                                         <h2>Randevular</h2>
                                     </div>
-                                    <div class="contentBody">
+                                    
 
                                         <div class="table-wrapper">
                                             <table>
@@ -173,7 +176,7 @@
                                             </table>
 
                                         </div>
-                                    </div>
+                                    
 
 
                                 </div>
@@ -182,20 +185,23 @@
                                         <h2>Ödemeler</h2>
                                     </div>
                                     <div class="contenBody">
-                                        <div class="table payment-table">
-                                            <table>
+                                        <div class="table-wrapper">
+                                            <table id="payment-table">
                                                 <thead>
 
                                                     <th>Tarih</th>
                                                     <th>K.Kartı/Nakit</td>
-                                                    <th>Tutar</td>
+                                                    <th>Ürünler</td>
+                                                    <th>İşlemler</td>
+                                                    <th>Toplam</td>
+                                                    <th>Açıklama</td>
                                                 </thead>
                                                 <tbody></tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td></td>
+                                                      
 
-                                                        <td>Toplam:</td>
+                                                        <td colspan="4" style="text-align: right;">Toplam:</td>
                                                         <td id="total-value"> 0</td>
                                                     </tr>
                                                 </tfoot>
@@ -616,7 +622,7 @@
                     <div class="form-group" id="payment_user_edit">
                         <input type="text" value="aaa" readonly>
                     </div>
-
+    
                     <div class="selected_proccess_type_edit">
                         <table class="selected_proccess_table_edit">
                             <thead>
@@ -629,20 +635,19 @@
                                 <td>Ödenen</td>
                             </thead>
                             <tbody>
-
-
+    
+    
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td>toplam:</td>
+                                  
+                                    <td colspan="6">toplam:</td>
                                     <td id="total_value_edit"></td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
-
+    
                     <div class="payment_options ">
                         <span>Tahsilat:</span>
                         <div>
@@ -654,23 +659,23 @@
                               <label for="cash_ratio_edit">Nakit</label>
                         </div>
                     </div>
-
+    
                     <div class="form-group">
                         <label for="description">Notlar:</label>
                         <textarea name="description" id="description_for_edit" cols="10" rows="3"></textarea>
                          
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn save form-btn" id="">Kaydet</button>
-                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                        <button type="submit" class="btn save form-btn" id="save_update_btn">Kaydet</button>
+                    <button type="button" class="btn cancel form-btn">Vazgeç</button>
                     </div>
-
-
-
+    
+    
                 </form>
             </div>
-
+            
         </div>
+        
 
         <div class="modal hidden" id="modal_slider">
             <div class="inner_modal slider-modal">

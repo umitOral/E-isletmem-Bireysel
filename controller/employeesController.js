@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import Employee from "../models/EmployeesModel.js";
-import Sessions from "../models/sessionModel.js";
+import Sessions from "../models/appointmentModel.js";
 import Company from "../models/companyModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { APPOINTMENT_STATUS } from "../config/status_list.js";

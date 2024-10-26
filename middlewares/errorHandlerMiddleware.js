@@ -16,9 +16,6 @@ if (customError.error) {
     customError = new CustomError(err.message, 400,customError.error);
   }
 
-  if (customError.error.name === "ValidationError") {
-    customError = new CustomError(err.errors.password.properties.message, 400,customError.error);
-  }
 
   ErrorLogger.error("xxxx",customError.error);
 }

@@ -3,7 +3,7 @@ import Company from "../models/companyModel.js";
 import Operation from "../models/OperationsModel.js";
 import Employee from "../models/EmployeesModel.js";
 import Payment from "../models/paymentsModel.js";
-import Session from "../models/sessionModel.js";
+import Session from "../models/appointmentModel.js";
 import { passwordResetMail } from "../controller/mailControllers.js";
 
 import bcrypt from "bcrypt";
@@ -61,21 +61,20 @@ const findUser = async (req, res, next) => {
   try {
     //search
 
-    
-    let searchObject={
-      company: res.locals.company._id
+    let searchObject = {
+      company: res.locals.company._id,
+    };
+    if (req.body.name !== "") {
+      searchObject.name = { $regex: "^" + req.body.name + "$", $options: "i" };
     }
-    if (req.body.name!=="") {
-      searchObject.name={'$regex' : '^'+req.body.name+'$', '$options' : 'i'}
+    if (req.body.surname !== "") {
+      searchObject.surname = req.body.surname;
     }
-    if (req.body.surname!=="") {
-      searchObject.surname=req.body.surname
-    } 
-    if (req.body.phone!=="") {
-      searchObject.phone=req.body.phone
+    if (req.body.phone !== "") {
+      searchObject.phone = req.body.phone;
     }
-    if (req.body.identity!=="") {
-      searchObject.identity=req.body.identity
+    if (req.body.identity !== "") {
+      searchObject.identity = req.body.identity;
     }
 
     console.log(searchObject);
@@ -85,7 +84,7 @@ const findUser = async (req, res, next) => {
       data: users,
       link: "users",
       success: true,
-      message:"hastalar başarıyla çekildi"
+      message: "hastalar başarıyla çekildi",
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -257,25 +256,24 @@ const createUser = async (req, res, next) => {
 };
 const editInformations = async (req, res, next) => {
   try {
-   
     let searchEmail;
     let searchPhone;
-    let user=await User.findById(req.params.id)
+    let user = await User.findById(req.params.id);
 
-    if (user.email!==req.body.email&& req.body.email!=="") {
+    if (user.email !== req.body.email && req.body.email !== "") {
       searchEmail = await User.findOne({
         email: req.body.email,
         company: res.locals.company,
       });
     }
 
-    if (user.phone!==req.body.phone&& req.body.phone!=="") {
-       searchPhone = await User.findOne({
+    if (user.phone !== req.body.phone && req.body.phone !== "") {
+      searchPhone = await User.findOne({
         phone: req.body.phone,
         company: res.locals.company,
       });
     }
-   
+
     if (searchEmail) {
       return next(
         new CustomError(
@@ -298,7 +296,7 @@ const editInformations = async (req, res, next) => {
         address: req.body.address,
         sex: req.body.sex,
         birthDate: req.body.birthDate,
-        identity:req.body.identity,
+        identity: req.body.identity,
         phone: req.body.phone,
         company: req.body.company,
         billingAddress: req.body.billingAddress,
@@ -306,16 +304,12 @@ const editInformations = async (req, res, next) => {
         userCompany: req.body.userCompany,
       });
       res.json({
-        succes:true,
-        message:"bilgiler başarıyla değiştirildi"
-        
+        succes: true,
+        message: "bilgiler başarıyla değiştirildi",
       });
-      
     }
-
-  
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
@@ -834,7 +828,11 @@ const getAllPhotos = async (req, res, next) => {
 };
 const getUsersAllPayments = async (req, res, next) => {
   try {
-    const payments = await Payment.find({ fromUser: req.params.id });
+    const payments = await Payment.find({
+      fromUser: req.params.id,
+      company: res.locals.company._id,
+    }).populate("products.productId")
+    .populate("operations.operationId");
     payments.forEach((element) => {
       console.log(element.operations.operationId);
     });

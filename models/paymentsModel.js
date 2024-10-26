@@ -11,6 +11,10 @@ const paymentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    employee: {
+      type: Schema.Types.ObjectId,
+      ref: "Employee",
+    },
     totalPrice: {
       type: Number,
       require: true,
@@ -66,6 +70,9 @@ const paymentSchema = new Schema(
   },
   { timestamps: true }
 );
+
+
+
 
 const Payment = mongoose.model("Payment", paymentSchema);
 export default Payment;

@@ -7,15 +7,14 @@ const addPayment = async (req, res, next) => {
   try {
     // console.log(req.body);
     req.body.company = res.locals.company._id;
-    if (req.body.fromUser==="") {
-      req.body.fromUser=undefined
+    req.body.employee = res.locals.employee._id;
+    if (req.body.fromUser === "") {
+      req.body.fromUser = undefined;
     }
-    req.body.products.forEach(element => {
-      element.productId=element._id
-    });
+
     await Payment.create(req.body)
       .then((response) => {
-        console.log(response)
+        console.log(response);
         req.body.operations.forEach(async (element) => {
           let foundedOperation = await Operation.findOne({
             _id: element.operationId,
@@ -70,17 +69,17 @@ const addPayment = async (req, res, next) => {
         if (req.body.products.length !== 0) {
           req.body.products.forEach(async (element) => {
             let foundedProduct = await Product.findOne({
-              _id: element._id,
+              _id: element.productId,
             });
 
-            foundedProduct.totalStock=foundedProduct.totalStock-element.quantity
-            await foundedProduct.save()
+            foundedProduct.totalStock =
+              foundedProduct.totalStock - element.quantity;
+            await foundedProduct.save();
           });
         }
-        
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         return new CustomError(err);
       });
 
@@ -157,11 +156,35 @@ const editPayment = async (req, res, next) => {
   try {
     console.log(req.body);
     let requestPayments = req.body.operations.map((item) => item.operationId);
+    let requestProducts = req.body.products;
+
     let payment = await Payment.findById(req.body.paymentId);
+    payment.description=req.body.description
+    payment.cashOrCard=req.body.cashOrCard
     let paymentOperations = payment.operations;
+    let paymentProducts = payment.products;
     let requestedPayment;
 
-    for (const operation of paymentOperations) {
+    for (const [i, value] of paymentProducts.entries()) {
+      
+      let indexcontrol = requestProducts.findIndex(
+        (item) => (item._id = value._id.toString())
+      );
+      let foundedProduct= await Product.findById(value.productId);
+      console.log(foundedProduct)
+      if (indexcontrol === -1) {
+        paymentProducts.splice(i, 1);
+        foundedProduct.totalStock=foundedProduct.totalStock+value.quantity
+      } else {
+        console.log("burası")
+        paymentProducts[i] = requestProducts[indexcontrol];
+        foundedProduct.totalStock=foundedProduct.totalStock+value.quantity-requestProducts[indexcontrol].quantity
+      }
+      await foundedProduct.save()
+    }
+
+    for (const [i,operation] of paymentOperations.entries()) {
+      
       let indexcontrol = requestPayments.findIndex(
         (item) => item === operation.operationId.toString()
       );
@@ -171,34 +194,18 @@ const editPayment = async (req, res, next) => {
       let indexcontrol2 = foundedOperation.payments.findIndex(
         (item) => item === req.body.paymentId
       );
-
-      console.log(indexcontrol);
+      
+     
       if (indexcontrol === -1) {
-        paymentOperations.splice(indexcontrol2, 1);
-        let totalPrice = paymentOperations
-          .map((item) => item.paymentValue)
-          .reduce((a, b) => a + b);
-
+        
         foundedOperation.payments.splice(indexcontrol2, 1);
         foundedOperation.paidValue =
           foundedOperation.paidValue - operation.paymentValue;
         await foundedOperation.save();
 
-        await Payment.findByIdAndUpdate(req.body.paymentId, {
-          $pull: { operations: { operationId: operation.operationId } },
-        });
-
-        console.log(totalPrice);
-        await Payment.findByIdAndUpdate(req.body.paymentId, {
-          $set: {
-            totalPrice: totalPrice,
-            description: req.body.description,
-            cashOrCard: req.body.cashOrCard,
-          },
-        }).then((response) => (requestedPayment = response));
+        payment.operations.splice(i, 1)
       } else {
-        // let _id = new mongoose.Types.ObjectId(req.body.paymentId);
-
+        // operasyon düzenlenmesi
         await Operation.updateOne(
           { _id: operation.operationId },
           {
@@ -213,6 +220,7 @@ const editPayment = async (req, res, next) => {
           }
         );
 
+        // operasyon düzenlendikten sonra operasyon total ödemesi hesaplaması
         let modifiedOperation = await Operation.findById(operation.operationId);
         if (modifiedOperation.payments.length === 0) {
           modifiedOperation.paidValue;
@@ -223,32 +231,35 @@ const editPayment = async (req, res, next) => {
             .reduce((a, b) => a + b);
           await modifiedOperation.save();
         }
-
-        await Payment.findByIdAndUpdate(
-          req.body.paymentId,
-          {
-            $set: {
-              "operations.$[operation].paymentValue":
-                req.body.operations[indexcontrol].paymentValue,
-              description: req.body.description,
-              cashOrCard: req.body.cashOrCard,
-            },
-          },
-          {
-            arrayFilters: [{ "operation._id": operation._id }],
-            new: true,
-          }
-        );
-
-        let modifiedPayment = await Payment.findById(req.body.paymentId);
-        modifiedPayment.totalPrice = modifiedPayment.operations
-          .map((item) => item.paymentValue)
-          .reduce((a, b) => a + b);
-        await modifiedPayment.save();
-        requestedPayment = modifiedPayment;
+        // ödemenin düzenlenmesi
+        payment.operations[i]=req.body.operations[indexcontrol]
       }
     }
+    // calculate total
+    console.log(payment)
+    let totalPriceProducts=0;
+    let totalPriceOperations=0;
+    if (payment.operations.length !== 0) {
+      totalPriceOperations = Number(
+        payment.operations
+          .map((item) => item.paymentValue)
+          .reduce((a, b) => a + b)
+      );
+    }
+    if (payment.products.length !== 0) {
+      totalPriceProducts = Number(
+        payment.products
+          .map((item) => item.paymentValue)
+          .reduce((a, b) => a + b)
+      );
+    }
 
+    payment.totalPrice = totalPriceProducts+totalPriceOperations
+    
+    await payment.save();
+    requestedPayment=await Payment.findById(req.body.paymentId).populate("operations.operationId").populate("products.productId")
+    
+    console.log("haho2");
     res.json({
       success: true,
       message: "ödeme düzenlendi.",

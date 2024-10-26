@@ -35,7 +35,7 @@ const createCompany = async (req, res, next) => {
     processes.forEach((process) => {
       req.body.services.push({
         serviceName: process,
-        servicePrice: 99,
+        servicePrice: 100,
         activeorNot: true,
       });
     });
@@ -43,6 +43,7 @@ const createCompany = async (req, res, next) => {
 
 
     const company = await Company.create(data);
+   
     data.role = ROLES_LIST.ADMIN;
     data.company = company._id;
     data.permissions=role_privileges.privileges.map((privilege,value)=>privilege.key)
