@@ -72,11 +72,20 @@ const ROLES_LIST = {
   RECEPTION: "resepsiyon",
   FINANCE: "muhasebe",
 };
+const LOG_LEVELS = {
+  INFO: "INFO",
+  WARN: "WARN",
+  ERROR: "ERROR",
+  DEBUG: "DEBUG",
+  VERBOSE: "VERBOSE",
+  HTTP: "HTTP",
+};
 
 const ORDER_STATUS_LIST = ["açık", "close", "cancel"];
 
 export {
   APPOINTMENT_STATUS,
+  LOG_LEVELS,
   APPOINTMENT_STATUS_AUTOMATIC,
   SERVICES_LIST,
   OPERATION_STATUS,

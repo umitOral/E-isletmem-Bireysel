@@ -1,34 +1,29 @@
 import { ErrorLogger } from "../helpers/logger/logger.js";
 
 import { sendErrorEmail } from "../controller/mailControllers.js";
-import {CustomError} from '../helpers/error/CustomError.js'
+
 
 const ErrorHandler = async (err, req, res, next) => {
-  console.log(err)
-  let customError = err;
-  
-if (customError.error) {
-  console.log("burası")
-  if (customError.error.name === "SyntaxError") {
-    customError = new CustomError("unexpected syntax", 400,customError.error);
+  console.log("burası1");
+  console.log(err);
+
+  if (err.name === "ReferenceError") {
+    res.render("errorPage",{
+      link:"error",
+      message:"bir sorun oluştu, yöneticiye başvurun",
+      error:err
+    })
+  }else{
+    res.status(err.status || 500).json({
+      success: false,
+      message: err.message || "yöneticiye başvurun",
+    });
   }
-  if (customError.error.name === "ValidatorError") {
-    customError = new CustomError(err.message, 400,customError.error);
-  }
 
+  ErrorLogger.error("errorHandler",err);
 
-  ErrorLogger.error("xxxx",customError.error);
-}
-  
+  await sendErrorEmail(err);
 
-  // await sendErrorEmail(customError.error);
-
- 
-
-  res.status(customError.status || 500).json({
-    success: false,
-    message: customError.message||"yöneticiye başvurun",
-  });
 
 };
 

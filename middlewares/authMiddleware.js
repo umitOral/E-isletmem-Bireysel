@@ -43,6 +43,7 @@ const authenticateToken = async (req, res, next) => {
  
   try {
     const token = req.cookies.jsonwebtoken;
+    
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET, (err) => {
         if (err) {
@@ -53,12 +54,10 @@ const authenticateToken = async (req, res, next) => {
       });
     } else {
       res.redirect("/login");
+      // return next(new CustomError("süre doldu, tekrar giriş yapınız",401))
     }
   } catch (error) {
-    res.status(401).json({
-      succes: false,
-      message: "yetkisizlikten gelen hata",
-    });
+    return next(new CustomError("sunucuda bir sorun oluştu",500,error))
   }
 };
 
@@ -88,7 +87,7 @@ const verifyactiveOrNot = () => {
       }
       next();
     } else {
-      next(new CustomError("Kullanıcı bulunamadı", 401));
+      res.json(Response.successResponse(true,"Kullanıcı bulunamadı"));
     }
   };
 };
@@ -100,7 +99,7 @@ const checkPriviliges = (...priviliges) => {
       if (res.locals.employee.permissions.includes(priviliges)) {
          next()
       }else{
-           next(new CustomError("İşlem için yetkiniz bulunmamaktadır.", 401));
+        res.json(Response.unsuccessResponse(false,"İşlem için yetkiniz bulunmamaktadır."))
       }
       
   }

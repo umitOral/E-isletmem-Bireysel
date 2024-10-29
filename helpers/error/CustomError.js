@@ -4,6 +4,7 @@ class CustomError extends Error {
         super(message);
         this.status=status;
         this.error=error;
+        this.errorMessage=error.message;
     }
 }
 

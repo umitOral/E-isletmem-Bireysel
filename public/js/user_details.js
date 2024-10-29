@@ -144,12 +144,184 @@ function userInformationEdit(e) {
 
   request
     .postWithUrlformData("../users/" + userID + "/editInformations", data)
-    .then((response) => {
-      if (response.succes) {
+    .then(async(response) => {
+      if (response.success) {
         ui.showNotification(true, response.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        modalUser.classList.add("hidden")
+        console.log(response.data)
+        let user=response.data.user
+        let ınformationsArea=document.querySelector(".table-wrapper.userInformation")
+        
+     
+        while (this.children.length !==1) {
+          console.log("burası1")
+          this.firstChild.remove()
+        }
+        let htmlContent=`
+                     <div class="form-group">
+                        <span>İsim</span>
+                        <input type="text" name="name" id="user-name" value="${user.name }">
+                    </div>
+
+                    <div class="form-group">
+                        <span>Soyisim</span>
+                        <input type="text" name="surname" id="user-surname" value="${user.surname }">
+                    </div>
+                    <div class="form-group">
+                        <span>TC</span>
+                        <input type="text" name="identity" id="identity" value="${user.identity }" inputmode="numeric" pattern="[0-9]{11}">
+                        
+
+                    </div>
+                    <div class="form-group">
+                        <span>Email</span>
+                        <input type="text" name="email" id="" value="${user.email }">
+                    </div>
+                    <div class="form-group">
+                       
+                      
+                        <span>Doğum Tarihi</span>
+                        
+                        <input type="date" name="birthDate" id="" value="${user.birthDate.split("T")[0]}">
+                    </div>
+                    <div class="options">
+                        <span>Cinsiyet:</span>
+                        ${(()=>{
+                          if(user.sex==="male" ){
+                            
+                            return `<div>
+                                <input type="radio" id="sex-women-update" name="sex" value="female">
+                                &nbsp; <label for="sex-women-update">Kadın</label>
+
+                                <input type="radio" id="sex-man-update" name="sex" value="male" checked="checked">
+                                &nbsp; <label for="sex-man-update">Erkek</label>
+
+                            </div>`
+                            // 
+                            }else{
+                             return ` <div>
+                                  <input type="radio" id="sex-women-update" name="sex" value="female"
+                                      checked="checked">
+                                  &nbsp; <label for="sex-women-update">Kadın</label>
+
+                                  <input type="radio" id="sex-man-update" name="sex" value="male">
+                                  &nbsp; <label for="sex-man-update">Erkek</label>
+
+                              </div>`
+                               }
+
+                        })()}
+                         
+
+                    </div>
+                    <div class="form-group">
+                        <span>Adres</span>
+                        <input type="text" name="address" id="" value="${user.address }"
+                            placeholder="${user.address }">
+                    </div>
+                    <div class="form-group">
+                        <span>Telefon</span>
+                        <input type="number" name="phone" id="phone" value="${user.phone }">
+                    </div>
+                    <div class="form-group">
+                        <span>Şirket</span>
+                        <input type="text" name="userCompany" id="" value="${user.userCompany }">
+                    </div>
+                    <div class="form-group">
+                        <span>Fatura Bilgisi:</span>
+                        <textarea name="billingAddress" id="" cols=""
+                            rows="2">${user.billingAddress }</textarea>
+                    </div>
+                    <div class="form-group">
+                        <span>Açıklama</span>
+                        <textarea name="notes" id="" cols="" rows="2">${user.notes}</textarea>
+                    </div>
+                  
+        `
+        this.insertAdjacentHTML("afterbegin", htmlContent)
+        
+        ınformationsArea.innerHTML=`
+                <div class="form-group">
+                                            <span>İsim</span>
+                                            <input type="text" name="" id="name" value="${user.name }"
+                                                readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Soyisim</span>
+                                            <input type="text" name="" id="surname" value="${user.surname}"
+                                                readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <span>TC</span>
+                                            <input type="text" name="" id="surname" value="${user.identity }" 
+                                                readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Kayıt Tarihi:</span>
+                                            <input type="text" name="" id="surname"
+                                                value="${user.createdAt.split("T")[0]}" readonly>
+                                        </div>
+                                        <div class="options ">
+                                            <span>Cinsiyet</span>
+                                            ${(()=>{
+                                              if(user.sex==="male" ){
+                                               return ` <div>
+
+                                                    <input type="radio" id="sex-man" name="sex" value="male"
+                                                        checked="checked">
+                                                    &nbsp; <label for="sex-man">Erkek</label>
+
+                                                </div>`
+                                                } else{
+                                                 return ` <div>
+                                                      <input type="radio" id="sex-women" name="sex" value="female"
+                                                          checked="checked">
+                                                      &nbsp; <label for="sex-women">Kadın</label>
+
+                                                  </div>`
+                                                  } 
+                                            })()}
+                                            
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Doğum Tarihi</span>
+                                            
+                                            <input type="date" name="" id="" value="${user.birthDate.split("T")[0]}"
+                                                readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Email</span>
+                                            <input type="email" name="" id="" value="${user.email }" readonly>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <span>Adres:</span>
+                                            <input type="text" value="${user.address }" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Şirket:</span>
+                                            <input type="text" value="${user.userCompany }" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Fatura Adresi:</span>
+                                            <input type="text" name="" id="" value="${user.billingAddress }"
+                                                readonly>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Telefon</span>
+                                            <input type="number" name="" id="" value="${user.phone }" readonly>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <span>Açıklama</span>
+                                            <input type="text" name="" id="" value="${user.notes }" readonly>
+                                        </div>
+                                    </div>           
+        `
+
+
       } else {
         ui.showNotification(false, response.message);
       }

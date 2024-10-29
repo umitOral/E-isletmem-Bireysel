@@ -82,7 +82,7 @@ const sendErrorEmail = async (err) => {
       from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: "umit.oralmat10@gmail.com",
       subject: "hata alındı",
-      html: err,
+      html: err.stack,
     });
 
     transporter.verify().then(console.log).catch(console.error);

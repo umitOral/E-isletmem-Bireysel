@@ -21,6 +21,9 @@ import {
 } from "../config/status_list.js";
 import Subscription from "../models/subscriptionModel.js";
 import { response } from "express";
+import { Response } from "../helpers/error/Response.js";
+
+import { AuditLogs } from "../helpers/auditLogs.js";
 
 const deactivateEmployee = async (req, res, next) => {
   try {
@@ -184,7 +187,6 @@ const findEmployees = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   try {
-    console.log("burası2");
     console.log(req.body);
     const userEmail = req.body.email;
     const userPhone = req.body.phone;
@@ -195,28 +197,30 @@ const createUser = async (req, res, next) => {
         email: userEmail,
         company: res.locals.company,
       });
+      console.log(searchEmail)
     }
-
+    
     const searchPhone = await User.findOne({
       phone: userPhone,
       company: res.locals.company,
     });
 
     if (searchEmail) {
-      return next(
-        new CustomError(
-          "Bu mail adresi ile kayıtlı kullanıcı bulunmaktadır",
-          400
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "Bu mail adresi ile kayıtlı kullanıcı bulunmaktadır"
         )
       );
     } else if (searchPhone) {
-      return next(
-        new CustomError(
-          "Bu Telefon adresi ile kayıtlı kullanıcı bulunmaktadır",
-          400
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "Bu Telefon adresi ile kayıtlı kullanıcı bulunmaktadır"
         )
       );
     } else {
+      
       await User.create(req.body).then((response) => {
         jwt.verify(
           req.cookies.userData,
@@ -275,21 +279,21 @@ const editInformations = async (req, res, next) => {
     }
 
     if (searchEmail) {
-      return next(
-        new CustomError(
-          "Bu mail adresi ile kayıtlı kullanıcı bulunmaktadır",
-          400
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "Bu mail ile kayıtlı kullanıcı bulunmaktadır"
         )
       );
     } else if (searchPhone) {
-      return next(
-        new CustomError(
-          "Bu Telefon adresi ile kayıtlı kullanıcı bulunmaktadır",
-          400
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "Bu Telefon ile kayıtlı kullanıcı bulunmaktadır"
         )
       );
     } else {
-      await User.findByIdAndUpdate(req.params.id, {
+     let updatedUser= await User.findByIdAndUpdate(req.params.id, {
         name: req.body.name,
         surname: req.body.surname,
         email: req.body.email,
@@ -302,15 +306,21 @@ const editInformations = async (req, res, next) => {
         billingAddress: req.body.billingAddress,
         notes: req.body.notes,
         userCompany: req.body.userCompany,
-      });
-      res.json({
-        succes: true,
-        message: "bilgiler başarıyla değiştirildi",
-      });
+      },{new:true});
+
+      res.json(
+        Response.successResponse(true, "bilgiler başarıyla değiştirildi", 200, {
+          user:updatedUser,
+        })
+      );
     }
+
+    AuditLogs.info(res.locals.employee.email, "user", "edit", {
+      _id: req.params._id,
+      ...req.body,
+    });
   } catch (error) {
-    console.log(error);
-    return next(new CustomError("bilinmeyen hata", 500, error));
+    return next(new CustomError("Yetkili ile iletişime geçiniz", 500, error));
   }
 };
 
@@ -322,8 +332,7 @@ const loginUser = async (req, res, next) => {
 
     if (employee) {
       const company = await Company.findOne({ _id: employee.company });
-      same = await bcrypt.compare(req.body.password, employee.password);
-      console.log(company);
+      same = bcrypt.compare(req.body.password, employee.password);
       if (same) {
         const token = createToken(company._id, employee._id);
 
@@ -336,7 +345,7 @@ const loginUser = async (req, res, next) => {
 
         res.cookie("jsonwebtoken", token, {
           httpOnly: true,
-          maxAge: 1000 * 60 * 60 * 24,
+          maxAge: 1000 * 60 * 60 *24,
         });
         res.cookie("userData", token2, {
           httpOnly: true,
@@ -364,10 +373,14 @@ const loginUser = async (req, res, next) => {
           message: "Giriş Başarılı,yönlendiriliyorsunuz",
         });
       } else {
-        return next(new CustomError("Kullanıcı adı veya şifresi yanlış", 400));
+        res.json(
+          Response.unsuccessResponse(false, "Kullanıcı adı veya şifresi yanlış")
+        );
       }
     } else {
-      return next(new CustomError("Kayıtlı kullanıcı bulunamadı", 400));
+      res.json(
+        Response.unsuccessResponse(false, "Kayıtlı kullanıcı bulunamadı")
+      );
     }
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -507,7 +520,12 @@ const addDiscountToOperation = async (req, res, next) => {
     console.log(req.params);
 
     if ((req.body.discount === "") & (req.body.percentDiscount === "")) {
-      next(new CustomError("en az 1 adet indirim tanımlamanız gerekmektedir"));
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "en az 1 adet indirim tanımlamanız gerekmektedir"
+        )
+      );
     } else if ((req.body.discount !== "") & (req.body.percentDiscount === "")) {
       await Operation.findByIdAndUpdate(req.params.operationID, {
         $set: {
@@ -831,8 +849,9 @@ const getUsersAllPayments = async (req, res, next) => {
     const payments = await Payment.find({
       fromUser: req.params.id,
       company: res.locals.company._id,
-    }).populate("products.productId")
-    .populate("operations.operationId");
+    })
+      .populate("products.productId")
+      .populate("operations.operationId");
     payments.forEach((element) => {
       console.log(element.operations.operationId);
     });
@@ -869,7 +888,9 @@ const resetPasswordMail = async (req, res, next) => {
     const employee = await Employee.findOne({ email: req.body.email });
 
     if (!employee) {
-      next(new CustomError("Kayıtlı kullanıcı Bulunamadı", 400));
+      res.json(
+        Response.unsuccessResponse(false, "Kayıtlı kullanıcı Bulunamadı")
+      );
     } else {
       const email = req.body.email;
 
