@@ -1,5 +1,5 @@
 import { CustomError } from "../helpers/error/CustomError.js";
-import axios from "axios";
+
 import Company from "../models/companyModel.js";
 import {Response} from "../helpers/error/Response.js";
 

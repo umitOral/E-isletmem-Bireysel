@@ -3,10 +3,15 @@ import Employee from "../models/EmployeesModel.js";
 import Subscription from "../models/subscriptionModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { orderSuccesEmail } from "./mailControllers.js";
-import { SERVICES_LIST,DATAS_LIST,ROLES_LIST} from "../config/status_list.js";
-import { role_privileges} from "../config/role_priveleges.js";
 
-import CryptoJS from "crypto-js";
+import { cloudinaryImageUploadMethod } from "../helpers/imageHelpers.js";
+import {
+  SERVICES_LIST,
+  DATAS_LIST,
+  ROLES_LIST,
+  COMPANY_DOCS
+} from "../config/status_list.js";
+import { role_privileges } from "../config/role_priveleges.js";
 
 import Iyzipay from "iyzipay";
 
@@ -20,12 +25,13 @@ const createCompany = async (req, res, next) => {
       newDate.setMonth(newDate.getMonth() + 1)
     ).toISOString();
 
+    
     req.body.serviceDatas = [];
     DATAS_LIST.forEach((singleData) => {
       req.body.serviceDatas.push({
-        dataName:singleData.dataName,
-        dataOptions:singleData.dataOptions  
-      })
+        dataName: singleData.dataName,
+        dataOptions: singleData.dataOptions,
+      });
     });
 
     const processes = SERVICES_LIST;
@@ -40,14 +46,13 @@ const createCompany = async (req, res, next) => {
       });
     });
 
-
-
     const company = await Company.create(data);
-   
+
     data.role = ROLES_LIST.ADMIN;
     data.company = company._id;
-    data.permissions=role_privileges.privileges.map((privilege,value)=>privilege.key)
-
+    data.permissions = role_privileges.privileges.map(
+      (privilege, value) => privilege.key
+    );
 
     await Employee.create(data);
     let subscriptionData = {
@@ -108,16 +113,78 @@ const updateCompanyInformations = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-
-const deleteCompany = async (req, res, next) => {
+const updateSmsConfig = async (req, res, next) => {
   try {
-    const company = await Company.findByIdAndDelete(req.params.id);
+    console.log("updateSmsConfig");
+    console.log(req.body);
 
-    res.redirect("back");
+    let { userName, password } = req.body;
+    await Company.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          "smsConfig.userName": userName,
+          "smsConfig.password": password,
+        },
+      }
+    );
+
+    res.json({
+      succes: true,
+      message: "bilgiler başarıyla değiştirildi.",
+    });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
+const updateCompanyDocs = async (req, res, next) => {
+  try {
+    console.log("updateCompanyDocs");
+
+    console.log(req.params.docKey);
+    const files = req.files;
+    const path = files.file.tempFilePath;
+    console.log(files.file.mimetype)
+    const doc = await cloudinaryImageUploadMethod(path);
+    console.log(doc)
+    const name = COMPANY_DOCS.find(doc => doc.key === req.params.docKey).name;
+    let data={
+        docKey:req.params.docKey ,
+        mimetype:files.file.mimetype,
+        url: doc.secure_url,
+        public_id: doc.public_id,
+    }
+
+    let result=await Company.findOneAndUpdate(
+      { _id: req.params.id,'companyDocs.docKey':req.params.docKey},
+      {
+        $set: {
+          'companyDocs.$': data
+        }
+      },{
+        new:true
+      }
+    );
+
+    if (!result) {
+      await Company.findByIdAndUpdate(req.params.id,
+        {
+          $push: { companyDocs: data }
+        },
+        { new: true }
+      );
+    }
+
+    res.json({
+      succes: true,
+      message: "Dosya  Yüklendi..",
+    });
+  } catch (error) {
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  }
+};
+
+
 const addCompanyPayment = async (req, res, next) => {
   try {
     // TODO
@@ -283,9 +350,11 @@ async function addSubscription(subscription) {
 
 export {
   updateCompanyPassword,
-  deleteCompany,
+  
   updateCompanyInformations,
   addCompanyPayment,
   companyPaymentResult,
-  createCompany
+  createCompany,
+  updateSmsConfig,
+  updateCompanyDocs,
 };

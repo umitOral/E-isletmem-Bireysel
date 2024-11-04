@@ -9,6 +9,31 @@ import { Ticket, ticketStatus } from "../models/ticketModel.js";
 
 dotenv.config({ path: "../.env" });
 
+const sendCustomMail = async (data) => {
+  try {
+    
+    const transporter = createTransport({
+      host: process.env.EMAIL_SMTP,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
+      to: req.body.email,
+      subject: "smsSTATUS DATA EMAİL",
+      html: data,
+    });
+
+    transporter.verify().then(console.log).catch(console.error);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
 const sendMail = async (req, res) => {
   try {
     const html = registerMail;
@@ -168,4 +193,5 @@ export {
   contactEmail,
   orderSuccesEmail,
   sendErrorEmail,
+  sendCustomMail
 };

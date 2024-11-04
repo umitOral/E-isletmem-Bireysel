@@ -1,25 +1,30 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import randombytes from "randombytes";
-import jwt from "jsonwebtoken";
+import CryptoJS from "crypto-js";
+import { DOC_STATUS } from "../config/status_list.js";
 
 const Schema = mongoose.Schema;
 const companySchema = new Schema(
   {
-    brandName: { type: String, require: true,lowercase: true},
-    companyName: { type: String, require: false,lowercase: true},
-    email: { type: String, require: true, index: { unique: true },lowercase: true},
+    brandName: { type: String, require: true, lowercase: true },
+    companyName: { type: String, require: false, lowercase: true },
+    email: {
+      type: String,
+      require: true,
+      index: { unique: true },
+      lowercase: true,
+    },
 
     password: {
       type: String,
       require: true,
       minLength: [4, "şifre uzunluğu en az 4 karakter olmalıdır."],
     },
-    phone: { type: String},
-    address: { type: String ,lowercase:true },
-    billingAddress: { type: String, lowercase:true },
+    phone: { type: String },
+    address: { type: String, lowercase: true },
+    billingAddress: { type: String, lowercase: true },
     registerDate: { type: Date, default: Date.now },
-    notes: { type: String, require: false,lowercase:true},
+    notes: { type: String, require: false, lowercase: true },
     debtStatus: { type: Number, require: 0 },
     employees: [
       {
@@ -59,10 +64,15 @@ const companySchema = new Schema(
     subscribeEndDate: { type: Date, default: null },
 
     activeOrNot: { type: Boolean, default: true },
+    smsConfig: {
+      userName: String,
+      password: String,
+      smsTitle: String,
+    },
     serviceDatas: [
       {
-        dataName: { type:String, lowercase: true, trim: true },
-        dataOptions:[{type:String,lowercase:true, trim:true}]
+        dataName: { type: String, lowercase: true, trim: true },
+        dataOptions: [{ type: String, lowercase: true, trim: true }],
       },
     ],
     services: [
@@ -75,13 +85,30 @@ const companySchema = new Schema(
         serviceData: [],
       },
     ],
-    sms: [
+    smsActive: {
+      type: Boolean,
+      default: false,
+    },
+    smsTemplates: [
       {
         smsName: {
           type: String,
         },
         activeorNot: { type: Boolean, default: true },
-        content:String,
+        content: String,
+      },
+    ],
+    companyDocs: [
+      {
+        docKey: String,
+        mimetype: String,
+        status: {
+          type: String,
+          default: DOC_STATUS.WAITING,
+        },
+        key: String,
+        url: String,
+        public_id: String,
       },
     ],
   },
@@ -96,16 +123,25 @@ companySchema.pre("save", function (next) {
   });
 });
 
-// companySchema.methods.createResetPasswordToken = function (companyEmail) {
-//   const resetToken = jwt.sign({ companyEmail }, process.env.JWT_SECRET, {
-//     expiresIn: "60m",
-//   });
-//   console.log(resetToken)
-//   this.passwordResetToken = resetToken;
-//   this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000; //10 minutes
+companySchema.pre("findOneAndUpdate", async function (next) {
 
-//   return resetToken;
-// };
+  const update = this.getUpdate();
+  const passwordChange = update["$set"]["smsConfig.password"];
+ 
+
+  // console.log(update['$set']['smsConfig.userName']);
+
+  if (update && passwordChange) {
+    console.log("xx");
+    let hashedPassword = CryptoJS.AES.encrypt(
+      update["$set"]["smsConfig.password"],
+      process.env.JWT_SECRET
+    ).toString();
+
+    update["$set"]["smsConfig.password"] = hashedPassword;
+  }
+  next();
+});
 
 const Company = mongoose.model("Company", companySchema);
 export default Company;

@@ -182,7 +182,7 @@ function userInformationEdit(e) {
                       
                         <span>Doğum Tarihi</span>
                         
-                        <input type="date" name="birthDate" id="" value="${user.birthDate.split("T")[0]}">
+                        <input type="date" name="birthDate" id="" value="${user.birthDate?.split("T")[0]}">
                     </div>
                     <div class="options">
                         <span>Cinsiyet:</span>
@@ -286,7 +286,7 @@ function userInformationEdit(e) {
                                         <div class="form-group">
                                             <span>Doğum Tarihi</span>
                                             
-                                            <input type="date" name="" id="" value="${user.birthDate.split("T")[0]}"
+                                            <input type="date" name="" id="" value="${user.birthDate?.split("T")[0]}"
                                                 readonly>
                                         </div>
                                         <div class="form-group">
@@ -475,7 +475,6 @@ showAppointmentsBtn.addEventListener("click", () => {
   console.log("adada");
   getAllAppointments();
 });
-// change states
 
 function getAllAppointments() {
   console.log("dada");

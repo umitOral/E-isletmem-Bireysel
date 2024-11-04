@@ -61,11 +61,12 @@ import {
   addProduct,searchProduct,addPassiveProduct,editProduct,addStock,fixStock,searchProductInner,searchProductName
 } from "../controller/productControllers.js";
 import {
-  addSms,
-  activateSms,
-  deactivateSms,
-  editSms,
-  sendBulkSms
+  addSmsTemplate,
+  activateSmsTemplate,
+  deactivateSmsTemplate,
+  editSmsTemplate,
+  sendBulkSms,
+  sendSingleSms
 } from "../controller/smsControllers.js";
 
 import {
@@ -92,6 +93,8 @@ import {
 import {
   updateCompanyPassword,
   updateCompanyInformations,
+  updateSmsConfig,
+  updateCompanyDocs,
   addCompanyPayment,
 } from "../controller/companyControllers.js";
 import {
@@ -113,6 +116,7 @@ import { ROLES_LIST } from "../config/status_list.js";
 import appointmentsRoutes from "./appointmentsRoutes.js";
 import reportsRoutes from "./reportsRoutes.js";
 import staticsRoutes from "./staticsRoutes.js";
+import { checkSmsActive } from "../middlewares/smsMiddleware.js";
 
 const router = express.Router();
 
@@ -258,12 +262,13 @@ router.route("/products/addPassiveProduct").post(checkPriviliges("product_add"),
 
 
 router.route("/sms").get(checkPriviliges("sms_view"), getSmsPage);
-router.route("/sms/addSms").post(checkPriviliges("sms_add"), addSms);
-router.route("/sms/sendBulkSms").post(checkPriviliges("sms_bulk_send"), sendBulkSms);
-router.route("/sms/:id/activateSms").get(checkPriviliges("sms_update"), activateSms);
-router.route("/sms/:id/deactivateSms").get(checkPriviliges("sms_update"), deactivateSms);
-router.route("/sms/:id/editSms").post(checkPriviliges("sms_update"), editSms);
+router.route("/sms/addSmsTemplate").post(checkPriviliges("sms_add"), addSmsTemplate);
+router.route("/sms/:id/activateSmsTemplate").get(checkPriviliges("sms_update"), activateSmsTemplate);
+router.route("/sms/:id/deactivateSmsTemplate").get(checkPriviliges("sms_update"), deactivateSmsTemplate);
+router.route("/sms/:id/editSmsTemplate").post(checkPriviliges("sms_update"), editSmsTemplate);
 
+router.route("/sms/sendBulkSms").post(checkPriviliges("sms_bulk_send"), sendBulkSms);
+router.route("/sms/sendSingleSms").post(checkPriviliges("sms_single_send"),checkSmsActive(), sendSingleSms);
 
 
 router.route("/services/:id/editService").post(checkPriviliges("service_update"), editService);
@@ -288,6 +293,12 @@ router
 router
   .route("/settings/:id/updateCompanyInformations")
   .post(checkPriviliges("settings_update"), updateCompanyInformations);
+router
+  .route("/settings/:id/updateSmsConfig")
+  .post(checkPriviliges("settings_update"), updateSmsConfig);
+router
+  .route("/settings/:id/:docKey/updateCompanyDocs")
+  .post(checkPriviliges("settings_update"), updateCompanyDocs);
 
 router.use(
   "/appointments",

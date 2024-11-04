@@ -62,10 +62,12 @@
                                 <th>Soyisim<i class="fa-solid fa-arrow-up"></i></td>
                                 <th>Telefon<i class="fa-solid fa-arrow-up"></i></td>
                                 <th>TC no<i class="fa-solid fa-arrow-up"></i></td>
+                                <th style="width: 10px;"></td>
+                                <th style="width: 10px;"></td>
                             </thead>
                             <tbody id="userList">
                                 <% users.forEach(element=> { %>
-                                    <tr>
+                                    <tr data-userId="<%= element._id %>">
                                         <td>
                                             <%= element.name %>
                                         </td>
@@ -74,6 +76,12 @@
                                         </td>
                                         <td><span class=""> <%=element.phone%></span> </td>
                                         <td><span class=""> <%=element.identity%></span> </td>
+                                        <td>
+                                            <select name="" class="user-options-select">
+                                                <option selected disable hidden>Seçenekler</option>
+                                                <option value="edit-payment">SMS Gönder</option>
+                                            </select>
+                                        </td>
                                         
                                         
                                         <td class="details"><a href="./users/<%= element._id %>" class="table-button notr">Detay</a></td>
@@ -151,6 +159,35 @@
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn save form-btn" id="add-user">Kaydet</button>
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal hidden" id="sms_modal">
+                    <div class="inner_modal">
+                        <h2>Sms Gönder</h2>
+                        <form action="./users/createUser" method="POST" id="sms-form">
+                            <div class="form-group ">
+                                <select name="" id="sms-type-select" required>
+                                    <option value="" disable selected hidden>Sms Tipi</option>
+                                    <option value="">Özel</option>
+                                    <% company.smsTemplates.forEach(element => { %>
+                                        <option value="<%= element.content%>" data-smsName="<%= element.smsName %>"><%= element.smsName %></option>
+                                    <% }) %>
+                                   
+                                </select>
+                            </div>
+                            
+                          
+                            <div class="form-group">
+                                <span>Mesaj</span>
+                               <textarea name="message_text" id="message_text" required></textarea>
+                            </div>
+                        
+                           
+                            <div class="form-group">
+                                <button type="submit" class="btn save form-btn">Gönder</button>
                                 <button type="button" class="btn cancel form-btn">Vazgeç</button>
                             </div>
                         </form>

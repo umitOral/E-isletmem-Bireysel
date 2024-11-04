@@ -248,6 +248,12 @@ export const role_privileges = {
       group: "SMS",
       description: "Sms Send Bulk",
     },
+    {
+      key: "sms_single_send",
+      name: "Tekil Sms Gaönderme",
+      group: "SMS",
+      description: "Sms Send Single",
+    },
   ],
 };
 

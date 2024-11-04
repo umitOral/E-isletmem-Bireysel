@@ -3,6 +3,7 @@ import User from "../models/userModel.js";
 import Company from "../models/companyModel.js";
 import Employee from "../models/EmployeesModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
+import { Response } from "../helpers/error/Response.js";
 
 const checkUser = async (req, res, next) => {
   
@@ -93,7 +94,6 @@ const verifyactiveOrNot = () => {
 };
 
 const checkPriviliges = (...priviliges) => {
-  
   
   return async (req,res,next)=>{
       if (res.locals.employee.permissions.includes(priviliges)) {

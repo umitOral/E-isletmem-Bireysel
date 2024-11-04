@@ -53,7 +53,7 @@
                                 <th></th>
                             </thead>
                             <tbody>
-                                <% sms.forEach(sms=> { %>
+                                <% smsTemplates.forEach(sms=> { %>
                                     <tr data-smsID="<%= sms._id %>">
 
                                         <td data-smsName="smsName">
@@ -83,10 +83,10 @@
     
                                                         <% if(sms.activeorNot){ %>
                                                             <a class="button"
-                                                                    href="./sms/<%= sms._id %>/deactivateSms">Pasif Et</a>
+                                                                    href="./sms/<%= sms._id %>/deactivateSmsTemplate">Pasif Et</a>
                                                             
                                                             <% } else{ %>
-                                                                <a href="./sms/<%= sms._id %>/activateSms">Aktif Et</a>
+                                                                <a href="./sms/<%= sms._id %>/activateSmsTemplate">Aktif Et</a>
                                                                 
                                                                 <% } %>
                                             </div>
@@ -113,7 +113,7 @@
         <div class="modal hidden" id="add_sms_modal">
             <div class="inner_modal">
                 <h2>Yeni Ürün Ekle</h2>
-                <form action="./sms/addSms" method="POST" id="add-sms-form">
+                <form action="./sms/addSmsTemplate" method="POST" id="add-sms-form">
                     <div class="form-group ">
                         <span>Sms Adı:</span>
                         <input type="text" name="smsName" id="smsName" required placeholder="örn. doğum günü">

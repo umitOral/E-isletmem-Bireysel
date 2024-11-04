@@ -11,59 +11,102 @@ const SESSION_STATUS_LIST = {
   INCOMPLETE: "yarım kaldı",
   USERCANCEL: "hasta iptali",
   COMPANYCANCEL: "işletme iptali",
-  FINISH: "tamamlandı"
+  FINISH: "tamamlandı",
 };
 const SESSION_STATUS_LIST_AUTOMATIC = {
   WAITING: "aksiyon bekliyor",
-  PLANNED: "planlandı"
+  PLANNED: "planlandı",
 };
 const PAYMENT_STATUS = {
   PAID: "ödendi",
-  NOTPAID: "ödenmedi"
+  NOTPAID: "ödenmedi",
 };
 
-const SERVICES_LIST = ["kaş alma", "microblading", "ayak bakımı",
-  "tırnak bakımı", "peeling", "manikür", "pedikür", "kalıcı Makyaj", "kalıcı oje", "ipek kirpik", "cilt Bakımı",
-  "lazer epilasyon", "kirpik Lifting", "protez Tırnak", "bölgesel İncelme", "yüz Bakımı", "cilt Gençleştirme", "masaj 1 saat"];
+const SERVICES_LIST = [
+  "kaş alma",
+  "microblading",
+  "ayak bakımı",
+  "tırnak bakımı",
+  "peeling",
+  "manikür",
+  "pedikür",
+  "kalıcı Makyaj",
+  "kalıcı oje",
+  "ipek kirpik",
+  "cilt Bakımı",
+  "lazer epilasyon",
+  "kirpik Lifting",
+  "protez Tırnak",
+  "bölgesel İncelme",
+  "yüz Bakımı",
+  "cilt Gençleştirme",
+  "masaj 1 saat",
+];
 
-const DATAS_LIST = [{
-  dataName: "deri yağlanması",
-  dataOptions: ["kuru", "karma", "normal"]
-}, {
-  dataName: "kıl yapısı",
-  dataOptions: ["sert", "yumuşak", "normal"]
-},{
-  dataName: "kıl kalınlığı",
-  dataOptions: ["ince", "kalın", "normal"]
-},
-{
-  dataName: "hastalıklar",
-  dataOptions: ["diyabet", "tansiyon", "kalp"]
-},
-{dataName: "allerjiler",
-  dataOptions: ["penisilin"]
-},
-{
-  dataName: "folikül sayısı",
-},]
+const DATAS_LIST = [
+  {
+    dataName: "deri yağlanması",
+    dataOptions: ["kuru", "karma", "normal"],
+  },
+  {
+    dataName: "kıl yapısı",
+    dataOptions: ["sert", "yumuşak", "normal"],
+  },
+  {
+    dataName: "kıl kalınlığı",
+    dataOptions: ["ince", "kalın", "normal"],
+  },
+  {
+    dataName: "hastalıklar",
+    dataOptions: ["diyabet", "tansiyon", "kalp"],
+  },
+  { dataName: "allerjiler", dataOptions: ["penisilin"] },
+  {
+    dataName: "folikül sayısı",
+  },
+];
 const OPERATION_STATUS = {
   FINISH: "tamamlandı",
   USERCANCEL: "hasta iptali",
   COMPANYCANCEL: "İşletme iptali",
-
-}
+};
 const OPERATION_STATUS_AUTOMATIC = {
   FINISH: "tamamlandı",
   CONTINUE: "devam ediyor",
   WAITING: "aksiyon bekliyor",
-  PLANNED: "planlandı"
-}
+  PLANNED: "planlandı",
+};
 const OPERATION_APPOINTMENT_AVALIABLE_STATUS = {
   NO: "var",
   YES: "yok",
-}
+};
 
-
+const COMPANY_DOCS= [
+  {
+    key: "identity_doc", // code içinde kullanılacak
+    name: "Yetkili Kimliği", //arayüzde kullanılacak
+    group: "DOCS",
+    description: "identity_doc",
+  },
+  {
+    key: "adress_doc", // code içinde kullanılacak
+    name: "İkamet Belgesi", //arayüzde kullanılacak
+    group: "DOCS",
+    description: "adress_doc",
+  },
+  {
+    key: "customs_doc", // code içinde kullanılacak
+    name: "Vergi levhası", //arayüzde kullanılacak
+    group: "DOCS",
+    description: "customs_doc",
+  },
+  {
+    key: "signature_doc", // code içinde kullanılacak
+    name: "İmza beyannamesi", //arayüzde kullanılacak
+    group: "DOCS",
+    description: "signature_doc",
+  },
+];
 
 const ROLES_LIST = {
   ADMIN: "admin",
@@ -71,6 +114,11 @@ const ROLES_LIST = {
   EMPLOYEE: "personel",
   RECEPTION: "resepsiyon",
   FINANCE: "muhasebe",
+};
+const DOC_STATUS = {
+  WAITING: "onay bekliyor",
+  REJECTED: "reddedildi",
+  APPROVED: "onaylandı",
 };
 const LOG_LEVELS = {
   INFO: "INFO",
@@ -96,5 +144,7 @@ export {
   PAYMENT_STATUS,
   OPERATION_APPOINTMENT_AVALIABLE_STATUS,
   SESSION_STATUS_LIST_AUTOMATIC,
-  DATAS_LIST
+  DATAS_LIST,
+  COMPANY_DOCS,
+  DOC_STATUS
 };

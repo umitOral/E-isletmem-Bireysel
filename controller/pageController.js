@@ -2,14 +2,13 @@ import User from "../models/userModel.js";
 import moment from "moment";
 import fs from "fs";
 import Employee from "../models/EmployeesModel.js";
-import { ROLES_LIST } from "../config/status_list.js";
+import { COMPANY_DOCS, DOC_STATUS, ROLES_LIST } from "../config/status_list.js";
 
 import Sessions from "../models/appointmentModel.js";
 import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
 import Product from "../models/productModel.js";
 import { productGeneralSchema } from "../models/productGeneralModel.js";
-
 
 import Subscription from "../models/subscriptionModel.js";
 import { Ticket } from "../models/ticketModel.js";
@@ -19,17 +18,18 @@ import { CustomError } from "../helpers/error/CustomError.js";
 import { query } from "express";
 
 import Session from "../models/appointmentModel.js";
-import {APPOINTMENT_STATUS,APPOINTMENT_STATUS_AUTOMATIC} from "../config/status_list.js";
+import {
+  APPOINTMENT_STATUS,
+  APPOINTMENT_STATUS_AUTOMATIC,
+} from "../config/status_list.js";
 import { searchProduct } from "./productControllers.js";
 import { getTenantDb } from "./db.js";
 import { BRAND_LIST } from "../config/brands.js";
-
 
 let now = new Date();
 let day = now.getDate();
 let month = now.getMonth();
 let year = now.getFullYear();
-
 
 const firstDate = new Date(year, month, day);
 const secondDate = new Date(year, month, day);
@@ -177,29 +177,26 @@ const getPricesPage = (req, res, next) => {
 const getservicesPage = async (req, res, next) => {
   try {
     let company = res.locals.company;
-    console.log("burası")
+    console.log("burası");
     let services = await company.services;
     // console.log(services)
-    console.log(req.query)
-
+    console.log(req.query);
 
     if (req.query.serviceName) {
-
       if (req.query.serviceName !== "") {
-
-        services = services.filter((item) => item.serviceName.includes(req.query.serviceName.toLowerCase()))
+        services = services.filter((item) =>
+          item.serviceName.includes(req.query.serviceName.toLowerCase())
+        );
       }
     }
-
 
     res.status(200).render("services", {
       serviceName: req.query.serviceName,
       services,
       link: "services",
     });
-
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       succes: false,
       message: error,
@@ -208,16 +205,12 @@ const getservicesPage = async (req, res, next) => {
 };
 const getProductsPage = async (req, res, next) => {
   try {
-
-    
-
     res.status(200).render("products", {
-      BRAND_LIST:BRAND_LIST,
+      BRAND_LIST: BRAND_LIST,
       link: "products",
     });
-
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       succes: false,
       message: error,
@@ -226,17 +219,18 @@ const getProductsPage = async (req, res, next) => {
 };
 const getAllProductsPage = async (req, res, next) => {
   try {
-    
-    const GeneralProductModel=getTenantDb(process.env.DB_NAME_GENERAL,"productGeneral",productGeneralSchema)
-    const products = await GeneralProductModel.find({})
+    const GeneralProductModel = getTenantDb(
+      process.env.DB_NAME_GENERAL,
+      "productGeneral",
+      productGeneralSchema
+    );
+    const products = await GeneralProductModel.find({});
 
     res.status(200).render("allProducts", {
       products,
       link: "products",
     });
-
   } catch (error) {
-
     res.status(500).json({
       succes: false,
       message: error,
@@ -245,17 +239,15 @@ const getAllProductsPage = async (req, res, next) => {
 };
 const getSmsPage = async (req, res, next) => {
   try {
-    
-    const company = await Company.findById(res.locals.company._id)
-    const sms=company.sms
-    
+    const company = await Company.findById(res.locals.company._id);
+    const smsTemplates = company.smsTemplates;
+
     res.status(200).render("smsPage", {
-      sms,
+      smsTemplates,
       link: "services",
     });
-
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       succes: false,
       message: error,
@@ -264,20 +256,20 @@ const getSmsPage = async (req, res, next) => {
 };
 const getDatasPage = async (req, res, next) => {
   try {
-
-    let serviceDatas = res.locals.company.serviceDatas
+    let serviceDatas = res.locals.company.serviceDatas;
 
     if (req.query.dataName) {
       if (req.query.dataName !== "") {
-        serviceDatas = serviceDatas.filter((item) => item.dataName.includes(req.query.dataName.toLowerCase()))
+        serviceDatas = serviceDatas.filter((item) =>
+          item.dataName.includes(req.query.dataName.toLowerCase())
+        );
       }
     }
-
 
     res.status(200).render("datasPage", {
       link: "services",
       serviceDatas: serviceDatas,
-      dataName: req.query.dataName
+      dataName: req.query.dataName,
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -288,7 +280,7 @@ const getRegisterPage = (req, res, next) => {
   try {
     res.status(200).render("front/register", {
       link: "register",
-      RECAPTCHA_SITEKEY: process.env.RECAPTCHA_SITEKEY
+      RECAPTCHA_SITEKEY: process.env.RECAPTCHA_SITEKEY,
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -298,7 +290,7 @@ const getContactPage = (req, res, next) => {
   try {
     res.status(200).render("front/contact-us", {
       link: "register",
-      RECAPTCHA_SITEKEY: process.env.RECAPTCHA_SITEKEY
+      RECAPTCHA_SITEKEY: process.env.RECAPTCHA_SITEKEY,
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -306,7 +298,6 @@ const getContactPage = (req, res, next) => {
 };
 const getAdminPage = async (req, res, next) => {
   try {
-
     res.status(200).render("indexAdmin", {
       link: "index",
     });
@@ -317,11 +308,10 @@ const getAdminPage = async (req, res, next) => {
 
 const getUsersPage = async (req, res, next) => {
   try {
-    console.log("burası")
+    console.log("burası");
     //pagination
 
-    let limit=10;
-
+    let limit = 10;
 
     let users = await User.find({
       company: res.locals.company._id,
@@ -330,10 +320,9 @@ const getUsersPage = async (req, res, next) => {
       .limit(limit)
       .sort({ updatedAt: -1 });
 
-
     res.status(200).render("users", {
       users,
-      succes:true,
+      succes: true,
       link: "users",
     });
   } catch (error) {
@@ -343,65 +332,62 @@ const getUsersPage = async (req, res, next) => {
 const getAppointmentReportsPage = async (req, res, next) => {
   try {
     //pagination
-    console.log(req.query)
+    console.log(req.query);
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
 
-    let searchObject={
-      company:res.locals.company._id
-    }
+    let searchObject = {
+      company: res.locals.company._id,
+    };
     let personels;
     let status;
     let startDate;
     let endDate;
-    
-   
-    
-    
+
     if (req.query.endDate) {
-       endDate=new Date(req.query.endDate)
-       endDate.setHours(24,0,0)
-    }else{
-        endDate=new Date()
-       endDate.setHours(24,0,0)
+      endDate = new Date(req.query.endDate);
+      endDate.setHours(24, 0, 0);
+    } else {
+      endDate = new Date();
+      endDate.setHours(24, 0, 0);
     }
     if (req.query.startDate) {
-      startDate=new Date(req.query.startDate)
-      startDate.setDate(startDate.getDate()-1)
-      startDate.setHours(24,0,0)
-    }else{
-      startDate=new Date()
-      startDate.setDate(startDate.getDate()-1)
-      startDate.setHours(24,0,0)
+      startDate = new Date(req.query.startDate);
+      startDate.setDate(startDate.getDate() - 1);
+      startDate.setHours(24, 0, 0);
+    } else {
+      startDate = new Date();
+      startDate.setDate(startDate.getDate() - 1);
+      startDate.setHours(24, 0, 0);
     }
-    
-    if (typeof(req.query.personelInput)==="string") {
-       personels=[req.query.personelInput]
-    }else{
-      personels=req.query.personelInput
+
+    if (typeof req.query.personelInput === "string") {
+      personels = [req.query.personelInput];
+    } else {
+      personels = req.query.personelInput;
     }
-    
-    if (typeof(req.query.status)==="string") {
-       status=[req.query.status]
-    }else{
-      status=req.query.status
+
+    if (typeof req.query.status === "string") {
+      status = [req.query.status];
+    } else {
+      status = req.query.status;
     }
 
     if (req.query.personelInput) {
-      searchObject.doctor={ $in: personels }
+      searchObject.doctor = { $in: personels };
     }
     if (req.query.status) {
-      searchObject.appointmentState={ $in: status }
+      searchObject.appointmentState = { $in: status };
     }
-    
-    
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
     let reports = await Session.find(searchObject)
-      
-      .where('date').gt(startDate).lt(endDate)
+
+      .where("date")
+      .gt(startDate)
+      .lt(endDate)
       .populate("user", ["name", "surname"])
       .populate("doctor", ["name", "surname"])
       .skip(startIndex)
@@ -409,17 +395,16 @@ const getAppointmentReportsPage = async (req, res, next) => {
       .sort({ date: -1 });
 
     let employes = await Employee.find({
-      company:res.locals.company._id,
-      activeOrNot:true
-    })
-    
+      company: res.locals.company._id,
+      activeOrNot: true,
+    });
 
+    let total = await Session.find(searchObject)
+      .where("date")
+      .gt(startDate)
+      .lt(endDate);
 
-    let total =await  Session.find(searchObject)
-    .where('date').gt(startDate).lt(endDate)
-
-   total=total.length
-
+    total = total.length;
 
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
@@ -439,9 +424,9 @@ const getAppointmentReportsPage = async (req, res, next) => {
       };
     }
 
-    let STATUS={...APPOINTMENT_STATUS,...APPOINTMENT_STATUS_AUTOMATIC}
-    STATUS= Object.values(STATUS)
-    console.log(pagination)
+    let STATUS = { ...APPOINTMENT_STATUS, ...APPOINTMENT_STATUS_AUTOMATIC };
+    STATUS = Object.values(STATUS);
+    console.log(pagination);
     res.status(200).render("reports/appointmentReports", {
       reports,
       STATUS,
@@ -449,7 +434,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
       total,
       count: reports.length,
       pagination,
-      query:req.query,
+      query: req.query,
       link: "reports",
     });
   } catch (error) {
@@ -458,7 +443,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
 };
 const paymentReportsPage = async (req, res, next) => {
   try {
-   let users= await User.find({})
+    let users = await User.find({});
     res.status(200).render("reports/paymentReports", {
       users,
       link: "reports",
@@ -469,7 +454,7 @@ const paymentReportsPage = async (req, res, next) => {
 };
 const productReportsPage = async (req, res, next) => {
   try {
-   let products= await Product.find({})
+    let products = await Product.find({});
     res.status(200).render("reports/productReports", {
       products,
       link: "reports",
@@ -481,39 +466,40 @@ const productReportsPage = async (req, res, next) => {
 const getUserReportsPage = async (req, res, next) => {
   try {
     //pagination
-    
-    const page =  1;
-    const limit =5;
 
-    let searchObject={
-      company:res.locals.company._id
-    }
+    const page = 1;
+    const limit = 5;
+
+    let searchObject = {
+      company: res.locals.company._id,
+    };
 
     let startDate;
     let endDate;
-    
 
-        endDate=new Date()
-       endDate.setHours(24,0,0)
+    endDate = new Date();
+    endDate.setHours(24, 0, 0);
 
-      startDate=new Date()
-      startDate.setDate(startDate.getDate()-1)
-      startDate.setHours(24,0,0)
-    console.log(startDate)
-    console.log(endDate)
+    startDate = new Date();
+    startDate.setDate(startDate.getDate() - 1);
+    startDate.setHours(24, 0, 0);
+    console.log(startDate);
+    console.log(endDate);
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
     let reports = await User.find(searchObject)
-      
-      .where('createdAt').gt(startDate).lt(endDate)
+
+      .where("createdAt")
+      .gt(startDate)
+      .lt(endDate)
       .skip(startIndex)
       .limit(limit)
       .sort({ date: -1 });
-      console.log(reports)
+    console.log(reports);
 
-    let total=reports.length
+    let total = reports.length;
 
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
@@ -533,8 +519,7 @@ const getUserReportsPage = async (req, res, next) => {
       };
     }
 
-
-    console.log(pagination)
+    console.log(pagination);
     res.status(200).render("reports/userReports", {
       reports,
       total,
@@ -542,7 +527,7 @@ const getUserReportsPage = async (req, res, next) => {
       count: reports.length,
       pagination,
       lastpage,
-      query:req.query,
+      query: req.query,
       link: "reports",
     });
   } catch (error) {
@@ -677,8 +662,26 @@ const getAppointmentsStaticsPage = async (req, res, next) => {
 const getSettingsPage = (req, res, next) => {
   try {
     const company = res.locals.company;
+    let missedDocs = [];
+    let finishedDocs = [];
 
+    COMPANY_DOCS.forEach((element, index) => {
+      let indexcontrol = company.companyDocs.findIndex(
+        (item) => item.docKey === element.key
+      );
+      console.log(indexcontrol);
+      if (indexcontrol === -1) {
+        missedDocs.push(element);
+      } else {
+        finishedDocs.push(company.companyDocs[indexcontrol]);
+        finishedDocs[finishedDocs.length-1].name=element.name
+      }
+    });
+    console.log(finishedDocs);
     res.status(200).render("settings", {
+      DOC_STATUS,
+      finishedDocs,
+      missedDocs,
       link: "settings",
       company,
     });
@@ -792,5 +795,5 @@ export {
   getSmsPage,
   paymentReportsPage,
   getAllProductsPage,
-  productReportsPage
+  productReportsPage,
 };

@@ -26,6 +26,7 @@ const userSchema = new Schema(
     birthDate: { type: Date },
     role: { type: String, default: "customer" },
     password: { type: String },
+
     phone: {
       type: String,
       require:[true, "telefon bilgisi gereklidir"],
@@ -62,6 +63,10 @@ userSchema.pre("save", function (next) {
   const user = this;
   bcrypt.hash(user.password, 10, (err, hash) => {
     user.password = hash;
+    next();
+  });
+  bcrypt.hash(user.smsConfig.password, 10, (err, hash) => {
+    user.smsConfig.password = hash;
     next();
   });
 });

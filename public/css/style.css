@@ -63,6 +63,10 @@ input::placeholder {
 * {
   user-select: auto !important;
 }
+.disable{
+  background-color: #8080804d !important;
+    cursor: auto impot !important;
+}
 
 html {
   font-size: 14px;
@@ -535,6 +539,29 @@ header div div i {
   background-color: #04d9d916;
   color: black;
 }
+
+.docs_area{
+  display: flex;
+  gap: 1rem;
+}
+.docs_area .form-group{
+  width: 250px;
+  background-color: #00df951f;
+  border: 1px solid var(--color-border-color);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+}
+.docs_area .form-group i{
+  font-size: 1.5rem;
+}
+.docs_area .form-group a:hover,.docs_area .form-group i:hover{
+  cursor: pointer;
+ color: var(--color-main);
+}
+
+
 
 .menu ul li > a:hover,
 .menu ul li.active > a {
@@ -1280,5 +1307,8 @@ header .head {
   }
   .header {
     text-align: center;
+  }
+  .docs_area{
+    flex-direction: column;
   }
 }

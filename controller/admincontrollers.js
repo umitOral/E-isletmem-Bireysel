@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import Sms from "../models/smsModel.js";
 
 import { ProductGeneral } from "../models/productGeneralModel.js";
 import Operation from "../models/OperationsModel.js";
@@ -44,7 +45,7 @@ const topluIslemler = async (req, res, next) => {
   try {
     
     
-    let response3 = await Product.deleteMany({name:"deneme11"});
+    let response3 = await Sms.deleteMany({});
    
     res.status(200).json({
       success: true,

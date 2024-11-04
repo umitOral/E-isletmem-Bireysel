@@ -4,6 +4,7 @@
 <head>
     <%- include('../partials/head.ejs') %>
     <link rel="stylesheet" href="/css/users.css">
+    <link rel="stylesheet" href="/css/superAdmin.css">
 </head>
 
 <body>
@@ -20,15 +21,7 @@
                         <h1> BAYİLER</h1>
                     </div>
 
-                    <div class="search">
-                        <form autocomplete="off" action="./personels/search">
-                            <div class="autocomplete form-group" style="width:300px;">
-                                <input id="myInput" type="text" name="user" placeholder="Personel Seç">
-                                <input type="submit" value="Ara">
-                            </div>
-
-                        </form>
-                    </div>
+                  
                     <div class="print">
 
                         <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
@@ -57,7 +50,7 @@
                             </thead>
                             <tbody id="userList">
                                 <% companies.forEach(company=> { %>
-                                    <tr>
+                                    <tr data-companyId="<%= company._id %>">
                                         
                                         <td>
                                             <%= company.companyName %>
@@ -76,7 +69,12 @@
                                         
 
                                         <td><a href="./companies/<%= company._id %>">Detaylar</a></td>
-                                        <td><a style="display: block; background-color: red; padding: 1rem;" href="./superAdmin/companies/delete/<%= company._id %>">Sil</a></td>
+                                        <td><select name="" class="company_options_select">
+                                            
+                                            <option value="" selected disable hidden>Seçenekler</option>
+                                            <option value="docs">Dosyaları Göster</option>
+                                            <option value="smsFunctionUpdate">Sms Gönderimi Değiştir.</option>
+                                        </select></td>
                                     </tr>
                                     <% }) %>
 
@@ -94,10 +92,34 @@
                 </main>
             </section>
 
+            <div class="modal hidden" id="modal_company_doc">
+                <div class="inner_modal">
+                    <h2>Şirket Evrakları</h2>
+                    <div class="data_area">
+
+                    </div>
+                    <button type="button" class="btn cancel form-btn">Kapat</button>
+                </div>
+            </div>
+
+            <div class="modal hidden" id="modal_company_sms_active">
+                <div class="inner_modal">
+                    <h2>Sms</h2>
+                    <div class="data_area">
+
+                    </div>
+                    <button type="button" class="btn cancel form-btn">Kapat</button>
+                </div>
+            </div>
+
+            <div class="information-modal-wrapper"></div>
+            <%- include('../partials/loader.ejs') %>
+
 
         
         <script type="module" src="../js/requests.js"></script>
-        <script type="module" src="../js/users.js"></script>
+        <script type="module" src="../js/ui.js"></script>
+        <script type="module" src="../js/superAdmin.js"></script>
         <script src="/js/sidebar.js"></script>
 
 

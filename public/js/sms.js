@@ -20,12 +20,15 @@ addSmsForm.addEventListener("submit", (e) => {
     content: addSmsForm.content.value,
   };
   request
-    .postWithUrl("./sms/addSms", data)
+    .postWithUrl("./sms/addSmsTemplate", data)
     .then((response) => {
       ui.showNotification(response.success, response.message);
       console.log(response);
       addSmsForm.reset();
       modalSmsAdd.classList.add("hidden");
+      setTimeout(() => {
+        window.location.reload()
+      }, 500);
     })
     .catch((err) => {
       ui.showNotification(err.success, err.message);
@@ -43,7 +46,7 @@ saveButtons.forEach((button) => {
       .postWithUrl(
         "./sms/" +
           button.parentElement.parentElement.parentElement.dataset.smsid +
-          "/editsms",
+          "/editSmsTemplate",
         data
       )
       .then((response) => {

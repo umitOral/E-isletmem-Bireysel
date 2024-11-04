@@ -54,7 +54,6 @@ employeeSchema.methods.createResetPasswordToken = function (employeeEmail) {
     expiresIn: '1h' ,
   });
 
-  
   this.passwordResetToken = resetToken;
   this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000; //10 minutes
 

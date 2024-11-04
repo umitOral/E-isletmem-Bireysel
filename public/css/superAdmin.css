@@ -1,0 +1,9 @@
+.data-area{
+   padding: 1rem;
+
+}
+.data-group-vertical{
+    display: flex;
+    justify-content: space-between;
+    
+}

@@ -5,6 +5,7 @@ import Employee from "../models/EmployeesModel.js";
 import Payment from "../models/paymentsModel.js";
 import Session from "../models/appointmentModel.js";
 import { passwordResetMail } from "../controller/mailControllers.js";
+import { cloudinaryImageUploadMethod } from "../helpers/imageHelpers.js";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -20,7 +21,7 @@ import {
   PAYMENT_STATUS,
 } from "../config/status_list.js";
 import Subscription from "../models/subscriptionModel.js";
-import { response } from "express";
+
 import { Response } from "../helpers/error/Response.js";
 
 import { AuditLogs } from "../helpers/auditLogs.js";
@@ -197,9 +198,9 @@ const createUser = async (req, res, next) => {
         email: userEmail,
         company: res.locals.company,
       });
-      console.log(searchEmail)
+      console.log(searchEmail);
     }
-    
+
     const searchPhone = await User.findOne({
       phone: userPhone,
       company: res.locals.company,
@@ -220,7 +221,6 @@ const createUser = async (req, res, next) => {
         )
       );
     } else {
-      
       await User.create(req.body).then((response) => {
         jwt.verify(
           req.cookies.userData,
@@ -293,24 +293,28 @@ const editInformations = async (req, res, next) => {
         )
       );
     } else {
-     let updatedUser= await User.findByIdAndUpdate(req.params.id, {
-        name: req.body.name,
-        surname: req.body.surname,
-        email: req.body.email,
-        address: req.body.address,
-        sex: req.body.sex,
-        birthDate: req.body.birthDate,
-        identity: req.body.identity,
-        phone: req.body.phone,
-        company: req.body.company,
-        billingAddress: req.body.billingAddress,
-        notes: req.body.notes,
-        userCompany: req.body.userCompany,
-      },{new:true});
+      let updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          name: req.body.name,
+          surname: req.body.surname,
+          email: req.body.email,
+          address: req.body.address,
+          sex: req.body.sex,
+          birthDate: req.body.birthDate,
+          identity: req.body.identity,
+          phone: req.body.phone,
+          company: req.body.company,
+          billingAddress: req.body.billingAddress,
+          notes: req.body.notes,
+          userCompany: req.body.userCompany,
+        },
+        { new: true }
+      );
 
       res.json(
         Response.successResponse(true, "bilgiler başarıyla değiştirildi", 200, {
-          user:updatedUser,
+          user: updatedUser,
         })
       );
     }
@@ -345,7 +349,7 @@ const loginUser = async (req, res, next) => {
 
         res.cookie("jsonwebtoken", token, {
           httpOnly: true,
-          maxAge: 1000 * 60 * 60 *24,
+          maxAge: 1000 * 60 * 60 * 24,
         });
         res.cookie("userData", token2, {
           httpOnly: true,
@@ -390,17 +394,10 @@ const loginUser = async (req, res, next) => {
 const uploadPictures = async (req, res, next) => {
   try {
     console.log(req.body);
-    const cloudinaryImageUploadMethod = async (file) => {
-      const result = await cloudinary.uploader.upload(file, {
-        use_filename: true,
-        folder: "archimet",
-      });
-
-      return { secure_url: result.secure_url, public_id: result.public_id };
-    };
-
+    
+    console.log(req.files)
     const files = req.files.upload_file;
-
+    console.log(files)
     if (files.length === undefined) {
       console.log("tek resim");
       const path = files.tempFilePath;
@@ -895,11 +892,12 @@ const resetPasswordMail = async (req, res, next) => {
       const email = req.body.email;
 
       const resetToken = employee.createResetPasswordToken(email);
-
+      console.log(resetToken)
       await employee.save();
       const resetUrl = `${req.protocol}://${req.get(
         "host"
       )}/newPassword/${resetToken}`;
+
       passwordResetMail(email, resetUrl);
 
       res.status(200).json({

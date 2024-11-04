@@ -32,14 +32,16 @@
                             <div class="show-content informations">Genel Bilgiler<i
                                     class="fa-solid fa-pen-to-square edit"></i>
                             </div>
+                            <div class="show-content informations">Evraklar<i
+                                    class="fa-solid fa-pen-to-square edit"></i>
+                            </div>
                             <div class="show-content sessions">Sms Ayarları
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
                             <div class="show-content sessions">Şifre Ayarları
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-
-
+                          
                         </div>
 
 
@@ -103,9 +105,81 @@
 
 
                                 </div>
+                                <div class="userInformationsContent docs ">
+                                    <div>
+                                        <h2>Dosyalar</h2>
+                                    </div>
+                                    <div class="docs_area">
+            
+                                        <% missedDocs.forEach((element,index) => { %>
+                                        
+                                            <div class="form-group">
+
+                                                <%= element.name %> (yüklenmedi)
+                                                <input type="file" id="<%= element.key %>" />
+                                                <button onclick="" data-dockey="<%= element.key %>" class="add_doc btn success">Yükle</button>
+                                                </div>
+                                        <% }) %>
+                                        <% finishedDocs.forEach((element,index) => { %>
+                                            
+                                                <% if(element.status===DOC_STATUS.REJECTED){ %>
+                                                    <div class="form-group">
+                                                        
+                                                        <a href="<%= element.url %>" target="_blank"><i class="fa-regular fa-file"></i><%= element.name %></a> (<%= element.status %>)
+                                                            <input type="file" id="<%= element.docKey %>" />
+                                                            <button  class="add_doc btn success" data-dockey="<%= element.docKey %>">Değiştir</but>
+                                                    </div>
+                                                   
+                                                  <% } else{ %>  
+                                                    <div class="form-group">
+                                                        <a href="<%= element.url %>" target="_blank"><i class="fa-regular fa-file"></i> <%= element.name %></a> (<%= element.status %>)
+
+                                                    </div>
+                                                   
+                                                </a>
+                                                 <% } %>
+             
+                                        <% }) %>
+
+                                </div>
+
+                                </div>
 
                                 <div class="userInformationsContent payments">
                                     <div><h2>Sms ayarları</h2></div>
+                                    <div>
+                                        
+                                            <div class="form-group">
+                                                <span>Sms Gönderebilme:</span> <p>(evraklar onaylandıktan sonra değişecektir,öncesinde sms göndremezsiniz.)</p>
+                                                <input type="text" class="disable" name="smsTitle" id="smsTitle" value="<% if(company.smsActive===true){ %>Aktif
+                                                  <% } else{ %>Pasif
+                                                 <% } %>" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <span>Başlık:</span><p>(göndereceğiniz evraklar doğrultusunda belirlenecektir.)</p>
+                                                <input type="text" class="disable" name="smsTitle" id="smsTitle" value="<%= company.smsConfig.smsTitle %>" readonly>
+                                            </div>
+                                        
+                                    </div>
+                                    <div>
+                                        <form action="./settings/<%= company._id %>/updateSmsConfig" method="POST"
+                                            id="update-smsConfig-form" enctype="multipart/form-data">
+                                            
+                                            <div class="form-group">
+                                                <span>Kullanıcı Adı:</span>
+                                                <input type="text" name="userName" id="userName" value="<%= company.smsConfig.userName %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <span>Şifre</span>
+                                                <input type="password" name="password" id="password" value="" placeholder="****">
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn save form-btn normal-btn"> Kaydet</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                 
+                                    
                                 </div>
                                 <div class="userInformationsContent payments">
                                     <div>
@@ -126,9 +200,6 @@
                                             <div class="form-group">
                                                 <button type="submit" class="btn save form-btn normal-btn">Şifre Kaydet</button>
                                             </div>
-    
-                                            
-    
     
                                         </form>
                                     </div>
@@ -202,17 +273,14 @@
             </div>
         </div>
         <div class="information-modal-wrapper"></div>
-
+        <%- include('partials/loader.ejs') %>
 
 
         <script type="module" src="/js/settings.js"></script>
         <script type="module" src="/js/requests.js"></script>
 
         <script src="/js/sidebar.js"></script>
-        <script>
-            const 
-        </script>
-
+       
 
 
 
