@@ -45,6 +45,7 @@ const addSmsTemplate = async (req, res, next) => {
 };
 const smsStatus = async (req, res, next) => {
   try {
+    console.log("hahoo");
     console.log("smsStatus");
     console.log(req.body);
     await sendCustomMail(req.body)
@@ -165,7 +166,12 @@ const sendSingleSms = async (req, res, next) => {
       phone: foundedUser.phone,
     };
     let sendedSms = await Sms.create(message);
-   console.log(`${req.protocol}://${req.get("host")}/smsStatus`)
+    const pushSettings = {
+      url: process.env.MODE === 'production' 
+        ? process.env.PUSH_NOTIFICATION_URL_LIVE 
+        : process.env.PUSH_NOTIFICATION_URL_LOCAL
+    };
+ console.log(pushSettings)
 
     let data = {
       type: 1,
@@ -185,7 +191,7 @@ const sendSingleSms = async (req, res, next) => {
       recipientType: 0,
       customID: sendedSms._id,
       pushSettings: {
-        url: `${req.protocol}://${req.get("host")}/smsStatus`,
+        url: pushSettings,
       },
     };
 
