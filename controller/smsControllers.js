@@ -48,7 +48,7 @@ const smsStatus = async (req, res, next) => {
     console.log("hahoo");
     console.log("smsStatus");
     console.log(req.body);
-    await sendCustomMail(req.body)
+    await sendCustomMail(req.body);
     // await Sms.findOneAndUpdate(req.body);
     res.status(201).json({
       success: true,
@@ -167,16 +167,17 @@ const sendSingleSms = async (req, res, next) => {
     };
     let sendedSms = await Sms.create(message);
     const pushSettings = {
-      url: process.env.MODE === 'production' 
-        ? process.env.PUSH_NOTIFICATION_URL_LIVE 
-        : process.env.PUSH_NOTIFICATION_URL_LOCAL
+      url:
+        process.env.MODE === "production"
+          ? process.env.PUSH_NOTIFICATION_URL_LIVE
+          : process.env.PUSH_NOTIFICATION_URL_LOCAL,
     };
- console.log(pushSettings)
+    console.log(pushSettings);
 
     let data = {
       type: 1,
       sendingType: 2,
-      title: req.body.messageName|| "",
+      title: req.body.messageName || "",
       numbers: [
         {
           nr: foundedUser.phone,
@@ -190,9 +191,7 @@ const sendSingleSms = async (req, res, next) => {
       skipAhsQuery: true,
       recipientType: 0,
       customID: sendedSms._id,
-      pushSettings: {
-        pushSettings,
-      },
+      pushSettings: pushSettings,
     };
 
     // decoded user sms password
@@ -202,14 +201,14 @@ const sendSingleSms = async (req, res, next) => {
       .post("http://panel4.ekomesaj.com:9587/sms/create", data, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": authorization,
+          Authorization: authorization,
         },
       })
-      .then(async(response) => {
+      .then(async (response) => {
         console.log(response.data);
         sendedSms.pkg.id = response.data.data.pkgID;
         await sendedSms.save();
-      })
+      });
 
     await session.commitTransaction();
     console.log("Transaction başarılı!");
