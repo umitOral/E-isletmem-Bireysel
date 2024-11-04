@@ -171,7 +171,7 @@
                             <div class="form-group ">
                                 <select name="" id="sms-type-select" required>
                                     <option value="" disable selected hidden>Sms Tipi</option>
-                                    <option value="">Özel</option>
+                                    <option value="" data-smsName="özel sms">Özel</option>
                                     <% company.smsTemplates.forEach(element => { %>
                                         <option value="<%= element.content%>" data-smsName="<%= element.smsName %>"><%= element.smsName %></option>
                                     <% }) %>

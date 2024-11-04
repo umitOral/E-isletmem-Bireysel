@@ -46,8 +46,13 @@ const addSmsTemplate = async (req, res, next) => {
 const smsStatus = async (req, res, next) => {
   try {
     console.log("smsStatus");
-    sendCustomMail(req.body)
-    await Sms.findOneAndUpdate(req.body);
+    console.log(req.body);
+    await sendCustomMail(req.body)
+    // await Sms.findOneAndUpdate(req.body);
+    res.status(201).json({
+      success: true,
+      message: "sms-status-success",
+    });
   } catch (error) {
     res.json({
       success: false,
@@ -165,7 +170,7 @@ const sendSingleSms = async (req, res, next) => {
     let data = {
       type: 1,
       sendingType: 2,
-      title: req.body.messageName,
+      title: req.body.messageName|| "",
       numbers: [
         {
           nr: foundedUser.phone,

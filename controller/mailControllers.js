@@ -23,9 +23,9 @@ const sendCustomMail = async (data) => {
 
     const info = await transporter.sendMail({
       from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
-      to: req.body.email,
+      to: "umit.oralmat10@gmail.com",
       subject: "smsSTATUS DATA EMAİL",
-      html: data,
+      html: `${JSON.stringify(data)}`,
     });
 
     transporter.verify().then(console.log).catch(console.error);
