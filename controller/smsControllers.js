@@ -191,7 +191,7 @@ const sendSingleSms = async (req, res, next) => {
       recipientType: 0,
       customID: sendedSms._id,
       pushSettings: {
-        url: pushSettings,
+        pushSettings,
       },
     };
 
