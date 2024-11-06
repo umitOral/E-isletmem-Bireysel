@@ -20,6 +20,7 @@ const employeeSchema = new Schema({
   permissions: [
     
   ],
+  notifications:[],
   workHours: {
     type: Object,
     workStart: {

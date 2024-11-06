@@ -195,7 +195,8 @@
 .procces,
 .permissions,
 .docs,
-.sms {
+.sms,
+.notifications {
   display: none;
 }
 

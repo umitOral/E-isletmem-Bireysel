@@ -13,7 +13,9 @@ import api from "./routes/api.js";
 import { ErrorHandler } from "./middlewares/errorHandlerMiddleware.js";
 
 
+
 import * as authMiddleware from "./middlewares/authMiddleware.js";
+import { scheduledJobs } from "./jobs/scheduledJobs.js";
 
 
 
@@ -82,6 +84,7 @@ app.use(
 );
 //error handlers
 app.use(ErrorHandler);
+scheduledJobs()
 
 
 app.get("*", (req, res) => { res.status(404).render("404") })

@@ -681,7 +681,7 @@ const getSettingsPage = (req, res, next) => {
       let indexcontrol = company.companyDocs.findIndex(
         (item) => item.docKey === element.key
       );
-      console.log(indexcontrol);
+      
       if (indexcontrol === -1) {
         missedDocs.push(element);
       } else {
@@ -689,7 +689,7 @@ const getSettingsPage = (req, res, next) => {
         finishedDocs[finishedDocs.length - 1].name = element.name;
       }
     });
-    console.log(finishedDocs);
+    
     res.status(200).render("settings", {
       DOC_STATUS,
       finishedDocs,

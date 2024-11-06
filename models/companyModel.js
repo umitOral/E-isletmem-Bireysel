@@ -89,6 +89,7 @@ const companySchema = new Schema(
       type: Boolean,
       default: false,
     },
+    notifications:[],
     smsTemplates: [
       {
         smsName: {

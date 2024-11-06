@@ -107,7 +107,29 @@ const COMPANY_DOCS = [
     description: "signature_doc",
   },
 ];
-
+const NOTIFICATION_PERMISSIONS= [
+  {
+    key: "daily_checkout_report", // code içinde kullanılacak
+    name: "Günlük Kasa Rapor Bildirim", //arayüzde kullanılacak
+    group: "REPORTS",
+    type:"MAIL",
+    description: "Daily Checkouts Reports",
+  },
+  // {
+  //   key: "checkout_delete_mail", // code içinde kullanılacak
+  //   name: "Ödeme Silindi Mail Bildirimi", //arayüzde kullanılacak
+  //   group: "ALERTS",
+  //   type:"MAIL",
+  //   description: "Checkout Deleted Mail",
+  // },
+  // {
+  //   key: "deneme", 
+  //   name: "deneme Bildirimi", 
+  //   group: "ALERTS",
+  //   type:"PHONE",
+  //   description: "Checkout Deleted Mail",
+  // },
+];
 const ROLES_LIST = {
   ADMIN: "admin",
   MANAGER: "yönetici",
@@ -171,5 +193,6 @@ export {
   COMPANY_DOCS,
   DOC_STATUS,
   SMS_PACKAGE_STATUS,
-  SMS_STATUS
+  SMS_STATUS,
+  NOTIFICATION_PERMISSIONS
 };

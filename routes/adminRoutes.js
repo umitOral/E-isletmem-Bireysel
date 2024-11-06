@@ -98,6 +98,8 @@ import {
   updateSmsConfig,
   updateCompanyDocs,
   addCompanyPayment,
+  updateCompanyNotification,
+  getCompanyNotificationPermission
 } from "../controller/companyControllers.js";
 import {
   updateSessionStatus,
@@ -223,6 +225,8 @@ router.route("/companyPaymentPage").get(companyPaymentPage);
 router.route("/companyPaymentsList").get(companyPaymentsListPage);
 
 router.route("/addCompanyPayment").post(addCompanyPayment);
+router.route("/getCompanyNotificationPermission").get(getCompanyNotificationPermission);
+router.route("/updateCompanyNotification").post(updateCompanyNotification);
 
 router.route("/employees").get(getEmployeesPage);
 router

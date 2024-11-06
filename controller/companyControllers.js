@@ -9,7 +9,8 @@ import {
   SERVICES_LIST,
   DATAS_LIST,
   ROLES_LIST,
-  COMPANY_DOCS
+  COMPANY_DOCS,
+  NOTIFICATION_PERMISSIONS,
 } from "../config/status_list.js";
 import { role_privileges } from "../config/role_priveleges.js";
 
@@ -25,7 +26,6 @@ const createCompany = async (req, res, next) => {
       newDate.setMonth(newDate.getMonth() + 1)
     ).toISOString();
 
-    
     req.body.serviceDatas = [];
     DATAS_LIST.forEach((singleData) => {
       req.body.serviceDatas.push({
@@ -52,6 +52,9 @@ const createCompany = async (req, res, next) => {
     data.company = company._id;
     data.permissions = role_privileges.privileges.map(
       (privilege, value) => privilege.key
+    );
+    data.notifications = NOTIFICATION_PERMISSIONS.map(
+      (item, value) => item.key
     );
 
     await Employee.create(data);
@@ -144,32 +147,34 @@ const updateCompanyDocs = async (req, res, next) => {
     console.log(req.params.docKey);
     const files = req.files;
     const path = files.file.tempFilePath;
-    console.log(files.file.mimetype)
+    console.log(files.file.mimetype);
     const doc = await cloudinaryImageUploadMethod(path);
-    console.log(doc)
-    const name = COMPANY_DOCS.find(doc => doc.key === req.params.docKey).name;
-    let data={
-        docKey:req.params.docKey ,
-        mimetype:files.file.mimetype,
-        url: doc.secure_url,
-        public_id: doc.public_id,
-    }
+    console.log(doc);
+    const name = COMPANY_DOCS.find((doc) => doc.key === req.params.docKey).name;
+    let data = {
+      docKey: req.params.docKey,
+      mimetype: files.file.mimetype,
+      url: doc.secure_url,
+      public_id: doc.public_id,
+    };
 
-    let result=await Company.findOneAndUpdate(
-      { _id: req.params.id,'companyDocs.docKey':req.params.docKey},
+    let result = await Company.findOneAndUpdate(
+      { _id: req.params.id, "companyDocs.docKey": req.params.docKey },
       {
         $set: {
-          'companyDocs.$': data
-        }
-      },{
-        new:true
+          "companyDocs.$": data,
+        },
+      },
+      {
+        new: true,
       }
     );
 
     if (!result) {
-      await Company.findByIdAndUpdate(req.params.id,
+      await Company.findByIdAndUpdate(
+        req.params.id,
         {
-          $push: { companyDocs: data }
+          $push: { companyDocs: data },
         },
         { new: true }
       );
@@ -183,7 +188,6 @@ const updateCompanyDocs = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-
 
 const addCompanyPayment = async (req, res, next) => {
   try {
@@ -347,14 +351,52 @@ async function addSubscription(subscription) {
     await company.save();
   }
 }
+const getCompanyNotificationPermission = async (req, res, next) => {
+  try {
+    console.log("getCompanyNotificationPermission");
+    let company = res.locals.company;
+    res.status(201).json({
+      success: true,
+      message: "izinler başarıyla çekildi",
+      data: company.notifications,
+      NOTIFICATION_PERMISSIONS,
+    });
+  } catch (error) {
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  }
+};
+
+const updateCompanyNotification = async (req, res, next) => {
+  console.log(req.body);
+  try {
+    let company = await Company.findById(res.locals.company._id);
+    if (company.notifications.includes(req.body.notificationkey)) {
+      company.notifications = company.notifications.filter((x) => x !== req.body.notificationkey);
+    } else {
+      company.notifications.push(req.body.notificationkey)
+    }
+
+    console.log(company.notifications);
+    await company.save();
+    res.status(200).json({
+      success: true,
+      message: "izin değiştirildi",
+      data: req.body.notificationkey,
+      link: "employees",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 
 export {
   updateCompanyPassword,
-  
   updateCompanyInformations,
   addCompanyPayment,
   companyPaymentResult,
   createCompany,
   updateSmsConfig,
   updateCompanyDocs,
+  getCompanyNotificationPermission,
+  updateCompanyNotification
 };
