@@ -232,7 +232,7 @@
                             <div class="form-group ">Mesaj Şablonu:
                                 <select name="smsName" id="smsName">
                                     <option value="" selected disabled hidden>Seçiniz</option>
-                                    <% locals.company.sms.forEach(sms => { %>
+                                    <% locals.company.smsTemplates.forEach(sms => { %>
                                        
                                      <option data-smsContent="<%= sms.content %>" value="<%= sms.smsName %>"><%= sms.smsName %></option>
                                     <% }) %>
@@ -242,7 +242,7 @@
                             
                                 <div class="form-group">
                                     <span>Mesaj:</span>
-                                    <% locals.company.sms.forEach(element => { %>
+                                    <% locals.company.smsTemplates.forEach(element => { %>
                                     <input placeholder="" class="message-contents" style="display:none" type="text" name="content" value="<%= element.content %>">
                                     <% }) %>
                                     <input placeholder="" class="message-contents" style="display:none" type="text" name="content" value="" aria-placeholder="aaa">

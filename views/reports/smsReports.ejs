@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+        <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+    <%- include("../partials/aside.ejs") %>
+        <section id="content">
+            <%- include('../partials/header.ejs') %>
+                <!---------- left aside ------------->
+
+
+                <main>
+
+                    <div class="header">
+                        <h1> Sms Raporları</h1>
+                    </div>
+
+
+                    <div class="search">
+                        <form autocomplete="off" action="" class="horizontal-form" id="sms-reports-search">
+
+                            <div class="form-group">Gönderim tarihi Başlangıç:
+                                <input type="datetime-local" name="startDate" class="startDate"
+                                    value="" required>
+                            </div>
+                            <div class="form-group">Gönderim tarihi Bitiş:
+                                <input type="datetime-local" name="endDate" class=""
+                                    value="" required>
+                            </div>
+
+                            <div class="form-group" style="align-self: end;">
+                                <input type="submit" class="save" value="Ara">
+                            </div>
+
+                        </form>
+
+                    </div>
+                    <br>
+                    <hr>
+                    <br>
+                    <div class="search">
+                            <div class="form-group">Toplu İşlemler:
+                                <select name="operationType" id="operationType">
+                                    <option value="" selected hidden disabled>Seçiniz</option>
+                                   
+                                </select>
+                            </div>
+
+
+                    </div>
+
+                    <div class="print">
+
+                        <span class="material-symbols-sharp print-icon" title="yazdır"> print</span>
+                        <div class="print-selection">
+                            <label>Yazdır&nbsp; &#10140</label>
+                            <label for="" class="to_pdf">PDF<span
+                                    class="material-symbols-sharp">picture_as_pdf</span></label>
+
+                            <label for="" class="to_xlsx">XLSX<span
+                                    class="material-symbols-sharp">description</span></label>
+                        </div>
+
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table id="sms-report-table">
+                            <thead>
+                                <th>
+                                    <div>
+                                        <div style="display: flex;flex-direction: column;">Hepsini Seç
+                                            <input type="checkbox" name="" id="check-all">
+                                        </div>
+                                    </div>
+                                </th>
+                                
+                                <th>
+                                    <div class="table_head">
+                                        Tarih :<i class="fa-solid fa-arrow-up"></i>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_head">
+                                        Sms id<i class="fa-solid fa-arrow-up"></i>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_head">
+                                        Sms Adı<i class="fa-solid fa-arrow-up"></i>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_head">
+                                        Sms İçeriği
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_head">
+                                        Başlık
+                                    </div>
+                                </th>
+                              
+                                <th>
+                                    <div class="table_head">
+                                        <i class="fa-solid fa-cart-arrow-down" title="Mesaj Sayısı" style="color: rgb(138, 189, 255);font-size: 1rem;"></i>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_head">
+                                        <i class="fa-solid fa-check" title="İletilen" style="color: rgb(115, 249, 156);font-size: 1rem;"></i>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_head">
+                                        <i class="fa-solid fa-xmark" title="İletilemeyen" style="color: rgb(254, 100, 100);font-size: 1rem;"></i>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_head">
+                                        Durum<i class="fa-solid fa-arrow-up"></i>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table_head">
+                                       
+                                    </div>
+                                </th>
+                            </thead>
+                            <tbody >
+                               
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="pagination-describe">
+                        <div>
+                            <span id="lastpage"></span> Sayfa, Toplam <span id="total"></span> Sonuç bulundu
+                        </div>
+                        
+                    </div>
+                    <div class="pagination" id="pagination">
+                    </div>
+                        <div class="pagination" id="pagination">
+                    </div>
+
+                </main>
+
+                </section>
+                <div class="modal hidden" id="package-details-modal">
+                    <div class="inner_modal">
+                        <h2>Paket Detayları</h2>
+                        <div class="modal_content">
+                           
+                        </div>
+                           
+                         
+                            <div class="form-group">
+                                
+                                <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                            </div>
+                        
+                    </div>
+                </div>
+
+                <div class="information-modal-wrapper"></div>
+
+                <script type="module" src="/js/smsReports.js"></script>
+                <script type="module" src="/js/inner_modules/tables.js"></script>
+                <script type="module" src="/js/inner_modules/print.js"></script>
+                <script type="module" src="/js/reports.js"></script>
+
+                <script src="/js/sidebar.js"></script>
+
+
+
+</body>
+
+</html>

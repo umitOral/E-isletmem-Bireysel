@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import axios from "axios";
 import { createSmsAuthorization } from "../helpers/smsHelpers.js";
 import { sendCustomMail } from "./mailControllers.js";
+import { SMS_STATUS } from "../config/status_list.js";
 
 const addSmsTemplate = async (req, res, next) => {
   try {
@@ -47,11 +48,21 @@ const smsStatus = async (req, res, next) => {
   try {
     console.log("hahoo");
     console.log("smsStatus");
-    console.log(req.body);
-    await sendCustomMail(req.body);
-    // await Sms.findOneAndUpdate(req.body);
+    // console.log(req.body);
+    
+    let data = await Sms.findOneAndUpdate(
+      { "pkg.id": req.body.pkg.id },
+      {
+        pkg: req.body.pkg,
+        items: req.body.items,
+        userID: req.body.userID,
+      },{
+        new:true
+      }
+    );
     res.status(201).json({
       success: true,
+      data: data,
       message: "sms-status-success",
     });
   } catch (error) {
@@ -223,6 +234,42 @@ const sendSingleSms = async (req, res, next) => {
     console.log("oturum sonlandırıldı!");
   }
 };
+const getSmsDetails = async (req, res, next) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+    let data={
+      "pkgID": req.params.packageId,
+  }	
+    // decoded user sms password
+    const authorization = await createSmsAuthorization(res.locals.company);
+    let smsData;
+    await axios
+      .post("https://panel4.ekomesaj.com:9588/sms/list-item", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authorization,
+        },
+      })
+      .then(async (response) => {
+        console.log(response.data);
+        smsData=response.data
+      });
+
+    await session.commitTransaction();
+    console.log("Transaction başarılı!");
+
+    res.json({ success: true, data:smsData,SMS_STATUS});
+  } catch (error) {
+    await session.abortTransaction();
+    console.log("transaction iptal!");
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  } finally {
+    session.endSession();
+    console.log("oturum sonlandırıldı!");
+  }
+};
 
 export {
   addSmsTemplate,
@@ -232,4 +279,5 @@ export {
   sendBulkSms,
   sendSingleSms,
   smsStatus,
+  getSmsDetails
 };

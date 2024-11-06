@@ -41,6 +41,7 @@ import {
   deactivateEmployee,
   activateEmployee,
   getUsersAllSessions,
+  getUsersAllSms
 } from "../controller/userController.js";
 import {
   createEmployees,
@@ -66,7 +67,8 @@ import {
   deactivateSmsTemplate,
   editSmsTemplate,
   sendBulkSms,
-  sendSingleSms
+  sendSingleSms,
+  getSmsDetails
 } from "../controller/smsControllers.js";
 
 import {
@@ -135,6 +137,7 @@ router
   .post(checkPriviliges("user_update"), uploadPictures);
 
 router.route("/users/:id/getUsersAllSessions").get(getUsersAllSessions);
+router.route("/users/:id/getUsersAllSms").get(getUsersAllSms);
 
 // employee routes
 router
@@ -267,6 +270,7 @@ router.route("/sms/:id/activateSmsTemplate").get(checkPriviliges("sms_update"), 
 router.route("/sms/:id/deactivateSmsTemplate").get(checkPriviliges("sms_update"), deactivateSmsTemplate);
 router.route("/sms/:id/editSmsTemplate").post(checkPriviliges("sms_update"), editSmsTemplate);
 
+router.route("/sms/:packageId/getSmsDetails").post(getSmsDetails);
 router.route("/sms/sendBulkSms").post(checkPriviliges("sms_bulk_send"), sendBulkSms);
 router.route("/sms/sendSingleSms").post(checkPriviliges("sms_single_send"),checkSmsActive(), sendSingleSms);
 

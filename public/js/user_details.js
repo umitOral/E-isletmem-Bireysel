@@ -565,6 +565,87 @@ function getAllAppointments() {
       console.log(err);
     });
 }
+//get all sms
+const smsSection = document.querySelector(
+  ".userInformationsContent.sms"
+);
+
+const showSmsBtn = document.querySelector(
+  ".show-content.sms"
+);
+
+showSmsBtn.addEventListener("click", () => {
+  // sessionsSection.classList
+  console.log("adada");
+  getAllSms();
+});
+
+function getAllSms() {
+  console.log("sms");
+  request
+    .getwithUrl(userID + "/getUsersAllSms")
+    .then((response) => {
+      console.log(response);
+      // APPOINTMENT_STATUS = Object.values(response.APPOINTMENT_STATUS);
+      const smsTableBody = document.querySelector(".sms-table tbody");
+      const smsTableFoot = document.querySelector("#sms-table-foot");
+      const smsTableRows = document.querySelectorAll(
+        ".sms-table tbody tr"
+      );
+
+      smsTableRows.forEach((row) => {
+        row.remove();
+      });
+      
+      response.sms.list.forEach((sms) => {
+        smsTableBody.innerHTML += `
+        <tr data-sms-pckId="${sms.id}">
+          <td>
+              ${new Date(sms.sendingDate).toLocaleDateString("tr-TR")} ${new Date(sms.sendingDate).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+          </td>
+        
+          <td>
+          ${sms.id}
+          </td>
+          <td>
+          ${sms.title}
+          </td>
+          <td>
+          ${sms.content}
+          </td>
+          <td>
+          ${sms.senders[0]}
+          </td>
+          <td>
+          ${sms.statistics.total}
+          </td>
+          <td>
+          ${sms.statistics.delivered}
+          </td>
+          <td>
+          ${sms.statistics.undelivered}
+          </td>
+          <td>
+          ${response.SMS_PACKAGE_STATUS[sms.state]}
+          </td>
+
+    </tr>
+        `;
+      });
+
+      smsTableFoot.innerHTML=`
+        <div>Toplam ${response.sms.stats.totalRecord} adet Kayıt  Bulundu.</div>
+      `
+
+     
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
 // add operation section
 

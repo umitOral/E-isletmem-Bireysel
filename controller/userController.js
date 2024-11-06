@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import axios from "axios";
 import Company from "../models/companyModel.js";
 import Operation from "../models/OperationsModel.js";
 import Employee from "../models/EmployeesModel.js";
@@ -6,6 +7,7 @@ import Payment from "../models/paymentsModel.js";
 import Session from "../models/appointmentModel.js";
 import { passwordResetMail } from "../controller/mailControllers.js";
 import { cloudinaryImageUploadMethod } from "../helpers/imageHelpers.js";
+import { createSmsAuthorization } from "../helpers/smsHelpers.js";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -19,12 +21,14 @@ import {
   OPERATION_STATUS_AUTOMATIC,
   ROLES_LIST,
   PAYMENT_STATUS,
+  SMS_PACKAGE_STATUS,
 } from "../config/status_list.js";
 import Subscription from "../models/subscriptionModel.js";
 
 import { Response } from "../helpers/error/Response.js";
 
 import { AuditLogs } from "../helpers/auditLogs.js";
+import Sms from "../models/smsModel.js";
 
 const deactivateEmployee = async (req, res, next) => {
   try {
@@ -57,6 +61,42 @@ const getUsersAllSessions = async (req, res, next) => {
       APPOINTMENT_STATUS,
       message: "seanslar başarıyla çekildi",
     });
+  } catch (error) {
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  }
+};
+const getUsersAllSms = async (req, res, next) => {
+  try {
+    const authorization = await createSmsAuthorization(res.locals.company);
+    let data = {
+    
+    };
+    await axios
+      .post("https://panel4.ekomesaj.com:9588/sms/list", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authorization,
+        },
+      })
+      .then(async (response) => {
+        console.log("haho");
+        console.log(response.data);
+        console.log(response.err);
+        if (response.data.err === null) {
+          res.status(200).json({
+            success: true,
+            sms: response.data.data,
+            SMS_PACKAGE_STATUS,
+            message: "sms başarıyla çekildi",
+          });
+        } else {
+          res.status(200).json({
+            success: false,
+            response: response.data.err,
+            message: "sms sisteminde bir sorun var",
+          });
+        }
+      });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
@@ -394,10 +434,10 @@ const loginUser = async (req, res, next) => {
 const uploadPictures = async (req, res, next) => {
   try {
     console.log(req.body);
-    
-    console.log(req.files)
+
+    console.log(req.files);
     const files = req.files.upload_file;
-    console.log(files)
+    console.log(files);
     if (files.length === undefined) {
       console.log("tek resim");
       const path = files.tempFilePath;
@@ -892,7 +932,7 @@ const resetPasswordMail = async (req, res, next) => {
       const email = req.body.email;
 
       const resetToken = employee.createResetPasswordToken(email);
-      console.log(resetToken)
+      console.log(resetToken);
       await employee.save();
       const resetUrl = `${req.protocol}://${req.get(
         "host"
@@ -949,4 +989,5 @@ export {
   addDiscountToOperation,
   getUsersOldOperations,
   getUsersAllSessions,
+  getUsersAllSms,
 };

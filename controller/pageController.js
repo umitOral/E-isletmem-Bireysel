@@ -463,6 +463,18 @@ const productReportsPage = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+const getSmsReportsPage = async (req, res, next) => {
+  try {
+    //pagination
+
+   
+    res.status(200).render("reports/smsReports", {
+      link: "reports",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 const getUserReportsPage = async (req, res, next) => {
   try {
     //pagination
@@ -674,7 +686,7 @@ const getSettingsPage = (req, res, next) => {
         missedDocs.push(element);
       } else {
         finishedDocs.push(company.companyDocs[indexcontrol]);
-        finishedDocs[finishedDocs.length-1].name=element.name
+        finishedDocs[finishedDocs.length - 1].name = element.name;
       }
     });
     console.log(finishedDocs);
@@ -796,4 +808,5 @@ export {
   paymentReportsPage,
   getAllProductsPage,
   productReportsPage,
+  getSmsReportsPage
 };

@@ -796,10 +796,22 @@ tfoot td {
 .table_head {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .modal.hidden {
   display: none;
 }
+.clickable-icon{
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+.clickable-icon:hover{
+  color: var(--color-main);
+}
+.modal_content{
+  padding: 1rem;
+}
+
 .slider-modal{
   width: 100% !important;
   height: 100%;

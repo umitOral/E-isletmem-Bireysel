@@ -81,7 +81,7 @@ const OPERATION_APPOINTMENT_AVALIABLE_STATUS = {
   YES: "yok",
 };
 
-const COMPANY_DOCS= [
+const COMPANY_DOCS = [
   {
     key: "identity_doc", // code içinde kullanılacak
     name: "Yetkili Kimliği", //arayüzde kullanılacak
@@ -120,6 +120,29 @@ const DOC_STATUS = {
   REJECTED: "reddedildi",
   APPROVED: "onaylandı",
 };
+const SMS_PACKAGE_STATUS = {
+  "-4": "İptal Edildi",
+  "-3": "Gönderim Başarısız Oldu",
+  "-2": "Paket Oluşturma Başarısız oldu",
+  "-1": "Paket Operatör Tarafından Reddedildi",
+  0: "Kaydediliyor",
+  1: "Beklemede",
+  2: "Kuyruklanıyor",
+  3: "Gönderiliyor",
+  4: "Gönderildi",
+  5: "Kısmen Raporlandı",
+  6: "Tamamlandı",
+};
+const SMS_STATUS = {
+  "-2": "İptal edildi",
+  "-1": "Operatör tarafından reddedildi",
+  0: "Beklemede",
+  1: "Gönderiliyor",
+  2: "Gönderildi",
+  3: "Numaraya iletildi",
+  4: "Numaraya iletilemedi",
+  5: "Zamanaşımına uğradı ",
+};
 const LOG_LEVELS = {
   INFO: "INFO",
   WARN: "WARN",
@@ -146,5 +169,7 @@ export {
   SESSION_STATUS_LIST_AUTOMATIC,
   DATAS_LIST,
   COMPANY_DOCS,
-  DOC_STATUS
+  DOC_STATUS,
+  SMS_PACKAGE_STATUS,
+  SMS_STATUS
 };
