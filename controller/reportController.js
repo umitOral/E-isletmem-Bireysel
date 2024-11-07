@@ -390,7 +390,7 @@ const getProductReports = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit)
       .sort({ createdAt: -1 });
-
+    console.log(reports)
     let total = await Product.find(searchObject)
       .where("createdAt")
       .gt(startDate)

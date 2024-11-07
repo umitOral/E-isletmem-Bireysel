@@ -1,3 +1,4 @@
+
 import { Request } from "./requests.js";
 import { UI } from "./ui.js";
 
@@ -15,12 +16,14 @@ const modalProductAdd = document.querySelector("#add_product");
 const modalProductEdit = document.querySelector("#edit_product");
 const modalAddStock = document.querySelector("#add_stock");
 const modalFixStock = document.querySelector("#fix_stock");
+const modalupdateComission = document.querySelector("#update_comission");
 const productTable = document.querySelector("#product-table tbody");
 
 const editProductForm = document.querySelector("#edit-product-form");
 const addProductForm = document.querySelector("#add-product-form");
 const addStockForm = document.querySelector("#add-stock-form");
 const fixStockForm = document.querySelector("#fix-stock-form");
+const formUpdateComission = document.querySelector("#update_comission_form");
 const modalShowStock = document.querySelector("#show-stocks-modal");
 const formShowStock = document.querySelector("#show-stocks-form");
 
@@ -50,6 +53,28 @@ addStockForm.addEventListener("submit", (e) => {
     });
 });
 
+formUpdateComission.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  let data = {
+    comission: formUpdateComission.comission.value,
+  };
+  request
+    .postWithUrl("./products/" + productId + "/updateComission", data)
+    .then((response) => {
+      console.log(response);
+      ui.showNotification(response.success, response.message);
+      if (response.success === true) {
+        modalupdateComission.classList.add("hidden");
+        formUpdateComission.reset();
+        selectedProduct.baseComission=response.data
+      }
+    })
+    .catch((err) => {
+      ui.showNotification(err.message, err.message);
+      console.log(err);
+    });
+});
 fixStockForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -257,6 +282,7 @@ searchProductForm.addEventListener("submit", (e) => {
 //                  <option value="add-stock">Stok Ekle</option>
 //                  <option value="show-stocks">Stokları Göster</option>
 //                  <option value="fix-stock">Stok Düzelt</option>
+//                  <option value="update-comission">Prim Oranı Değiştir</option>
 //                  </select>
 //                </td>
 //              </td>
@@ -382,6 +408,14 @@ function handleProductSelect() {
       modalFixStock.classList.remove("hidden");
     }
     if (
+      e.target.options[e.target.options.selectedIndex].value === "update-comission"
+    ) {
+      console.log("x")
+      console.log(selectedProduct)
+      formUpdateComission.comission.value=selectedProduct.baseComission||0
+      modalupdateComission.classList.remove("hidden");
+    }
+    if (
       e.target.options[e.target.options.selectedIndex].value === "show-stocks"
     ) {
       modalShowStock.classList.remove("hidden");
@@ -466,6 +500,7 @@ function datasToUI(target, product) {
                   <option value="add-stock">Stok Ekle</option>
                   <option value="show-stocks">Stokları Göster</option>
                   <option value="fix-stock">Stok Düzelt</option>
+                   <option value="update-comission">Prim Oranı Değiştir</option>
                   </select>
                 </td>
               </td>

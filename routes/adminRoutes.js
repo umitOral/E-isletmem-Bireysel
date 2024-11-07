@@ -59,7 +59,7 @@ import {
   deactivateService,
 } from "../controller/serviceControllers.js";
 import {
-  addProduct,searchProduct,addPassiveProduct,editProduct,addStock,fixStock,searchProductInner,searchProductName
+  addProduct,searchProduct,addPassiveProduct,editProduct,addStock,fixStock,searchProductInner,searchProductName,updateComission
 } from "../controller/productControllers.js";
 import {
   addSmsTemplate,
@@ -260,6 +260,7 @@ router.route("/products/").get(checkPriviliges("product_view"), getProductsPage)
 router.route("/products/:productId/editProduct").post(checkPriviliges("product_edit"), editProduct);
 router.route("/products/:productId/addStock").post(checkPriviliges("product_edit"), addStock);
 router.route("/products/:productId/fixStock").post(checkPriviliges("product_edit"), fixStock);
+router.route("/products/:productId/updateComission").post(checkPriviliges("product_edit"), updateComission);
 router.route("/allProducts/").get(checkPriviliges("product_view"), getAllProductsPage);
 router.route("/products/addProduct").post(checkPriviliges("product_add"), addProduct);
 router.route("/products/searchProduct").post(checkPriviliges("product_add"), searchProduct);

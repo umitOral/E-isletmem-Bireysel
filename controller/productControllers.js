@@ -21,25 +21,16 @@ const addPassiveProduct = async (req, res, next) => {
     req.body.company = res.locals.company._id;
     req.body.totalStock = req.body.stocks.quantity;
 
-    await Product.create(req.body)
-      .then((response) => {
-        res.json({
-          success: true,
-          message: "ürün eklendi",
-        });
-      })
-      .catch((err) => {
-        res.json({
-          success: false,
-          message: err.message,
-        });
+    await Product.create(req.body).then((response) => {
+      res.json({
+        success: true,
+        message: "ürün eklendi",
       });
-  } catch (error) {
-    res.json({
-      success: false,
-      message: "ürün eklenirken bir sorun oluştu",
-      error: error,
     });
+  } catch (error) {
+    return next(
+      new CustomError("ürün eklenirken bir sorun oluştu", 500, error)
+    );
   }
 };
 const addProduct = async (req, res, next) => {
@@ -72,7 +63,7 @@ const addProduct = async (req, res, next) => {
       });
     }
 
-    if (product===null) {
+    if (product === null) {
       await Product.create(req.body);
       let data = {
         name: req.body.name,
@@ -81,18 +72,18 @@ const addProduct = async (req, res, next) => {
       };
 
       // Yeni eleman ekle
-      console.log(data)
+      console.log(data);
       await ProductGeneral.create(data).then((response) => {
         res.json({
           success: true,
           message: "ürün eklendi",
         });
       });
-    }else{
-        res.json({
-          success: false,
-          message: "bu barkodla kayıtlı ürün bulunmaktadır.",
-        })
+    } else {
+      res.json({
+        success: false,
+        message: "bu barkodla kayıtlı ürün bulunmaktadır.",
+      });
     }
   } catch (error) {
     console.log(error);
@@ -153,6 +144,29 @@ const fixStock = async (req, res, next) => {
     });
   }
 };
+const updateComission = async (req, res, next) => {
+  try {
+    console.log("updateComission");
+    console.log(req.body);
+
+    let product = await Product.findByIdAndUpdate(req.params.productId, {
+      $set: { baseComission: req.body.comission },
+    },{
+      new:true
+    });
+    res.json({
+      success: true,
+      message: "Komisyon oranı değiştirildi.",
+      data: product.baseComission,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: error,
+    });
+  }
+};
 const editProduct = async (req, res, next) => {
   try {
     console.log("edit product");
@@ -180,7 +194,10 @@ const searchProductInner = async (req, res, next) => {
     console.log("searchProductInner");
     console.log(req.body);
 
-    await Product.findOne({ barcodes: req.body.barcode }).then((response) => {
+    await Product.findOne({
+      company: res.locals.company._id,
+      barcodes: req.body.barcode,
+    }).then((response) => {
       if (response === null) {
         res.json({
           success: false,
@@ -307,4 +324,5 @@ export {
   addStock,
   fixStock,
   searchProductInner,
+  updateComission,
 };

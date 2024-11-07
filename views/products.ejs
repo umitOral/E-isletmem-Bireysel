@@ -105,6 +105,24 @@
             </div>
 
         </div>
+        <div class="modal hidden" id="update_comission">
+            <div class="inner_modal">
+                <h2>Komisyon Düzenleme</h2>
+                
+                <form action="./products/fixStock" method="POST" id="update_comission_form">
+                    <div class="form-group ">
+                        <span>Komisyon Oranı (%):</span>
+                        <input  type="Number" name="comission" id="comission"  placeholder="Rakam giriniz." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn">Kaydet</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
         <div class="modal hidden" id="show-stocks-modal">
             <div class="inner_modal">
                 <h2>Stoklar</h2>
