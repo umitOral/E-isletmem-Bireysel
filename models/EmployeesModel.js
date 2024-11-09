@@ -16,7 +16,7 @@ const employeeSchema = new Schema({
   address: { type: String, require: false },
   registerDate: { type: Date, default: new Date() },
   notes: { type: String, require: false },
-  bonusPercentage: { type: Number },
+ 
   permissions: [
     
   ],

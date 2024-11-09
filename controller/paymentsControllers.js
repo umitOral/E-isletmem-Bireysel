@@ -1,91 +1,107 @@
 import { CustomError } from "../helpers/error/CustomError.js";
 import Operation from "../models/OperationsModel.js";
+import Employee from "../models/EmployeesModel.js";
 import Payment from "../models/paymentsModel.js";
 import Product from "../models/productModel.js";
 
 const addPayment = async (req, res, next) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
     req.body.company = res.locals.company._id;
-    req.body.employee = res.locals.employee._id;
+    const employee = await Employee.findById(req.body.comissionEmployee);
+      console.log("employee")
+      console.log(employee)
+  
+
     if (req.body.fromUser === "") {
       req.body.fromUser = undefined;
     }
 
-    await Payment.create(req.body)
-      .then((response) => {
-        console.log(response);
-        req.body.operations.forEach(async (element) => {
-          let foundedOperation = await Operation.findOne({
-            _id: element.operationId,
-          });
+    if (req.body.comissionEmployee!==""&&req.body.products.length !== 0) {
+      console.log("burası")
+      req.body.products.forEach(element => {
+        console.log( "haho")
+        console.log(employee||"deneme")
+        element.employeeComission=employee.employeeComission
+      });
+    }
+console.log("burası2")
+ 
 
-          if (foundedOperation.payments.length !== 0) {
-            let totalPayments = foundedOperation.payments.map(
-              (item) => item.paymentValue
-            );
-            let totalPaymentValue =
-              totalPayments.reduce((a, b) => a + b) + element.paymentValue;
-            console.log(totalPaymentValue);
-            if (
-              (foundedOperation.operationPrice - foundedOperation.discount) *
-                ((100 - foundedOperation.percentDiscount) / 100) ===
-              totalPaymentValue
-            ) {
-              foundedOperation.payments.push({
-                paymentId: response._id,
-                paymentValue: element.paymentValue,
-              });
-              foundedOperation.paymentStatus = "ödendi";
-            } else {
-              foundedOperation.payments.push({
-                paymentId: response._id,
-                paymentValue: element.paymentValue,
-              });
-            }
-          } else {
-            let totalPaymentValue = element.paymentValue;
-            if (
-              (foundedOperation.operationPrice - foundedOperation.discount) *
-                ((100 - foundedOperation.percentDiscount) / 100) ===
-              totalPaymentValue
-            ) {
-              foundedOperation.payments.push({
-                paymentId: response._id,
-                paymentValue: element.paymentValue,
-              });
-              foundedOperation.paymentStatus = "ödendi";
-            } else {
-              foundedOperation.payments.push({
-                paymentId: response._id,
-                paymentValue: element.paymentValue,
-              });
-            }
-          }
-          foundedOperation.paidValue =
-            foundedOperation.paidValue + element.paymentValue;
-          await foundedOperation.save();
+    await Payment.create(req.body).then((response) => {
+      console.log(response);
+      req.body.operations.forEach(async (element) => {
+        let foundedOperation = await Operation.findOne({
+          _id: element.operationId,
         });
-        if (req.body.products.length !== 0) {
-          req.body.products.forEach(async (element) => {
-            let foundedProduct = await Product.findOne({
-              _id: element.productId,
-            });
 
-            foundedProduct.totalStock =
-              foundedProduct.totalStock - element.quantity;
-            await foundedProduct.save();
-          });
+        if (foundedOperation.payments.length !== 0) {
+          let totalPayments = foundedOperation.payments.map(
+            (item) => item.paymentValue
+          );
+          let totalPaymentValue =
+            totalPayments.reduce((a, b) => a + b) + element.paymentValue;
+          console.log(totalPaymentValue);
+          if (
+            (foundedOperation.operationPrice - foundedOperation.discount) *
+              ((100 - foundedOperation.percentDiscount) / 100) ===
+            totalPaymentValue
+          ) {
+            foundedOperation.payments.push({
+              paymentId: response._id,
+              paymentValue: element.paymentValue,
+            });
+            foundedOperation.paymentStatus = "ödendi";
+          } else {
+            foundedOperation.payments.push({
+              paymentId: response._id,
+              paymentValue: element.paymentValue,
+            });
+          }
+        } else {
+          let totalPaymentValue = element.paymentValue;
+          if (
+            (foundedOperation.operationPrice - foundedOperation.discount) *
+              ((100 - foundedOperation.percentDiscount) / 100) ===
+            totalPaymentValue
+          ) {
+            foundedOperation.payments.push({
+              paymentId: response._id,
+              paymentValue: element.paymentValue,
+            });
+            foundedOperation.paymentStatus = "ödendi";
+          } else {
+            foundedOperation.payments.push({
+              paymentId: response._id,
+              paymentValue: element.paymentValue,
+            });
+          }
         }
-      })
-    
+        foundedOperation.paidValue =
+          foundedOperation.paidValue + element.paymentValue;
+        await foundedOperation.save();
+      });
+    });
+
+
+    if (req.body.products.length !== 0) {
+      req.body.products.forEach(async (element) => {
+        let foundedProduct = await Product.findOne({
+          _id: element.productId,
+        });
+
+        foundedProduct.totalStock =
+          foundedProduct.totalStock - element.quantity;
+        await foundedProduct.save();
+      });
+    }
 
     res.status(200).json({
       success: true,
       message: "Ödeme kaydedildi",
     });
   } catch (error) {
-    return new CustomError(err);
+    return new CustomError(error);
   }
 };
 
@@ -156,32 +172,33 @@ const editPayment = async (req, res, next) => {
     let requestProducts = req.body.products;
 
     let payment = await Payment.findById(req.body.paymentId);
-    payment.description=req.body.description
-    payment.cashOrCard=req.body.cashOrCard
+    payment.description = req.body.description;
+    payment.cashOrCard = req.body.cashOrCard;
     let paymentOperations = payment.operations;
     let paymentProducts = payment.products;
     let requestedPayment;
 
     for (const [i, value] of paymentProducts.entries()) {
-      
       let indexcontrol = requestProducts.findIndex(
         (item) => (item._id = value._id.toString())
       );
-      let foundedProduct= await Product.findById(value.productId);
-      console.log(foundedProduct)
+      let foundedProduct = await Product.findById(value.productId);
+      console.log(foundedProduct);
       if (indexcontrol === -1) {
         paymentProducts.splice(i, 1);
-        foundedProduct.totalStock=foundedProduct.totalStock+value.quantity
+        foundedProduct.totalStock = foundedProduct.totalStock + value.quantity;
       } else {
-        console.log("burası")
+        console.log("burası");
         paymentProducts[i] = requestProducts[indexcontrol];
-        foundedProduct.totalStock=foundedProduct.totalStock+value.quantity-requestProducts[indexcontrol].quantity
+        foundedProduct.totalStock =
+          foundedProduct.totalStock +
+          value.quantity -
+          requestProducts[indexcontrol].quantity;
       }
-      await foundedProduct.save()
+      await foundedProduct.save();
     }
 
-    for (const [i,operation] of paymentOperations.entries()) {
-      
+    for (const [i, operation] of paymentOperations.entries()) {
       let indexcontrol = requestPayments.findIndex(
         (item) => item === operation.operationId.toString()
       );
@@ -191,16 +208,14 @@ const editPayment = async (req, res, next) => {
       let indexcontrol2 = foundedOperation.payments.findIndex(
         (item) => item === req.body.paymentId
       );
-      
-     
+
       if (indexcontrol === -1) {
-        
         foundedOperation.payments.splice(indexcontrol2, 1);
         foundedOperation.paidValue =
           foundedOperation.paidValue - operation.paymentValue;
         await foundedOperation.save();
 
-        payment.operations.splice(i, 1)
+        payment.operations.splice(i, 1);
       } else {
         // operasyon düzenlenmesi
         await Operation.updateOne(
@@ -229,13 +244,13 @@ const editPayment = async (req, res, next) => {
           await modifiedOperation.save();
         }
         // ödemenin düzenlenmesi
-        payment.operations[i]=req.body.operations[indexcontrol]
+        payment.operations[i] = req.body.operations[indexcontrol];
       }
     }
     // calculate total
-    console.log(payment)
-    let totalPriceProducts=0;
-    let totalPriceOperations=0;
+    console.log(payment);
+    let totalPriceProducts = 0;
+    let totalPriceOperations = 0;
     if (payment.operations.length !== 0) {
       totalPriceOperations = Number(
         payment.operations
@@ -251,11 +266,13 @@ const editPayment = async (req, res, next) => {
       );
     }
 
-    payment.totalPrice = totalPriceProducts+totalPriceOperations
-    
+    payment.totalPrice = totalPriceProducts + totalPriceOperations;
+
     await payment.save();
-    requestedPayment=await Payment.findById(req.body.paymentId).populate("operations.operationId").populate("products.productId")
-    
+    requestedPayment = await Payment.findById(req.body.paymentId)
+      .populate("operations.operationId")
+      .populate("products.productId");
+
     console.log("haho2");
     res.json({
       success: true,

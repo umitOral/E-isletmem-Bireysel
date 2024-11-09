@@ -20,6 +20,7 @@ const totalValue = document.querySelector("#total_value");
 
 const barcodeInput = document.querySelector("#barcode-input");
 const userSelect = document.querySelector("#fromUser");
+const employeeSelect = document.querySelector("#employee_select");
 const operationsSelect = document.querySelector("#operations_select");
 const addPaymentFrom = document.querySelector("#add_payment");
 const selected_proccess_type_add = document.querySelector(
@@ -229,7 +230,7 @@ function handleEditModal(e) {
           paymentValue: element.price,
           discount: element.discount,
           percentDiscount: element.percentDiscount,
-          productId:element.productId._id
+          productId: element.productId._id,
         });
       });
       console.log(selectedOperationsforEdit);
@@ -357,6 +358,11 @@ function dateRange() {
 
 // user selecting handled
 
+employeeSelect.addEventListener("change", (e) => {
+ 
+  selectedEmployee=employeeSelect.options[employeeSelect.selectedIndex].value
+  console.log(selectedEmployee)
+});
 userSelect.addEventListener("change", () => {
   let userID = userSelect.options[userSelect.options.selectedIndex].value;
   selectedOperations = [];
@@ -427,6 +433,7 @@ userSelect.addEventListener("change", () => {
 // selectedOperations Handeled
 let selectedOperations = [];
 let selectedProducts = [];
+let selectedEmployee;
 
 operationsSelect.addEventListener("change", () => {
   let selectedOption =
@@ -621,8 +628,7 @@ selected_proccess_type_add.addEventListener("click", (e) => {
 selected_proccess_type_edit.addEventListener("input", (e) => {
   if (e.target.classList.contains("product-quantity")) {
     let index = selectedProductsforEdit.findIndex(
-      (item) =>
-        item._id === e.target.parentElement.parentElement.dataset.id
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
     );
     console.log(index);
     console.log(selectedProductsforEdit);
@@ -636,22 +642,20 @@ selected_proccess_type_edit.addEventListener("input", (e) => {
   }
   if (e.target.classList.contains("discount")) {
     let index = selectedProductsforEdit.findIndex(
-      (item) =>
-        item._id === e.target.parentElement.parentElement.dataset.id
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
     );
-    
-    
+
     selectedProductsforEdit[index].discount = Number(e.target.value);
     selectedProductsforEdit[index].paymentValue =
-    selectedProductsforEdit[index].quantity * selectedProductsforEdit[index].price -
-    selectedProductsforEdit[index].discount;
-  e.target.parentElement.parentElement.children[6].children[0].value =
-  selectedProductsforEdit[index].paymentValue;
-    
+      selectedProductsforEdit[index].quantity *
+        selectedProductsforEdit[index].price -
+      selectedProductsforEdit[index].discount;
+    e.target.parentElement.parentElement.children[6].children[0].value =
+      selectedProductsforEdit[index].paymentValue;
+
     calculateTotalPriceforEdit();
   }
 });
-
 
 selected_proccess_type_add.addEventListener("input", (e) => {
   if (
@@ -846,6 +850,7 @@ barcodeInput.addEventListener("keydown", (e) => {
               product.paymentValue = response.data.price;
               product.discount = 0;
               product.percentDiscount = 0;
+              product.baseComission= response.data.baseComission;
               selectedProducts.push(product);
             } else {
               selectedProducts[index].quantity =
@@ -857,7 +862,6 @@ barcodeInput.addEventListener("keydown", (e) => {
 
               productsRow.forEach((element) => {
                 if (element.dataset.id === selectedProducts[index]._id) {
-                  console.log("burası2");
                   element.children[1].children[0].value =
                     Number(element.children[1].children[0].value) + 1;
                   element.children[7].children[0].value =
@@ -891,6 +895,7 @@ addPaymentFrom.addEventListener("submit", (e) => {
     description: addPaymentFrom.description.value,
     operations: selectedOperations,
     products: selectedProducts,
+    comissionEmployee: selectedEmployee,
   };
   request
     .postWithUrl("./payments/addPayment", data)

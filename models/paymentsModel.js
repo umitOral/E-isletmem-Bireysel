@@ -7,6 +7,11 @@ const paymentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Company",
     },
+    comissionEmployee: {
+      type: Schema.Types.ObjectId,
+      ref: "Employee",
+    },
+
     fromUser: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -27,12 +32,7 @@ const paymentSchema = new Schema(
     description: {
       type: String,
     },
-    products: [
-      {
-        producName: { type: String },
-        producPrice: { type: Number },
-      },
-    ],
+  
     operations: [
       {
         operationId: {
@@ -63,6 +63,12 @@ const paymentSchema = new Schema(
           type: Number,
         },
         percentDiscount: {
+          type: Number,
+        },
+        baseComission: {
+          type: Number,
+        },
+        employeeComission: {
           type: Number,
         },
       },

@@ -730,10 +730,12 @@ const companyPaymentsListPage = async (req, res, next) => {
 const getPaymentsPage = async (req, res, next) => {
   try {
     const users = await User.find({ company: res.locals.company._id });
+    const employees = await Employee.find({ company: res.locals.company._id });
 
     res.status(200).render("payments", {
       link: "payments",
       users: users,
+      employees
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));

@@ -123,6 +123,19 @@
                 <h2>Ödeme Ekle</h2>
                 <form action="./payments/addPayment" id="add_payment" method="POST">
                     <div class="form-group">
+                        Prim Personeli:
+                        <select name="employee" id="employee_select" class="form-group">
+                            <option value="" selected disable hidden> Personel seçiniz</option>
+                            <% employees.forEach(employee=> { %>
+                                <option value="<%= employee._id %>">
+                                    <%= employee.name %>
+                                        <%= employee.surname %>
+                                </option>
+                                <% }) %>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
                         Hasta:
                         <select name="fromUser" id="fromUser" class="form-group">
                             <option value="" selected disable hidden> Hasta seçiniz</option>

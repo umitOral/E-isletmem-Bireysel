@@ -303,7 +303,19 @@ gap: 1rem;
 }
 
  .chosen-single{
-  padding:0.5rem important!;
+  height: max-content !important;
+  padding: 0.4rem !important;
+  border: 1px solid rgba(128, 128, 128, 0.394) !important;
+}
+
+ .chosen-single span{
+font-weight: 400;
+
+}
+.chosen-container-multi .chosen-choices{
+  padding: 0.4rem !important;
+  border: 1px solid rgba(128, 128, 128, 0.394) !important;
+  border-radius: 0.4rem !important;
 }
 
 /*  */
@@ -811,6 +823,7 @@ tfoot td {
 .modal_content{
   padding: 1rem;
 }
+
 
 .slider-modal{
   width: 100% !important;

@@ -77,7 +77,7 @@ let workHours=[]
       phone: form.phone.value,
 workHours:workHours,
       birthDate: form.birthDate.value,
-      bonusPercentage: form.bonusPercentage.value,
+      employeeComission: form.employeeComission.value,
     })
     .then((response) => {
       console.log(response);
