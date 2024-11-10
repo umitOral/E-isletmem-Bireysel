@@ -440,7 +440,7 @@ header {
   height: 56px;
   gap: 1rem;
 }
-header a {
+.logout {
   border: 1px solid gray;
   border-radius: var(--border-radius-2);
   background-color: var(--color-danger);

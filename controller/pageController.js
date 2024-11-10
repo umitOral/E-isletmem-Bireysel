@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import moment from "moment";
 import fs from "fs";
 import Employee from "../models/EmployeesModel.js";
-import { COMPANY_DOCS, DOC_STATUS, ROLES_LIST } from "../config/status_list.js";
+import { COMPANY_DOCS, DOC_STATUS } from "../config/status_list.js";
 
 import Sessions from "../models/appointmentModel.js";
 import Payment from "../models/paymentsModel.js";
@@ -562,8 +562,7 @@ const deneme = async (req, res, next) => {
 const getEmployeesPage = async (req, res, next) => {
   try {
     let query = Employee.find({});
-    let roles = Object.keys(ROLES_LIST);
-    let rolesValues = Object.values(ROLES_LIST);
+    
     if (req.query) {
       const searchObject = {};
       searchObject["company"] = res.locals.company._id;
@@ -607,8 +606,6 @@ const getEmployeesPage = async (req, res, next) => {
       total,
       count: employees.length,
       employees,
-      roles: roles,
-      rolesValues,
       link: "employees",
     });
   } catch (error) {
@@ -759,11 +756,22 @@ const getUserPage = async (req, res, next) => {
 const getSingleEmployeePage = async (req, res, next) => {
   try {
     const singleUser = await Employee.findById(req.params.id);
-    let roles = Object.values(ROLES_LIST).slice(1);
-
+   
     res.status(200).render("employee-details", {
       singleUser,
-      roles: roles,
+    
+      link: "employees",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getEmployeeSelfPage = async (req, res, next) => {
+  try {
+    const singleUser = res.locals.employee
+
+    res.status(200).render("employee-self", {
+      singleUser,
       link: "employees",
     });
   } catch (error) {
@@ -773,6 +781,7 @@ const getSingleEmployeePage = async (req, res, next) => {
 
 export {
   getForgotPasswordPage,
+  getEmployeeSelfPage,
   getSuperAdminPage,
   getSettingsPage,
   getAppointmentsStaticsPage,

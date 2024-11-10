@@ -6,7 +6,6 @@ import { CustomError } from "../helpers/error/CustomError.js";
 import { Response } from "../helpers/error/Response.js";
 
 const checkUser = async (req, res, next) => {
-  
   const token = req.cookies.jsonwebtoken;
   const token2 = req.cookies.userData;
 
@@ -16,12 +15,9 @@ const checkUser = async (req, res, next) => {
         res.locals.company = null;
         next();
       } else {
-
-        jwt.verify(token2,process.env.JWT_SECRET,(err,decodedToken)=>{
-          
+        jwt.verify(token2, process.env.JWT_SECRET, (err, decodedToken) => {
           res.locals.usersNames = decodedToken.usersNames;
-          
-        })
+        });
         const company = await Company.findById(decodedToken.companyID).populate(
           "employees"
         );
@@ -41,10 +37,9 @@ const checkUser = async (req, res, next) => {
 };
 
 const authenticateToken = async (req, res, next) => {
- 
   try {
     const token = req.cookies.jsonwebtoken;
-    
+
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET, (err) => {
         if (err) {
@@ -58,13 +53,11 @@ const authenticateToken = async (req, res, next) => {
       // return next(new CustomError("süre doldu, tekrar giriş yapınız",401))
     }
   } catch (error) {
-    return next(new CustomError("sunucuda bir sorun oluştu",500,error))
+    return next(new CustomError("sunucuda bir sorun oluştu", 500, error));
   }
 };
 
-
 const verifyRoles = (...roles) => {
-  
   return async (req, res, next) => {
     if (!roles.includes(res.locals.employee.role)) {
       next(new Error("Buraya giriş yetkiniz bulunmamaktadır.", 401));
@@ -88,23 +81,38 @@ const verifyactiveOrNot = () => {
       }
       next();
     } else {
-      res.json(Response.successResponse(true,"Kullanıcı bulunamadı"));
+      res.json(Response.successResponse(true, "Kullanıcı bulunamadı"));
     }
   };
 };
+const checkEmployee = (req, res, next) => {
+  console.log("das1");
+  console.log(req.params)
+  console.log(res.locals.employee)
+  if (req.params.id == res.locals.employee._id) {
+    console.log("das");
+    next();
+  } else {
+    res.json(
+      Response.successResponse(true, "Bu sayfayı görmeye yetkili değilsiniz.")
+    );
+  }
+};
 
 const checkPriviliges = (...priviliges) => {
-  
-  return async (req,res,next)=>{
-      if (res.locals.employee.permissions.includes(priviliges)) {
-         next()
-      }else{
-        res.json(Response.unsuccessResponse(false,"İşlem için yetkiniz bulunmamaktadır."))
-      }
-      
-  }
+  return async (req, res, next) => {
+    if (res.locals.employee.permissions.includes(priviliges)) {
+      next();
+    } else {
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "İşlem için yetkiniz bulunmamaktadır."
+        )
+      );
+    }
   };
-  
+};
 
 export {
   authenticateToken,
@@ -112,5 +120,5 @@ export {
   verifyRoles,
   checkPriviliges,
   verifyactiveOrNot,
-
+  checkEmployee,
 };

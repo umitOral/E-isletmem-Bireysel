@@ -8,6 +8,7 @@ import {
   getAppointmentsPage,
   getUserPage,
   getSingleEmployeePage,
+  getEmployeeSelfPage,
   getservicesPage,
   getProductsPage,
   getAllProductsPage,
@@ -115,8 +116,8 @@ import {
   addDataToSessionInsideAppointment,
 } from "../controller/operationController.js";
 
-import { verifyRoles, checkPriviliges } from "../middlewares/authMiddleware.js";
-import { ROLES_LIST } from "../config/status_list.js";
+import { verifyRoles, checkPriviliges, checkEmployee } from "../middlewares/authMiddleware.js";
+
 
 import appointmentsRoutes from "./appointmentsRoutes.js";
 import reportsRoutes from "./reportsRoutes.js";
@@ -229,10 +230,11 @@ router.route("/addCompanyPayment").post(addCompanyPayment);
 router.route("/getCompanyNotificationPermission").get(getCompanyNotificationPermission);
 router.route("/updateCompanyNotification").post(updateCompanyNotification);
 
-router.route("/employees").get(getEmployeesPage);
+router.route("/employee/:id").get(checkEmployee,getEmployeeSelfPage);
+
+router.route("/employees").get(checkPriviliges("employee_view"),getEmployeesPage);
 router
-  .route("/employees/:id")
-  .get(verifyRoles(ROLES_LIST.ADMIN), getSingleEmployeePage);
+  .route("/employees/:id").get(checkPriviliges("employee_view"),getSingleEmployeePage);
 router
   .route("/employees/:id/getEmployeesPermissions")
   .get(getEmployeesPermissions);

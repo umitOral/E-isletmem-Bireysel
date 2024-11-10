@@ -4,7 +4,7 @@ import Appointment from "../models/appointmentModel.js";
 import Company from "../models/companyModel.js";
 import jwt from "jsonwebtoken";
 import { CustomError } from "../helpers/error/CustomError.js";
-import  {SESSION_STATUS_LIST,OPERATION_STATUS,APPOINTMENT_STATUS,ROLES_LIST} from "../config/status_list.js";
+import  {SESSION_STATUS_LIST,OPERATION_STATUS,APPOINTMENT_STATUS} from "../config/status_list.js";
 import Operation from "../models/OperationsModel.js";
 
 
@@ -75,7 +75,7 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
     
     const doctors = await Employee.find({
       company: res.locals.company._id,
-      role: ROLES_LIST.EMPLOYEE,
+      permissions: "appointment_get",
       activeOrNot: true,
     });
 
@@ -169,7 +169,7 @@ const getDaysFullorNot = async (req, res) => {
 
     const doctors = await Employee.find({
       company: res.locals.company._id,
-      role: ROLES_LIST.EMPLOYEE,
+      permissions:"appointment_get",
       activeOrNot: true,
     });
 

@@ -58,21 +58,27 @@ export const role_privileges = {
     },
     {
       key: "employee_view",
-      name: "Kullanıcı Görüntüleme",
+      name: "Personel Görüntüleme",
       group: "EMPLOYEES",
       description: "Employee View",
     },
     {
       key: "employee_add",
-      name: "Kullanıcı Ekleme",
+      name: "Personel Ekleme",
       group: "EMPLOYEES",
       description: "Employee Add",
     },
     {
       key: "employee_update",
-      name: "Kullanıcı Düzenleme",
+      name: "Personel Düzenleme",
       group: "EMPLOYEES",
       description: "Employee Update",
+    },
+    {
+      key: "appointment_get",
+      name: "Randevu Alabilme",
+      group: "APPOINTMENTS",
+      description: "Appointment Getting",
     },
     {
       key: "appointment_view",

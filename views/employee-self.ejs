@@ -40,9 +40,7 @@
                             <div class="show-content appointments">Randevular
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
-                            <div class="show-content permissions">Yetkiler
-                                <i class="fa-solid fa-pen-to-square edit"></i>
-                            </div>
+                          
                             
                         </div>
 
@@ -246,7 +244,20 @@
                         <span>Soyisim</span>
                         <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>">
                     </div>
-                   
+                    <div class="form-group ">
+                        <span>Görev:</span>
+                        <select name="role" id="role">
+                            <option value="<%= singleUser.role %>" checked disable hidden>
+                                <%= singleUser.role %>
+                            </option>
+                            <% roles.forEach(role=> { %>
+                                <option value="<%= role %>">
+                                    <%=role %>
+                                </option>
+                                <% }) %>
+                        </select>
+
+                    </div>
 
                     <div class="form-group">
                         <span>Çalışma saatleri:</span>
@@ -365,7 +376,7 @@
 
 
         <script type="module" src="/js/requests.js"></script>
-        <script type="module" src="/js/employee-details.js"></script>
+        <script type="module" src="/js/employee-self.js"></script>
         <script type="module" src="/js/inner_modules/tables.js"></script>
 
         <script src="/js/sidebar.js"></script>

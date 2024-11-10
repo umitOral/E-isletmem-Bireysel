@@ -22,7 +22,6 @@ function createEmployee(e) {
     surname: form.surname.value,
     email: form.email.value,
     password: form.password.value,
-    role: form.role.options[form.role.selectedIndex].value,
     sex: form.sex.value,
     birthDate: form.birthDate.value,
     address: form.address.value,
