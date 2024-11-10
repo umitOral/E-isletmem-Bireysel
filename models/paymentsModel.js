@@ -16,10 +16,7 @@ const paymentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    employee: {
-      type: Schema.Types.ObjectId,
-      ref: "Employee",
-    },
+    
     totalPrice: {
       type: Number,
       require: true,
@@ -27,12 +24,12 @@ const paymentSchema = new Schema(
     cashOrCard: {
       type: String,
       default: "nakit",
-      lowercase: true
+      lowercase: true,
     },
     description: {
       type: String,
     },
-  
+
     operations: [
       {
         operationId: {
@@ -67,6 +64,7 @@ const paymentSchema = new Schema(
         },
         baseComission: {
           type: Number,
+          default: 0,
         },
         employeeComission: {
           type: Number,
@@ -77,8 +75,7 @@ const paymentSchema = new Schema(
   { timestamps: true }
 );
 
-
-
-
 const Payment = mongoose.model("Payment", paymentSchema);
 export default Payment;
+
+

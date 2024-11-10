@@ -443,9 +443,11 @@ const getAppointmentReportsPage = async (req, res, next) => {
 };
 const paymentReportsPage = async (req, res, next) => {
   try {
-    let users = await User.find({});
+    let users = await User.find({company:res.locals.company._id});
+    let employes = await Employee.find({company:res.locals.company._id});
     res.status(200).render("reports/paymentReports", {
       users,
+      employes,
       link: "reports",
     });
   } catch (error) {

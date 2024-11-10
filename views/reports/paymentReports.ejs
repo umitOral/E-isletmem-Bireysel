@@ -63,11 +63,21 @@
                                         <% }) %>
                                     </select>
                             </div>
+                            <div class="form-group horizontal">Prim Personeli:
+                                <select class="chosen-select" name="employeeInput" id="employeeInput"
+                                    data-placeholder="Seçiniz." multiple>
+
+                                    <% employes.forEach(element=> { %>
+                                        <option value="<%= element._id %>">
+                                            <%= element.name+" "+element.surname %></option>
+                                        <% }) %>
+                                    </select>
+                            </div>
                             
 
 
                             <div class="form-group" style="align-self: end;">
-                                <button type="submit" class="btn save" >Ara</button>
+                               <button type="submit" class="btn save" >Ara</button>
                             </div>
 
 
@@ -114,9 +124,11 @@
                                     </div>
                                 </th>
                                 <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Personel<i class="fa-solid fa-arrow-up"></i></td>
+                                
+                                <th>Komisyon Personeli<i class="fa-solid fa-arrow-up"></i></td>
                                 <th>Hasta<i class="fa-solid fa-arrow-up"></i></td>
                                 <th>Tutar<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Komisyon Tutarı:<i class="fa-solid fa-arrow-up"></i></td>
                                 <th>Ödeme Şekli<i class="fa-solid fa-arrow-up"></i></td>
                                 <th>Notlar<i class="fa-solid fa-arrow-up"></i></td>
                             </thead>
@@ -125,6 +137,7 @@
 
 
                             </tbody>
+                            <tfoot></tfoot>
 
 
                         </table>

@@ -7,8 +7,7 @@ const ui = new UI();
 import { Tables } from "./inner_modules/tables.js";
 const tables = new Tables();
 
-ui.closeNotification()
-
+ui.closeNotification();
 
 const showContentsBtn = document.querySelectorAll(".show-content");
 const contents = document.querySelectorAll(".userInformationsContent");
@@ -20,6 +19,7 @@ const appointmentsTabButton = document.querySelector(
 const permissionsTabButton = document.querySelector(
   ".show-content.permissions"
 );
+
 
 const editBtn = document.querySelector(".edit-informations-btn");
 const editUserForm = document.getElementById("user-edit-form");
@@ -39,6 +39,7 @@ function eventListeners() {
   editBtn.addEventListener("click", showInformationsModal);
   appointmentsTabButton.addEventListener("click", getEmployeesAppointments);
   permissionsTabButton.addEventListener("click", getEmployeesPermissions);
+  
 }
 
 cancelModal.forEach((element) => {
@@ -48,23 +49,23 @@ cancelModal.forEach((element) => {
   });
 });
 
-cancelBtns.forEach(element => {
-  element.addEventListener("click",()=>{
-    allModals.forEach(element => {
-      element.classList.add("hidden")
+cancelBtns.forEach((element) => {
+  element.addEventListener("click", () => {
+    allModals.forEach((element) => {
+      element.classList.add("hidden");
     });
-  })
+  });
 });
 
 function editUser(e) {
   e.preventDefault();
 
   const form = document.querySelector("#user-edit-form");
-let workHours=[]
-  form.workhours.forEach(element => {
-    workHours.push(element.value)
+  let workHours = [];
+  form.workhours.forEach((element) => {
+    workHours.push(element.value);
   });
-  
+
   console.log(form.action);
   request
     .postWithUrl(form.action, {
@@ -75,7 +76,7 @@ let workHours=[]
       sex: form.sex.value,
       address: form.address.value,
       phone: form.phone.value,
-workHours:workHours,
+      workHours: workHours,
       birthDate: form.birthDate.value,
       employeeComission: form.employeeComission.value,
     })
@@ -107,10 +108,7 @@ showContentsBtn.forEach((element, index) => {
   });
 });
 
-
-
 // user details modal -----------------
-
 
 function showInformationsModal() {
   modalUser.classList.remove("hidden");
@@ -140,17 +138,18 @@ async function getEmployeesPermissions() {
       console.log(response);
       ui.showNotification(response.success, "izinler başarıyla çekildi");
 
-     
-      response.data.allPermissions.privileges.forEach(element => {
-        element.ispermitted=false
+      response.data.allPermissions.privileges.forEach((element) => {
+        element.ispermitted = false;
       });
-      
+
       response.data.employeePermissions.forEach((element) => {
-        let index=response.data.allPermissions.privileges.findIndex(item=>item.key===element)
-        
-        response.data.allPermissions.privileges[index].ispermitted=true
+        let index = response.data.allPermissions.privileges.findIndex(
+          (item) => item.key === element
+        );
+
+        response.data.allPermissions.privileges[index].ispermitted = true;
       });
-      permissionTableBody.innerHTML=""
+      permissionTableBody.innerHTML = "";
       response.data.allPermissions.privileges.forEach((element, index) => {
         permissionTableBody.innerHTML += `
           <tr>
@@ -170,6 +169,8 @@ async function getEmployeesPermissions() {
     })
     .catch((err) => console.log(err));
 }
+
+
 
 function handleEvents(e) {
   console.log("burası");
@@ -191,9 +192,6 @@ function handleEvents(e) {
       });
   }
 }
-
-
-
 
 // table sorting
 

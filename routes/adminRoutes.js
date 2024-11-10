@@ -48,6 +48,7 @@ import {
   editInformationsEmployees,
   getEmployesAppointments,
   getEmployeesPermissions,
+  getEmployeesPayments,
   updateEmployeesPermissions,
 } from "../controller/employeesController.js";
 
@@ -235,6 +236,9 @@ router
 router
   .route("/employees/:id/getEmployeesPermissions")
   .get(getEmployeesPermissions);
+router
+  .route("/employees/:id/getEmployeesPayments")
+  .get(getEmployeesPayments);
 router
   .route("/employees/:id/updateEmployeesPermissions")
   .post(updateEmployeesPermissions);

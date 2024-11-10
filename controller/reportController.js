@@ -291,6 +291,9 @@ const getPaymentReports = async (req, res, next) => {
     if (req.body.cashOrCard !== "") {
       searchObject.cashOrCard = req.body.cashOrCard;
     }
+    if (req.body.employee.length!==0) {
+      searchObject.comissionEmployee = { $in: req.body.employee };
+    }
     if (req.body.users.length !== 0) {
       searchObject.fromUser = { $in: req.body.users };
     }
@@ -314,7 +317,7 @@ const getPaymentReports = async (req, res, next) => {
       .lt(endDate)
       .populate("fromUser", ["name", "surname"])
       .populate("operations.operationId")
-      .populate("employee")
+      .populate("comissionEmployee",["name","surname"])
       .skip(startIndex)
       .limit(limit)
       .sort({ createdAt: -1 });

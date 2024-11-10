@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 import Employee from "../models/EmployeesModel.js";
 import Sessions from "../models/appointmentModel.js";
-import Company from "../models/companyModel.js";
+import Payment from "../models/paymentsModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { APPOINTMENT_STATUS } from "../config/status_list.js";
 import { role_privileges } from "../config/role_priveleges.js";
@@ -10,9 +10,12 @@ const createEmployees = async (req, res, next) => {
   try {
     const userEmail = req.body.email;
     req.body.company = res.locals.company;
-    if (req.body.email!=="") {
-      console.log("burası")
-      const searchEmail = await Employee.findOne({ email: userEmail, company: res.locals.company });
+    if (req.body.email !== "") {
+      console.log("burası");
+      const searchEmail = await Employee.findOne({
+        email: userEmail,
+        company: res.locals.company,
+      });
       if (searchEmail) {
         res.json({
           success: false,
@@ -26,9 +29,6 @@ const createEmployees = async (req, res, next) => {
         });
       }
     }
-    
-    
-
 
     // await Company.updateOne(
     //   { _id: res.locals.company._id },
@@ -50,7 +50,10 @@ const editInformationsEmployees = async (req, res) => {
   try {
     console.log("hahı");
     console.log(req.body);
-    req.body.workHours = { workStart: req.body.workHours[0], workEnd: req.body.workHours[1],}
+    req.body.workHours = {
+      workStart: req.body.workHours[0],
+      workEnd: req.body.workHours[1],
+    };
     await Employee.findByIdAndUpdate(req.params.id, req.body);
     res.status(200).json({
       success: true,
@@ -95,14 +98,32 @@ const getEmployeesPermissions = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+const getEmployeesPayments = async (req, res, next) => {
+  try {
+    let payments = await Payment.find({
+      comissionEmployee: req.params.id,
+      products: { $exists: true, $not: { $size: 0 } }
+    });
+
+    res.status(200).json({
+      success: true,
+      data: payments,
+      link: "employees",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 const updateEmployeesPermissions = async (req, res, next) => {
   console.log(req.body);
   try {
     let employee = await Employee.findById(req.params.id);
     if (employee.permissions.includes(req.body.permissionkey)) {
-      employee.permissions = employee.permissions.filter((x) => x !== req.body.permissionkey);
+      employee.permissions = employee.permissions.filter(
+        (x) => x !== req.body.permissionkey
+      );
     } else {
-      employee.permissions.push(req.body.permissionkey)
+      employee.permissions.push(req.body.permissionkey);
     }
 
     console.log(employee.permissions);
@@ -124,4 +145,5 @@ export {
   getEmployesAppointments,
   getEmployeesPermissions,
   updateEmployeesPermissions,
+  getEmployeesPayments,
 };

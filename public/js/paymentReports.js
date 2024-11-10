@@ -11,9 +11,8 @@ const ui = new UI();
 const cancelBtns = document.querySelectorAll(".btn.cancel.form-btn");
 const operationTypeSelect = document.getElementById("operationType");
 let paginationBtns = document.querySelectorAll(".pagination-buttons");
-let editPaymentModal=document.querySelector("#modal_edit_payment")
+let editPaymentModal = document.querySelector("#modal_edit_payment");
 const checkAll = document.getElementById("check-all");
-
 
 const selected_proccess_type_edit = document.querySelector(
   ".selected_proccess_type_edit"
@@ -44,24 +43,30 @@ searchForm.addEventListener("submit", (e) => {
 });
 
 function getPayments(page) {
- console.log("burası")
+  console.log("burası");
   let data = {
-    page:page||1,
+    page: page || 1,
     startDate: searchForm.startDate.value,
     endDate: searchForm.endDate.value,
     users: Array.from(searchForm.userInput.selectedOptions).map(
       ({ value }) => value
     ),
-    cashOrCard: searchForm.cashOrCard.options[searchForm.cashOrCard.options.selectedIndex].value
-    
+    employee: Array.from(searchForm.employeeInput.selectedOptions).map(
+      ({ value }) => value
+    ),
+    cashOrCard:
+      searchForm.cashOrCard.options[searchForm.cashOrCard.options.selectedIndex]
+        .value,
   };
- 
+
   request
     .postWithUrl("./paymentsReportsPage", data)
     .then((response) => {
       ui.showNotification(response.success, response.message);
       console.log(response);
-      datasToTable(response.data);
+      let totalComission = calculateTotalComission(response.data.reports);
+      let totalValue = calculateTotalValue(response.data.reports);
+      datasToTable(response.data, totalValue, totalComission);
       detailsBtnhandLe();
       datasToPagination(response.data.pagination);
     })
@@ -72,12 +77,12 @@ function getPayments(page) {
 }
 
 function detailsBtnhandLe() {
-  let btns=document.querySelectorAll(".payment-details-btn")
-  btns.forEach((element,index) => {
-    element.addEventListener("click",(e)=>{
-      selectedPaymentIndex=index+1
-      handleEditModal(e.target.parentElement.parentElement.dataset.paymentid)
-    })
+  let btns = document.querySelectorAll(".payment-details-btn");
+  btns.forEach((element, index) => {
+    element.addEventListener("click", (e) => {
+      selectedPaymentIndex = index + 1;
+      handleEditModal(e.target.parentElement.parentElement.dataset.paymentid);
+    });
   });
 }
 
@@ -104,11 +109,11 @@ const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
 );
 
-function handleEditModal(paymentId,index) {
+function handleEditModal(paymentId, index) {
   editedPayment = paymentId;
 
   request
-    .getwithUrl("../payments/" +paymentId)
+    .getwithUrl("../payments/" + paymentId)
     .then((response) => {
       console.log(response);
       editPaymentModal.classList.remove("hidden");
@@ -166,27 +171,32 @@ function handleEditModal(paymentId,index) {
            
             `;
       });
-      selectedOperationsforEdit=[]
+      selectedOperationsforEdit = [];
       response.data.operations.forEach((element) => {
         selectedOperationsforEdit.push(element);
       });
-     
-      calculatetTotalPriceforEdit();
+
+      calculateTotalComissionforEdit();
     })
     .catch((err) => {
       console.log(err);
     });
 }
 
-function datasToTable(data) {
+function datasToTable(data, totalValue, totalComission) {
   let tableBody = document.querySelector("#payment-report-table tbody");
+  let tableFoot = document.querySelector("#payment-report-table tfoot");
   let lastpage = document.querySelector("#lastpage");
   let total = document.querySelector("#total");
 
-
   while (tableBody.children[0]) {
     tableBody.children[0].remove();
+    
   }
+  while (tableFoot.children[0]) {
+    tableFoot.children[0].remove();
+  }
+
   data.reports.forEach((element, index) => {
     tableBody.innerHTML += `
     <tr data-paymentId="${element._id}">
@@ -209,32 +219,49 @@ function datasToTable(data) {
                                        ).toLocaleDateString()}
                                        </td>
                                       
+                                      
                                        <td>
-                                       ${
-                                         (()=>{
-                                          if (element.employee) {
-                                           return element.employee.name+" "+element.employee.surname
-                                          } else {
-                                           return " "
-                                          }
-                                         })()
-                                       }
+                                       ${(() => {
+                                         if (element.comissionEmployee) {
+                                           return (
+                                             element.comissionEmployee.name +
+                                             " " +
+                                             element.comissionEmployee.surname
+                                           );
+                                         } else {
+                                           return " ";
+                                         }
+                                       })()}
                                        </td>
                                        <td>
-                                       ${
-                                         (()=>{
-                                          if (element.fromUser) {
-                                           return element.fromUser.name+" "+element.fromUser.surname
-                                          } else {
-                                           return " "
-                                          }
-                                         })()
-                                       }
+                                       ${(() => {
+                                         if (element.fromUser) {
+                                           return (
+                                             element.fromUser.name +
+                                             " " +
+                                             element.fromUser.surname
+                                           );
+                                         } else {
+                                           return " ";
+                                         }
+                                       })()}
                                        </td>
                                        
                                           <td>
                                        ${element.totalPrice}
                                        </td>
+                                        <td><span> ${element.products
+                                          .map((product) => {
+                                            let commission =
+                                              ((product.baseComission +
+                                                product.employeeComission) *
+                                                product.paymentValue) /
+                                              100;
+                                            return `<li> ${commission.toFixed(
+                                              2
+                                            )}</li>`;
+                                          })
+                                          .join("")}</span></td>
                                      
                                           <td>
                                        ${element.cashOrCard}
@@ -251,9 +278,20 @@ function datasToTable(data) {
                                      
                                    </tr>
 `;
+
     lastpage.innerHTML = `${data.pagination.lastpage}`;
     total.innerHTML = data.total;
   });
+  tableFoot.innerHTML += `
+                  
+  <tr>
+      
+      <td colspan="4">toplam:</td>
+      <td id="">${totalValue}</td>
+      <td id="">${totalComission}</td>
+  </tr>
+
+`;
 }
 function datasToPagination(pagination) {
   let paginationArea = document.getElementById("pagination");
@@ -321,8 +359,6 @@ function paginatioButtonsHandle() {
   });
 }
 
-
-
 checkAll.addEventListener("click", (e) => {
   ui.tableRowSelection(table);
 });
@@ -356,8 +392,7 @@ operationTypeSelect.addEventListener("change", () => {
   }
 });
 
-
-saveEditModal.addEventListener("click",(e) => {
+saveEditModal.addEventListener("click", (e) => {
   e.preventDefault();
   let data = {
     paymentId: editedPayment,
@@ -365,32 +400,28 @@ saveEditModal.addEventListener("click",(e) => {
     description: editPaymentForm.description.value,
     operations: selectedOperationsforEdit,
   };
-  console.log(data)
+  console.log(data);
 
-    request
+  request
     .postWithUrl("../payments/" + editedPayment + "/editPayment", data)
     .then((response) => {
-      console.log(response)
+      console.log(response);
       ui.showNotification(true, response.message);
       editPaymentModal.classList.add("hidden");
-      table.rows[selectedPaymentIndex].children[4].innerHTML=`
+      table.rows[selectedPaymentIndex].children[4].innerHTML = `
         ${response.data.totalPrice}
-      `
-      table.rows[selectedPaymentIndex].children[5].innerHTML=`
+      `;
+      table.rows[selectedPaymentIndex].children[5].innerHTML = `
         ${response.data.cashOrCard}
-      `
-      table.rows[selectedPaymentIndex].children[6].innerHTML=`
+      `;
+      table.rows[selectedPaymentIndex].children[6].innerHTML = `
         ${response.data.description}
-      `
-      
-     
+      `;
     })
     .catch((err) => console.log(err));
-  
 });
 
-function calculatetTotalPriceforEdit() {
-
+function calculateTotalComissionforEdit() {
   let totalValueforEdit = document.querySelector("#total_value_edit");
   let paymentValues = selectedOperationsforEdit.map(
     (element) => element.paymentValue
@@ -402,7 +433,32 @@ function calculatetTotalPriceforEdit() {
     totalValueforEdit.textContent = paymentValues.reduce((a, b) => a + b);
   }
 }
+function calculateTotalComission(data) {
+  let totalComission = 0;
+  data.forEach((element) => {
+    totalComission += element.products
+      .map((product) => {
+        let commission =
+          ((product.baseComission + product.employeeComission) *
+            product.paymentValue) /
+          100;
+        return commission;
+      })
+      .reduce((a, b) => a + b);
+  });
 
+  return totalComission;
+}
+function calculateTotalValue(data) {
+  let totalValue = 0;
+  data.forEach((element) => {
+    totalValue += element.products
+      .map((item) => item.paymentValue)
+      .reduce((a, b) => a + b);
+  });
+
+  return totalValue;
+}
 
 selected_proccess_table_edit.addEventListener("input", (e) => {
   if (e.target.classList.contains("payment_value")) {
@@ -413,7 +469,7 @@ selected_proccess_table_edit.addEventListener("input", (e) => {
     e.target.addEventListener("input", (e) => {
       selectedOperationsforEdit[index].paymentValue = Number(e.target.value);
       console.log(selectedOperationsforEdit);
-      calculatetTotalPriceforEdit();
+      calculateTotalComissionforEdit();
     });
   }
 });
