@@ -36,11 +36,11 @@
 
                             <div class="form-group">Başlangıç tarihi:
                                 <input type="date" name="startDate" class="startDate"
-                                    value="<%= new Date().toISOString().substr(0, 10) %>">
+                                    value="<%= new Date().toLocaleDateString('en-CA') %>">
                             </div>
                             <div class="form-group">Bitiş tarihi:
                                 <input type="date" name="endDate" class="endDate"
-                                    value="<%= new Date().toISOString().substr(0, 10) %>">
+                                    value="<%= new Date().toLocaleDateString('en-CA') %>">
                             </div>
                             <div class="form-group horizontal">Ödeme Şekli:
                                 <select class="chosen-select" name="cashOrCard" id="cashOrCard"

@@ -359,9 +359,8 @@ function dateRange() {
 // user selecting handled
 
 employeeSelect.addEventListener("change", (e) => {
- 
-  selectedEmployee=employeeSelect.options[employeeSelect.selectedIndex].value
-  console.log(selectedEmployee)
+  selectedEmployee = employeeSelect.options[employeeSelect.selectedIndex].value;
+  console.log(selectedEmployee);
 });
 userSelect.addEventListener("change", () => {
   let userID = userSelect.options[userSelect.options.selectedIndex].value;
@@ -799,17 +798,15 @@ barcodeInput.addEventListener("keydown", (e) => {
       request
         .postWithUrl("./products/searchProductInner", data)
         .then((response) => {
-          barcodeInput.value = "";
           console.log(response);
+          barcodeInput.value = "";
           ui.showNotification(response.success, response.message);
-
-          let index = selectedProducts.findIndex(
-            (item) => item.productId === response.data._id
-          );
-          console.log(index);
           let product = {};
 
           if (response.success === true) {
+            let index = selectedProducts.findIndex(
+              (item) => item.productId === response.data._id
+            );
             if (index === -1) {
               selected_proccess_table.innerHTML += `
               <tr data-productId="${response.data._id}" data-type="product" >
@@ -850,7 +847,7 @@ barcodeInput.addEventListener("keydown", (e) => {
               product.paymentValue = response.data.price;
               product.discount = 0;
               product.percentDiscount = 0;
-              product.baseComission= response.data.baseComission;
+              product.baseComission = response.data.baseComission;
               selectedProducts.push(product);
             } else {
               selectedProducts[index].quantity =

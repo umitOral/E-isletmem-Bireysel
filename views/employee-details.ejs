@@ -43,6 +43,9 @@
                             <div class="show-content permissions">Yetkiler
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
+                            <div class="show-content payments">Satışlar
+                                <i class="fa-solid fa-pen-to-square edit"></i>
+                            </div>
                             
                         </div>
 
@@ -171,6 +174,7 @@
                                             <table>
                                                 <thead>
 
+                                                    
                                                     <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
                                                     <th>Saat</th>
                                                     <th>Hasta<i class="fa-solid fa-arrow-up"></i></th>
@@ -184,6 +188,7 @@
                                             </table>
 
                                         </div>
+                                      
                                     </div>
 
                                 </div>
@@ -207,6 +212,62 @@
 
 
                                             </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="userInformationsContent  payments ">
+                                    <div>
+                                        <h2>Satışlar</h2>
+                                    </div>
+                                    <div class="search">
+                                        <form autocomplete="off" action="" class="horizontal-form" id="payment-reports-search" data-employeid="<%= locals.employee._id %>">
+                
+                                            <div class="form-group">Başlangıç tarihi:
+                                                <input type="date" name="startDate" class="startDate"
+                                                    value="<%= new Date().toLocaleDateString('en-CA') %>">
+                                            </div>
+                                            <div class="form-group">Bitiş tarihi:
+                                                <input type="date" name="endDate" class="endDate"
+                                                    value="<%= new Date().toLocaleDateString('en-CA') %>">
+                                            </div>
+                                           
+                                            <div class="form-group" style="align-self: end;">
+                                               <button type="submit" class="btn save" >Ara</button>
+                                            </div>
+                
+                
+                                        </form>
+                
+                                    </div>
+                                    <div class="contentBody">
+                                        <div class="table ">
+                                            <table id="payments-table">
+                                                <thead>
+
+                                                    <th></th>
+                                                    <th>Tarih</th>
+                                                    <th>İşlem Tutarı</th>
+                                                    <th>(personel yüzdesi+ürün yüzdesi)</th>
+                                                    <th>Komisyon Tutarı</th>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+
+                                                </tfoot>
+                                            </table>
+                                            <div class="pagination-describe">
+                                                <div>
+                                                    <div>
+                                                        <span id="lastpage"><%=  %></span> Sayfa, Toplam <span id="total"><%=  %></span> Sonuç bulundu
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pagination" id="pagination">
+
+
+                                            </div>
 
                                         </div>
                                     </div>

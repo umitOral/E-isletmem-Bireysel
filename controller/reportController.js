@@ -294,7 +294,7 @@ const getPaymentReports = async (req, res, next) => {
     if (req.body.employee.length!==0) {
       searchObject.comissionEmployee = { $in: req.body.employee };
     }
-    if (req.body.users.length !== 0) {
+    if (req.body.users&&req.body.users.length !== 0) {
       searchObject.fromUser = { $in: req.body.users };
     }
 
@@ -308,10 +308,9 @@ const getPaymentReports = async (req, res, next) => {
     // pagination
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-
+    console.log(searchObject)
     let reports = await Payment.find(searchObject)
       .lean()
-
       .where("createdAt")
       .gt(startDate)
       .lt(endDate)
