@@ -8,14 +8,26 @@
         </div>
        
         <div>
-            <a href="/admin/settings" title="işletme ayarları"><i class="ph ph-buildings"></i></a>
-            <span class="text">
-                <%= locals.company.brandName || "İşletme Adı" %>
-            </span>
+            <% if(!locals.employee.permissions.includes("settings_view")){ %>
+                <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Yetkiniz Yok">
+                   
+                        <a href="/admin/settings" title="işletme ayarları"><i class="ph ph-buildings clickable-icon"></i></a>
+                        <span class="text">
+                            <%= locals.company.brandName || "İşletme Adı" %>
+                        </span>
+                   
+                </li>
+                <% } else{ %>
+                    <a href="/admin/settings" title="işletme ayarları"><i class="ph ph-buildings clickable-icon"></i></a>
+                    <span class="text">
+                        <%= locals.company.brandName || "İşletme Adı" %>
+                    </span>
+                    <% } %>
+
         </div>
         
         <div>
-            <a href="/admin/employee/<%= locals.employee._id %>" title="kullanıcı ayarları"><i class="ph ph-user-circle"></i></a>
+            <a href="/admin/employee/<%= locals.employee._id %>" title="kullanıcı ayarları"><i class="ph ph-user-circle clickable-icon"></i></a>
             
             <span> <%= locals.employee.name ||"kullanıcı adı" %></span>/
             <span> <%= locals.employee.role %></span>

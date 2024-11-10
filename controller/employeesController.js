@@ -50,10 +50,13 @@ const editInformationsEmployees = async (req, res) => {
   try {
     console.log("hahı");
     console.log(req.body);
-    req.body.workHours = {
-      workStart: req.body.workHours[0],
-      workEnd: req.body.workHours[1],
-    };
+    if (req.body.workHours) {
+      req.body.workHours = {
+        workStart: req.body.workHours[0],
+        workEnd: req.body.workHours[1],
+      };
+    }
+    
     await Employee.findByIdAndUpdate(req.params.id, req.body);
     res.status(200).json({
       success: true,

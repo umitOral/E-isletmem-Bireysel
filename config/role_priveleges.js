@@ -13,6 +13,10 @@ export const role_privileges = {
       name: "Role Permissions",
     },
     {
+      id: "PAGES",
+      name: "Page Permissions",
+    },
+    {
       id: "DEFINITIONS",
       name: "Definitions Permissions",
     },
@@ -38,6 +42,12 @@ export const role_privileges = {
     },
   ],
   privileges: [
+    // {
+    //   key: "appointment_page_view",  // code içinde kullanılacak
+    //   name: "Randevu ekranını Görüntüleme", //arayüzde kullanılacak
+    //   group: "PAGES",
+    //   description: "appointment Page View", 
+    // },
     {
       key: "user_view",  // code içinde kullanılacak
       name: "Hasta Görüntüleme", //arayüzde kullanılacak
@@ -106,7 +116,7 @@ export const role_privileges = {
     },
     {
       key: "payment_view",
-      name: "Ödeme Görüntüleme",
+      name: "Kasa Görüntüleme",
       group: "PAYMENTS",
       description: "Payments View",
     },

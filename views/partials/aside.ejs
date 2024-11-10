@@ -17,22 +17,17 @@
                     </a>
                 </li>
 
-
-
-
                 <li>
                     <a href="/admin/users" <% if (link==="users" ) { %>class="active"<% } %>>
                             <i class="icon ph-bold ph-users"></i>
                             <span class="text">Hastalar</span>
                     </a>
                 </li>
-                <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
+                <% if(!locals.employee.permissions.includes("employee_view")){ %>
                     <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Sadece Yönetici">
                         <a href="/admin/employees" <% if (link==="employees" ) { %>class="active"<% } %>>
                                 <i class="icon ph-bold ph-stethoscope"></i>
                                 <span class="text">Personeller</span>
-
-
                                 <i class="ph ph-star"></i>
                         </a>
                     </li>
@@ -51,7 +46,7 @@
                                         <span class="text">Seanslar</span>
                                 </a>
                             </li>
-                            <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){
+                            <% if(!locals.employee.permissions.includes("service_view")){
                                 %>
                                 <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                                     <a href="/admin/services" <% if (link==="services" ) { %>class="active"<% } %>>
@@ -95,7 +90,7 @@
                                     <% } %>
 
 
-                                        <% if(locals.employee.role.includes("personel")){ %>
+                                        <% if(!locals.employee.permissions.includes("payment_view")){ %>
                                             <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
                                                 <a href="/admin/payments" <% if (link==="payments" ) { %>class="active"
                                                     <% } %>>
@@ -179,22 +174,6 @@
         <div class="menu">
             <p class="title">Ayarlar</p>
             <ul>
-                <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
-                    <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
-                        <a href="#" <% if (link==="settings" ) { %>
-                            class="active"
-                            <% } %>>
-                                <i class="icon ph-bold ph-gear"></i>
-                                <span class="text">AYARLAR</span>
-                                <i class="arrow ph-bold ph-caret-down"></i>
-                        </a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a href="/admin/settings">
-                                    <span class="text">Şirket Bilgileri</span>
-                                </a>
-                            </li>
-                            <% } else{ %>
                                 <li>
                                     <a href="#" <% if (link==="settings" ) { %>
                                         class="active"
@@ -204,14 +183,22 @@
                                             <i class="arrow ph-bold ph-caret-down"></i>
                                     </a>
                                     <ul class="sub-menu">
-                                        <li>
-                                            <a href="/admin/settings">
-                                                <span class="text">Şirket Bilgileri</span>
-                                            </a>
-                                        </li>
-                                        <% } %>
-
-
+                                        <% if(!locals.employee.permissions.includes("settings_view")){ %>
+                                            <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Yetkiniz Yok">
+                                                <a href="/admin/settings" <% if (link==="settings" ) { %>class="active"<% } %>>
+                                                        <i class="icon ph-bold ph-stethoscope"></i>
+                                                        <span class="text">Şirket Bilgileri</span>
+                                                        <i class="ph ph-star"></i>
+                                                </a>
+                                            </li>
+                                            <% } else{ %>
+                                                <li>
+                                                    <a href="/admin/settings" <% if (link==="settings" ) { %>class="active"<% } %>>
+                                                            <i class="icon ph-bold ph-stethoscope"></i>
+                                                            <span class="text">Şirket Bilgileri</span>
+                                                    </a>
+                                                </li>
+                                                <% } %>
 
 
                                     </ul>
@@ -222,32 +209,6 @@
     <div class="menu">
         <p class="title">Hesap</p>
         <ul>
-            <% if(locals.employee.role.includes("personel")||locals.employee.role.includes("resepsiyon")){ %>
-                <li onclick="alert('yetkili değilsiniz');return false" class="deactivate">
-                    <a href="#" <% if (link==="companyPaymentPage" ) { %>
-                        class="active"
-                        <% } %>>
-                            <i class="icon ph ph-cardholder"></i>
-                            <span class="text">Abonelik-Ödeme</span>
-                            <i class="arrow ph-bold ph-caret-down"></i>
-                    </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="/admin/companyPaymentsList">
-                                <span class="text">Abonelikler</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/companyPaymentPage">
-                                <span class="text">Ödeme Yap</span>
-                            </a>
-                        </li>
-
-
-                    </ul>
-
-                </li>
-                <% } else{ %>
                     <li>
                         <a href="#" <% if (link==="companyPaymentPage" ) { %>
                             class="active"
@@ -257,22 +218,44 @@
                                 <i class="arrow ph-bold ph-caret-down"></i>
                         </a>
                         <ul class="sub-menu">
-                            <li>
-                                <a href="/admin/companyPaymentsList">
-                                    <span class="text">Abonelikler</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/admin/companyPaymentPage">
-                                    <span class="text">Ödeme Yap</span>
-                                </a>
-                            </li>
+
+                        
+                                        <% if(!locals.employee.permissions.includes("settings_view")){ %>
+                                            <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Yetkiniz Yok">
+                                                <a href="/admin/companyPaymentsList" <% if (link==="settings" ) { %>class="active"<% } %>>
+                                                        <span class="text">Abonelikler</span>
+                                                        <i class="ph ph-star"></i>
+                                                </a>
+                                            </li>
+                                            <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Yetkiniz Yok">
+                                                <a href="/admin/companyPaymentPage" <% if (link==="settings" ) { %>class="active"<% } %>>
+                                                    <span class="text">Ödeme Yap</span>
+                                                        <i class="ph ph-star"></i>
+                                                </a>
+                                            </li>
+                                            <% } else{ %>
+                                                <li>
+                                                    <a href="/admin/companyPaymentsList">
+                                                        <span class="text">Abonelikler</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/admin/companyPaymentPage">
+                                                        <span class="text">Ödeme Yap</span>
+                                                    </a>
+                                                </li>
+                                                <% } %>
+
+
+
+                            
+                          
 
 
                         </ul>
 
                     </li>
-                    <% } %>
+                
 
 
 

@@ -71,7 +71,6 @@ function editUser(e) {
     .postWithUrl(form.action, {
       name: form.name.value,
       surname: form.surname.value,
-      role: form.role.value,
       email: form.email.value,
       sex: form.sex.value,
       address: form.address.value,

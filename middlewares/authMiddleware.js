@@ -104,6 +104,7 @@ const checkPriviliges = (...priviliges) => {
     if (res.locals.employee.permissions.includes(priviliges)) {
       next();
     } else {
+     
       res.json(
         Response.unsuccessResponse(
           false,

@@ -58,24 +58,19 @@ function editUser(e) {
   e.preventDefault();
 
   const form = document.querySelector("#user-edit-form");
-  let workHours = [];
-  form.workhours.forEach((element) => {
-    workHours.push(element.value);
-  });
 
   console.log(form.action);
   request
     .postWithUrl(form.action, {
       name: form.name.value,
       surname: form.surname.value,
-      role: form.role.value,
       email: form.email.value,
       sex: form.sex.value,
       address: form.address.value,
       phone: form.phone.value,
-      workHours: workHours,
+      
       birthDate: form.birthDate.value,
-      employeeComission: form.employeeComission.value,
+      
     })
     .then((response) => {
       console.log(response);
