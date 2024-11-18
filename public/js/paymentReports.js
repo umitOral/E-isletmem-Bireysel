@@ -23,6 +23,7 @@ const selected_proccess_table = document.querySelector(
 const paymentsTable = document.querySelector("#payments_table");
 
 let selectedOperationsforEdit = [];
+let selectedProductsforEdit = [];
 let editedPayment = "";
 
 let selectedOperations = [];
@@ -64,9 +65,9 @@ function getPayments(page) {
     .then((response) => {
       ui.showNotification(response.success, response.message);
       console.log(response);
-      let totalComission = calculateTotalComission(response.data.reports);
-      let totalValue = calculateTotalValue(response.data.reports);
-      datasToTable(response.data, totalValue, totalComission);
+      
+      
+      datasToTable(response.data);
       detailsBtnhandLe();
       datasToPagination(response.data.pagination);
     })
@@ -81,7 +82,7 @@ function detailsBtnhandLe() {
   btns.forEach((element, index) => {
     element.addEventListener("click", (e) => {
       selectedPaymentIndex = index + 1;
-      handleEditModal(e.target.parentElement.parentElement.dataset.paymentid);
+      handleEditModal(e);
     });
   });
 }
@@ -109,11 +110,12 @@ const selected_proccess_table_edit = document.querySelector(
   ".selected_proccess_table_edit tbody"
 );
 
-function handleEditModal(paymentId, index) {
-  editedPayment = paymentId;
+function handleEditModal(e) {
+  console.log(e.target);
+  editedPayment = e.target.parentElement.parentElement.dataset.paymentid;
 
   request
-    .getwithUrl("../payments/" + paymentId)
+    .getwithUrl("../payments/" +e.target.parentElement.parentElement.dataset.paymentid)
     .then((response) => {
       console.log(response);
       editPaymentModal.classList.remove("hidden");
@@ -124,21 +126,25 @@ function handleEditModal(paymentId, index) {
       } else {
         paymentCreditCartRatio.checked = true;
       }
-      editPaymentForm.dataset.userid = response.data.fromUser._id;
-      paymentUserEdit.value =
-        response.data.fromUser.name + " " + response.data.fromUser.surname;
-
+      if (!response.data.fromUser) {
+        editPaymentForm.dataset.userid = "";
+        paymentUserEdit.value = "";
+      } else {
+        editPaymentForm.dataset.userid = response.data.fromUser._id;
+        paymentUserEdit.value =
+          response.data.fromUser.name + " " + response.data.fromUser.surname;
+      }
       paymentDescriptionEdit.value = response.data.description;
 
       response.operationsDetails.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
         <tr data-id="${response.data.operations[index]._id}" data-price="${
           response.data.operations[index].paymentValue
-        }" >
+        }" data-type="operation">
             <td>${element.operationName}</td>
                 
             <td>
-            
+           
             </td>
             
 
@@ -159,31 +165,101 @@ function handleEditModal(paymentId, index) {
             }
             </td>
             <td>
-              <input class="payment_value" value=" ${
+              <input class="payment_value tdInputs" value=" ${
                 response.data.operations[index].paymentValue
               }" placeholder="${
           response.data.operations[index].paymentValue
         }"></input>
             </td>
             
-            <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
+            <td><i class="fa-solid fa-trash delete_operation_from_basket"></i></td>
+        </tr>
+           
+            `;
+      });
+      response.data.products.forEach((element, index) => {
+        selected_proccess_table_edit.innerHTML += `
+        <tr data-id="${element._id}" data-price="${element.price}" data-type="product" >
+             <td>${element.productId.name}</td>
+                  <td>
+                  <input class="tdInputs product-quantity" type="number" min="0" value="${element.quantity}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs deactive" type="number" min="0" value="${element.price}" readonly >
+                  </td>
+                  <td>
+                  <input class="tdInputs discount" type="number" min="0" value="${element.discount}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs percentDiscount" type="number" min="0" value="${element.percentDiscount}" >
+                  </td>
+                  <td>
+                  <input class="tdInputs deactive"  type="number" min="0" value="${element.paymentValue}" readonly >
+                  </td>
+                 
+                  <td>
+                  <input class="payment_value tdInputs" type="number" min="0"
+                    max=""
+                    value="${element.paymentValue}"
+                    step="1" disabled>
+                  </td>
+            
+            <td><i class="fa-solid fa-trash delete_product_from_basket"></i></td>
         </tr>
            
             `;
       });
       selectedOperationsforEdit = [];
+      selectedProductsforEdit = [];
       response.data.operations.forEach((element) => {
         selectedOperationsforEdit.push(element);
       });
-
-      calculateTotalComissionforEdit();
+      response.data.products.forEach((element) => {
+        selectedProductsforEdit.push({
+          _id: element._id,
+          quantity: element.quantity,
+          price: element.price,
+          paymentValue: element.price,
+          discount: element.discount,
+          percentDiscount: element.percentDiscount,
+          productId: element.productId._id,
+        });
+      });
+      console.log(selectedOperationsforEdit);
+      console.log(selectedProductsforEdit);
+      calculateTotalPriceforEdit();
     })
     .catch((err) => {
       console.log(err);
     });
 }
 
-function datasToTable(data, totalValue, totalComission) {
+function calculateTotalPriceforEdit() {
+  console.log("calculating2");
+
+  let totalValueforEdit = document.querySelector("#total_value_edit");
+  let paymentValues = 0;
+  let productPaymentValues = 0;
+  if (selectedOperationsforEdit.length !== 0) {
+    paymentValues = selectedOperationsforEdit.map(
+      (element) => element.paymentValue
+    );
+    paymentValues = paymentValues.reduce((a, b) => a + b).toFixed();
+  }
+  if (selectedProductsforEdit.length !== 0) {
+    selectedProductsforEdit.forEach((element) => {
+      productPaymentValues += element.paymentValue;
+    });
+    productPaymentValues = productPaymentValues;
+  }
+
+  totalValueforEdit.textContent =
+    Number(paymentValues) + Number(productPaymentValues);
+}
+
+
+
+function datasToTable(data) {
   let tableBody = document.querySelector("#payment-report-table tbody");
   let tableFoot = document.querySelector("#payment-report-table tfoot");
   let lastpage = document.querySelector("#lastpage");
@@ -276,7 +352,7 @@ function datasToTable(data, totalValue, totalComission) {
   <tr>
       
       <td colspan="4">toplam:</td>
-      <td id="">${totalValue}</td>
+     
       
   </tr>
 
@@ -422,32 +498,8 @@ function calculateTotalComissionforEdit() {
     totalValueforEdit.textContent = paymentValues.reduce((a, b) => a + b);
   }
 }
-function calculateTotalComission(data) {
-  let totalComission = 0;
-  data.forEach((element) => {
-    totalComission += element.products
-      .map((product) => {
-        let commission =
-          ((product.baseComission + product.employeeComission) *
-            product.paymentValue) /
-          100;
-        return commission;
-      })
-      .reduce((a, b) => a + b);
-  });
 
-  return totalComission;
-}
-function calculateTotalValue(data) {
-  let totalValue = 0;
-  data.forEach((element) => {
-    totalValue += element.products
-      .map((item) => item.paymentValue)
-      .reduce((a, b) => a + b);
-  });
 
-  return totalValue;
-}
 
 selected_proccess_table_edit.addEventListener("input", (e) => {
   if (e.target.classList.contains("payment_value")) {
