@@ -16,6 +16,7 @@ const tableElements = document.querySelectorAll("table");
 const appointmentsTabButton = document.querySelector(
   ".show-content.appointments"
 );
+
 const permissionsTabButton = document.querySelector(
   ".show-content.permissions"
 );

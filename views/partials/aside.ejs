@@ -173,7 +173,7 @@
         </div>
         <div class="menu">
             <p class="title">Ayarlar</p>
-            <ul>
+            <ul> 
                                 <li>
                                     <a href="#" <% if (link==="settings" ) { %>
                                         class="active"
@@ -183,6 +183,13 @@
                                             <i class="arrow ph-bold ph-caret-down"></i>
                                     </a>
                                     <ul class="sub-menu">
+                                        <li>
+                                                    <a href="/admin/employee/<%=locals.employee._id %>" <% if (link==="settings" ) { %>class="active"<% } %>>
+                                                            <i class="icon ph-bold ph-stethoscope"></i>
+                                                            <span class="text">Kullanıcı Bilgileri</span>
+                                                    </a>
+                                                    
+                                                </li>
                                         <% if(!locals.employee.permissions.includes("settings_view")){ %>
                                             <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Yetkiniz Yok">
                                                 <a href="/admin/settings" <% if (link==="settings" ) { %>class="active"<% } %>>

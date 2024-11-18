@@ -40,6 +40,9 @@
                             <div class="show-content appointments">Randevular
                                 <i class="fa-solid fa-pen-to-square edit"></i>
                             </div>
+                            <div class="show-content payments">Satışlar
+                                <i class="fa-solid fa-pen-to-square edit"></i>
+                            </div>
                           
                             
                         </div>
@@ -188,29 +191,58 @@
                                
                                 <div class="userInformationsContent  permissions ">
                                     <div>
-                                        <h2>İzinler</h2>
+                                        <h2>Satışlar</h2>
+                                    </div>
+                                    <div class="search">
+                                        <form autocomplete="off" action="" class="horizontal-form" id="payment-reports-search" data-employeid="<%= locals.employee._id %>">
+                
+                                            <div class="form-group">Başlangıç tarihi:
+                                                <input type="date" name="startDate" class="startDate"
+                                                    value="<%= new Date().toLocaleDateString('en-CA') %>">
+                                            </div>
+                                            <div class="form-group">Bitiş tarihi:
+                                                <input type="date" name="endDate" class="endDate"
+                                                    value="<%= new Date().toLocaleDateString('en-CA') %>">
+                                            </div>
+                                           
+                                            <div class="form-group" style="align-self: end;">
+                                               <button type="submit" class="btn save" >Ara</button>
+                                            </div>
+                
+                
+                                        </form>
+                
                                     </div>
                                     <div class="contentBody">
-
-                                        <div class="table permissions-table">
-                                            <table>
+                                        <div class="table-wrapper ">
+                                            <table id="payments-table">
                                                 <thead>
 
-                                                    <th>Yetki</th>
-                                                    <th>Durum</th>
-
-
+                                                    <th></th>
+                                                    <th>Tarih</th>
+                                                    <th>İşlem Tutarı</th>
+                                                    <th>(personel yüzdesi+ürün yüzdesi)</th>
+                                                    <th>Komisyon Tutarı</th>
                                                 </thead>
                                                 <tbody></tbody>
+                                                <tfoot>
 
-
+                                                </tfoot>
                                             </table>
+                                        </div>
+                                        <div class="pagination-describe">
+                                            <div>
+                                                <div>
+                                                    <span id="lastpage"><%=  %></span> Sayfa, Toplam <span id="total"><%=  %></span> Sonuç bulundu
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pagination" id="pagination">
+
 
                                         </div>
                                     </div>
-
-
-
+                              
 
                                 </div>
                               

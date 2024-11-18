@@ -17,6 +17,8 @@ const appointmentsTabButton = document.querySelector(
   ".show-content.appointments"
 );
 
+const paymentSearchForm = document.querySelector("#payment-reports-search");
+
 
 
 const editBtn = document.querySelector(".edit-informations-btn");
@@ -36,7 +38,206 @@ function eventListeners() {
   editUserForm.addEventListener("submit", editUser);
   editBtn.addEventListener("click", showInformationsModal);
   appointmentsTabButton.addEventListener("click", getEmployeesAppointments);
- 
+  paymentSearchForm.addEventListener("submit", (e) => {
+    getEmployeesPayment();
+    e.preventDefault();
+    
+  });
+}
+
+function getEmployeesPayment(page) {
+
+  const form = document.querySelector("#payment-reports-search");
+  let employeeId = form.dataset.employeid
+  console.log(employeeId)
+  request
+    .postWithUrl("../reports/paymentsReportsPage", {
+      startDate: form.startDate.value,
+      endDate: form.endDate.value,
+      employee: employeeId,
+      page: page||1,
+      cashOrCard: "",
+    })
+    .then((response) => {
+      console.log(response);
+      let totalComission = calculateTotalComission(response.data.reports);
+      let totalValue = calculateTotalValue(response.data.reports);
+      
+
+      datasToTable(response.data, totalValue, totalComission);
+      datasToPagination(response.data.pagination);
+      ui.showNotification(true, response.message);
+    })
+    .catch((err) => {
+      console.log(err);
+      ui.showNotification(false, err);
+    });
+}
+
+function datasToTable(data, totalValue, totalComission) {
+  let tableBody = document.querySelector("#payments-table tbody");
+  let tableFoot = document.querySelector("#payments-table tfoot");
+  let lastpage = document.querySelector("#lastpage");
+  let total = document.querySelector("#total");
+
+  while (tableBody.children[0]) {
+    tableBody.children[0].remove();
+  }
+  while (tableFoot.children[0]) {
+    tableFoot.children[0].remove();
+  }
+
+
+
+  data.reports.forEach((element, index) => {
+    const totalComissionforSingle = element.products.reduce((total, product) => {
+      return total + product.paymentValue * (product.baseComission+product.employeeComission)/100;
+    }, 0);
+    tableBody.innerHTML += `
+    <tr data-paymentId="${element._id}">
+                                       
+                                       <td>
+                                        <div style="display: flex; align-items: center; justify-content: center; gap:0.5rem;">
+                                              <label for="">${
+                                                (data.pagination.page - 1) *
+                                                  data.pagination.limit +
+                                                index +
+                                                1
+                                              }.</label>
+                                             
+                                          </div>
+                                       
+                                       </td>
+                                       <td>
+                                       ${new Date(
+                                         element.createdAt
+                                       ).toLocaleDateString()}
+                                       </td>
+                                      
+                                      
+                                     
+
+                                          <td>
+                                       ${element.totalPrice}
+                                       </td>
+                                        <td><span> ${element.products
+                                          .map((product) => {
+                                            return `<li> ${product.paymentValue}x(${product.baseComission}+${product.employeeComission})=${((product.baseComission +product.employeeComission) *product.paymentValue) /100}</li>`;
+                                          })
+                                          .join("")}</span></td>
+
+                                        <td><span>
+                                          ${totalComissionforSingle}
+                                          
+                                        </span></td>
+                                     
+                                        
+                                          <td>
+                                       ${element.description}
+                                       </td>
+                                        
+                                    
+                                       
+                                     
+                                   </tr>
+`;
+
+    lastpage.innerHTML = `${data.pagination.lastpage}`;
+    total.innerHTML = data.total;
+  });
+  tableFoot.innerHTML += `
+                  
+  <tr>
+      
+      <td colspan="4">toplam:</td>
+      
+      <td id="">${totalComission}</td>
+  </tr>
+
+`;
+}
+function datasToPagination(pagination) {
+  let paginationArea = document.getElementById("pagination");
+  // reset
+  paginationArea.innerHTML = "";
+  // create
+  if (pagination.previous) {
+    paginationArea.innerHTML += `
+      <span class="pagination-buttons" data-pageNumber="${pagination.page - 1}">
+       <i class="fa-solid fa-angle-left"></i>
+      </span>
+    
+  `;
+  }
+
+  if (pagination.page > 1) {
+    paginationArea.innerHTML += `
+        <span class="pagination-buttons" data-pageNumber="${
+          pagination.page - 1
+        }">
+        ${pagination.page - 1}
+          </span>
+        
+      `;
+  }
+
+  paginationArea.innerHTML += `
+      <span class="pagination-buttons page-active" data-pageNumber="${pagination.page}">
+              ${pagination.page}
+            </span>
+    `;
+
+  if (pagination.page < pagination.lastpage) {
+    paginationArea.innerHTML += `
+           
+        <span class="pagination-buttons" data-pageNumber="${
+          pagination.page + 1
+        }">
+        ${pagination.page + 1}
+        </span>
+     
+ `;
+  }
+  if (pagination.next) {
+    paginationArea.innerHTML += `
+           
+               <span class="pagination-buttons" data-pageNumber="${
+                 pagination.page + 1
+               }">
+                  <i class="fa-solid fa-angle-right"></i>
+               </span>
+            
+        `;
+  }
+  paginatioButtonsHandle();
+}
+function calculateTotalComission(data) {
+  let totalComission = 0;
+  
+  data.forEach((element) => {
+    totalComission += element.products
+      .map((product) => {
+        let commission =
+          ((product.baseComission + product.employeeComission) *
+            product.paymentValue) /
+          100;
+        return commission;
+      })
+      .reduce((a, b) => a + b);
+  });
+
+  return totalComission;
+}
+
+function calculateTotalValue(data) {
+  let totalValue = 0;
+  data.forEach((element) => {
+    totalValue += element.products
+      .map((item) => item.paymentValue)
+      .reduce((a, b) => a + b);
+  });
+
+  return totalValue;
 }
 
 cancelModal.forEach((element) => {
@@ -117,6 +318,16 @@ function getEmployeesAppointments() {
       );
     })
     .catch((err) => console.log(err));
+}
+
+function paginatioButtonsHandle() {
+  let paginationBtns = document.querySelectorAll(".pagination-buttons");
+  paginationBtns.forEach((element) => {
+    element.addEventListener("click", (e) => {
+      console.log(e.target.dataset.pagenumber);
+      getEmployeesPayment(e.target.dataset.pagenumber);
+    });
+  });
 }
 
 

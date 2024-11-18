@@ -250,18 +250,7 @@ function datasToTable(data, totalValue, totalComission) {
                                           <td>
                                        ${element.totalPrice}
                                        </td>
-                                        <td><span> ${element.products
-                                          .map((product) => {
-                                            let commission =
-                                              ((product.baseComission +
-                                                product.employeeComission) *
-                                                product.paymentValue) /
-                                              100;
-                                            return `<li> ${commission.toFixed(
-                                              2
-                                            )}</li>`;
-                                          })
-                                          .join("")}</span></td>
+                                        
                                      
                                           <td>
                                        ${element.cashOrCard}
@@ -288,7 +277,7 @@ function datasToTable(data, totalValue, totalComission) {
       
       <td colspan="4">toplam:</td>
       <td id="">${totalValue}</td>
-      <td id="">${totalComission}</td>
+      
   </tr>
 
 `;
