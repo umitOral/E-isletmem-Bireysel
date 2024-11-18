@@ -4,6 +4,7 @@ import {
   companyPaymentsListPage,
   getSettingsPage,
   getAdminPage,
+  getSantralPage,
   getUsersPage,
   getAppointmentsPage,
   getUserPage,
@@ -127,6 +128,7 @@ import { checkSmsActive } from "../middlewares/smsMiddleware.js";
 const router = express.Router();
 
 router.route("/").get(getAdminPage);
+router.route("/santral/:companyId/:phone").get(getSantralPage);
 router.route("/adminControllers/addbulkproducttoGeneral").get(addbulkproducttoGeneral);
 router.route("/adminControllers/topluIslemler").get(topluIslemler);
 router.route("/users").get(checkPriviliges("user_view"), getUsersPage);

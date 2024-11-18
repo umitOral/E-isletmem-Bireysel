@@ -305,6 +305,15 @@ const getAdminPage = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+const getSantralPage = async (req, res, next) => {
+  try {
+    res.status(200).render("santral", {
+      link: "santral",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 
 const getUsersPage = async (req, res, next) => {
   try {
@@ -821,5 +830,6 @@ export {
   paymentReportsPage,
   getAllProductsPage,
   productReportsPage,
-  getSmsReportsPage
+  getSmsReportsPage,
+  getSantralPage
 };
