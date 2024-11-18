@@ -89,6 +89,8 @@ width:min-content;
 .edit_payment_small_modal.showed_modal {
     display: block;
     z-index: 999;
+    padding: 0.5rem;
+    border-radius: 1rem;
 }
 .edit_payment_small_modal button {
     
@@ -96,7 +98,8 @@ width:min-content;
    cursor: pointer;
    border: none;
    padding: 0.5rem;
-   
+   border-radius: 1rem;
+   background-color: white;
 }
 thead td {
     white-space: nowrap
