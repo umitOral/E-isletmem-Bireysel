@@ -808,8 +808,12 @@ barcodeInput.addEventListener("keydown", (e) => {
               (item) => item.productId === response.data._id
             );
             if (index === -1) {
-              selected_proccess_table.innerHTML += `
-              <tr data-productId="${response.data._id}" data-type="product" >
+              let newRow = selected_proccess_table.insertRow(-1);
+                newRow.setAttribute("data-productId",response.data._id)
+                newRow.setAttribute("data-productBarcode",response.data.barcodes[0])
+                newRow.setAttribute("data-type","product")
+              newRow.innerHTML += `
+              
                   <td>
                     <span>${response.data.name}</span>
                   </td>
@@ -840,7 +844,7 @@ barcodeInput.addEventListener("keydown", (e) => {
       
                   <td><i class="fa-solid fa-trash delete_product_from_basket"></i></td>
       
-              </tr>`;
+              `;
               product.productId = response.data._id;
               product.quantity = 1;
               product.price = response.data.price;
@@ -856,9 +860,10 @@ barcodeInput.addEventListener("keydown", (e) => {
                 selectedProducts[index].quantity *
                 selectedProducts[index].price;
               let productsRow = selected_proccess_table.querySelectorAll("tr");
-
+              console.log(productsRow)
               productsRow.forEach((element) => {
-                if (element.dataset.id === selectedProducts[index]._id) {
+                if (element.dataset.productid === selectedProducts[index].productId) {
+                  console.log("işleşti")
                   element.children[1].children[0].value =
                     Number(element.children[1].children[0].value) + 1;
                   element.children[7].children[0].value =
