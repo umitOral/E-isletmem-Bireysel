@@ -26,7 +26,6 @@ let selectedOperationsforEdit = [];
 let selectedProductsforEdit = [];
 let editedPayment = "";
 
-let selectedOperations = [];
 let selectedPaymentIndex;
 
 cancelBtns.forEach((element) => {
@@ -65,8 +64,7 @@ function getPayments(page) {
     .then((response) => {
       ui.showNotification(response.success, response.message);
       console.log(response);
-      
-      
+
       datasToTable(response.data);
       detailsBtnhandLe();
       datasToPagination(response.data.pagination);
@@ -115,7 +113,9 @@ function handleEditModal(e) {
   editedPayment = e.target.parentElement.parentElement.dataset.paymentid;
 
   request
-    .getwithUrl("../payments/" +e.target.parentElement.parentElement.dataset.paymentid)
+    .getwithUrl(
+      "../payments/" + e.target.parentElement.parentElement.dataset.paymentid
+    )
     .then((response) => {
       console.log(response);
       editPaymentModal.classList.remove("hidden");
@@ -128,7 +128,7 @@ function handleEditModal(e) {
       }
       if (!response.data.fromUser) {
         editPaymentForm.dataset.userid = "";
-        paymentUserEdit.value = "";
+        paymentUserEdit.value = "hasta işlenmedi";
       } else {
         editPaymentForm.dataset.userid = response.data.fromUser._id;
         paymentUserEdit.value =
@@ -179,7 +179,7 @@ function handleEditModal(e) {
       });
       response.data.products.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
-        <tr data-id="${element._id}" data-price="${element.price}" data-type="product" >
+        <tr data-id="${element.productId._id}" data-price="${element.price}" data-type="product" >
              <td>${element.productId.name}</td>
                   <td>
                   <input class="tdInputs product-quantity" type="number" min="0" value="${element.quantity}" >
@@ -219,7 +219,7 @@ function handleEditModal(e) {
           _id: element._id,
           quantity: element.quantity,
           price: element.price,
-          paymentValue: element.price,
+          paymentValue: element.paymentValue,
           discount: element.discount,
           percentDiscount: element.percentDiscount,
           productId: element.productId._id,
@@ -236,6 +236,7 @@ function handleEditModal(e) {
 
 function calculateTotalPriceforEdit() {
   console.log("calculating2");
+  console.log(selectedProductsforEdit);
 
   let totalValueforEdit = document.querySelector("#total_value_edit");
   let paymentValues = 0;
@@ -257,17 +258,13 @@ function calculateTotalPriceforEdit() {
     Number(paymentValues) + Number(productPaymentValues);
 }
 
-
-
 function datasToTable(data) {
   let tableBody = document.querySelector("#payment-report-table tbody");
   let tableFoot = document.querySelector("#payment-report-table tfoot");
   let lastpage = document.querySelector("#lastpage");
-  let total = document.querySelector("#total");
 
   while (tableBody.children[0]) {
     tableBody.children[0].remove();
-    
   }
   while (tableFoot.children[0]) {
     tableFoot.children[0].remove();
@@ -345,15 +342,18 @@ function datasToTable(data) {
 `;
 
     lastpage.innerHTML = `${data.pagination.lastpage}`;
-    total.innerHTML = data.total;
   });
+
   tableFoot.innerHTML += `
                   
   <tr>
       
       <td colspan="4">toplam:</td>
+        <td>
+        ${(data.reports.map((item) => item.totalPrice)
+          .reduce((a, b) => a + b))}
+        </td>
      
-      
   </tr>
 
 `;
@@ -464,6 +464,7 @@ saveEditModal.addEventListener("click", (e) => {
     cashOrCard: editPaymentForm.cashOrCard.value,
     description: editPaymentForm.description.value,
     operations: selectedOperationsforEdit,
+    products: selectedProductsforEdit,
   };
   console.log(data);
 
@@ -486,31 +487,90 @@ saveEditModal.addEventListener("click", (e) => {
     .catch((err) => console.log(err));
 });
 
-function calculateTotalComissionforEdit() {
-  let totalValueforEdit = document.querySelector("#total_value_edit");
-  let paymentValues = selectedOperationsforEdit.map(
-    (element) => element.paymentValue
-  );
-
-  if (paymentValues.length === 0) {
-    totalValueforEdit.textContent = 0;
-  } else {
-    totalValueforEdit.textContent = paymentValues.reduce((a, b) => a + b);
+selected_proccess_table_edit.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete_product_from_basket")) {
+    // remove selected options
+    let index = selectedProductsforEdit.findIndex(
+      (item) =>
+        item.productId === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    selectedProductsforEdit.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    console.log(selectedProductsforEdit);
+    calculateTotalPriceforEdit();
   }
-}
-
-
+  if (e.target.classList.contains("delete_operation_from_basket")) {
+    let index = selectedOperationsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    selectedOperationsforEdit.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    calculateTotalPriceforEdit();
+    console.log(selectedOperationsforEdit);
+  }
+});
 
 selected_proccess_table_edit.addEventListener("input", (e) => {
-  if (e.target.classList.contains("payment_value")) {
+  if (
+    e.target.classList.contains("payment_value") &&
+    e.target.parentElement.parentElement.dataset.type === "operation"
+  ) {
     let index = selectedOperationsforEdit.findIndex(
       (item) => item._id === e.target.parentElement.parentElement.dataset.id
     );
 
     e.target.addEventListener("input", (e) => {
       selectedOperationsforEdit[index].paymentValue = Number(e.target.value);
-      console.log(selectedOperationsforEdit);
-      calculateTotalComissionforEdit();
+
+      calculateTotalPriceforEdit();
     });
+  }
+
+  if (
+    e.target.classList.contains("payment_value") &&
+    e.target.parentElement.parentElement.dataset.type === "product"
+  ) {
+    let index = selectedProductsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    console.log(selectedProductsforEdit);
+    selectedProductsforEdit[index].paymentValue = Number(e.target.value);
+
+    calculateTotalPriceforEdit();
+  }
+});
+
+selected_proccess_type_edit.addEventListener("input", (e) => {
+  if (e.target.classList.contains("product-quantity")) {
+    let index = selectedProductsforEdit.findIndex(
+      (item) =>
+        item.productId === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    console.log(selectedProductsforEdit);
+    selectedProductsforEdit[index].quantity = Number(e.target.value);
+    selectedProductsforEdit[index].paymentValue =
+      selectedProductsforEdit[index].quantity *
+      selectedProductsforEdit[index].price;
+    e.target.parentElement.parentElement.children[6].children[0].value =
+      selectedProductsforEdit[index].paymentValue;
+    calculateTotalPriceforEdit();
+  }
+  if (e.target.classList.contains("discount")) {
+    let index = selectedProductsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+
+    selectedProductsforEdit[index].discount = Number(e.target.value);
+    selectedProductsforEdit[index].paymentValue =
+      selectedProductsforEdit[index].quantity *
+        selectedProductsforEdit[index].price -
+      selectedProductsforEdit[index].discount;
+    e.target.parentElement.parentElement.children[6].children[0].value =
+      selectedProductsforEdit[index].paymentValue;
+
+    calculateTotalPriceforEdit();
   }
 });

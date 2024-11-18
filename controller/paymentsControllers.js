@@ -8,23 +8,23 @@ const addPayment = async (req, res, next) => {
   try {
     console.log(req.body);
     req.body.company = res.locals.company._id;
-    const employee = await Employee.findById(req.body.comissionEmployee);
-      console.log("employee")
-      console.log(employee)
-  
-
+   
+    
+      
     if (req.body.fromUser === "") {
       req.body.fromUser = undefined;
     }
 
-    if (req.body.comissionEmployee!==""&&req.body.products.length !== 0) {
+    if (req.body.comissionEmployee && req.body.products.length !== 0) {
       console.log("burası")
+      const employee = await Employee.findById(req.body.comissionEmployee);
       req.body.products.forEach(element => {
         console.log( "haho")
         console.log(employee||"deneme")
         element.employeeComission=employee.employeeComission
       });
     }
+
 console.log("burası2")
  
 
@@ -101,6 +101,7 @@ console.log("burası2")
       message: "Ödeme kaydedildi",
     });
   } catch (error) {
+    console.log(error)
     return new CustomError(error);
   }
 };
@@ -180,15 +181,22 @@ const editPayment = async (req, res, next) => {
 
     for (const [i, value] of paymentProducts.entries()) {
       let indexcontrol = requestProducts.findIndex(
-        (item) => (item._id = value._id.toString())
+        (item) => (item.productId === value.productId.toString())
       );
+      
+      console.log(i);
+      console.log(indexcontrol);
+      console.log(value.productId.toString());
+      
+      
+
       let foundedProduct = await Product.findById(value.productId);
-      console.log(foundedProduct);
+      
       if (indexcontrol === -1) {
         paymentProducts.splice(i, 1);
         foundedProduct.totalStock = foundedProduct.totalStock + value.quantity;
       } else {
-        console.log("burası");
+        
         paymentProducts[i] = requestProducts[indexcontrol];
         foundedProduct.totalStock =
           foundedProduct.totalStock +
@@ -248,24 +256,25 @@ const editPayment = async (req, res, next) => {
       }
     }
     // calculate total
-    console.log(payment);
+   
     let totalPriceProducts = 0;
     let totalPriceOperations = 0;
-    if (payment.operations.length !== 0) {
+    if (req.body.operations.length !== 0) {
       totalPriceOperations = Number(
-        payment.operations
+        req.body.operations
           .map((item) => item.paymentValue)
           .reduce((a, b) => a + b)
       );
     }
-    if (payment.products.length !== 0) {
+    if (req.body.products.length !== 0) {
       totalPriceProducts = Number(
-        payment.products
+        req.body.products
           .map((item) => item.paymentValue)
           .reduce((a, b) => a + b)
       );
     }
-
+    console.log(totalPriceOperations)
+    console.log(totalPriceProducts)
     payment.totalPrice = totalPriceProducts + totalPriceOperations;
 
     await payment.save();

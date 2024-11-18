@@ -1007,6 +1007,7 @@ selected_proccess_type_edit.addEventListener("input", (e) => {
       selectedProductsforEdit[index].paymentValue;
     calculateTotalPriceforEdit();
   }
+  
   if (e.target.classList.contains("discount")) {
     let index = selectedProductsforEdit.findIndex(
       (item) =>
@@ -1158,6 +1159,27 @@ function handleEditPaymentModal(e) {
 }
 
 selected_proccess_table_edit.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete_operation_from_basket")) {
+    let index = selectedOperationsforEdit.findIndex(
+      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+    );
+    selectedOperationsforEdit.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    calculateTotalPriceforEdit();
+    console.log(selectedOperationsforEdit);
+  }
+
+  if (e.target.classList.contains("delete_product_from_basket")) {
+    // remove selected options
+    let index = selectedProductsforEdit.findIndex(
+      (item) => item.productId === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    selectedProductsforEdit.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    console.log(selectedProductsforEdit);
+    calculateTotalPriceforEdit();
+  }
   if (e.target.classList.contains("delete_items_from_basket")) {
     let index = selectedOperationsforEdit.findIndex(
       (item) => item._id === e.target.parentElement.parentElement.dataset.id

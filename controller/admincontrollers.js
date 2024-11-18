@@ -45,7 +45,7 @@ const topluIslemler = async (req, res, next) => {
   try {
     
     
-    let response3 = await Sms.deleteMany({});
+    let response3 = await Payment.deleteMany({});
    
     res.status(200).json({
       success: true,

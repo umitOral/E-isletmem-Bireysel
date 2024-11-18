@@ -119,7 +119,7 @@ paymentTable.addEventListener("click", (e) => {
 });
 
 function handleEditModal(e) {
-  console.log(e.target);
+  
   editedPayment = e.target.dataset.paymentid;
 
   request
@@ -187,7 +187,7 @@ function handleEditModal(e) {
       });
       response.data.products.forEach((element, index) => {
         selected_proccess_table_edit.innerHTML += `
-        <tr data-id="${element._id}" data-price="${element.price}" data-type="product" >
+        <tr data-id="${element.productId._id}" data-price="${element.price}" data-type="product" >
              <td>${element.productId.name}</td>
                   <td>
                   <input class="tdInputs product-quantity" type="number" min="0" value="${element.quantity}" >
@@ -227,7 +227,7 @@ function handleEditModal(e) {
           _id: element._id,
           quantity: element.quantity,
           price: element.price,
-          paymentValue: element.price,
+          paymentValue: element.paymentValue,
           discount: element.discount,
           percentDiscount: element.percentDiscount,
           productId: element.productId._id,
@@ -540,7 +540,7 @@ function calculateTotalPrice() {
     });
     productPaymentValues = productPaymentValues;
   }
-  console.log(Number(productPaymentValues));
+  
   totalValue.textContent = Number(paymentValues) + Number(productPaymentValues);
 }
 
@@ -624,10 +624,11 @@ selected_proccess_type_add.addEventListener("click", (e) => {
 
   // //////////////////
 });
+
 selected_proccess_type_edit.addEventListener("input", (e) => {
   if (e.target.classList.contains("product-quantity")) {
     let index = selectedProductsforEdit.findIndex(
-      (item) => item._id === e.target.parentElement.parentElement.dataset.id
+      (item) => item.productId === e.target.parentElement.parentElement.dataset.id
     );
     console.log(index);
     console.log(selectedProductsforEdit);
@@ -734,15 +735,15 @@ selected_proccess_type_add.addEventListener("input", (e) => {
 });
 
 selected_proccess_table_edit.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete_product_from_basket")) {
-    let index = selectedOperationsforEdit.findIndex(
-      (item) => item._id === e.target.parentElement.parentElement.dataset.id
-    );
-    selectedProductsforEdit.splice(index, 1);
-    e.target.parentElement.parentElement.remove();
-    calculateTotalPriceforEdit();
-    console.log(selectedProductsforEdit);
-  }
+  // if (e.target.classList.contains("delete_product_from_basket")) {
+  //   let index = selectedOperationsforEdit.findIndex(
+  //     (item) => item._id === e.target.parentElement.parentElement.dataset.id
+  //   );
+  //   selectedProductsforEdit.splice(index, 1);
+  //   e.target.parentElement.parentElement.remove();
+  //   calculateTotalPriceforEdit();
+  //   console.log(selectedProductsforEdit);
+  // }
   if (e.target.classList.contains("delete_operation_from_basket")) {
     let index = selectedOperationsforEdit.findIndex(
       (item) => item._id === e.target.parentElement.parentElement.dataset.id
@@ -751,6 +752,18 @@ selected_proccess_table_edit.addEventListener("click", (e) => {
     e.target.parentElement.parentElement.remove();
     calculateTotalPriceforEdit();
     console.log(selectedOperationsforEdit);
+  }
+
+  if (e.target.classList.contains("delete_product_from_basket")) {
+    // remove selected options
+    let index = selectedProductsforEdit.findIndex(
+      (item) => item.productId === e.target.parentElement.parentElement.dataset.id
+    );
+    console.log(index);
+    selectedProductsforEdit.splice(index, 1);
+    e.target.parentElement.parentElement.remove();
+    console.log(selectedProductsforEdit);
+    calculateTotalPriceforEdit();
   }
 });
 
@@ -899,6 +912,7 @@ addPaymentFrom.addEventListener("submit", (e) => {
     products: selectedProducts,
     comissionEmployee: selectedEmployee,
   };
+  console.log(data)
   request
     .postWithUrl("./payments/addPayment", data)
     .then((response) => {
