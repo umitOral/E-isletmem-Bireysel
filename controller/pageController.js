@@ -25,7 +25,8 @@ import {
 import { searchProduct } from "./productControllers.js";
 import { getTenantDb } from "./db.js";
 import { BRAND_LIST } from "../config/brands.js";
-import { sendTestMail } from "./mailControllers.js";
+import { sendRegisterMail } from "./mailControllers.js";
+
 
 let now = new Date();
 let day = now.getDate();
@@ -299,7 +300,7 @@ const getContactPage = (req, res, next) => {
 };
 const getAdminPage = async (req, res, next) => {
   try {
-    sendTestMail()
+    console.log( "mail başarılı")
     res.status(200).render("indexAdmin", {
       link: "index",
     });

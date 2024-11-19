@@ -5,7 +5,7 @@ import Operation from "../models/OperationsModel.js";
 import Employee from "../models/EmployeesModel.js";
 import Payment from "../models/paymentsModel.js";
 import Session from "../models/appointmentModel.js";
-import { passwordResetMail } from "../controller/mailControllers.js";
+import { sendPasswordResetMail } from "../controller/mailControllers.js";
 import { cloudinaryImageUploadMethod } from "../helpers/imageHelpers.js";
 import { createSmsAuthorization } from "../helpers/smsHelpers.js";
 
@@ -937,7 +937,7 @@ const resetPasswordMail = async (req, res, next) => {
         "host"
       )}/newPassword/${resetToken}`;
 
-      passwordResetMail(email, resetUrl);
+      sendPasswordResetMail(email, resetUrl);
 
       res.status(200).json({
         succes: true,

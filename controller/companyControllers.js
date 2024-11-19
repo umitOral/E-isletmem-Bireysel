@@ -2,7 +2,7 @@ import Company from "../models/companyModel.js";
 import Employee from "../models/EmployeesModel.js";
 import Subscription from "../models/subscriptionModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
-import { orderSuccesEmail } from "./mailControllers.js";
+import { orderSuccesEmail, sendRegisterMail } from "./mailControllers.js";
 
 import { cloudinaryImageUploadMethod } from "../helpers/imageHelpers.js";
 import {
@@ -65,6 +65,7 @@ const createCompany = async (req, res, next) => {
       paymentTransactionId: 0,
     };
     await Subscription.create(subscriptionData);
+    await sendRegisterMail();
     res.json({
       createSuccess: true,
       message: "kaydınız başarıyla oluşturuldu",
@@ -269,6 +270,7 @@ const addCompanyPayment = async (req, res, next) => {
           token: result.token,
         };
         await Subscription.create(data);
+        await orderSuccesEmail(result)
         res.json({
           success: true,
           message: "ödeme sayfasına yönlendiriliyorsunuz.",
@@ -276,6 +278,8 @@ const addCompanyPayment = async (req, res, next) => {
         });
       }
     });
+
+    
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }

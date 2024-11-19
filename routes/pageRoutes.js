@@ -3,7 +3,7 @@ import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getco
 import {loginUser,resetPasswordMail} from '../controller/userController.js';
 import {companyPaymentResult,createCompany} from '../controller/companyControllers.js';
 import {smsStatus} from '../controller/smsControllers.js';
-import {sendMail,contactEmail} from '../controller/mailControllers.js';
+import {contactEmail} from '../controller/mailControllers.js';
 import {newPassword} from '../controller/apicontrollers.js';
 import * as authMiddleware from '../middlewares/authMiddleware.js'
 import { verifyRecaptcha,checkPassword,verifyCompanyUniqueness} from "../helpers/recaptchaVerify.js";
