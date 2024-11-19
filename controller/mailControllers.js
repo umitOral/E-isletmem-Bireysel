@@ -4,6 +4,7 @@ import {
   contactEmailHTML,
   registerMail,
   resetPasswordMailHtml,
+  welcomeMail,
 } from "../helpers/mails/mails.js";
 import { Ticket, ticketStatus } from "../models/ticketModel.js";
 
@@ -55,6 +56,33 @@ const sendCustomMail = async (data) => {
 
     transporter.verify().then(console.log).catch(console.error);
 
+  } catch (error) {
+    console.log(error);
+  }
+};
+const sendTestMail = async () => {
+  try {
+    const html = welcomeMail;
+    const transporter = createTransport({
+      host: process.env.EMAIL_SMTP,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
+      to: "umit.oralmat10@gmail.com",
+      subject: "Başarıyla Kayıt oldunuz",
+      html: html,
+    });
+
+    transporter.verify().then(console.log).catch(console.error);
+
+    console.log("message sent:" + info.messageId);
+    
   } catch (error) {
     console.log(error);
   }
@@ -214,6 +242,7 @@ const contactEmail = async (req, res) => {
 
 export {
   sendMail,
+  sendTestMail,
   passwordResetMail,
   contactEmail,
   orderSuccesEmail,
