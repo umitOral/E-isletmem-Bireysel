@@ -71,7 +71,7 @@ const welcomeMail = `
 body{margin:0;padding:0}table,td,tr{border-collapse:collapse;vertical-align:top}p{margin:0}.ie-container table,.mso-container table{table-layout:fixed}*{line-height:inherit}a[x-apple-data-detectors=true]{color:inherit!important;text-decoration:none!important}
 
 
-table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: underline; } #u_content_text_46 a { color: #000000; text-decoration: none; } @media (max-width: 480px) { #u_row_8 .v-row-background-image--inner { background-position: left center !important; background-repeat: no-repeat !important; } #u_row_8 .v-row-background-image--outer { background-position: left center !important; background-repeat: no-repeat !important; } #u_row_8.v-row-background-image--outer { background-position: left center !important; background-repeat: no-repeat !important; } #u_content_text_4 .v-text-align { text-align: center !important; } #u_content_heading_2 .v-text-align { text-align: center !important; } #u_content_text_47 .v-text-align { text-align: center !important; } #u_content_text_47 .v-line-height { line-height: 100% !important; } #u_content_button_9 .v-text-align { text-align: center !important; } #u_column_51 .v-col-background-color { background-color: #ffffff !important; } #u_column_49 .v-col-background-color { background-color: #ffffff !important; } #u_content_text_39 .v-container-padding-padding { padding: 10px 10px 0px !important; } #u_content_text_39 .v-text-align { text-align: center !important; } #u_content_text_39 .v-line-height { line-height: 140% !important; } #u_content_text_34 .v-text-align { text-align: center !important; } #u_content_text_31 .v-container-padding-padding { padding: 10px 10px 0px !important; } #u_content_text_31 .v-text-align { text-align: center !important; } }
+table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: underline; } #u_content_text_46 a { color: #000000; text-decoration: none; } @media (max-width: 480px) { #u_row_2 .v-row-background-image--inner { background-position: center bottom !important; background-repeat: no-repeat !important; } #u_row_2 .v-row-background-image--outer { background-position: center bottom !important; background-repeat: no-repeat !important; } #u_row_2.v-row-background-image--outer { background-position: center bottom !important; background-repeat: no-repeat !important; } #u_content_image_2 .v-container-padding-padding { padding: 15px !important; } #u_content_image_2 .v-src-width { width: auto !important; } #u_content_image_2 .v-src-max-width { max-width: 44% !important; } #u_row_8 .v-row-background-image--inner { background-position: left center !important; background-repeat: no-repeat !important; } #u_row_8 .v-row-background-image--outer { background-position: left center !important; background-repeat: no-repeat !important; } #u_row_8.v-row-background-image--outer { background-position: left center !important; background-repeat: no-repeat !important; } #u_content_text_4 .v-text-align { text-align: center !important; } #u_content_button_1 .v-button-colors { color: #ffffff !important; background-color: #03d9d9 !important; } #u_content_button_1 .v-button-colors:hover { color: #FFFFFF !important; background-color: #3AAEE0 !important; } #u_content_image_19 .v-container-padding-padding { padding: 10px 10px 0px !important; } #u_content_image_19 .v-src-width { width: auto !important; } #u_content_image_19 .v-src-max-width { max-width: 69% !important; } #u_content_heading_2 .v-container-padding-padding { padding: 10px !important; } #u_content_heading_2 .v-text-align { text-align: center !important; } #u_content_heading_2 .v-line-height { line-height: 100% !important; } #u_content_text_47 .v-text-align { text-align: center !important; } #u_content_text_47 .v-line-height { line-height: 140% !important; } #u_content_text_47 .v-letter-spacing { letter-spacing: 0px !important; } #u_content_button_9 .v-text-align { text-align: center !important; } #u_column_51 .v-col-background-color { background-color: #ffffff !important; } #u_content_heading_3 .v-font-size { font-size: 20px !important; } #u_row_28 .v-row-background-image--inner { background-position: center center !important; background-repeat: no-repeat !important; } #u_row_28 .v-row-background-image--outer { background-image: url('cid:image-7') !important; background-position: center center !important; background-repeat: no-repeat !important; } #u_row_28.v-row-background-image--outer { background-image: url('cid:image-7') !important; background-position: center center !important; background-repeat: no-repeat !important; } #u_row_26 .v-row-background-image--inner { background-position: center bottom !important; background-repeat: no-repeat !important; } #u_row_26 .v-row-background-image--outer { background-image: url('cid:image-7') !important; background-position: center bottom !important; background-repeat: no-repeat !important; } #u_row_26.v-row-background-image--outer { background-image: url('cid:image-7') !important; background-position: center bottom !important; background-repeat: no-repeat !important; } #u_content_text_39 .v-container-padding-padding { padding: 10px 10px 0px !important; } #u_content_text_39 .v-text-align { text-align: center !important; } #u_content_text_39 .v-line-height { line-height: 140% !important; } #u_content_text_34 .v-text-align { text-align: center !important; } #u_content_text_31 .v-container-padding-padding { padding: 10px 10px 0px !important; } #u_content_text_31 .v-text-align { text-align: center !important; } }
     </style>
   
   
@@ -91,17 +91,25 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     
   
   
-<div class="u-row-container v-row-background-image--outer" style="padding: 0px;background-color: transparent">
+    <!--[if gte mso 9]>
+      <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;min-width: 320px;max-width: 600px;">
+        <tr>
+          <td background="https://cdn.templates.unlayer.com/assets/1599215590807-Screenshot_3.png" valign="top" width="100%">
+      <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width: 600px;">
+        <v:fill type="frame" src="https://cdn.templates.unlayer.com/assets/1599215590807-Screenshot_3.png" /><v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+      <![endif]-->
+  
+<div id="u_row_2" class="u-row-container v-row-background-image--outer" style="padding: 0px;background-image: url('cid:image-7');background-repeat: no-repeat;background-position: center top;background-color: transparent">
   <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
     <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-image: url('images/image-7.png');background-repeat: no-repeat;background-position: center top;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
       
-<!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="background-color: #e4faf4;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
+<!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
 <div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
-  <div class="v-col-background-color" style="background-color: #e4faf4;height: 100%;width: 100% !important;">
+  <div class="v-col-background-color" style="height: 100%;width: 100% !important;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;"><!--<![endif]-->
   
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+<table id="u_content_image_2" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
   <tbody>
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:21px 10px 20px;font-family:arial,helvetica,sans-serif;" align="left">
@@ -110,7 +118,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <tr>
     <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="center">
       
-      <img align="center" border="0" src="mail-photos/registerMail/image-1.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 25%;max-width: 145px;" width="145"/>
+      <img align="center" border="0" src="cid:image-1" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 25%;max-width: 145px;" width="145" class="v-src-width v-src-max-width"/>
       
     </td>
   </tr>
@@ -130,6 +138,13 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   </div>
   </div>
   
+    <!--[if gte mso 9]>
+      </v:textbox></v:rect>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    
 
 
   
@@ -144,8 +159,8 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   
 <div id="u_row_8" class="u-row-container v-row-background-image--outer" style="padding: 0px;background-color: transparent">
   <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-image: url('mail-photos/registerMail/image-7.jpeg');background-repeat: no-repeat;background-position: left bottom;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-image: url('mail-photos/registerMail/image-7.jpeg');background-repeat: no-repeat;background-position: left bottom;background-color: transparent;"><![endif]-->
+    <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-image: url('cid:image-8');background-repeat: no-repeat;background-position: 0% 100%;background-color: transparent;">
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-image: url('images/image-8.jpeg');background-repeat: no-repeat;background-position: 0% 100%;background-color: transparent;"><![endif]-->
       
 <!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
 <div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
@@ -157,7 +172,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:23px 10px 10px;font-family:arial,helvetica,sans-serif;" align="left">
         
-  <div class="v-text-align v-line-height" style="font-size: 14px; color: #ffffff; line-height: 150%; text-align: center; word-wrap: break-word;">
+  <div class="v-text-align v-line-height v-font-size v-letter-spacing" style="font-size: 14px; color: #ffffff; line-height: 150%; text-align: center; word-wrap: break-word;">
     <p style="font-size: 14px; line-height: 150%;"><span style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 21px;"><span style="font-size: 28px; line-height: 42px;"><span style="line-height: 42px; font-size: 28px;"><span style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 21px;"><span style="font-size: 28px; line-height: 42px;">Aramıza</span></span></span></span></span></p>
 <p style="font-size: 14px; line-height: 150%;"><span style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 21px;"><span style="font-size: 28px; line-height: 42px;"><span style="line-height: 42px; font-size: 28px;">HOŞGELDİN !!</span></span></span></p>
   </div>
@@ -172,7 +187,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:0px 10px 10px;font-family:arial,helvetica,sans-serif;" align="left">
         
-  <div class="v-text-align v-line-height" style="font-size: 14px; color: #ffffff; line-height: 160%; text-align: center; word-wrap: break-word;">
+  <div class="v-text-align v-line-height v-font-size v-letter-spacing" style="font-size: 14px; color: #ffffff; line-height: 160%; text-align: center; word-wrap: break-word;">
     <p style="font-size: 14px; line-height: 160%;"><span style="font-size: 14px; line-height: 22.4px;">İşletmenizin bütün ihtiyaçlarını</span></p>
 <p style="font-size: 14px; line-height: 160%;"><span style="font-size: 14px; line-height: 22.4px;">dijitalleştirmeye hazır mısın?</span></p>
   </div>
@@ -182,7 +197,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   </tbody>
 </table>
 
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+<table id="u_content_button_1" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
   <tbody>
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:0px 10px 43px;font-family:arial,helvetica,sans-serif;" align="left">
@@ -190,8 +205,127 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
 <div class="v-text-align" align="center">
   <!--[if mso]><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" bgcolor="#ffffff" style="padding:12px 30px;" valign="top"><![endif]-->
-    <a href="https://www.e-isletmem.com/login" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #00d09c; background-color: #ffffff; border-radius: 10px;-webkit-border-radius: 10px; -moz-border-radius: 10px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+    <a href="https://www.e-isletmem.com/login" target="_blank" class="v-button v-button-colors v-font-size v-letter-spacing" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #00d09c; background-color: #ffffff; border-radius: 10px;-webkit-border-radius: 10px; -moz-border-radius: 10px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
       <span class="v-line-height" style="display:block;padding:12px 30px;line-height:120%;">HEMEN BAŞLA</span>
+    </a>
+    <!--[if mso]></td></tr></table><![endif]-->
+</div>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
+  </div>
+</div>
+<!--[if (mso)|(IE)]></td><![endif]-->
+      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
+    </div>
+  </div>
+  </div>
+  
+    <!--[if gte mso 9]>
+      </v:textbox></v:rect>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    
+
+
+  
+  
+    <!--[if gte mso 9]>
+      <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;min-width: 320px;max-width: 600px;">
+        <tr>
+          <td background="https://cdn.templates.unlayer.com/assets/1599215590807-Screenshot_3.png" valign="top" width="100%">
+      <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width: 600px;">
+        <v:fill type="frame" src="https://cdn.templates.unlayer.com/assets/1599215590807-Screenshot_3.png" /><v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+      <![endif]-->
+  
+<div class="u-row-container v-row-background-image--outer" style="padding: 0px;background-image: url('cid:image-7');background-repeat: no-repeat;background-position: center bottom;background-color: transparent">
+  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
+    <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-image: url('images/image-7.png');background-repeat: no-repeat;background-position: center bottom;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
+      
+<!--[if (mso)|(IE)]><td align="center" width="300" class="v-col-background-color" style="width: 300px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+  <div class="v-col-background-color" style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
+  
+<table id="u_content_image_19" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
+        
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="center">
+      
+      <img align="center" border="0" src="cid:image-2" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 280px;" width="280" class="v-src-width v-src-max-width"/>
+      
+    </td>
+  </tr>
+</table>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
+  </div>
+</div>
+<!--[if (mso)|(IE)]></td><![endif]-->
+<!--[if (mso)|(IE)]><td align="center" width="300" class="v-col-background-color" style="width: 300px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+  <div class="v-col-background-color" style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
+  
+<table id="u_content_heading_2" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
+        
+  <!--[if mso]><table width="100%"><tr><td><![endif]-->
+    <h1 class="v-text-align v-line-height v-font-size v-letter-spacing" style="margin: 0px; line-height: 100%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;"><span style="line-height: 22px;">Neler Yapabilirsiniz?</span></h1>
+  <!--[if mso]></td></tr></table><![endif]-->
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table id="u_content_text_47" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:0px 10px 0px 0px;font-family:arial,helvetica,sans-serif;" align="left">
+        
+  <div class="v-text-align v-line-height v-font-size v-letter-spacing" style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
+    <p style="line-height: 140%;"><span style="font-size: 12px; line-height: 16.8px; font-family: arial, helvetica, sans-serif;">• </span>Danışan Yönetimi</p>
+<p style="line-height: 140%;"><span style="font-size: 12px; line-height: 16.8px; font-family: arial, helvetica, sans-serif;">• </span>Randevu Yönetimi</p>
+<p style="line-height: 140%;"><span style="font-size: 12px; line-height: 16.8px; font-family: arial, helvetica, sans-serif;">• </span>Gelir-Gider Yönetimi</p>
+<p style="line-height: 140%;"><span style="font-size: 12px; line-height: 16.8px; font-family: arial, helvetica, sans-serif;">• </span>Personel Yönetimi</p>
+<p style="line-height: 140%;"><span style="font-size: 12px; line-height: 16.8px; font-family: arial, helvetica, sans-serif;">• </span>Sms Yönetimi</p>
+<p style="line-height: 140%;"><span style="font-size: 12px; line-height: 16.8px; font-family: arial, helvetica, sans-serif;">• </span>Ve daha fazlası ...</p>
+  </div>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table id="u_content_button_9" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
+        
+  <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
+<div class="v-text-align" align="left">
+  <!--[if mso]><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" bgcolor="#03d9d9" style="padding:10px 20px;" valign="top"><![endif]-->
+    <a href="https://www.e-isletmem.com/our-services" target="_blank" class="v-button v-button-colors v-font-size v-letter-spacing" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #03d9d9; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+      <span class="v-line-height" style="display:block;padding:10px 20px;line-height:120%;"><span style="font-size: 14px; line-height: 16.8px;">HEPSİNİ GÖR<br /></span></span>
     </a>
     <!--[if mso]></td></tr></table><![endif]-->
 </div>
@@ -226,188 +360,19 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
       <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
       
-<!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
-<div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
-  <div class="v-col-background-color" style="height: 100%;width: 100% !important;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;"><!--<![endif]-->
-  
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 1px solid #BBBBBB;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-    <tbody>
-      <tr style="vertical-align: top">
-        <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;font-size: 0px;line-height: 0px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-          <span>&#160;</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-  
-  
-<div class="u-row-container v-row-background-image--outer" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="300" class="v-col-background-color" style="width: 300px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
+<!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div id="u_column_51" class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
   <div class="v-col-background-color" style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
   
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr>
-    <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="center">
-      
-      <img align="center" border="0" src="mail-photos/registerMail/image-2.jpeg" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 69%;max-width: 193.2px;" width="193.2"/>
-      
-    </td>
-  </tr>
-</table>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-<!--[if (mso)|(IE)]><td align="center" width="300" class="v-col-background-color" style="width: 300px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-  <div class="v-col-background-color" style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table id="u_content_heading_2" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+<table id="u_content_heading_3" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
   <tbody>
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
   <!--[if mso]><table width="100%"><tr><td><![endif]-->
-    <h1 class="v-text-align v-line-height" style="margin: 0px; line-height: 100%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;"><span style="line-height: 22px;">Neler Yapabilirsiniz?</span></h1>
+    <h1 class="v-text-align v-line-height v-font-size v-letter-spacing" style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-size: 22px; font-weight: 400;"><span>100'lerce İşletme Burda</span></h1>
   <!--[if mso]></td></tr></table><![endif]-->
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table id="u_content_text_47" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:0px 10px 0px 0px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <div class="v-text-align v-line-height" style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <ul>
-<li style="line-height: 19.6px;">Danışan Yönetimi</li>
-<li style="line-height: 19.6px;">Randevu Yönetimi</li>
-<li style="line-height: 19.6px;">Gelir-Gider Yönetimi</li>
-<li style="line-height: 19.6px;">Personel Yönetimi</li>
-<li style="line-height: 19.6px;">Sms Yönetimi</li>
-<li style="line-height: 19.6px;">Ve daha fazlası ...</li>
-</ul>
-  </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table id="u_content_button_9" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
-<div class="v-text-align" align="left">
-  <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.e-isletmem.com/our-services" style="height:37px; v-text-anchor:middle; width:132px;" arcsize="11%"  stroke="f" fillcolor="#03d9d9"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-    <a href="https://www.e-isletmem.com/our-services" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #03d9d9; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
-      <span class="v-line-height" style="display:block;padding:10px 20px;line-height:120%;"><span style="font-size: 14px; line-height: 16.8px;">HEPSİNİ GÖR<br /></span></span>
-    </a>
-    <!--[if mso]></center></v:roundrect><![endif]-->
-</div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-  </div>
-</div>
-<!--[if (mso)|(IE)]></td><![endif]-->
-      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
-    </div>
-  </div>
-  </div>
-  
-
-
-  
-  
-<div class="u-row-container v-row-background-image--outer" style="padding: 0px;background-color: transparent">
-  <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
-    <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
-      
-<!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="background-color: #ffffff;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div id="u_column_51" class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
-  <div class="v-col-background-color" style="background-color: #ffffff;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
-  <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
-  
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 1px solid #BBBBBB;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-    <tbody>
-      <tr style="vertical-align: top">
-        <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;font-size: 0px;line-height: 0px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-          <span>&#160;</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:20px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <div class="v-text-align v-line-height" style="font-size: 14px; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="line-height: 140%;"><span style="font-size: 20px; line-height: 28px;">100'lerce İşletme Burada</span></p>
-  </div>
 
       </td>
     </tr>
@@ -446,7 +411,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <tr>
     <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="center">
       
-      <img align="center" border="0" src="mail-photos/registerMail/image-3.png" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 580px;" width="580"/>
+      <img align="center" border="0" src="cid:image-3" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 580px;" width="580" class="v-src-width v-src-max-width"/>
       
     </td>
   </tr>
@@ -470,14 +435,22 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
   
   
-<div class="u-row-container v-row-background-image--outer" style="padding: 0px;background-color: transparent">
+    <!--[if gte mso 9]>
+      <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;min-width: 320px;max-width: 600px;">
+        <tr>
+          <td background="https://cdn.templates.unlayer.com/assets/1599215590807-Screenshot_3.png" valign="top" width="100%">
+      <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width: 600px;">
+        <v:fill type="frame" src="https://cdn.templates.unlayer.com/assets/1599215590807-Screenshot_3.png" /><v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+      <![endif]-->
+  
+<div id="u_row_28" class="u-row-container v-row-background-image--outer" style="padding: 0px;background-image: url('cid:image-7');background-repeat: no-repeat;background-position: center center;background-color: transparent">
   <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
     <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-image: url('images/image-7.png');background-repeat: no-repeat;background-position: center center;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
       
-<!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="background-color: #ffffff;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
-<div id="u_column_49" class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
-  <div class="v-col-background-color" style="background-color: #ffffff;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+<!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
+  <div class="v-col-background-color" style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
   
 <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
@@ -487,32 +460,12 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
         
   <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
 <div class="v-text-align" align="center">
-  <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.e-isletmem.com/#testimonials" style="height:39px; v-text-anchor:middle; width:142px;" arcsize="25.5%"  stroke="f" fillcolor="#03d9d9"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-    <a href="https://www.e-isletmem.com/#testimonials" target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #03d9d9; border-radius: 10px;-webkit-border-radius: 10px; -moz-border-radius: 10px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+  <!--[if mso]><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" bgcolor="#03d9d9" style="padding:11px 25px;" valign="top"><![endif]-->
+    <a href="https://www.e-isletmem.com/#testimonials" target="_blank" class="v-button v-button-colors v-font-size v-letter-spacing" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #03d9d9; border-radius: 10px;-webkit-border-radius: 10px; -moz-border-radius: 10px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
       <span class="v-line-height" style="display:block;padding:11px 25px;line-height:120%;"><span style="font-size: 14px; line-height: 16.8px;">HEPSİNİ GÖR</span></span>
     </a>
-    <!--[if mso]></center></v:roundrect><![endif]-->
+    <!--[if mso]></td></tr></table><![endif]-->
 </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-        
-  <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 1px solid #BBBBBB;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-    <tbody>
-      <tr style="vertical-align: top">
-        <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;font-size: 0px;line-height: 0px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-          <span>&#160;</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
       </td>
     </tr>
@@ -528,18 +481,25 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   </div>
   </div>
   
+    <!--[if gte mso 9]>
+      </v:textbox></v:rect>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    
 
 
   
   
-<div class="u-row-container v-row-background-image--outer" style="padding: 0px;background-color: transparent">
+<div id="u_row_26" class="u-row-container v-row-background-image--outer" style="padding: 0px;background-color: transparent">
   <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
     <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
       <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
       
-<!--[if (mso)|(IE)]><td align="center" width="300" class="v-col-background-color" style="background-color: #03d9d9;width: 300px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<!--[if (mso)|(IE)]><td align="center" width="300" class="v-col-background-color" style="width: 300px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
 <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-  <div class="v-col-background-color" style="background-color: #03d9d9;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+  <div class="v-col-background-color" style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
   
 <table id="u_content_text_39" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
@@ -547,7 +507,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
-  <div class="v-text-align v-line-height" style="font-size: 14px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word;">
+  <div class="v-text-align v-line-height v-font-size v-letter-spacing" style="font-size: 14px; color: #000000; line-height: 140%; text-align: center; word-wrap: break-word;">
     <p style="font-size: 14px; line-height: 140%;"><span style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 19.6px;"><span style="font-size: 16px; line-height: 22.4px;">İletişim</span><br /></span></p>
   </div>
 
@@ -561,7 +521,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
-  <div class="v-text-align v-line-height" style="font-size: 14px; color: #ffffff; line-height: 170%; text-align: center; word-wrap: break-word;">
+  <div class="v-text-align v-line-height v-font-size v-letter-spacing" style="font-size: 14px; color: #000000; line-height: 170%; text-align: center; word-wrap: break-word;">
     <p style="font-size: 14px; line-height: 170%;">TR(+90) 541 384 8148</p>
 <p style="font-size: 14px; line-height: 170%;">bilgi@e-isletmem.com </p>
   </div>
@@ -575,9 +535,9 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   </div>
 </div>
 <!--[if (mso)|(IE)]></td><![endif]-->
-<!--[if (mso)|(IE)]><td align="center" width="300" class="v-col-background-color" style="background-color: #03d9d9;width: 300px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<!--[if (mso)|(IE)]><td align="center" width="300" class="v-col-background-color" style="width: 300px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
 <div class="u-col u-col-50" style="max-width: 320px;min-width: 300px;display: table-cell;vertical-align: top;">
-  <div class="v-col-background-color" style="background-color: #03d9d9;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+  <div class="v-col-background-color" style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
   <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
   
 <table id="u_content_text_31" style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
@@ -585,7 +545,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
-  <div class="v-text-align v-line-height" style="font-size: 14px; color: #f6fefb; line-height: 140%; text-align: center; word-wrap: break-word;">
+  <div class="v-text-align v-line-height v-font-size v-letter-spacing" style="font-size: 14px; color: #000000; line-height: 140%; text-align: center; word-wrap: break-word;">
     <p style="font-size: 14px; line-height: 140%;"><span style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 19.6px;"><span style="font-size: 16px; line-height: 22.4px;">Sosyal Medya</span><br /></span></p>
   </div>
 
@@ -608,7 +568,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <table border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 5px">
       <tbody><tr style="vertical-align: top"><td valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <a href="https://facebook.com/e-işletmem.com" title="Facebook" target="_blank">
-          <img src="mail-photos/registerMail/image-4.png" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+          <img src="cid:image-4" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
     </tbody></table>
@@ -618,7 +578,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <table border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 5px">
       <tbody><tr style="vertical-align: top"><td valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <a href="https://twitter.com/e-işletmem.com" title="Twitter" target="_blank">
-          <img src="mail-photos/registerMail/image-5.png" alt="Twitter" title="Twitter" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+          <img src="cid:image-5" alt="Twitter" title="Twitter" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
     </tbody></table>
@@ -628,7 +588,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <table border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 0px">
       <tbody><tr style="vertical-align: top"><td valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <a href="https://instagram.com/e-işletmem.com" title="Instagram" target="_blank">
-          <img src="mail-photos/registerMail/image-6.png" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+          <img src="cid:image-6" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
     </tbody></table>
@@ -657,10 +617,18 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
   
   
-<div class="u-row-container v-row-background-image--outer" style="padding: 0px;background-color: transparent">
+    <!--[if gte mso 9]>
+      <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;min-width: 320px;max-width: 600px;">
+        <tr>
+          <td background="https://cdn.templates.unlayer.com/assets/1599215590807-Screenshot_3.png" valign="top" width="100%">
+      <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width: 600px;">
+        <v:fill type="frame" src="https://cdn.templates.unlayer.com/assets/1599215590807-Screenshot_3.png" /><v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+      <![endif]-->
+  
+<div class="u-row-container v-row-background-image--outer" style="padding: 0px;background-image: url('cid:image-7');background-repeat: no-repeat;background-position: center center;background-color: transparent">
   <div class="u-row" style="margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
     <div class="v-row-background-image--inner" style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer" style="padding: 0px;background-image: url('images/image-7.png');background-repeat: no-repeat;background-position: center center;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
       
 <!--[if (mso)|(IE)]><td align="center" width="600" class="v-col-background-color" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
 <div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
@@ -672,7 +640,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
         
-  <div class="v-text-align v-line-height" style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
+  <div class="v-text-align v-line-height v-font-size v-letter-spacing" style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
     <p style="line-height: 140%; text-align: center;"><a rel="noopener" href="https://www.e-isletmem.com/" target="_blank">www.e-işletmem.com</a></p>
   </div>
 
@@ -690,6 +658,13 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   </div>
   </div>
   
+    <!--[if gte mso 9]>
+      </v:textbox></v:rect>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    
 
 
     <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
@@ -757,7 +732,7 @@ const registerMail = `
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-image" style="font-size: 0px;"><a target="_blank"><img class="adapt-img" src="https://ecemmye.stripocdn.email/content/guids/CABINET_943c59f74a920e7384ba534efa6d40b8e720a8a77a40f1525f06dc973ee25754/images/eisletmemcom_1_TGN.png" alt style="display: block;" height="100"></a></td>
+                                                                                    <td align="center" class="esd-block-image" style="font-size: 0px;"><a target="_blank"><img class="adapt-img" src="cid:image-7" alt style="display: block;" height="100"></a></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-spacer es-p10" style="font-size:0">
