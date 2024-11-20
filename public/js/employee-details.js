@@ -40,7 +40,7 @@ function eventListeners() {
   editUserForm.addEventListener("submit", editUser);
   editBtn.addEventListener("click", showInformationsModal);
   appointmentsTabButton.addEventListener("click", getEmployeesAppointments);
-  permissionsTabButton.addEventListener("click", getEmployeesPermissions);
+  permissionsTabButton.addEventListener("click", getEmployeePermissions);
   paymentSearchForm.addEventListener("submit", (e) => {
     console.log("burası")
     getEmployeesPayment();
@@ -340,9 +340,9 @@ let permissionTableBody = document.querySelector(".permissions-table tbody");
 permissionTableBody.addEventListener("change", (e) => {
   handleEvents(e);
 });
-async function getEmployeesPermissions() {
+async function getEmployeePermissions() {
   await request
-    .getwithUrl(document.location.pathname + "/getEmployeesPermissions")
+    .getwithUrl(document.location.pathname + "/getEmployeePermissions")
     .then((response) => {
       console.log(response);
       ui.showNotification(response.success, "izinler başarıyla çekildi");

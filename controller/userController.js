@@ -28,6 +28,7 @@ import { Response } from "../helpers/error/Response.js";
 
 import { AuditLogs } from "../helpers/auditLogs.js";
 import Sms from "../models/smsModel.js";
+import { notifications } from "../config/notifications.js";
 
 const deactivateEmployee = async (req, res, next) => {
   try {
@@ -919,6 +920,48 @@ const logOut = (req, res, next) => {
   }
 };
 
+const getUserNotifications = async (req, res, next) => {
+  try {
+    let user=await User.findById(req.params.id)
+    let userNotifications = user.notifications || {};
+    let allNotifications = notifications;
+
+    res.status(200).json({
+      success: true,
+      data: { userNotifications, allNotifications },
+      link: "employees",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+
+const updateUserNotifications = async (req, res, next) => {
+  console.log(req.body);
+  try {
+    let user = await User.findById(req.params.id);
+    if (user.notifications.includes(req.body.notificationkey)) {
+      user.notifications = user.notifications.filter(
+        (x) => x !== req.body.notificationkey
+      );
+    } else {
+      user.notifications.push(req.body.notificationkey);
+    }
+    
+
+    console.log(user.notifications);
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "izin değiştirildi",
+      data: req.body.notificationkey,
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+
+
 const resetPasswordMail = async (req, res, next) => {
   try {
     const employee = await Employee.findOne({ email: req.body.email });
@@ -973,6 +1016,7 @@ export {
   deactivateEmployee,
   findEmployees,
   activateEmployee,
+  updateUserNotifications,
   deletePhoto,
   deleteOperation,
   getSessionsofOperation,
@@ -989,4 +1033,5 @@ export {
   getUsersOldOperations,
   getUsersAllSessions,
   getUsersAllSms,
+  getUserNotifications
 };

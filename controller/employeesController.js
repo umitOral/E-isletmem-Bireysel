@@ -86,10 +86,10 @@ const getEmployesAppointments = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getEmployeesPermissions = async (req, res, next) => {
+const getEmployeePermissions = async (req, res, next) => {
   try {
-    let employee = await Employee.findById(req.params.id);
-    let employeePermissions = employee.permissions;
+    
+    let employeePermissions = res.locals.employee.permissions;
     let allPermissions = role_privileges;
 
     res.status(200).json({
@@ -146,7 +146,7 @@ export {
   createEmployees,
   editInformationsEmployees,
   getEmployesAppointments,
-  getEmployeesPermissions,
+  getEmployeePermissions,
   updateEmployeesPermissions,
   getEmployeesPayments,
 };

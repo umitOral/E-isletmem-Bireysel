@@ -43,13 +43,15 @@ import {
   deactivateEmployee,
   activateEmployee,
   getUsersAllSessions,
-  getUsersAllSms
+  getUsersAllSms,
+  updateUserNotifications,
+  getUserNotifications
 } from "../controller/userController.js";
 import {
   createEmployees,
   editInformationsEmployees,
   getEmployesAppointments,
-  getEmployeesPermissions,
+  getEmployeePermissions,
   getEmployeesPayments,
   updateEmployeesPermissions,
 } from "../controller/employeesController.js";
@@ -141,7 +143,9 @@ router.route("/users/:id").get(checkPriviliges("user_view"), getUserPage);
 router
   .route("/users/:id/uploadpictures")
   .post(checkPriviliges("user_update"), uploadPictures);
-
+  router
+  .route("/users/:id/updateUserNotifications")
+  .post(updateUserNotifications);
 router.route("/users/:id/getUsersAllSessions").get(getUsersAllSessions);
 router.route("/users/:id/getUsersAllSms").get(getUsersAllSms);
 
@@ -179,6 +183,9 @@ router
   .get(getUsersHasPaymentOperations);
 router.route("/users/:id/deletePhoto/:operationid/:photoid").get(deletePhoto);
 router.route("/users/:id/editInformations").post(editInformations);
+router
+  .route("/users/:id/getUserNotifications")
+  .get(getUserNotifications);
 router.route("/users/createUser").post(createUser);
 
 router
@@ -238,8 +245,8 @@ router.route("/employees").get(checkPriviliges("employee_view"),getEmployeesPage
 router
   .route("/employees/:id").get(checkPriviliges("employee_view"),getSingleEmployeePage);
 router
-  .route("/employees/:id/getEmployeesPermissions")
-  .get(getEmployeesPermissions);
+  .route("/employees/:id/getEmployeePermissions")
+  .get(getEmployeePermissions);
 router
   .route("/employees/:id/getEmployeesPayments")
   .get(getEmployeesPayments);

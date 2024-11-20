@@ -17,7 +17,7 @@ const userSchema = new Schema(
       lowercase: true,
     },
     activeOrNot: { type: Boolean, default: true },
-    email: { type: String, lowercase: true,index:{unique:true}},
+    email: { type: String, lowercase: true, index: { unique: true } },
     sex: {
       type: String,
       enum: ["male", "female"],
@@ -29,13 +29,13 @@ const userSchema = new Schema(
 
     phone: {
       type: String,
-      require:[true, "telefon bilgisi gereklidir"],
-      unique:true ,
+      require: [true, "telefon bilgisi gereklidir"],
+      unique: true,
     },
     userCompany: { type: String, default: "", lowercase: true },
     address: { type: String, lowercase: true },
     billingAddress: { type: String, lowercase: true },
-    notes: { type: String,lowercase: true},
+    notes: { type: String, lowercase: true },
     debtStatus: { type: Number, default: 0 },
     images: [
       {
@@ -49,6 +49,7 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Company",
     },
+    notifications: [],
     identity: {
       type: String,
       trim: true,
@@ -63,22 +64,19 @@ userSchema.pre("save", function (next) {
   const user = this;
   bcrypt.hash(user.password, 10, (err, hash) => {
     user.password = hash;
-    next();
   });
-  bcrypt.hash(user.smsConfig.password, 10, (err, hash) => {
-    user.smsConfig.password = hash;
-    next();
-  });
+
+  next();
 });
 
-userSchema.pre('findOneAndUpdate', function (next) {
-  this.options.runValidators = true
-  next()
-})
-userSchema.pre('findByIdAndUpdate', function (next) {
-  this.options.runValidators = true
-  next()
-})
+userSchema.pre("findOneAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
+userSchema.pre("findByIdAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
 
 const User = mongoose.model("User", userSchema);
 export default User;

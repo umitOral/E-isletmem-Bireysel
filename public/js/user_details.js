@@ -64,6 +64,12 @@ const allSessionsofOperationModal = document.querySelector(
 const allSessionsofOperationModalContent = document.querySelector(
   ".allsessionOfOperationContent table tbody"
 );
+const notificationsArea = document.querySelector(
+  ".userInformationsContent.notifications"
+);
+const permissionsTabButton = document.querySelector(
+  ".show-content.notifications"
+);
 
 // responsed datas
 
@@ -81,6 +87,7 @@ function eventListeners() {
 
   editBtn.addEventListener("click", showInformationsModal);
   userInformationForm.addEventListener("submit", userInformationEdit);
+  permissionsTabButton.addEventListener("click", getUserNotifications);
 }
 
 cancelBtns.forEach((element) => {
@@ -1586,4 +1593,130 @@ function addPicture(e) {
     });
 
   e.preventDefault();
+}
+
+async function getUserNotifications() {
+
+  let notificationsArea=document.querySelector("#notifications-area")
+  console.log(notificationsArea)
+  await request
+    .getwithUrl(document.location.pathname + "/getUserNotifications")
+    .then((response) => {
+      console.log(response);
+      ui.showNotification(response.success, "Bildirim izinleri başarıyla çekildi");
+
+      response.data.allNotifications.notifications.forEach((element) => {
+        element.ispermitted = false;
+      });
+     
+      response.data.userNotifications?.forEach((element) => {
+        let index = response.data.allNotifications.notifications.findIndex(
+          (item) => item.key === element
+        );
+
+        response.data.allNotifications.notifications[index].ispermitted = true;
+      });
+      notificationsArea.innerHTML = "";
+      response.data.allNotifications.notificationGroups.forEach((element, index) => {
+        notificationsArea.innerHTML += `
+        <button class="accordion">
+            <span>${element.name}</span>
+            <i class="fa-solid fa-chevron-up"></i>
+        </button>
+        <div class="panel">
+            <table class="table notifications-table">
+                    <thead>
+                        <th>Bildirim</th>
+                        <th>Durum</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        ${response.data.allNotifications.notifications.map(function(item){
+                            if (item.category==="USERS"&&item.group===element.id) {
+                              return `
+                              <td>${item.name}</td>
+                            <td>
+                                <label class="switch" name="notification-checkboxes" data-notificationkey="${item.key}">
+                                <input type="checkbox"${(() => {
+                                    if (item.ispermitted === true) {
+                                      return `checked`;
+                                    } else {
+                                      return ``;
+                                    }
+                                  })()}>
+                                <span class="slider round"></span>
+                              </label>
+                            </td>
+                              `
+                            }
+                        }
+                         
+                          ).join("")}
+                           
+                            
+                        </tr>
+
+                    </tbody>
+
+
+                </table>
+
+            
+        </div>
+
+    `;
+    accordionHandle()
+      });
+    })
+    .catch((err) => console.log(err));
+}
+
+
+// switches for notifications
+notificationsArea.addEventListener("change",(e)=>{
+  console.log("haho")
+  console.log(e.target.parentElement)
+  
+
+  let data = { notificationkey: e.target.parentElement.dataset.notificationkey };
+  request
+    .postWithUrl(
+      document.location.pathname + "/updateUserNotifications",
+      data
+    )
+    .then((response) => {
+      console.log(response);
+      ui.showNotification(response.success, response.message);
+    })
+    .catch((err) => {
+      console.log(err);
+      ui.showNotification(false, err);
+    });
+})
+
+
+// accordion Menu
+function accordionHandle(params) {
+  var acc = document.getElementsByClassName("accordion");
+            
+  var i;
+  
+  for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+     
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      var icon = this.children[1];
+      console.log(icon)
+      if (panel.style.display === "block") {
+          console.log("burası1")
+      panel.style.display = "none";
+      icon.style=`transform:rotate(0deg)`
+      } else {
+          console.log("burası2")
+      panel.style.display = "block";
+      icon.style=`transform:rotate(180deg)`
+      }
+  });
+  }
 }
