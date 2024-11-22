@@ -5,6 +5,8 @@ import Payment from "../models/paymentsModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { APPOINTMENT_STATUS } from "../config/status_list.js";
 import { role_privileges } from "../config/role_priveleges.js";
+import { NOTIFICATIONS } from "../config/notifications.js";
+import { sendEmployeeRegisterMail, sendRegisterMail } from "./mailControllers.js";
 
 const createEmployees = async (req, res, next) => {
   try {
@@ -23,6 +25,7 @@ const createEmployees = async (req, res, next) => {
         });
       } else {
         await Employee.create(req.body);
+        sendEmployeeRegisterMail(userEmail,{email:userEmail,password:req.body.password})
         res.json({
           success: true,
           message: "Kulllanıcı başarıyla kaydedildi.",
@@ -101,6 +104,46 @@ const getEmployeePermissions = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+
+const updateEmployeeNotifications = async (req, res, next) => {
+  console.log(req.body);
+  try {
+    let employee = await Employee.findById(req.params.id);
+    if (employee.notifications.includes(req.body.notificationkey)) {
+      employee.notifications = employee.notifications.filter(
+        (x) => x !== req.body.notificationkey
+      );
+    } else {
+      employee.notifications.push(req.body.notificationkey);
+    }
+    
+
+    await employee.save();
+    res.status(200).json({
+      success: true,
+      message: "izin değiştirildi",
+      data: req.body.notificationkey,
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+
+const getEmployeeNotifications = async (req, res, next) => {
+  try {
+    let employee=await Employee.findById(req.params.id)
+    let userNotifications = employee.notifications || {};
+    let allNotifications = NOTIFICATIONS;
+
+    res.status(200).json({
+      success: true,
+      data: { userNotifications, allNotifications },
+      link: "employees",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 const getEmployeesPayments = async (req, res, next) => {
   try {
     let payments = await Payment.find({
@@ -149,4 +192,6 @@ export {
   getEmployeePermissions,
   updateEmployeesPermissions,
   getEmployeesPayments,
+  getEmployeeNotifications,
+  updateEmployeeNotifications
 };

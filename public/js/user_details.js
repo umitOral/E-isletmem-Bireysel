@@ -161,7 +161,7 @@ function userInformationEdit(e) {
         
      
         while (this.children.length !==1) {
-          console.log("burası1")
+         
           this.firstChild.remove()
         }
         let htmlContent=`
@@ -1596,7 +1596,6 @@ function addPicture(e) {
 }
 
 async function getUserNotifications() {
-
   let notificationsArea=document.querySelector("#notifications-area")
   console.log(notificationsArea)
   await request
@@ -1630,10 +1629,11 @@ async function getUserNotifications() {
                         <th>Durum</th>
                     </thead>
                     <tbody>
-                        <tr>
+                        
                         ${response.data.allNotifications.notifications.map(function(item){
                             if (item.category==="USERS"&&item.group===element.id) {
                               return `
+                              <tr>
                               <td>${item.name}</td>
                             <td>
                                 <label class="switch" name="notification-checkboxes" data-notificationkey="${item.key}">
@@ -1647,23 +1647,16 @@ async function getUserNotifications() {
                                 <span class="slider round"></span>
                               </label>
                             </td>
+                            </tr>
                               `
                             }
                         }
-                         
                           ).join("")}
                            
-                            
-                        </tr>
-
+                        
                     </tbody>
-
-
                 </table>
-
-            
         </div>
-
     `;
     accordionHandle()
       });
@@ -1709,7 +1702,7 @@ function accordionHandle(params) {
       var icon = this.children[1];
       console.log(icon)
       if (panel.style.display === "block") {
-          console.log("burası1")
+          
       panel.style.display = "none";
       icon.style=`transform:rotate(0deg)`
       } else {

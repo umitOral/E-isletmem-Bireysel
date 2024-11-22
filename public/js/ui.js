@@ -547,6 +547,7 @@ export class UI {
 
       singleDoctorArea.className = "single-doctor-area";
       singleDoctorArea.setAttribute("data-doctorid", AllDoctor[index]._id);
+      singleDoctorArea.setAttribute("data-doctoremail", AllDoctor[index].email);
 
       singleDoctorArea.innerHTML += `
 

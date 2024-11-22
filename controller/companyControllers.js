@@ -10,13 +10,13 @@ import {
   DATAS_LIST,
   ROLES_LIST,
   COMPANY_DOCS,
-  NOTIFICATION_PERMISSIONS,
 } from "../config/status_list.js";
 import { role_privileges } from "../config/role_priveleges.js";
 
 import Iyzipay from "iyzipay";
 
 import { v4 as uuidv4 } from "uuid";
+import { NOTIFICATIONS } from "../config/notifications.js";
 
 const createCompany = async (req, res, next) => {
   try {
@@ -53,7 +53,7 @@ const createCompany = async (req, res, next) => {
     data.permissions = role_privileges.privileges.map(
       (privilege, value) => privilege.key
     );
-    data.notifications = NOTIFICATION_PERMISSIONS.map(
+    data.notifications = NOTIFICATIONS.map(
       (item, value) => item.key
     );
 
@@ -355,20 +355,7 @@ async function addSubscription(subscription) {
     await company.save();
   }
 }
-const getCompanyNotificationPermission = async (req, res, next) => {
-  try {
-    console.log("getCompanyNotificationPermission");
-    let company = res.locals.company;
-    res.status(201).json({
-      success: true,
-      message: "izinler başarıyla çekildi",
-      data: company.notifications,
-      NOTIFICATION_PERMISSIONS,
-    });
-  } catch (error) {
-    return next(new CustomError("bilinmeyen hata", 500, error));
-  }
-};
+
 
 const updateCompanyNotification = async (req, res, next) => {
   console.log(req.body);
@@ -401,6 +388,5 @@ export {
   createCompany,
   updateSmsConfig,
   updateCompanyDocs,
-  getCompanyNotificationPermission,
   updateCompanyNotification
 };

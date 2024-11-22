@@ -1,4 +1,4 @@
-export const notifications = {
+export const NOTIFICATIONS = {
     notificationGroups: [
       {
         id: "MAIL",
@@ -8,15 +8,21 @@ export const notifications = {
         id: "SMS",
         name: "Sms Bildirimleri",
       },
-     
     ],
     notifications: [
       {
         key: "user_appointment_mail",  // code içinde kullanılacak
-        name: "Randevu Maili", //arayüzde kullanılacak
+        name: "Randevu Oluşturuldu Maili", //arayüzde kullanılacak
         group: "MAIL",
         category:"USERS",
-        description: "User View", 
+        description: "", 
+      },
+      {
+        key: "user_appointment_last_day_mail",  // code içinde kullanılacak
+        name: "Son gün Randevu Maili", //arayüzde kullanılacak
+        group: "MAIL",
+        category:"USERS",
+        description: "", 
       },
       {
         key: "user_appointment_sms",  // code içinde kullanılacak
@@ -24,6 +30,14 @@ export const notifications = {
         group: "SMS",
         category:"USERS",
         description: "User View", 
+      },
+     
+      {
+        key: "daily_checkout_report",  // code içinde kullanılacak
+        name: "Günlük Kasa Rapor Maili", //arayüzde kullanılacak
+        group: "MAIL",
+        category:"EMPLOYES",
+        description: "Company Daily Report", 
       },
   
     ],

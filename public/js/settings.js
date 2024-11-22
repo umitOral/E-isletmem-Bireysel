@@ -71,6 +71,10 @@ function changeInformations(e) {
     .then((response) => {
       modalUser.classList.remove("hidden");
       ui.showNotification(true, response.message);
+      setTimeout(() => {
+        window.location.reload()
+      }, 500);
+      
     })
     .catch((err) => console.log("hata:" + err));
 }
@@ -137,93 +141,7 @@ showContentsBtns.forEach((element, index) => {
     ].classList.add("showed_content");
    
     console.log(element.classList)
-    if (element.classList.contains("notifications")) {
-      getCompanyNotificationPermission()
-    }
+   
   });
 });
 
-// images area ----------------
-
-const imagesSmall = document.querySelectorAll(
-  ".userInformationsContent.images .small_images img"
-);
-const imageBig = document.querySelector(
-  ".userInformationsContent.images #big_image_wrapper img "
-);
-
-imagesSmall.forEach((element) => {
-  element.onclick = () => {
-    imagesSmall.forEach((element) => {
-      element.classList.remove("focused");
-    });
-    element.classList.add("focused");
-    let src = element.getAttribute("src");
-
-    imageBig.setAttribute("src", src);
-  };
-});
-
-let notificationsTableBody=document.querySelector(".table.permissions-table tbody")
-async function getCompanyNotificationPermission() {
-  await request
-    .getwithUrl("./getCompanyNotificationPermission")
-    .then((response) => {
-      console.log(response);
-      ui.showNotification(response.success,response.message);
-
-     
-      response.NOTIFICATION_PERMISSIONS.forEach(element => {
-        element.ispermitted=false
-      });
-      console.log(response.NOTIFICATION_PERMISSIONS)
-      response.data.forEach((element) => {
-        console.log(element)
-       let index=response.NOTIFICATION_PERMISSIONS.findIndex((item)=>item.key===element)
-       console.log(index)
-        response.NOTIFICATION_PERMISSIONS[index].ispermitted=true
-      });
-      notificationsTableBody.innerHTML=""
-      response.NOTIFICATION_PERMISSIONS.forEach((element, index) => {
-        notificationsTableBody.innerHTML += `
-          <tr>
-            <td><span>${element.name}</span></td>
-            <td><input type="checkbox"  class="centered_cell" data-notificationkey="${
-              element.key
-            }" name="notificationcheckbox" id="" ${(() => {
-          if (element.ispermitted === true) {
-            return `checked`;
-          } else {
-            return ``;
-          }
-        })()}></td>
-          </tr>
-    `;
-      });
-    })
-    .catch((err) => console.log(err));
-}
-
-notificationsTableBody.addEventListener("change", (e) => {
-  handleEvents(e);
-});
-
-function handleEvents(e) {
- 
-  if (e.target.name === "notificationcheckbox") {
-    
-    let data = { notificationkey: e.target.dataset.notificationkey };
-    request
-      .postWithUrl("./updateCompanyNotification",
-        data
-      )
-      .then((response) => {
-        console.log(response);
-        ui.showNotification(response.success, response.message);
-      })
-      .catch((err) => {
-        console.log(err);
-        ui.showNotification(false, err);
-      });
-  }
-}

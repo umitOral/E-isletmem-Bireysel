@@ -524,7 +524,7 @@ i:hover {
 
 
 
-.active, .accordion:hover {
+.accordion.active, .accordion:hover {
   background-color: var(--color-success); 
 }
 

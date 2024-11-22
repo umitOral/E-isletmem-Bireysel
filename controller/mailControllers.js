@@ -1,20 +1,28 @@
 import { createTransport } from "nodemailer";
 
-
-
 import dotenv from "dotenv";
 import {
   contactEmailHTML,
+  dailyCheckoutReportMailHTML,
   paymentSuccessMailHTML,
+  registerEmloyeeMailHTML,
   registerMailHTML,
   resetPasswordMailHtml,
-  
+  userAppointmentLastDayMailHTML,
+  userAppointmentMailHTML,
 } from "../helpers/mails/mails.js";
 import { Ticket, ticketStatus } from "../models/ticketModel.js";
+import { getCheckOutReport } from "../helpers/paymentHelpers.js";
 
 dotenv.config({ path: "../.env" });
 
-const sendMailWithData = async (receiver, subject, data) => {
+const sendDailyCheckoutReportMail = async (receiver,company) => {
+  
+
+  let response = await getCheckOutReport(company);
+
+
+  let html=dailyCheckoutReportMailHTML(response)
   try {
     const transporter = createTransport({
       host: process.env.EMAIL_SMTP,
@@ -28,7 +36,34 @@ const sendMailWithData = async (receiver, subject, data) => {
     const info = await transporter.sendMail({
       from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: receiver,
-      subject: subject,
+      subject: "Günlük Kasa Raporu",
+      html: html,
+    });
+
+    transporter
+      .verify()
+      .then(console.log("sendDailyCheckoutReportMail sended"))
+      .catch(console.error);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const sendDailyEmployeeReportMail = async (receiver) => {
+  let data = "günlük işletme rapor detayları";
+  try {
+    const transporter = createTransport({
+      host: process.env.EMAIL_SMTP,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
+      to: receiver,
+      subject: "günlük İşletme Raporu",
       html: data,
     });
 
@@ -71,13 +106,90 @@ const sendRegisterMail = async () => {
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-    
+
     const info = await transporter.sendMail({
       from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: "umit.oralmat10@gmail.com",
       subject: "Başarıyla Kayıt oldunuz",
       html: html,
-      
+    });
+
+    transporter.verify().then(console.log).catch(console.error);
+    console.log("message sent:" + info.messageId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const sendEmployeeRegisterMail = async (receiver, data) => {
+  try {
+    const html = registerEmloyeeMailHTML(data);
+    const transporter = createTransport({
+      host: process.env.EMAIL_SMTP,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
+      to: receiver,
+      subject: "Personel Kaydınız Yapıldı",
+      html: html,
+    });
+
+    transporter.verify().then(console.log).catch(console.error);
+    console.log("message sent:" + info.messageId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const sendUserAppointmentMail = async (receiver, data) => {
+  try {
+    const html = userAppointmentMailHTML(data);
+    const transporter = createTransport({
+      host: process.env.EMAIL_SMTP,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
+      to: receiver,
+      subject: "Randevunuz Oluşturuldu",
+      html: html,
+    });
+
+    transporter.verify().then(console.log).catch(console.error);
+    console.log("message sent:" + info.messageId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const sendUserAppointmentLastDayMail = async (receiver, data) => {
+  try {
+    console.log("burası");
+    console.log(receiver);
+    console.log(data);
+    const html = userAppointmentLastDayMailHTML(data);
+    const transporter = createTransport({
+      host: process.env.EMAIL_SMTP,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_ADRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
+      to: receiver,
+      subject: "Randevu hatırlatma",
+      html: html,
     });
 
     transporter.verify().then(console.log).catch(console.error);
@@ -150,14 +262,13 @@ const orderSuccesEmail = async (request) => {
       },
     });
 
-      
-    let html = paymentSuccessMailHTML(data)
-      
+    let html = paymentSuccessMailHTML(data);
+
     const info = await transporter.sendMail({
       from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: "umit.oralmat10@gmail.com",
       subject: "Ödeme alındı",
-      html:html
+      html: html,
     });
 
     transporter.verify().then(console.log).catch(console.error);
@@ -219,5 +330,9 @@ export {
   orderSuccesEmail,
   sendErrorEmail,
   sendCustomMail,
-  sendMailWithData,
+  sendDailyCheckoutReportMail,
+  sendDailyEmployeeReportMail,
+  sendEmployeeRegisterMail,
+  sendUserAppointmentMail,
+  sendUserAppointmentLastDayMail,
 };

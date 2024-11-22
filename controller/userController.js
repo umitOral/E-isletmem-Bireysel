@@ -28,7 +28,7 @@ import { Response } from "../helpers/error/Response.js";
 
 import { AuditLogs } from "../helpers/auditLogs.js";
 import Sms from "../models/smsModel.js";
-import { notifications } from "../config/notifications.js";
+import { NOTIFICATIONS } from "../config/notifications.js";
 
 const deactivateEmployee = async (req, res, next) => {
   try {
@@ -50,7 +50,7 @@ const activateEmployee = async (req, res, next) => {
 };
 const getUsersAllSessions = async (req, res, next) => {
   try {
-    const sessions = await Session.find({ user: req.params.id }).populate([
+    const sessions = await Appointment.find({ user: req.params.id }).populate([
       "doctor",
       "operations.operation",
     ]);
@@ -274,6 +274,7 @@ const createUser = async (req, res, next) => {
               _id: response._id,
               name: response.name,
               surname: response.surname,
+              email:response?.email
             });
             const updatedToken = createTokenSingleData(decodedToken.usersNames);
             res.cookie("userData", updatedToken, {
@@ -382,7 +383,7 @@ const loginUser = async (req, res, next) => {
 
         const usersNames = await User.find(
           { role: "customer", company: company },
-          { name: true, surname: true }
+          { name: true, surname: true,email:true}
         );
 
         const token2 = createTokenSingleData(usersNames);
@@ -613,7 +614,7 @@ const addOperationInsideAppointment = async (req, res, next) => {
     const results = await Operation.insertMany(req.body.selectedOperations);
 
     for (const iterator of results) {
-      await Session.findByIdAndUpdate(req.body.appointment, {
+      await Appointment.findByIdAndUpdate(req.body.appointment, {
         $push: { operations: iterator._id },
       });
     }
@@ -680,7 +681,7 @@ const deleteOperation = async (req, res, next) => {
     //     message: "İşleme ait geçmiş Ödemeler olduğundan İşlem Silinemez.",
     //   });
     // } else {
-    //   await Session.deleteMany({ _id: { $in: operation.appointments } });
+    //   await Appointment.deleteMany({ _id: { $in: operation.appointments } });
     //   await Operation.findByIdAndDelete(req.params.operationId)
     //     .then((response) => {
     //       console.log("işlem silindi");
@@ -924,7 +925,7 @@ const getUserNotifications = async (req, res, next) => {
   try {
     let user=await User.findById(req.params.id)
     let userNotifications = user.notifications || {};
-    let allNotifications = notifications;
+    let allNotifications = NOTIFICATIONS;
 
     res.status(200).json({
       success: true,

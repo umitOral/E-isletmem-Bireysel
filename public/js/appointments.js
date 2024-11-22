@@ -32,6 +32,8 @@ const userSelect = document.querySelector("#user-select");
 const dataList=document.querySelector("#user-names")
 
 let userID=""
+let useremail=""
+
 let APPOINTMENT_STATUS=[]
 
 let today = new Date();
@@ -66,7 +68,7 @@ addUserForm.addEventListener("submit",(e)=>{
     console.log(response)
     ui.showNotification(response.success,response.message)
     dataList.innerHTML+=`
-    <option data-userid="${response.data._id}" data-userdata="${response.data.name+response.data.surname}" value="${response.data.name+" "+response.data.surname}"></option>
+    <option data-userid="${response.data._id}" data-userdata="${response.data.name+response.data.surname}" value="${response.data.name+""+response.data.surname}"></option>
     `
     addUserModal.classList.add("hidden")
   })
@@ -176,6 +178,7 @@ async function getSessions() {
     let value=userSelect.value.replaceAll(" ", "")
     console.log(value)
     userID = document.querySelector(`#user-names option[data-userdata=${value}]`).dataset.userid;
+    useremail = document.querySelector(`#user-names option[data-userdata=${value}]`).dataset.useremail;
     
     request
       .getwithUrl("./users/" + userID + "/getUsersContinueOperations")
@@ -364,7 +367,7 @@ todayBtn.addEventListener("click", () => {
 
 const closeAddSessionBtn = document.querySelector("#cancel-add-appointment");
 
-const modalAddSession = document.querySelector("#modal_add_session");
+const modalAddAppointment = document.querySelector("#modal_add_session");
 
 const doctorIDs = document.querySelectorAll(".doctor-id");
 
@@ -472,7 +475,7 @@ addSessionBtn.addEventListener("click", function (e) {
   if (checkedElements.length === 0) {
     ui.showNotification(false,"lütfen randevu saati seçiniz");
   } else {
-    modalAddSession.classList.remove("hidden")
+    modalAddAppointment.classList.remove("hidden")
 
     showAddEventModal(checkedElements);
   }
@@ -524,7 +527,7 @@ function showAddEventModal(e) {
     e[0].parentElement.parentElement.dataset.starthour
   );
 
-  modalAddSession.classList.remove("hidden");
+  modalAddAppointment.classList.remove("hidden");
 }
 
 
@@ -574,9 +577,11 @@ addSessionForm.addEventListener("submit", (e) => {
     doctor: addSessionForm.doctor.value,
     date: addSessionForm.date.value,
     description: addSessionForm.description.value,
-    }
+    },
+    userEmail:useremail,
     
   };
+  console.log(data)
   request
     .postWithUrl("./appointments/createAppointment", data)
     .then((response) => {
@@ -600,7 +605,7 @@ addSessionForm.addEventListener("submit", (e) => {
      getAllSessions(selectedDate)})
 
     .catch((err) => console.log(err));
-  modalAddSession.classList.add("hidden");
+  modalAddAppointment.classList.add("hidden");
 });
 
 // ///////////////////////////////////
@@ -788,7 +793,7 @@ selected_proccess_type_new.addEventListener("click", (e) => {
 //     )
 //     .then((response) => {
 //       ui.showNotification(true, response.message);
-//       modalUpdateSession.classList.toggle("showed_modal");
+//       modalUpdateAppointment.classList.toggle("showed_modal");
 //       getAllSessions();
 //     })
 //     .catch((err) => console.log(err));

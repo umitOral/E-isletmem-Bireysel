@@ -111,7 +111,6 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
     }
    
 
-    console.log(allDoctorAllSessions)
 
 
     res.status(200).json({

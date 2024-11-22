@@ -26,6 +26,7 @@ import { searchProduct } from "./productControllers.js";
 import { getTenantDb } from "./db.js";
 import { BRAND_LIST } from "../config/brands.js";
 import { sendRegisterMail } from "./mailControllers.js";
+import Appointment from "../models/appointmentModel.js";
 
 
 let now = new Date();
@@ -300,7 +301,7 @@ const getContactPage = (req, res, next) => {
 };
 const getAdminPage = async (req, res, next) => {
   try {
-    console.log( "mail başarılı")
+   
     res.status(200).render("indexAdmin", {
       link: "index",
     });
@@ -395,7 +396,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    let reports = await Session.find(searchObject)
+    let reports = await Appointment.find(searchObject)
 
       .where("date")
       .gt(startDate)
@@ -411,7 +412,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
       activeOrNot: true,
     });
 
-    let total = await Session.find(searchObject)
+    let total = await Appointment.find(searchObject)
       .where("date")
       .gt(startDate)
       .lt(endDate);

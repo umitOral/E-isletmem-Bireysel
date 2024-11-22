@@ -294,14 +294,7 @@ const editPayment = async (req, res, next) => {
 };
 const getSearchedPayments = async (req, res, next) => {
   try {
-    console.log(req.query);
-    function toDateInputValue(dateObject) {
-      const local = new Date(dateObject);
-      local.setMinutes(
-        dateObject.getMinutes() + dateObject.getTimezoneOffset()
-      );
-      return local;
-    }
+    
     let endDate = new Date(req.query.endDate);
     let startDate = new Date(req.query.startDate);
     startDate.setDate(startDate.getDate() - 1);
@@ -326,6 +319,7 @@ const getSearchedPayments = async (req, res, next) => {
     let totalExpenses = 0;
     let totalCash = 0;
     let totalCreditCard = 0;
+    let totalCashForExpenses = 0;
     let netCash = 0;
 
     payments.forEach((payment) => {
@@ -337,11 +331,16 @@ const getSearchedPayments = async (req, res, next) => {
           totalCreditCard += payment.totalPrice;
         }
       } else {
+         
+      if (payment.cashOrCard === "nakit") {
+        totalCashForExpenses += payment.totalPrice;
+      } else {
         totalExpenses += payment.totalPrice;
+      }
       }
     });
 
-    netCash = totalCash - totalExpenses * -1;
+    netCash = totalCash - totalCashForExpenses * -1;
 
     res.status(200).json({
       succes: true,

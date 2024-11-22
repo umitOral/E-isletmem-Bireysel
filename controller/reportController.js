@@ -57,7 +57,7 @@ const getUserReports = async (req, res, next) => {
 
         for (const [index, element] of reports.entries()) {
           console.log("arama");
-          await Session.findOne({ user: element._id }).then((resp) => {
+          await Appointment.findOne({ user: element._id }).then((resp) => {
             console.log(index);
             console.log(resp);
             if (resp === null) {
@@ -72,7 +72,7 @@ const getUserReports = async (req, res, next) => {
         }
       } else {
         for (const [index, element] of reports.entries()) {
-          await Session.findOne({ user: element._id }).then((resp) => {
+          await Appointment.findOne({ user: element._id }).then((resp) => {
             if (resp === null) {
               filteredReports.push(element);
               element.firstAppointment = false;
@@ -156,7 +156,7 @@ const getAppointmentReports = async (req, res, next) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    let reports = await Session.find(searchObject)
+    let reports = await Appointment.find(searchObject)
       .lean()
 
       .where("createdAt")
@@ -168,7 +168,7 @@ const getAppointmentReports = async (req, res, next) => {
       .limit(limit)
       .sort({ createdAt: -1 });
 
-    let total = await Session.find(searchObject)
+    let total = await Appointment.find(searchObject)
       .where("createdAt")
       .gt(startDate)
       .lt(endDate);

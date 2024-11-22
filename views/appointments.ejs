@@ -92,6 +92,7 @@
                             <% locals.usersNames.forEach(element=> { %>
 
                                 <option data-userid="<%= element._id %>"
+                                    data-useremail="<%= element.email %>"
                                     data-userdata="<%= element.name+""+element.surname %>"
                                     value="<%= element.name+" "+element.surname %>">
 

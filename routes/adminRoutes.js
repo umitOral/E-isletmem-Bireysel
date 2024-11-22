@@ -54,6 +54,8 @@ import {
   getEmployeePermissions,
   getEmployeesPayments,
   updateEmployeesPermissions,
+  getEmployeeNotifications,
+  updateEmployeeNotifications,
 } from "../controller/employeesController.js";
 
 import {
@@ -104,7 +106,6 @@ import {
   updateCompanyDocs,
   addCompanyPayment,
   updateCompanyNotification,
-  getCompanyNotificationPermission
 } from "../controller/companyControllers.js";
 import {
   updateSessionStatus,
@@ -236,7 +237,7 @@ router.route("/companyPaymentPage").get(companyPaymentPage);
 router.route("/companyPaymentsList").get(companyPaymentsListPage);
 
 router.route("/addCompanyPayment").post(addCompanyPayment);
-router.route("/getCompanyNotificationPermission").get(getCompanyNotificationPermission);
+
 router.route("/updateCompanyNotification").post(updateCompanyNotification);
 
 router.route("/employee/:id").get(checkEmployee,getEmployeeSelfPage);
@@ -247,6 +248,12 @@ router
 router
   .route("/employees/:id/getEmployeePermissions")
   .get(getEmployeePermissions);
+  router
+  .route("/employees/:id/getEmployeeNotifications")
+  .get(getEmployeeNotifications);
+  router
+  .route("/employees/:id/updateEmployeeNotifications")
+  .post(updateEmployeeNotifications);
 router
   .route("/employees/:id/getEmployeesPayments")
   .get(getEmployeesPayments);

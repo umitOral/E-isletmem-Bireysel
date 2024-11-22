@@ -1,6 +1,6 @@
 import Session from "../models/appointmentModel.js";
 import Operation from "../models/OperationsModel.js";
-import {CustomError} from "../helpers/error/CustomError.js";
+import { CustomError } from "../helpers/error/CustomError.js";
 // import Order from '../models/OrderModel.js';
 import {
   OPERATION_APPOINTMENT_AVALIABLE_STATUS,
@@ -9,14 +9,16 @@ import {
   SESSION_STATUS_LIST_AUTOMATIC,
   SESSION_STATUS_LIST,
 } from "../config/status_list.js";
+import { sendUserAppointmentMail } from "./mailControllers.js";
+import Appointment from "../models/appointmentModel.js";
 
-const createAppointment = async (req,res,next) => {
+const createAppointment = async (req, res, next) => {
   try {
-   console.log(req.body)
+    console.log(req.body);
     req.body.appointmentData.startHour = new Date(
       `${req.body.appointmentData.date},${req.body.appointmentData.startHour}`
     );
-    req.body.appointmentData.company = res.locals.company
+    req.body.appointmentData.company = res.locals.company;
     req.body.appointmentData.endHour = new Date(
       `${req.body.appointmentData.date},${req.body.appointmentData.endHour}`
     );
@@ -27,7 +29,8 @@ const createAppointment = async (req,res,next) => {
     if (req.body.operations.newOperations) {
       req.body.operations.newOperations.forEach((element) => {
         element.company = res.locals.company;
-        element.operationAppointmentStatus =OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO;
+        element.operationAppointmentStatus =
+          OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO;
         element.user = req.body.appointmentData.user;
 
         element.operationStatus = OPERATION_STATUS_AUTOMATIC.PLANNED;
@@ -44,37 +47,61 @@ const createAppointment = async (req,res,next) => {
 
     if (req.body.operations.oldOperations) {
       req.body.operations.oldOperations.forEach((element) => {
-        req.body.appointmentData.operations.push({operation:element.operationID,session:element.nextSessionNumber});
+        req.body.appointmentData.operations.push({
+          operation: element.operationID,
+          session: element.nextSessionNumber,
+        });
       });
     }
 
     await Operation.insertMany(req.body.operations.newOperations).then(
       (response) => {
         response.forEach((element) => {
-          req.body.appointmentData.operations.push({operation:element._id,session:1});
+          req.body.appointmentData.operations.push({
+            operation: element._id,
+            session: 1,
+          });
         });
       }
     );
 
-    let session = await Session.create(req.body.appointmentData);
-   
+    let appointment = await Appointment.create(req.body.appointmentData)
+     console.log(appointment)
+
     await Operation.updateMany(
-      { _id: { $in: req.body.operations.oldOperations.map(item=>item.operationID)} },
+      {
+        _id: {
+          $in: req.body.operations.oldOperations.map(
+            (item) => item.operationID
+          ),
+        },
+      },
       {
         $push: {
           sessionOfOperation: {
             sessionDate: new Date(req.body.appointmentData.date),
             sessionState: SESSION_STATUS_LIST_AUTOMATIC.WAITING,
-            refAppointmentID: session._id,
+            refAppointmentID: appointment._id,
           },
         },
         $set: {
           operationStatus: OPERATION_STATUS_AUTOMATIC.PLANNED,
-          operationAppointmentStatus:OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO,
-          "sessionOfOperation[sessionOfOperation.length-1].sessionState":SESSION_STATUS_LIST_AUTOMATIC.WAITING,
+          operationAppointmentStatus: OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO,
+          "sessionOfOperation[sessionOfOperation.length-1].sessionState":
+            SESSION_STATUS_LIST_AUTOMATIC.WAITING,
         },
       }
     );
+
+    let data = {
+      brandName: appointment.company.brandName,
+      companyPhone: appointment.company.phone,
+      date: req.body.appointmentData.date,
+      startHour: req.body.appointmentData.startHour,
+    };
+    console.log(data);
+    console.log(req.body.userEmail);
+    sendUserAppointmentMail(req.body.userEmail, data);
 
     res.status(200).json({
       success: true,
@@ -82,22 +109,21 @@ const createAppointment = async (req,res,next) => {
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
-
   }
 };
 
-const deleteAppointment = async (req,res,next) => {
+const deleteAppointment = async (req, res, next) => {
   try {
     console.log("delete appointment");
 
     let date = new Date();
-    const session = await Session.findById(req.params.id);
+    const session = await Appointment.findById(req.params.id);
 
     session.date.setTime(session.startHour);
     let diffTime = date - session.date;
     console.log(diffTime);
     if (diffTime < 0) {
-      await Session.findByIdAndDelete(req.params.id);
+      await Appointment.findByIdAndDelete(req.params.id);
       session.operations.forEach(async (element, index) => {
         await Operation.updateOne(
           { _id: session.operations[index] },
@@ -121,20 +147,16 @@ const deleteAppointment = async (req,res,next) => {
     }
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
-
   }
 };
-const updateStateAppointment = async (req,res,next) => {
+const updateStateAppointment = async (req, res, next) => {
   try {
-    
     console.log(req.query);
     console.log(req.params);
 
-    const session = await Session.findByIdAndUpdate(req.params.id, {
+    const session = await Appointment.findByIdAndUpdate(req.params.id, {
       appointmentState: req.query.state,
     }).populate("operations");
-
-   
 
     res.json({
       succes: true,
@@ -145,11 +167,11 @@ const updateStateAppointment = async (req,res,next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const updateAppointment = async (req,res,next) => {
+const updateAppointment = async (req, res, next) => {
   try {
     console.log("uptt");
     console.log(req.body);
-    const session = await Session.findByIdAndUpdate(req.params.id, req.body);
+    const session = await Appointment.findByIdAndUpdate(req.params.id, req.body);
 
     res.json({
       succes: true,
@@ -157,12 +179,11 @@ const updateAppointment = async (req,res,next) => {
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
-
   }
 };
-const getAppointment = async (req,res,next) => {
+const getAppointment = async (req, res, next) => {
   try {
-    const session = await Session.findById(req.params.id).populate("user");
+    const session = await Appointment.findById(req.params.id).populate("user");
 
     res.json({
       succes: true,
@@ -170,7 +191,6 @@ const getAppointment = async (req,res,next) => {
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
-
   }
 };
 

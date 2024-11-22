@@ -1,4 +1,4 @@
-import CryptoJS  from 'crypto-js';
+
 
 const createSmsAuthorization = async (company) => {
   let bytes = CryptoJS.AES.decrypt(company.smsConfig.password,process.env.JWT_SECRET);
