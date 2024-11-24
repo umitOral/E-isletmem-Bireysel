@@ -5,7 +5,7 @@ import { UI } from "./ui.js";
 const ui = new UI();
 ui.closeNotification();
 
-const allModals = document.querySelectorAll(".modal");
+
 const cancelBtns = document.querySelectorAll(".btn.cancel.form-btn");
 
 cancelBtns.forEach((element) => {
@@ -174,7 +174,8 @@ function getAllSessions() {
         response.workHours,
         APPOINTMENT_STATUS
       );
-      // renderAppointments()
+      
+      appointmentUpdate();
       handleResize();
       changeState();
       getSessions();
@@ -489,43 +490,24 @@ const addSessionBtn = document.querySelector("#add-session-btn");
 const addSessionForm = document.getElementById("add-session-form");
 
 addSessionBtn.addEventListener("click", function (e) {
-  const checkBoxes = document.querySelectorAll(".event input[type='checkbox']");
-
-  let checkedElements = [];
-  checkBoxes.forEach((element, index) => {
-    if (element.checked) {
-      checkedElements.push(element);
-    }
-  });
-
-  if (checkedElements.length === 0) {
-    ui.showNotification(false, "lütfen randevu saati seçiniz");
-  } else {
+ 
     modalAddAppointment.classList.remove("hidden");
 
     showAddEventModal(checkedElements);
-  }
+  
 });
 
-const rightSection = document.querySelector(".right");
 
-rightSection.addEventListener("click", sessionEditButtonHandled);
 
-function sessionEditButtonHandled(e) {
-  const sessionOptionsModalOptions = document.querySelectorAll(
-    ".session-options-modal"
-  );
-
-  if (e.target.classList.contains("edit-session")) {
-    sessionOptionsModalOptions.forEach((element) => {
-      element.classList.remove("showed_modal");
-    });
-    e.target.nextSibling.nextSibling.classList.toggle("showed_modal");
-  } else {
-    sessionOptionsModalOptions.forEach((element) => {
-      element.classList.remove("showed_modal");
-    });
-  }
+     
+function appointmentUpdate() {
+  let appointments = document.querySelectorAll(".event");
+  appointments.forEach(element => {
+    element.addEventListener("click",()=>{
+      modalEdit.classList.remove("hidden");
+    })
+  });
+  
 }
 
 function showAddEventModal(e) {

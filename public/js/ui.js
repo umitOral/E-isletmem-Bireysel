@@ -540,7 +540,7 @@ export class UI {
 
   showAllSessionToUI(allDoctorDatas, workHours, APPOINTMENT_STATUS) {
     const timeLineArea = document.querySelector(".time-line-area");
-
+    console.log(allDoctorDatas);
     const allDoctorArea = document.createElement("div");
     allDoctorArea.className = "all-doctor-area";
 
@@ -557,16 +557,23 @@ export class UI {
         singleDoctorData.doctorInformations.email
       );
 
+      
+
       singleDoctorData.sessionsofdoctorforactualDay.forEach(
         (element, index) => {
-          
-          
-          let topPoint=(element.startHour.split(":")[0]-workHours.workStart.split(":")[0])*300+
-                            (element.startHour.split(":")[1]-workHours.workStart.split(":")[1])*5
-          let height=(element.endHour.split(":")[0]-element.startHour.split(":")[0])*300+
-          (element.endHour.split(":")[1]-element.startHour.split(":")[1])*5
+          let topPoint =
+            (element.startHour.split(":")[0] -
+              workHours.workStart.split(":")[0]) *
+              300 +
+            (element.startHour.split(":")[1] -
+              workHours.workStart.split(":")[1]) *
+              5;
+          let height =
+            (element.endHour.split(":")[0] - element.startHour.split(":")[0]) *
+              300 +
+            (element.endHour.split(":")[1] - element.startHour.split(":")[1]) *
+              5;
 
-  
           singleDoctorArea.innerHTML += `
                     
                     <div class="event"
@@ -582,8 +589,8 @@ export class UI {
                           </span>
                           
                           <span>${element.user.name} ${
-                            element.user.surname
-                          }</span>
+            element.user.surname
+          }</span>
                           <span>${element.operations.map(
                             (item) => item.operationName
                           )}
