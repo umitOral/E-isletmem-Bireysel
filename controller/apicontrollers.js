@@ -81,7 +81,7 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
 
     // test codes
     const workHours = res.locals.company.workHours;
-    const allDoctorAllSessions = [];
+    const allDoctorDatas = [];
 
     const actualDate = new Date(req.params.date + ",Z00:00:00");
     const date = new Date(req.params.date + ",Z00:00:00");
@@ -103,8 +103,8 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
           .populate("operations","operationName")
           .sort({ startHour: 1 });
         
-        allDoctorAllSessions.push({
-          doctorName: doctors[i].name,
+        allDoctorDatas.push({
+          doctorInformations: doctors[i],
           sessionsofdoctorforactualDay
         });
       }
@@ -115,10 +115,10 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
 
     res.status(200).json({
       workHours,
-      doctors: doctors,
+      // doctors: doctors,
       APPOINTMENT_STATUS,
       // sessionsAllDoctor: sessionsAllDoctor,
-      allDoctorAllSessions: allDoctorAllSessions,
+      allDoctorDatas: allDoctorDatas,
     });
   } catch (error) {
     res.status(500).json({
@@ -195,8 +195,8 @@ const getDaysFullorNot = async (req, res) => {
           }).sort({ startHour: 1 });
           
           sessionsofdoctorforsingleDay.forEach((element) => {
-            daysCount +=
-              element.timeIndexes[1] - element.timeIndexes[0] + 1;
+            // daysCount +=
+            //   element.timeIndexes[1] - element.timeIndexes[0] + 1;
           });
 
         }

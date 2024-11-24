@@ -393,13 +393,13 @@ function getAllAppointmentofSingleDoctor() {
         return date;
       }
 
-      sessionsOfDoctorSingleDay.forEach((element, index) => {
-        times.splice(
-          element.timeIndexes[0],
-          element.timeIndexes[1] - element.timeIndexes[0] + 1,
-          element
-        );
-      });
+      // sessionsOfDoctorSingleDay.forEach((element, index) => {
+      //   times.splice(
+      //     element.timeIndexes[0],
+      //     element.timeIndexes[1] - element.timeIndexes[0] + 1,
+      //     element
+      //   );
+      // });
       console.log(times);
 
       ui.sessionToUISingleDoctor(times,APPOINTMENT_STATUS);

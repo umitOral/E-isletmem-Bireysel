@@ -5,19 +5,15 @@ import { OPERATION_STATUS_AUTOMATIC } from "../config/status_list.js";
 const Schema = mongoose.Schema;
 const appointmentSchema = new Schema(
   {
-    timeIndexes: [
-      {
-        type: Number,
-      },
-    ],
+    
     date: {
       type: Date,
     },
     startHour: {
-      type: Date,
+      type: String,
     },
     endHour: {
-      type: Date,
+      type: String,
     },
 
     description: { type: String },

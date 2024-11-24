@@ -28,7 +28,6 @@ import { BRAND_LIST } from "../config/brands.js";
 import { sendRegisterMail } from "./mailControllers.js";
 import Appointment from "../models/appointmentModel.js";
 
-
 let now = new Date();
 let day = now.getDate();
 let month = now.getMonth();
@@ -301,7 +300,6 @@ const getContactPage = (req, res, next) => {
 };
 const getAdminPage = async (req, res, next) => {
   try {
-   
     res.status(200).render("indexAdmin", {
       link: "index",
     });
@@ -456,8 +454,8 @@ const getAppointmentReportsPage = async (req, res, next) => {
 };
 const paymentReportsPage = async (req, res, next) => {
   try {
-    let users = await User.find({company:res.locals.company._id});
-    let employes = await Employee.find({company:res.locals.company._id});
+    let users = await User.find({ company: res.locals.company._id });
+    let employes = await Employee.find({ company: res.locals.company._id });
     res.status(200).render("reports/paymentReports", {
       users,
       employes,
@@ -482,7 +480,6 @@ const getSmsReportsPage = async (req, res, next) => {
   try {
     //pagination
 
-   
     res.status(200).render("reports/smsReports", {
       link: "reports",
     });
@@ -575,7 +572,7 @@ const deneme = async (req, res, next) => {
 const getEmployeesPage = async (req, res, next) => {
   try {
     let query = Employee.find({});
-    
+
     if (req.query) {
       const searchObject = {};
       searchObject["company"] = res.locals.company._id;
@@ -629,6 +626,11 @@ const getEmployeesPage = async (req, res, next) => {
 const getAppointmentsPage = async (req, res, next) => {
   try {
     let services = await Company.findById({ _id: res.locals.company._id });
+    let doctors = await Employee.find({
+      activeOrNot: true,
+      permissions: "appointment_get",
+      company:res.locals.company._id
+    });
     const activeServices = [];
     services.services.forEach((element) => {
       if (element.activeorNot === true) {
@@ -639,7 +641,7 @@ const getAppointmentsPage = async (req, res, next) => {
 
     res.status(200).render("appointments", {
       link: "appointments",
-
+      doctors: doctors,
       services: activeServices,
     });
   } catch (error) {
@@ -693,7 +695,7 @@ const getSettingsPage = (req, res, next) => {
       let indexcontrol = company.companyDocs.findIndex(
         (item) => item.docKey === element.key
       );
-      
+
       if (indexcontrol === -1) {
         missedDocs.push(element);
       } else {
@@ -701,7 +703,7 @@ const getSettingsPage = (req, res, next) => {
         finishedDocs[finishedDocs.length - 1].name = element.name;
       }
     });
-    
+
     res.status(200).render("settings", {
       DOC_STATUS,
       finishedDocs,
@@ -747,7 +749,7 @@ const getPaymentsPage = async (req, res, next) => {
     res.status(200).render("payments", {
       link: "payments",
       users: users,
-      employees
+      employees,
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -769,10 +771,10 @@ const getUserPage = async (req, res, next) => {
 const getSingleEmployeePage = async (req, res, next) => {
   try {
     const singleUser = await Employee.findById(req.params.id);
-   
+
     res.status(200).render("employee-details", {
       singleUser,
-    
+
       link: "employees",
     });
   } catch (error) {
@@ -781,7 +783,7 @@ const getSingleEmployeePage = async (req, res, next) => {
 };
 const getEmployeeSelfPage = async (req, res, next) => {
   try {
-    const singleUser = res.locals.employee
+    const singleUser = res.locals.employee;
 
     res.status(200).render("employee-self", {
       singleUser,
@@ -835,5 +837,5 @@ export {
   getAllProductsPage,
   productReportsPage,
   getSmsReportsPage,
-  getSantralPage
+  getSantralPage,
 };

@@ -3,6 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="../css/sessions.css">
+   
 
     <%- include('partials/head.ejs') %>
 
@@ -61,8 +62,11 @@
 
                             </div>
                             <div class="add-session"><button id="add-session-btn">Randevu Ekle</button></div>
-                            <div class="events-all-doctors">
-
+                            <div class="time-line-area">
+<!--                                
+                                <% doctors.forEach(element => { %>
+                                    <div class="column" data-doctor="<%= element._id %>"><%= element.name+element.surname %></div>
+                                <% }) %> -->
 
                             </div>
 
@@ -131,12 +135,7 @@
                         </div>
 
                     </div>
-                    <div class="form-group" hidden>timeIndex:
-                        <input type="text" name="timeIndexes" id="" class="timeIndex">
-                    </div>
-                    <div class="form-group" hidden>timeIndex1:
-                        <input type="text" name="timeIndexes" id="" class="timeIndex">
-                    </div>
+                   
                     <div class="form-group">Başlangıç Saati:
                         <input type="text" name="startHour" id="" class="startHour" readonly>
                     </div>

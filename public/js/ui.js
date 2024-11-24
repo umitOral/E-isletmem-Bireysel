@@ -102,11 +102,13 @@ export class UI {
                 <td>${new Date(element.createdAt).toLocaleDateString(
                   "tr-TR"
                 )}//${new Date(element.createdAt).toLocaleTimeString(
-                  "tr-TR"
-                )}</td>
+          "tr-TR"
+        )}</td>
                 <td>${element.cashOrCard}</td>
                 <td>
-                    ${element.products.map((item, i) => `
+                    ${element.products
+                      .map(
+                        (item, i) => `
                     <div data-dataId="${item._id}" data-dataName="${item.dataName}">
                     ${item.quantity}x${item.productId.name}=${item.paymentValue} <br>
                     </div>
@@ -115,7 +117,9 @@ export class UI {
                       .join("")}
                 </td>
                 <td>
-                    ${element.operations.map((item, i) => `
+                    ${element.operations
+                      .map(
+                        (item, i) => `
                       <div>
                       ${item.operationId.operationName}=${item.paymentValue} <br>
                     </div>
@@ -534,133 +538,72 @@ export class UI {
     netCash.innerHTML = data.netCash;
   }
 
-  showAllSessionToUI(allTimesforAllDoctors, AllDoctor, APPOINTMENT_STATUS) {
-    console.log(allTimesforAllDoctors);
-    const allDoctorEvents = document.querySelector(".events-all-doctors");
+  showAllSessionToUI(allDoctorDatas, workHours, APPOINTMENT_STATUS) {
+    const timeLineArea = document.querySelector(".time-line-area");
 
-    while (allDoctorEvents.firstChild) {
-      allDoctorEvents.firstChild.remove();
-    }
+    const allDoctorArea = document.createElement("div");
+    allDoctorArea.className = "all-doctor-area";
 
-    allTimesforAllDoctors.forEach((timesForSingleDoctor, index) => {
+    allDoctorDatas.forEach((singleDoctorData, index) => {
       const singleDoctorArea = document.createElement("div");
+      // singleDoctorArea.style.left = `${index*200}px`;
+      singleDoctorArea.className = "single-doctor-events";
+      singleDoctorArea.setAttribute(
+        "data-doctorid",
+        singleDoctorData.doctorInformations._id
+      );
+      singleDoctorArea.setAttribute(
+        "data-doctoremail",
+        singleDoctorData.doctorInformations.email
+      );
 
-      singleDoctorArea.className = "single-doctor-area";
-      singleDoctorArea.setAttribute("data-doctorid", AllDoctor[index]._id);
-      singleDoctorArea.setAttribute("data-doctoremail", AllDoctor[index].email);
+      singleDoctorData.sessionsofdoctorforactualDay.forEach(
+        (element, index) => {
+          
+          
+          let topPoint=(element.startHour.split(":")[0]-workHours.workStart.split(":")[0])*300+
+                            (element.startHour.split(":")[1]-workHours.workStart.split(":")[1])*5
+          let height=(element.endHour.split(":")[0]-element.startHour.split(":")[0])*300+
+          (element.endHour.split(":")[1]-element.startHour.split(":")[1])*5
 
-      singleDoctorArea.innerHTML += `
-
-            <div class="doctor-name" value="">
-                ${AllDoctor[index].name} ${AllDoctor[index].surname}
-            </div>
-            `;
-      // singleDoctorArea.dataset=AllDoctor[index]._id
-      const singleDoctorEvents = document.createElement("div");
-      singleDoctorEvents.className = "single-doctor-events";
-
-      allDoctorEvents.appendChild(singleDoctorArea);
-
-      timesForSingleDoctor.forEach((element, index) => {
-        if (element._id) {
-          singleDoctorEvents.innerHTML += `
-                    <div class="event full" data-session="${
-                      element._id
-                    }" data-userName="${element.user.name}" style="height:${
-            (element.timeIndexes[1] - element.timeIndexes[0] + 1) * 100
-          }px">
-
-                        <div class="center">
-                        <div>
-                        <span>${new Date(element.startHour)
-                          .toLocaleTimeString()
-                          .slice(0, 5)}-</span><span>${new Date(element.endHour)
-            .toLocaleTimeString()
-            .slice(0, 5)}</span>
-
-                        </div>
-
-                            <span>${element.user.name} ${
-            element.user.surname
-          }</span>
-                            <span>${element.operations.map(
-                              (item) => item.operationName
-                            )}
-                            </span>
-                            
-                            
-                            <span class="buttons">${
-                              element.appointmentState
-                            }</span>
-
-                            
-                         
-
-                        </div>
-                        <div class="options-appointments" >
-                            <span class="material-symbols-sharp edit-session">
-                                more_vert
-                            </span>
-                            <div class="session-options-modal">
-                                ${APPOINTMENT_STATUS.map(
-                                  (item) => `
-                                <span class="change-state" value="${item}">${item}</span>
-                                `
-                                ).join("")}
-                                
-                              
-                                
-                            </div>
-
-
-                          </div>
+  
+          singleDoctorArea.innerHTML += `
+                    
+                    <div class="event"
+                    data-session="${element._id}"
+                    data-startHour="${element.startHour}"
+                    data-endHour="${element.endHour}"
+                     data-userName="${element.user.name}"
+                     style="top:${topPoint}px;height:${height}px"
+                     >
+                        <div class="resize-handle top"></div>
+                        <div class="center prevent-select">
+                          <span>${element.startHour}-${element.endHour}
+                          </span>
                           
-                    </div>
-                    `;
-          singleDoctorArea.appendChild(singleDoctorEvents);
-        } else {
-          singleDoctorEvents.innerHTML += `
-                         
-                    <div class="event" data-time="${index}" data-startHour="${
-            element.startHour
-          }" data-endHour="${element.endHour}" style="height:75px">
-                                             
-                        <div>
-                        <span>${new Date(element.startHour).toLocaleTimeString(
-                          [],
-                          {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )} </span> -
-                        <span>${new Date(element.endHour).toLocaleTimeString(
-                          [],
-                          {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )} </span>
-                        
-                        
-                        </div>
-                        <span>  Boş</span>
-                        
-                        <div>
-                        <input type="checkbox" name="aaa" id="">
+                          <span>${element.user.name} ${
+                            element.user.surname
+                          }</span>
+                          <span>${element.operations.map(
+                            (item) => item.operationName
+                          )}
+                          </span>
+                          
                         </div>
                         
-
-                       
-
-
-                    </div>
+                          <div class="resize-handle bottom"></div>
+                      </div>
+                        
                     
                     `;
-          singleDoctorArea.appendChild(singleDoctorEvents);
+          allDoctorArea.appendChild(singleDoctorArea);
         }
-      });
+      );
     });
+
+    timeLineArea.appendChild(allDoctorArea);
   }
+
   sessionToUISingleDoctor(times, APPOINTMENT_STATUS_LIST) {
     const appointmentsOfDoctor = document.querySelector(
       ".appointments-of-doctor"
@@ -673,20 +616,13 @@ export class UI {
     times.forEach((element, index) => {
       if (element._id) {
         appointmentsOfDoctor.innerHTML += `
-                    <div class="event full" data-appointmentid="${
+                    <div class="event" data-appointmentid="${
                       element._id
-                    }" data-userid="${element.user._id}" style="height:${
-          (element.timeIndexes[1] - element.timeIndexes[0] + 1) * 100
-        }px">
+                    }" data-userid="${element.user._id}" style="height:px">
 
                         <div class="center">
                         <div>
-                        <span>${new Date(element.startHour)
-                          .toLocaleTimeString()
-                          .slice(0, 5)}-</span><span>${new Date(element.endHour)
-          .toLocaleTimeString()
-          .slice(0, 5)}</span>
-
+                          <span>${element.startHour}-${element.endHour}</span>
                         </div>
 
                             <span>${element.user.name} ${
