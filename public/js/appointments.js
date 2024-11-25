@@ -493,7 +493,7 @@ addSessionBtn.addEventListener("click", function (e) {
  
     modalAddAppointment.classList.remove("hidden");
 
-    showAddEventModal(checkedElements);
+    showAddEventModal();
   
 });
 

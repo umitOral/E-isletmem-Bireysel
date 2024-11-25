@@ -37,9 +37,14 @@
 }
 #add-session-btn {
   background-color: var(--color-main-lighter);
-  padding: 1rem;
+  padding: 0.7rem 2rem;
+  border-radius: 0.5rem;
   color: white;
   border: none;
+}
+#add-session-btn:hover {
+  background-color: var(--color-main);
+ 
 }
 .month {
   display: flex;
@@ -65,9 +70,9 @@
 
 .weekdays {
   display: flex;
-  gap: 1rem;
-  padding: 20px 0;
-  justify-content: space-between;
+  
+  padding: 10px 0;
+  justify-content: center;
   width: 100%;
   font-weight: 600;
 }
@@ -77,12 +82,13 @@
 }
 .days {
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto auto;
+  grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
+  justify-content: center;
 }
 .days .day {
   border: 1px solid rgba(128, 128, 128, 0.1);
   text-align: center;
-  height: 70px;
+  height: 50px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -91,7 +97,7 @@
   cursor: pointer;
 }
 .days .day.active {
-  font-size: 2rem;
+  font-size: 1.5rem;
   background-color: var(--color-main-lighter);
   color: white;
 }
@@ -104,11 +110,10 @@
 }
 
 .day.today {
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: var(--color-main);
 }
 .day.today:hover {
-  font-size: 2rem;
   color: white;
 }
 .calendar .days .day.event {
@@ -156,10 +161,18 @@
   padding: 5px 10px;
   cursor: pointer;
 }
-.calendar .goto-today .today-btn {
-  padding: 5px 10px;
+ .today-btn {
+  padding:0.5rem;
+  width: 100%;
+  color: white;
   background-color: var(--color-main-lighter);
   cursor: pointer;
+  text-align: center;
+  border-radius: 0.5rem;
+}
+.today-btn:hover {
+  background-color: var(--color-main);
+  
 }
 .calendar .goto-today .goto button:hover {
   background-color: var(--color-main-lighter);
@@ -375,14 +388,9 @@ tr {
   background-color: rgb(249, 135, 154);
 }
 .add-session {
-  background-color: aquamarine;
-  border: 1px solid gray;
-  border-radius: 5px;
-  cursor: pointer;
+  margin: 0.5rem;
 }
-.add-session:hover {
-  background-color: rgb(83, 243, 189);
-}
+
 
 .session-options-modal {
   display: flex;

@@ -543,10 +543,11 @@ export class UI {
     console.log(allDoctorDatas);
     const allDoctorArea = document.createElement("div");
     allDoctorArea.className = "all-doctor-area";
-
+    
     allDoctorDatas.forEach((singleDoctorData, index) => {
       const singleDoctorArea = document.createElement("div");
       // singleDoctorArea.style.left = `${index*200}px`;
+      singleDoctorArea.style.width=`${100/allDoctorDatas.length}%`
       singleDoctorArea.className = "single-doctor-events";
       singleDoctorArea.setAttribute(
         "data-doctorid",

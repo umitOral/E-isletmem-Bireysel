@@ -49,7 +49,7 @@
 
                                 </div>
                                 <div class="goto-today">
-                                    <button class="today-btn">Bugüne Git</button>
+                                    <span class="today-btn">Bugüne Git</span>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             <div class="add-session"><button id="add-session-btn">Randevu Ekle</button></div>
                             <div class="doctor-name-area">
                                 <% doctors.forEach(element => { %>
-                                    <div class="column" data-doctor="<%= element._id %>"><%= element.name+element.surname %></div>
+                                    <div class="column" data-doctor="<%= element._id %>"><%= element.name+" "+element.surname %></div>
                                 <% }) %>
                             </div>
 

@@ -91,8 +91,8 @@ const getEmployesAppointments = async (req, res, next) => {
 };
 const getEmployeePermissions = async (req, res, next) => {
   try {
-    
-    let employeePermissions = res.locals.employee.permissions;
+    let employee =await Employee.findById(req.params.id)
+    let employeePermissions =employee.permissions;
     let allPermissions = role_privileges;
 
     res.status(200).json({
