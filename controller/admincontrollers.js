@@ -5,6 +5,7 @@ import { ProductGeneral } from "../models/productGeneralModel.js";
 import Operation from "../models/OperationsModel.js";
 import Payment from "../models/paymentsModel.js";
 import Product from "../models/productModel.js";
+import Appointment from "../models/appointmentModel.js";
 const addbulkproducttoGeneral = async (req, res, next) => {
   try {
     console.log("add product");
@@ -45,7 +46,7 @@ const topluIslemler = async (req, res, next) => {
   try {
     
     
-    let response3 = await Payment.deleteMany({});
+    let response3 = await Appointment.deleteMany({});
    
     res.status(200).json({
       success: true,

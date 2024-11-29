@@ -540,9 +540,12 @@ export class UI {
 
   showAllSessionToUI(allDoctorDatas, workHours, APPOINTMENT_STATUS) {
     const timeLineArea = document.querySelector(".time-line-area");
-    console.log(allDoctorDatas);
     const allDoctorArea = document.createElement("div");
     allDoctorArea.className = "all-doctor-area";
+    let element=document.querySelector(".all-doctor-area")
+    if (element) {
+      element.remove()
+    }
     
     allDoctorDatas.forEach((singleDoctorData, index) => {
       const singleDoctorArea = document.createElement("div");
@@ -558,55 +561,63 @@ export class UI {
         singleDoctorData.doctorInformations.email
       );
 
-      
-
-      singleDoctorData.sessionsofdoctorforactualDay.forEach(
-        (element, index) => {
-          let topPoint =
-            (element.startHour.split(":")[0] -
-              workHours.workStart.split(":")[0]) *
-              300 +
-            (element.startHour.split(":")[1] -
-              workHours.workStart.split(":")[1]) *
-              5;
-          let height =
-            (element.endHour.split(":")[0] - element.startHour.split(":")[0]) *
-              300 +
-            (element.endHour.split(":")[1] - element.startHour.split(":")[1]) *
-              5;
-
-          singleDoctorArea.innerHTML += `
-                    
-                    <div class="event"
-                    data-session="${element._id}"
-                    data-startHour="${element.startHour}"
-                    data-endHour="${element.endHour}"
-                     data-userName="${element.user.name}"
-                     style="top:${topPoint}px;height:${height}px"
-                     >
-                        <div class="resize-handle top"></div>
-                        <div class="center prevent-select">
-                          <span>${element.startHour}-${element.endHour}
-                          </span>
+      if (singleDoctorData.sessionsofdoctorforactualDay.length===0) {
+        
+        singleDoctorArea.innerHTML=`
+        <div></div>
+        `
+      }else{
+        
+        singleDoctorData.sessionsofdoctorforactualDay.forEach(
+          (element, index) => {
+            let topPoint =
+              (element.startHour.split(":")[0] -
+                workHours.workStart.split(":")[0]) *
+                300 +
+              (element.startHour.split(":")[1] -
+                workHours.workStart.split(":")[1]) *
+                5;
+            let height =
+              (element.endHour.split(":")[0] - element.startHour.split(":")[0]) *
+                300 +
+              (element.endHour.split(":")[1] - element.startHour.split(":")[1]) *
+                5;
+                
+            singleDoctorArea.innerHTML += `
+                      
+                      <div class="event"
+                      data-session="${element._id}"
+                      data-startHour="${element.startHour}"
+                      data-endHour="${element.endHour}"
+                       data-userName="${element.user.name}"
+                       style="top:${topPoint}px;height:${height}px"
+                       >
+                          <div class="resize-handle top"></div>
+                          <div class="center prevent-select">
+                            <div> 
+                              <span>${element.startHour}-${element.endHour}
+                            </span>
+                            </br>
+                            <span>${element.user.name} ${
+                              element.user.surname}
+                            </span>
+                                     
+                            </div>
+                                   
+                            
+                          </div>
                           
-                          <span>${element.user.name} ${
-            element.user.surname
-          }</span>
-                          <span>${element.operations.map(
-                            (item) => item.operationName
-                          )}
-                          </span>
-                          
+                            <div class="resize-handle bottom"></div>
                         </div>
-                        
-                          <div class="resize-handle bottom"></div>
-                      </div>
-                        
-                    
-                    `;
-          allDoctorArea.appendChild(singleDoctorArea);
-        }
-      );
+                          
+                      
+                      `;
+            
+          }
+        );
+      }
+      allDoctorArea.appendChild(singleDoctorArea);
+      
     });
 
     timeLineArea.appendChild(allDoctorArea);
@@ -699,13 +710,7 @@ export class UI {
     });
   }
 
-  deleteAllSessionFromUI() {
-    const events = document.querySelectorAll(".event");
-
-    events.forEach((element) => {
-      element.remove();
-    });
-  }
+  
   addOperationstoUI(data) {
     const userSelect = document.querySelector("#user-select");
     const orderSelect = document.getElementById("proccess_type_add");
@@ -718,6 +723,47 @@ export class UI {
       opt.setAttribute("disable", "");
       opt.setAttribute("hidden", "");
       opt.textContent = "hastaya Ait İşlem Yok";
+      orderSelect.add(opt);
+    } else {
+      for (let index = orderSelect.options.length - 1; index >= 0; index--) {
+        console.log(orderSelect.options[index]);
+        orderSelect.options[index].remove();
+      }
+
+      let opt = document.createElement("option");
+      opt.setAttribute("selected", "");
+      opt.setAttribute("disable", "");
+      opt.setAttribute("hidden", "");
+      opt.textContent = "İşlem Seçiniz";
+      orderSelect.add(opt);
+
+      data.forEach((element) => {
+        let opt = document.createElement("option");
+        opt.setAttribute("data-price", element.operationPrice);
+        opt.setAttribute("data-id", element._id);
+        opt.setAttribute(
+          "data-nextsessionnumber",
+          element.sessionOfOperation.length + 1
+        );
+        opt.textContent = element.operationName;
+        opt.value = element.operationName;
+        orderSelect.add(opt);
+      });
+    }
+  }
+  addOperationstoUIForEdit(data) {
+    console.log(data)
+    
+    const orderSelect = document.getElementById("proccess_type_add_for_edit");
+    while (orderSelect.firstChild) {
+      orderSelect.firstChild.remove();
+    }
+    if (data.length === 0) {
+      let opt = document.createElement("option");
+      opt.setAttribute("selected", "");
+      opt.setAttribute("disable", "");
+      opt.setAttribute("hidden", "");
+      opt.textContent = "Planlanmamış İşlem Yok";
       orderSelect.add(opt);
     } else {
       for (let index = orderSelect.options.length - 1; index >= 0; index--) {

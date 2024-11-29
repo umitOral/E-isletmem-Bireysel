@@ -69,7 +69,7 @@ const newPassword = async (req, res, next) => {
   }
 };
 
-const getSingleDayAllDoctorSessions = async (req, res) => {
+const getSingleDayAllDoctorSessions = async (req, res,next) => {
   try {
 
     
@@ -82,13 +82,11 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
     // test codes
     const workHours = res.locals.company.workHours;
     const allDoctorDatas = [];
+    console.log(req.params)
+    const actualDate = new Date(`${req.params.date.split("-")[0]}-${req.params.date.split("-")[1]}-${req.params.date.split("-")[2]}`);
+    // actualDate.setHours(0,0,0,0)
+    console.log(actualDate)
 
-    const actualDate = new Date(req.params.date + ",Z00:00:00");
-    const date = new Date(req.params.date + ",Z00:00:00");
-
-    let firstDay = date.getDate();
-    let lastDay = new Date(new Date(date.setMonth(date.getMonth() + 1)).setDate(0)).getDate();
-   
 
     for (const i in doctors) {
       if (Object.hasOwnProperty.call(doctors, i)) {
@@ -100,7 +98,6 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
         })
           .populate("user", ["name","surname"])
           .populate("doctor", ["name","surname"])
-          .populate("operations","operationName")
           .sort({ startHour: 1 });
         
         allDoctorDatas.push({
@@ -121,10 +118,9 @@ const getSingleDayAllDoctorSessions = async (req, res) => {
       allDoctorDatas: allDoctorDatas,
     });
   } catch (error) {
-    res.status(500).json({
-      succes: false,
-      message: "api hatası",
-    });
+    console.log(error)
+    
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const getAllAppointmentofSingleDoctor = async (req, res) => {

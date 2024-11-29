@@ -31,11 +31,12 @@ const appointmentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Employee",
     },
+    operations:[
 
-    operations: [
+    ],
+    plannedOperations: [
       {
-        operation: { type: Schema.Types.ObjectId, ref: "Operation" },
-        session: { type: Number },
+        type:String 
       },
     ],
     appointmentState: {

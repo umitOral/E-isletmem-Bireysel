@@ -49,6 +49,7 @@ const OperationSchema = new Schema(
 
     totalAppointments: {
       type: Number,
+      default:1
     },
     appointmensCount: {
       type: Number,

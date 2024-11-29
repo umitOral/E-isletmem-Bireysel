@@ -79,7 +79,7 @@
                 </main>
         </section>
         <div class="information-modal-wrapper"></div>
-        <div class="modal hidden" id="modal_add_session">
+        <div class="modal hidden" id="modal_add_appointment">
             <div class="inner_modal">
                 <h2>Randevu Ekle</h2>
                 <form action="" onsubmit="return false" method="POST" id="add-session-form">
@@ -108,19 +108,120 @@
                         </datalist>
                     </div>
                     <div class="form-group">
+                        <span>İşlemler:</span>
+                        <div class="form-group vertical">
+                            <span>Devam eden:</span>
+                            <select class="proccess_type_add" id="proccess_type_add">
+                                <option value="" selected hidden disable>Önce hasta seçiniz</option>
+                            </select>
+                            <span>Yeni:</span>
+                            <select class="proccess_type_new" id="proccess_type_new">
+                                <option value="" selected hidden disable>İşlem Seçiniz</option>
+                                <% locals.company.services.forEach(element=> { %>
+                                    <% if (element.activeorNot===true) { %>
+                                        <option data-price="<%= element.servicePrice %>" data-id="<%= element._id %>"
+                                            value="<%= element.serviceName %>">
+                                            <%= element.serviceName %>
+                                        </option>
+                                        <% } %>
+                                            <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        
+                        
+                    </div>
+                   
+                    <div class="form-group">
+                        <div class="selected_proccess">
+                        </div>
+                    </div>
+                    <div class="form-group">Başlangıç Saati:
+                        <input type="time" name="startHour" id="" class="startHour">
+                    </div>
+                    <div class="form-group">Bitiş Saati:
+                        <input type="time" name="endHour" id="" class="endHour">
+                    </div>
+
+                    <div class="form-group">Personel:
+                        <div style="display: flex; gap: 1rem;">
+                            <select name="doctor" id="doctor-select-for-add">
+                                
+                                <% doctors.forEach(element=> { %>
+                                   
+                                    <option data-doctorid="<%= element._id %>"
+
+                                        data-doctorID="<%= element._id%>"
+                                        data-doctordata="<%= element.name+""+element.surname %>"
+                                        value="<%= element.name+" "+element.surname %>"> <%= element.name+" "+element.surname %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            
+                        </div>
+
+
+                    </div>
+                    
+                    <div class="form-group">Tarih:
+                        <input type="date" name="date" class="event-date-form">
+                    </div>
+
+                    <div class="form-group">Not:
+                        <input type="text" name="description" placeholder="notlar">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn">Randevu Ekle +</button>
+                        <button type="button" id="cancel-add-appointment" class="btn cancel form-btn"
+                            onclick="resetForm(this)">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+        <div class="modal hidden" id="modal_edit_appointment">
+            <div class="inner_modal">
+                <h2>Randevu Düzenle</h2>
+                <form action="" onsubmit="return false" method="POST" id="edit-appointment-form">
+                    <div class="form-group">
+                        <span>Hasta:</span>
+                        <div >
+                            <input required type="text" list="user-names" name="user" id="user-select-for-edit"
+                                autocomplete="off" placeholder="isim soyisim">
+                            
+                        </div>
+
+
+                        <datalist id="user-names">
+                            <% locals.usersNames.forEach(element=> { %>
+
+                                <option data-userid="<%= element._id %>"
+                                    data-useremail="<%= element.email %>"
+                                    data-userdata="<%= element.name+""+element.surname %>"
+                                    value="<%= element.name+" "+element.surname %>">
+
+                                </option>
+                                <% }) %>
+
+                        </datalist>
+                    </div>
+                    <div class="form-group">
                         <span>Devam eden İşlemler:</span>
-                        <select class="proccess_type_add" id="proccess_type_add">
+                        <select class="proccess_type_add_for_edit" id="proccess_type_add_for_edit">
                             <option value="" selected hidden disable>Önce hasta seçiniz</option>
                         </select>
-
-                        <div class="selected_proccess_type_add">
+                        <div class="selected_proccess_type_add_for_edit">
 
                         </div>
 
                     </div>
                     <div class="form-group">
                         <span>Yeni İşlemler:</span>
-                        <select class="proccess_type_new" id="proccess_type_new">
+                        <select class="proccess_type_new_for_edit" id="proccess_type_new_for_edit">
                             <option value="" selected hidden disable>İşlem Seçiniz</option>
                             <% locals.company.services.forEach(element=> { %>
                                 <% if (element.activeorNot===true) { %>
@@ -131,28 +232,37 @@
                                     <% } %>
                                         <% }) %>
                         </select>
-
-                        <div class="selected_proccess_type_new">
+                        <span>Seçilen İşlemler:</span>
+                        <div class="selected_proccess_type_new_for_edit">
 
                         </div>
 
                     </div>
                    
                     <div class="form-group">Başlangıç Saati:
-                        <input type="text" name="startHour" id="" class="startHour" readonly>
+                        <input type="time" name="startHour" id="" class="startHour">
                     </div>
                     <div class="form-group">Bitiş Saati:
-                        <input type="text" name="endHour" id="" class="endHour" readonly>
+                        <input type="time" name="endHour" id="" class="endHour">
                     </div>
 
                     <div class="form-group">Personel:
-                        <input type="text" id="" name="doctorName" class="doctor-name" readonly>
+                                <select name="doctor" id="doctor-select-for-edit">
+                                    <% doctors.forEach(element=> { %>
+
+                                        <option data-doctorid="<%= element._id %>"
+
+                                            data-doctorID="<%= element._id%>"
+                                            data-doctordata="<%= element.name+""+element.surname %>"
+                                            value="<%= element.name+" "+element.surname %>"> <%= element.name+" "+element.surname %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+
                     </div>
-                    <div class="form-group" style="display: none;">PersnoelID:
-                        <input type="text" name="doctor" id="" class="doctor-id">
-                    </div>
+                    
                     <div class="form-group">Tarih:
-                        <input type="date" name="date" class="event-date-from" readonly>
+                        <input type="datetime-local" name="date" class="event-date-form">
                     </div>
 
                     <div class="form-group">Not:
@@ -160,9 +270,10 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" class="btn save form-btn">Seans Ekle +</button>
-                        <button type="button" id="cancel-add-appointment" class="btn cancel form-btn"
-                            onclick="resetForm(this)">Vazgeç</button>
+                        <button type="submit" class="btn save form-btn">Randevu Kaydet +</button>
+                        <button type="button" class="btn cancel form-btn" id="cancel-apppointment">Randevu İptal Et</button>
+                        <button type="button" id="cancel-edit-appointment" class="btn cancel form-btn"
+                            onclick="resetForm(this)">Kapat</button>
                     </div>
                 </form>
             </div>

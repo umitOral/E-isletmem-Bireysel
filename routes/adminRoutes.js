@@ -148,7 +148,7 @@ router
   .route("/users/:id/updateUserNotifications")
   .post(updateUserNotifications);
 router.route("/users/:id/getUsersAllSessions").get(getUsersAllSessions);
-router.route("/users/:id/getUsersAllSms").get(getUsersAllSms);
+router.route("/users/:id/getUsersAllSms").get(checkSmsActive(),getUsersAllSms);
 
 // employee routes
 router
