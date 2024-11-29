@@ -47,15 +47,15 @@ const createAppointment = async (req, res, next) => {
       });
     }
 
-    await Operation.insertMany(plannedOperations).then((response) => {
-      response.forEach((element) => {
-        req.body.appointmentData.operations.push({
-          operation: element._id,
-          session: 1,
-          type: "new",
-        });
-      });
-    });
+    // await Operation.insertMany(plannedOperations).then((response) => {
+    //   response.forEach((element) => {
+    //     req.body.appointmentData.operations.push({
+    //       operation: element._id,
+    //       session: 1,
+    //       type: "new",
+    //     });
+    //   });
+    // });
 
     let appointment = await Appointment.create(req.body.appointmentData);
 

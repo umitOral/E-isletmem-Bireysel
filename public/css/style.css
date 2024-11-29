@@ -930,6 +930,37 @@ tfoot td {
   transition: opacity 0.75s;
 
 }
+.small_modal {
+  display: flex;
+  flex-direction: column;
+ width: 100px;
+ position: absolute;
+ right: 0;
+ border-radius: var(--border-radius-1);
+ box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+ display: block;
+ background-color: white;
+ 
+}
+.small_modal button:hover {
+  background-color: var(--color-danger);
+}
+.small_modal button {
+    
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: white;
+}
+.small_modal.hidden{
+    display: none;
+    z-index: 999;
+    padding: 0.5rem;
+    border-radius: 1rem;
+
+}
 .inner_modal{
   border:var(--border-style-1);
   border-radius: var(--border-radius-1);

@@ -15,6 +15,7 @@ cancelBtns.forEach((element) => {
 });
 
 const loader = document.querySelector(".loader_wrapper.hidden");
+const smallModal = document.querySelector(".small_modal");
 
 let calendarHead = document.querySelector(".calendar-head"),
   daysContainer = document.querySelector(".days"),
@@ -40,6 +41,9 @@ let doctorID = "";
 let useremail = "";
 let selectedAppointment = "";
 let selectedAppointmentForEdit = "";
+let appointmentsDiv;
+let resizing = false;
+let isResizing = false;
 
 let workHours = "";
 
@@ -78,6 +82,8 @@ deleteBtn.addEventListener("click", (e) => {
     })
     .catch((err) => ui.showNotification(false, err));
 });
+
+
 addUserForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -194,7 +200,6 @@ function createTimeline(workHours, alldoctorDatas) {
         handleAddAppointmentModal(element, e.target);
       });
     });
-    
   });
 }
 
@@ -242,16 +247,14 @@ function getAllSessions() {
         response.workHours,
         APPOINTMENT_STATUS
       );
-
+       appointmentsDiv = document.querySelectorAll(".event");
       appointmentEdit();
-      handleResize()
-      changeState();
+      handleResize();
+      // changeState();
     })
 
     .catch((err) => console.log(err));
 }
-
-
 
 function handleResize() {
   let resizeTops = document.querySelectorAll(".resize-handle.top");
@@ -585,22 +588,49 @@ addSessionBtn.addEventListener("click", function (e) {
 });
 
 function appointmentEdit() {
-  let appointments = document.querySelectorAll(".event");
-  appointments.forEach((element) => {
-    element.addEventListener("mousedown", (e) => {
+
+  appointmentsDiv.forEach((element) => {
+    element.addEventListener("click", (e) => {
+      if (isResizing) {
+        // Prevent modal from showing during resize
+        isResizing = false;
+        return;
+      }
+      e.stopPropagation()
+      console.log(e.target)
       if (!e.target.classList.contains("resize-handle")) {
         selectedAppointmentForEdit = allAppointments
           .flatMap((item) => item.sessionsofdoctorforactualDay)
           .find((appointment) => appointment._id === element.dataset.session);
 
         console.log(selectedAppointmentForEdit);
-
-        editModalHandle();
-        modalEditAppointment.classList.remove("hidden");
+        smallModal.dataset.appointmentid=element.dataset.session
+        smallModal.classList.remove("hidden");
+        smallModal.style.left = `${e.pageX}px`;
+        smallModal.style.top = `${e.pageY}px`;
+       
       }
+    
     });
+
   });
 }
+
+document.addEventListener("click", (e) => {
+  console.log(e.target)
+  smallModal.classList.add("hidden")
+  
+});
+
+smallModal.addEventListener("click", (e) => {
+  // e.stopPropagation();
+  if (e.target.classList.contains("edit-appointment")) {
+    editModalHandle();
+    
+    modalEditAppointment.classList.remove("hidden");
+  }
+});
+
 
 function editModalHandle() {
   console.log(selectedAppointment);
@@ -873,6 +903,8 @@ function toMinutes(time) {
 function startResize(event, appointment, type) {
   event.stopPropagation();
   console.log("start");
+  resizing = true;
+  isResizing = true;
   currentDrag = appointment;
   dragType = type;
   document.addEventListener("mousemove", resizeAppointment);
@@ -932,7 +964,11 @@ function resizeAppointment(event) {
 async function stopResize() {
   if (currentDrag) {
     document.removeEventListener("mousemove", resizeAppointment);
-      document.removeEventListener("mouseup", stopResize);
+    document.removeEventListener("mouseup", stopResize);
+    resizing = false;
+    setTimeout(() => {
+      isResizing = false; // Reset resizing flag after a short delay
+    }, 100);
     console.log(currentDrag);
     const doctorId = currentDrag.parentElement.dataset.doctorid;
     let indexcontrol = allAppointments.findIndex(
@@ -952,16 +988,16 @@ async function stopResize() {
     ) {
       appointment.startHour = currentDrag.dataset.starthour;
       appointment.endHour = currentDrag.dataset.endhour;
-      currentDrag.querySelector(".center div span").textContent=`${currentDrag.dataset.starthour}-${currentDrag.dataset.endhour}`
-      
-     
+      currentDrag.querySelector(
+        ".center div span"
+      ).textContent = `${currentDrag.dataset.starthour}-${currentDrag.dataset.endhour}`;
+
       await request
         .postWithUrl(
           "./appointments/" + appointment._id + "/updateAppointment",
           appointment
         )
         .then((response) => {
-          
           if (response.success === true) {
             ui.showNotification(true, response.message);
             console.log(response);
@@ -978,10 +1014,10 @@ async function stopResize() {
           ui.showNotification(false, err);
         });
 
-        currentDrag = null;
+      currentDrag = null;
       dragType = null;
-      
     }
+   
   }
 }
 
