@@ -47,12 +47,13 @@ const topluIslemler = async (req, res, next) => {
     
     
     // let response3 = await Operation.deleteMany({});
+    //  await Appointment.deleteMany({});
    
-    // res.status(200).json({
-    //   success: true,
-    //   message: "içerden sorgulandı",
-    //   data: response3,
-    // });
+    res.status(200).json({
+      success: true,
+      message: "içerden sorgulandı",
+      data: response3,
+    });
     // let barcode = Number(req.body.barcode)
     // let productModel = await getProductModelGeneral()
     // await productModel.findOne({ $or: [{ upc: barcode }, { ean: barcode }] })

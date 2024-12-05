@@ -5,7 +5,6 @@ import { OPERATION_STATUS_AUTOMATIC } from "../config/status_list.js";
 const Schema = mongoose.Schema;
 const appointmentSchema = new Schema(
   {
-    
     date: {
       type: Date,
     },
@@ -31,14 +30,11 @@ const appointmentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Employee",
     },
-    operations:[
-
-    ],
-    plannedOperations: [
-      {
-        type:String 
-      },
-    ],
+    operations: [],
+    plannedOperations: {
+      oldOperations: [{ type: Schema.Types.ObjectId, ref: "Operation" }],
+      newOperations: [],
+    },
     appointmentState: {
       type: String,
       default: OPERATION_STATUS_AUTOMATIC.WAITING,

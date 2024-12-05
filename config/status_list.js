@@ -2,10 +2,9 @@ const APPOINTMENT_STATUS = {
   FINISH: "tamamlandı",
   COMPANYCANCEL: "işletme iptali",
   USERCANCEL: "hasta iptali",
-};
-const APPOINTMENT_STATUS_AUTOMATIC = {
   WAITING: "aksiyon bekliyor",
 };
+
 
 const SESSION_STATUS_LIST = {
   INCOMPLETE: "yarım kaldı",
@@ -78,7 +77,7 @@ const OPERATION_STATUS_AUTOMATIC = {
 };
 const OPERATION_APPOINTMENT_AVALIABLE_STATUS = {
   NO: "var",
-  YES: "yok",
+  AVALIABLE: "yok",
 };
 
 const COMPANY_DOCS = [
@@ -120,6 +119,30 @@ const DOC_STATUS = {
   REJECTED: "reddedildi",
   APPROVED: "onaylandı",
 };
+const SMS_TEMPLATES= [
+  {
+    smsName: "29 ekim",  // code içinde kullanılacak
+    activeorNot: "true", //arayüzde kullanılacak
+    content: "sevgili {{isim}}, 29 ekim cumhuriyet bayramınız kutlu olsun.",
+  },
+  {
+    smsName: "yılbaşı",  // code içinde kullanılacak
+    activeorNot: "true", //arayüzde kullanılacak
+    content: "Değerli danışanımız yeni yılınızın sağlıklı geçmesini dileriz.",
+  },
+  {
+    smsName: "hatırlatma mesajı",  // code içinde kullanılacak
+    activeorNot: "true", //arayüzde kullanılacak
+    content: "değerli danışanımız, randevu tarihiniz: {{randevu-tarihi}}, saat {{randevu-saati}} ",
+  },
+  {
+    smsName: "randevu oluşturma mesajı",  // code içinde kullanılacak
+    activeorNot: "true", //arayüzde kullanılacak
+    content: "değerli danışanımız,{{randevu-tarihi}}, saat {{randevu-saati}} tarihi için randevunuz oluşturulmuştur.",
+  },
+
+
+]
 const SMS_PACKAGE_STATUS = {
   "-4": "İptal Edildi",
   "-3": "Gönderim Başarısız Oldu",
@@ -157,7 +180,6 @@ const ORDER_STATUS_LIST = ["açık", "close", "cancel"];
 export {
   APPOINTMENT_STATUS,
   LOG_LEVELS,
-  APPOINTMENT_STATUS_AUTOMATIC,
   SERVICES_LIST,
   OPERATION_STATUS,
   ROLES_LIST,
@@ -172,4 +194,5 @@ export {
   DOC_STATUS,
   SMS_PACKAGE_STATUS,
   SMS_STATUS,
+  SMS_TEMPLATES
 };

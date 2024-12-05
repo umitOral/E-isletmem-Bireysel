@@ -486,7 +486,7 @@ showAppointmentsBtn.addEventListener("click", () => {
 function getAllAppointments() {
   console.log("dada");
   request
-    .getwithUrl(userID + "/getUsersAllSessions")
+    .getwithUrl(userID + "/getUsersAllAppointments")
     .then((response) => {
       console.log(response);
       APPOINTMENT_STATUS = Object.values(response.APPOINTMENT_STATUS);
@@ -499,51 +499,63 @@ function getAllAppointments() {
         row.remove();
       });
 
-      response.sessions.forEach((session) => {
+      response.appointments.forEach((appointment) => {
         sessionsTableBody.innerHTML += `
-        <tr data-appointmentid="${session._id}">
+        <tr data-appointmentid="${appointment._id}">
     
         <td>
-            ${new Date(session.date).toLocaleDateString("tr-TR")}
+            ${new Date(appointment.date).toLocaleDateString("tr-TR")}
         </td>
 
         <td>
-            ${new Date(session.startHour).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            ${appointment.startHour}
                 -
-                ${new Date(session.endHour).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+                ${appointment.endHour}
                     
         </td>
 
         <td>
-            ${session.doctor.name}
-            ${session.doctor.surname}
+            ${appointment.doctor.name}
+            ${appointment.doctor.surname}
             
         </td>
         <td>
-          ${session.operations.map(
+          <div class="selected_proccess" >
+             Kayıtlı:
+              ${appointment.plannedOperations.oldOperations.map(
+                (item, i) => `
+            
+              <span type="text" class="old">
+                ${item.operationName}
+              </span>
+                `
+              )}
+          </div>
+          
+          <div class="selected_proccess" >
+             Planlanan:
+            ${appointment.plannedOperations.newOperations.map(
             (item, i) => `
-                ${item.operation.operationName}
-                seans:${item.session}
+                 <span type="text" class="new">
+                ${item}
+              </span>
           `
           )}
+          </div>
+       
+       
         </td>
 
         
         <td>
-             ${session.description}
+             ${appointment.description}
         </td>
 
 
         <td>
           <select name="" class="updateStateAppointment">
           <option value="" disable hidden selected >${
-            session.appointmentState
+            appointment.appointmentState
           }</option>
           ${APPOINTMENT_STATUS.map(
             (item) => `

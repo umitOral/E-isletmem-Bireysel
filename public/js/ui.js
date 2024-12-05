@@ -538,7 +538,7 @@ export class UI {
     netCash.innerHTML = data.netCash;
   }
 
-  showAllSessionToUI(allDoctorDatas, workHours, APPOINTMENT_STATUS) {
+  showAllSessionToUI(allDoctorDatas, workHours) {
     const timeLineArea = document.querySelector(".time-line-area");
     const allDoctorArea = document.createElement("div");
     allDoctorArea.className = "all-doctor-area";
@@ -573,24 +573,34 @@ export class UI {
             let topPoint =
               (element.startHour.split(":")[0] -
                 workHours.workStart.split(":")[0]) *
-                300 +
+                (60*5*10/workHours.workPeriod) +
               (element.startHour.split(":")[1] -
                 workHours.workStart.split(":")[1]) *
-                5;
+                (1*5*10/workHours.workPeriod);
             let height =
               (element.endHour.split(":")[0] - element.startHour.split(":")[0]) *
-                300 +
+                (60*5*10/workHours.workPeriod) +
               (element.endHour.split(":")[1] - element.startHour.split(":")[1]) *
-                5;
+                (1*5*10/workHours.workPeriod);
+              
                 
             singleDoctorArea.innerHTML += `
                       
                       <div class="event"
+                      
                       data-session="${element._id}"
                       data-startHour="${element.startHour}"
                       data-endHour="${element.endHour}"
                        data-userName="${element.user.name}"
-                       style="top:${topPoint}px;height:${height}px"
+                       style="top:${topPoint}px;height:${height}px;background-color: ${(()=>{
+                        if (element.appointmentState==="tamamlandı") {
+                            return `#41f1b6`
+                        } else if (element.appointmentState==="hasta iptali" ||element.appointmentState==="işletme iptali" ) {
+                            return `#ff3949`
+                        }else{
+                          return `#faebd7`
+                        }
+                          })()}"
                        >
                           <div class="resize-handle top"></div>
                           <div class="center prevent-select">
@@ -713,7 +723,7 @@ export class UI {
 
   
   addOperationstoUI(data) {
-    const userSelect = document.querySelector("#user-select");
+   
     const orderSelect = document.getElementById("proccess_type_add");
     while (orderSelect.firstChild) {
       orderSelect.firstChild.remove();
@@ -741,7 +751,7 @@ export class UI {
       data.forEach((element) => {
         let opt = document.createElement("option");
         opt.setAttribute("data-price", element.operationPrice);
-        opt.setAttribute("data-id", element._id);
+        opt.setAttribute("data-operationid", element._id);
         opt.setAttribute(
           "data-nextsessionnumber",
           element.sessionOfOperation.length + 1
@@ -752,10 +762,10 @@ export class UI {
       });
     }
   }
-  addOperationstoUIForEdit(data) {
-    console.log(data)
-    
+
+  addOperationstoUIforEdit(data) {
     const orderSelect = document.getElementById("proccess_type_add_for_edit");
+    
     while (orderSelect.firstChild) {
       orderSelect.firstChild.remove();
     }
@@ -764,14 +774,14 @@ export class UI {
       opt.setAttribute("selected", "");
       opt.setAttribute("disable", "");
       opt.setAttribute("hidden", "");
-      opt.textContent = "Planlanmamış İşlem Yok";
+      opt.textContent = "İşlem Seçiniz";
       orderSelect.add(opt);
     } else {
       for (let index = orderSelect.options.length - 1; index >= 0; index--) {
         console.log(orderSelect.options[index]);
         orderSelect.options[index].remove();
       }
-
+      
       let opt = document.createElement("option");
       opt.setAttribute("selected", "");
       opt.setAttribute("disable", "");
@@ -782,7 +792,7 @@ export class UI {
       data.forEach((element) => {
         let opt = document.createElement("option");
         opt.setAttribute("data-price", element.operationPrice);
-        opt.setAttribute("data-id", element._id);
+        opt.setAttribute("data-operationid", element._id);
         opt.setAttribute(
           "data-nextsessionnumber",
           element.sessionOfOperation.length + 1
@@ -793,6 +803,7 @@ export class UI {
       });
     }
   }
+ 
 
   deletePaymentFromUI(payment) {
     payment.remove();

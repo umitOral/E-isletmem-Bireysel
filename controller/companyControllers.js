@@ -10,6 +10,7 @@ import {
   DATAS_LIST,
   ROLES_LIST,
   COMPANY_DOCS,
+  SMS_TEMPLATES,
 } from "../config/status_list.js";
 import { role_privileges } from "../config/role_priveleges.js";
 
@@ -32,6 +33,9 @@ const createCompany = async (req, res, next) => {
         dataName: singleData.dataName,
         dataOptions: singleData.dataOptions,
       });
+    });
+    SMS_TEMPLATES.forEach((template) => {
+      req.body.smsTemplates.push(template);
     });
 
     const processes = SERVICES_LIST;

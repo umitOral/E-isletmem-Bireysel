@@ -20,7 +20,7 @@ import { query } from "express";
 import Session from "../models/appointmentModel.js";
 import {
   APPOINTMENT_STATUS,
-  APPOINTMENT_STATUS_AUTOMATIC,
+
 } from "../config/status_list.js";
 import { searchProduct } from "./productControllers.js";
 import { getTenantDb } from "./db.js";
@@ -435,7 +435,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
       };
     }
 
-    let STATUS = { ...APPOINTMENT_STATUS, ...APPOINTMENT_STATUS_AUTOMATIC };
+    let STATUS = { ...APPOINTMENT_STATUS };
     STATUS = Object.values(STATUS);
     console.log(pagination);
     res.status(200).render("reports/appointmentReports", {
@@ -643,6 +643,7 @@ const getAppointmentsPage = async (req, res, next) => {
       link: "appointments",
       doctors: doctors,
       services: activeServices,
+      APPOINTMENT_STATUS
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));

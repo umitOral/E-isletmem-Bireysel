@@ -231,12 +231,18 @@
 }
 .resize-handle.top {
  
-  background-color: #f42c2c;
+  /* background-color: #f42c2c; */
 }
 .resize-handle {
   cursor: n-resize;
   height: 10px;
   width: 100%;
+}
+.old{
+  background-color: #41f1b6;
+}
+.new{
+  background-color:aliceblue;
 }
 .doctor-name-area .column {
   background: var(--color-main-lighter4);
@@ -262,10 +268,18 @@
   border-top: 1px solid #fdfdfd;
   background-color: var(--color-danger);
   cursor: pointer;
+  border-left: 5px solid gray;
+
+
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
   position: absolute;
   box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
+}
+.single-doctor-events .event:hover {
+  border: 1px solid gray;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-left: 5px solid gray;
 }
 .bottom {
   position: absolute;
@@ -273,6 +287,7 @@
 }
 .single-doctor-events .event:hover {
   background-color: #fb5462;
+  z-index: 998;
 }
 .single-doctor-events .center {
   display: flex;

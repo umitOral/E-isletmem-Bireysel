@@ -30,7 +30,7 @@ const updateSessionStatus = async (req,res,next) => {
     } else {
       responseData.operationStatus = OPERATION_STATUS_AUTOMATIC.WAITING;
     }
-    responseData.operationAppointmentStatus = OPERATION_APPOINTMENT_AVALIABLE_STATUS.YES;
+    responseData.operationAppointmentStatus = OPERATION_APPOINTMENT_AVALIABLE_STATUS.AVALIABLE;
     await responseData.save();
     console.log(responseData);
 

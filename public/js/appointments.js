@@ -6,7 +6,6 @@ const ui = new UI();
 ui.closeNotification();
 
 const cancelBtns = document.querySelectorAll(".btn.cancel.form-btn");
-const deleteBtn = document.querySelector("#cancel-apppointment");
 
 cancelBtns.forEach((element) => {
   element.addEventListener("click", () => {
@@ -28,19 +27,25 @@ const addUserBtn = document.querySelector("#add-user-btn");
 const addUserModal = document.querySelector("#add_customer");
 const addUserForm = document.querySelector("#add-user-form");
 const userSelect = document.querySelector("#user-select");
-const userSelectForEdit = document.querySelector("#user-select-for-edit");
+
 const doctorSelect = document.querySelector("#doctor-select-for-add");
 
 const dataList = document.querySelector("#user-names");
 const modalAddAppointment = document.querySelector("#modal_add_appointment");
 const modalEditAppointment = document.querySelector("#modal_edit_appointment");
+const modalChangeStatus = document.querySelector("#modal_change_status");
 const formEditAppointment = document.querySelector("#edit-appointment-form");
+const changeStatusSelect = document.querySelector("#change-status-select");
 
 let userID = "";
 let doctorID = "";
 let useremail = "";
 let selectedAppointment = "";
 let selectedAppointmentForEdit = "";
+let newAppointment = {
+  plannedOperations: { oldOperations: [], newOperations: [] },
+};
+let selectedOperationsForEdit = null;
 let appointmentsDiv;
 let resizing = false;
 let isResizing = false;
@@ -68,21 +73,34 @@ addUserBtn.addEventListener("click", () => {
   addUserModal.classList.remove("hidden");
 });
 
-deleteBtn.addEventListener("click", (e) => {
-  modalEditAppointment.classList.remove("hidden");
+function changeStatusModalHandle() {
+  let index = APPOINTMENT_STATUS.findIndex(
+    (item) => item === selectedAppointmentForEdit.appointmentState
+  );
+  changeStatusSelect.options.selectedIndex = index;
+}
+
+changeStatusSelect.addEventListener("change", (e) => {
+  let data = {
+    status:
+      changeStatusSelect.options[changeStatusSelect.options.selectedIndex]
+        .value,
+  };
   request
-    .getwithUrl(
-      "./appointments/" + selectedAppointmentForEdit._id + "/deleteAppointment"
+    .postWithUrl(
+      "./appointments/" +
+        selectedAppointmentForEdit._id +
+        "/changeAppointmentStatus",
+      data
     )
     .then((response) => {
       console.log(response);
       ui.showNotification(true, response.message);
-      console.log("silme başarılı");
+      modalChangeStatus.classList.add("hidden");
       getAllSessions();
     })
     .catch((err) => ui.showNotification(false, err));
 });
-
 
 addUserForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -137,7 +155,6 @@ function showDatesAtPage(params) {
 const eventArea = document.querySelector(".time-line-area");
 
 function createTimeline(workHours, alldoctorDatas) {
-  console.log(alldoctorDatas);
   const times = [];
   const workStartTime = workHours.workStart;
   const workFinishTime = workHours.workEnd;
@@ -220,6 +237,7 @@ function handleAddAppointmentModal(element, target) {
 }
 
 function getAllSessions() {
+  loader.classList.toggle("showed");
   request
     .getwithUrl(
       "/api/getSingleDayAllDoctorSessions/" + selectedDate.replaceAll("/", "-")
@@ -242,15 +260,11 @@ function getAllSessions() {
 
       createTimeline(response.workHours, response.allDoctorDatas);
 
-      ui.showAllSessionToUI(
-        allAppointments,
-        response.workHours,
-        APPOINTMENT_STATUS
-      );
-       appointmentsDiv = document.querySelectorAll(".event");
+      ui.showAllSessionToUI(allAppointments, response.workHours);
+      appointmentsDiv = document.querySelectorAll(".event");
       appointmentEdit();
       handleResize();
-      // changeState();
+      loader.classList.toggle("showed");
     })
 
     .catch((err) => console.log(err));
@@ -295,25 +309,6 @@ userSelect.addEventListener("change", () => {
     .catch((err) => console.log(err));
 });
 
-userSelectForEdit.addEventListener("change", () => {
-  let value = userSelectForEdit.value.replaceAll(" ", "");
-  console.log(value);
-  userID = document.querySelector(`#user-names option[data-userdata=${value}]`)
-    .dataset.userid;
-  useremail = document.querySelector(
-    `#user-names option[data-userdata=${value}]`
-  ).dataset.useremail;
-
-  request
-    .getwithUrl("./users/" + userID + "/getUsersContinueOperations")
-    .then((response) => {
-      console.log(response);
-
-      ui.addOperationstoUIForEdit(response.operations, selectedAppointment);
-    })
-    .catch((err) => console.log(err));
-});
-
 doctorSelect.addEventListener("change", () => {
   console.log(doctorSelect.value);
   let value = doctorSelect.value.replaceAll(" ", "");
@@ -332,38 +327,6 @@ async function dayFullOrNight() {
   //   .catch((err) => console.log(err));
 
   return responseData;
-}
-
-function changeState() {
-  const sessionOptionsModalOptions = document.querySelectorAll(
-    ".session-options-modal span"
-  );
-
-  sessionOptionsModalOptions.forEach((element) => {
-    element.addEventListener("click", (e) => {
-      console.log(e.target);
-
-      if (e.target.classList.contains("save-edit-button")) {
-      }
-
-      if (e.target.classList.contains("change-state")) {
-        console.log(e.target.textContent);
-        request
-          .updateStateSession(
-            "./appointments/" +
-              e.target.parentElement.parentElement.parentElement.dataset
-                .session +
-              "/updateStateAppointment?state=" +
-              e.target.textContent.toLowerCase()
-          )
-          .then((response) => {
-            console.log(response);
-            getAllSessions();
-          })
-          .catch((err) => console.log(err));
-      }
-    });
-  });
 }
 
 // calendar  ---------------------------------
@@ -490,7 +453,10 @@ closeAddAppointmentBtn.addEventListener("click", () => {
     selected_proccess.firstChild.remove();
   }
 
-  newAppointment.plannedOperations = [];
+  newAppointment={
+    plannedOperations: { oldOperations: [], newOperations: [] },
+  };
+  
   userSelect.value = "";
   proccessTypeNew.innerHTML += `<option value="" selected hidden disable>İşlem Seçiniz</option>`;
   proccessType.innerHTML = `
@@ -499,18 +465,15 @@ closeAddAppointmentBtn.addEventListener("click", () => {
 });
 
 closeEditAppointmentnBtn.addEventListener("click", () => {
-  while (selected_proccess_type_new_for_edit.firstChild) {
-    selected_proccess_type_new_for_edit.firstChild.remove();
-  }
-  while (selected_proccess_type_add_for_edit.firstChild) {
-    selected_proccess_type_add_for_edit.firstChild.remove();
+  while (selected_proccess_for_edit.firstChild) {
+    selected_proccess_for_edit.firstChild.remove();
   }
 
   selectedOperationsForEdit = {
     oldOperations: [],
     newOperations: [],
   };
-  userSelectForEdit.value = "";
+
   proccessTypeNewForEdit.innerHTML += `<option value="" selected hidden disable>İşlem Seçiniz</option>`;
   proccessTypeForEdit.innerHTML = `
     <option value="" selected hidden disable>Önce hasta seçiniz</option>
@@ -588,7 +551,6 @@ addSessionBtn.addEventListener("click", function (e) {
 });
 
 function appointmentEdit() {
-
   appointmentsDiv.forEach((element) => {
     element.addEventListener("click", (e) => {
       if (isResizing) {
@@ -596,57 +558,124 @@ function appointmentEdit() {
         isResizing = false;
         return;
       }
-      e.stopPropagation()
-      console.log(e.target)
+      e.stopPropagation();
+      console.log(e.target);
       if (!e.target.classList.contains("resize-handle")) {
         selectedAppointmentForEdit = allAppointments
           .flatMap((item) => item.sessionsofdoctorforactualDay)
           .find((appointment) => appointment._id === element.dataset.session);
 
-        console.log(selectedAppointmentForEdit);
-        smallModal.dataset.appointmentid=element.dataset.session
+        smallModal.dataset.appointmentid = element.dataset.session;
         smallModal.classList.remove("hidden");
         smallModal.style.left = `${e.pageX}px`;
         smallModal.style.top = `${e.pageY}px`;
-       
       }
-    
     });
-
   });
 }
 
 document.addEventListener("click", (e) => {
-  console.log(e.target)
-  smallModal.classList.add("hidden")
-  
+  smallModal.classList.add("hidden");
 });
 
 smallModal.addEventListener("click", (e) => {
   // e.stopPropagation();
+
   if (e.target.classList.contains("edit-appointment")) {
     editModalHandle();
-    
     modalEditAppointment.classList.remove("hidden");
+  }
+  if (e.target.classList.contains("change-status")) {
+    changeStatusModalHandle();
+    modalChangeStatus.classList.remove("hidden");
+  }
+  if (e.target.classList.contains("send-reminder-sms")) {
+    let data = {
+      userID: selectedAppointmentForEdit.user._id,
+      appointment: selectedAppointmentForEdit,
+    };
+    console.log(data)
+    request
+      .postWithUrl(
+        "./appointments/" + selectedAppointmentForEdit._id + "/sendReminderSms",data
+      )
+      .then((response) => {
+        if (response.success === true) {
+          ui.showNotification(true, response.message);
+          console.log(response);
+        } else {
+          ui.showNotification(false, response.message);
+        }
+      })
+      .catch((err) => {
+        ui.showNotification(false, err);
+      });
   }
 });
 
-
 function editModalHandle() {
-  console.log(selectedAppointment);
+  request
+    .getwithUrl(
+      "./users/" +
+        selectedAppointmentForEdit.user._id +
+        "/getUsersContinueOperations"
+    )
+    .then((response) => {
+      console.log(response);
+      ui.addOperationstoUIforEdit(response.operations);
+    })
+    .catch((err) => console.log(err));
+
+  console.log(selectedAppointmentForEdit);
+
+  formEditAppointment.user.value =
+    selectedAppointmentForEdit.user.name +
+    " " +
+    selectedAppointmentForEdit.user.surname;
   formEditAppointment.startHour.value = selectedAppointmentForEdit.startHour;
   formEditAppointment.endHour.value = selectedAppointmentForEdit.endHour;
   formEditAppointment.date.value =
     selectedAppointmentForEdit.date.split("T")[0];
   formEditAppointment.description.value =
     selectedAppointmentForEdit.description;
+
+  const [year, month, day] = selectedAppointmentForEdit.date
+    .split("T")[0]
+    .split("-");
+
+  const isoDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  formEditAppointment.date.value = isoDate;
   formEditAppointment.doctor.options.selectedIndex = allAppointments.findIndex(
     (item) =>
       item.doctorInformations._id === selectedAppointmentForEdit.doctor._id
   );
+  selected_proccess_for_edit.innerHTML = "";
+  selectedAppointmentForEdit.plannedOperations.oldOperations.forEach(
+    (element) => {
+      selected_proccess_for_edit.innerHTML += `
+        <div data-operationid="${element._id}">
+          <span type="text" class="selected_proccess old">
+          ${element.operationName}
+          </span>
+          <i class="ph ph-x"></i>
+        </div>
+      `;
+    }
+  );
+  selectedAppointmentForEdit.plannedOperations.newOperations.forEach(
+    (element) => {
+      selected_proccess_for_edit.innerHTML += `
+        <div data-type="new">
+          <span class="selected_proccess new">
+          ${element}
+          </span>
+          <i class="ph ph-x">
+          </i>
+        </div>
+      `;
+    }
+  );
 }
-
-let selectedValuesUpdate = [];
 
 // **********************************************************************add session modal actions
 
@@ -661,14 +690,8 @@ const proccessTypeNewForEdit = document.querySelector(
 );
 
 const selected_proccess = document.querySelector(".selected_proccess");
-const selected_proccess_type_new = document.querySelector(
-  ".selected_proccess_type_new"
-);
-const selected_proccess_type_add_for_edit = document.querySelector(
-  ".selected_proccess_type_add_for_edit"
-);
-const selected_proccess_type_new_for_edit = document.querySelector(
-  ".selected_proccess_type_new_for_edit"
+const selected_proccess_for_edit = document.querySelector(
+  ".selected_proccess_for_edit"
 );
 
 addSessionForm.addEventListener("submit", (e) => {
@@ -702,7 +725,7 @@ addSessionForm.addEventListener("submit", (e) => {
         selected_proccess.firstChild.remove();
       }
 
-      newAppointment.plannedOperations = [];
+      newAppointment.plannedOperations = {oldOperations:[],newOperations:[]};
       userSelect.value = "";
       proccessTypeNew.innerHTML += `<option value="" selected hidden disable>İşlem Seçiniz</option>`;
 
@@ -728,142 +751,106 @@ addSessionForm.addEventListener("submit", (e) => {
 
 // ///////////////////////////////////
 
-let newAppointment = {
-  plannedOperations: [],
-};
-let selectedOperationsForEdit = null;
-
 proccessType.addEventListener("change", (e) => {
   console.log("hizmet seçildi");
 
-  newAppointment.plannedOperations.push(
-    proccessType.options[proccessType.options.selectedIndex].textContent.trim()
+  newAppointment.plannedOperations.oldOperations.push(
+    proccessType.options[proccessType.options.selectedIndex].dataset.operationid
   );
   console.log(newAppointment);
 
-  let proccessDiv = document.createElement("div");
-  proccessDiv.innerHTML = `
-  
-        <input type="text"
-          disabled
-          name="services"
-          class="selected_proccess"
-          data-type="old"
-          value="${proccessType.options[
-            proccessType.options.selectedIndex
-          ].textContent.trim()}"
+  selected_proccess.innerHTML += `
+  <div data-operationid="${
+    proccessType.options[proccessType.options.selectedIndex].dataset.operationid
+  }">
+        <span type="text"
+          class="selected_proccess old"
         >
+        ${proccessType.options[
+          proccessType.options.selectedIndex
+        ].textContent.trim()}
+        </span>
         <i class="ph ph-x"></i>
-  
+  </div>
   `;
 
   proccessType.options[proccessType.options.selectedIndex].remove();
-
-  selected_proccess.appendChild(proccessDiv);
 });
 
 proccessTypeForEdit.addEventListener("change", (e) => {
   console.log("hizmet seçildi");
 
-  selectedOperationsForEdit.oldOperations.push({
-    type: "old",
-    operationID:
+  selectedAppointmentForEdit.plannedOperations.oldOperations.push({
+    operationName:
       proccessTypeForEdit.options[proccessTypeForEdit.options.selectedIndex]
-        .dataset.id,
-    nextSessionNumber:
-      proccessTypeForEdit.options[proccessTypeForEdit.options.selectedIndex]
-        .dataset.nextsessionnumber,
+        .value,
+    _id: proccessTypeForEdit.options[proccessTypeForEdit.options.selectedIndex]
+      .dataset.operationid,
   });
-  console.log(selectedOperationsForEdit);
-  let proccessDiv = document.createElement("div");
-  proccessDiv.innerHTML = `
-  <input type="text"
-          value="${proccessTypeForEdit.options[
-            proccessTypeForEdit.options.selectedIndex
-          ].textContent.trim()}"
-          disabled
-          name="services"
-          data-type="new"
-          class="selected_proccess"
-          data-id="${
-            proccessTypeForEdit.options[
+  console.log(selectedAppointmentForEdit);
+
+  selected_proccess_for_edit.innerHTML += `
+   <div data-operationid="${
+     proccessTypeForEdit.options[proccessTypeForEdit.options.selectedIndex]
+       .dataset.operationid
+   }">
+            <span type="text"
+              class="selected_proccess old"
+            >
+            ${proccessTypeForEdit.options[
               proccessTypeForEdit.options.selectedIndex
-            ].dataset.id
-          }"
-          data-price="${
-            proccessTypeForEdit.options[
-              proccessTypeForEdit.options.selectedIndex
-            ].dataset.price
-          }"
-          data-nextsessionnumber="${
-            proccessTypeForEdit.options[
-              proccessTypeForEdit.options.selectedIndex
-            ].dataset.nextsessionnumber
-          }">
-        <i class="ph ph-x"></i>
+            ].textContent.trim()}
+            </span>
+            <i class="ph ph-x"></i>
+    </div>
   
   `;
-  proccessTypeForEdit.options[proccessType.options.selectedIndex].remove();
-
-  selected_proccess_type_add_for_edit.appendChild(proccessDiv);
+  proccessTypeForEdit.options[
+    proccessTypeForEdit.options.selectedIndex
+  ].remove();
 });
 
 proccessTypeNew.addEventListener("change", (e) => {
   console.log("yeni hizmet seçildi");
   console.log(newAppointment);
 
-  newAppointment.plannedOperations.push(
+  newAppointment.plannedOperations.newOperations.push(
     proccessTypeNew.options[proccessTypeNew.options.selectedIndex].value
   );
-  console.log(selectedAppointment);
 
   selected_proccess.innerHTML += `
-          <div>
-          <input name="services" disabled="" type="text" class="selected_proccess"
-          value="${proccessTypeNew.options[
+          <div data-type="new">
+          <span class="selected_proccess new">
+          ${proccessTypeNew.options[
             proccessTypeNew.options.selectedIndex
-          ].textContent.trim()}"><i class="ph ph-x">
-          </i></div>
+          ].textContent.trim()}
+          </span>
+          <i class="ph ph-x">
+          </i>
+          </div>
           `;
 });
+
 proccessTypeNewForEdit.addEventListener("change", (e) => {
   console.log("yeni hizmet seçildi");
   console.log(selectedAppointmentForEdit);
 
-  selectedAppointmentForEdit.push({
-    newOperations: {
-      type: "new",
-      operationName:
-        proccessTypeNewForEdit.options[
-          proccessTypeNewForEdit.options.selectedIndex
-        ].value,
-      operationPrice:
-        proccessTypeNewForEdit.options[
-          proccessTypeNewForEdit.options.selectedIndex
-        ].dataset.price,
-      totalAppointments: 1,
-      appointments: [],
-    },
-  });
+  selectedAppointmentForEdit.plannedOperations.newOperations.push(
+    proccessTypeNewForEdit.options[proccessTypeNewForEdit.options.selectedIndex]
+      .value
+  );
   console.log(selectedAppointmentForEdit);
 
-  selected_proccess_type_new_for_edit.innerHTML += `
-          <div>
-          <input name="services" disabled="" type="text" class="selected_proccess"
-          data-id="${
-            proccessTypeNewForEdit.options[
+  selected_proccess_for_edit.innerHTML += `
+          <div data-type="new">
+            <span class="selected_proccess new">
+            ${proccessTypeNewForEdit.options[
               proccessTypeNewForEdit.options.selectedIndex
-            ].dataset.id
-          }"
-          data-price="${
-            proccessTypeNewForEdit.options[
-              proccessTypeNewForEdit.options.selectedIndex
-            ].dataset.price
-          }"
-          value="${proccessTypeNewForEdit.options[
-            proccessTypeNewForEdit.options.selectedIndex
-          ].textContent.trim()}"><i class="ph ph-x">
-          </i></div>
+            ].textContent.trim()}
+            </span>
+            <i class="ph ph-x">
+            </i>
+          </div>
           `;
 });
 
@@ -872,18 +859,75 @@ selected_proccess.addEventListener("click", (e) => {
     // add back to selectedbox
     console.log(e.target);
     console.log(e.target.previousElementSibling);
-    let opt = document.createElement("option");
-    opt.value = e.target.previousElementSibling.value;
-    opt.textContent = e.target.previousElementSibling.value;
-    if (e.target.previousElementSibling.dataset.type === "old") {
-      proccessType.add(opt);
-    }
 
+    if (e.target.parentElement.dataset.operationid) {
+      let opt = document.createElement("option");
+      opt.setAttribute(
+        "data-operationid",
+        e.target.parentElement.dataset.operationid
+      );
+      opt.value = e.target.previousElementSibling.textContent.trim();
+      opt.textContent = e.target.previousElementSibling.textContent.trim();
+      proccessType.add(opt);
+      let indexcontrol =
+        newAppointment.plannedOperations.oldOperations.findIndex(
+          (item) =>
+            item.operationId === e.target.parentElement.dataset.operationid
+        );
+      newAppointment.plannedOperations.oldOperations.splice(indexcontrol, 1);
+    } else {
+      // if operations is a new
+      let indexcontrol =
+        newAppointment.plannedOperations.newOperations.findIndex(
+          (item) => item === e.target.previousElementSibling.textContent.trim()
+        );
+      newAppointment.plannedOperations.newOperations.splice(indexcontrol, 1);
+    }
+    console.log(newAppointment);
     // remove selected options
-    let indexcontrol = newAppointment.plannedOperations.findIndex(
-      (item) => item === e.target.textContent.trim()
-    );
-    newAppointment.plannedOperations.splice(indexcontrol, 1);
+
+    e.target.parentElement.remove();
+  }
+});
+selected_proccess_for_edit.addEventListener("click", (e) => {
+  if (e.target.classList.contains("ph-x")) {
+    // add back to selectedbox
+    console.log(e.target);
+    console.log(e.target.previousElementSibling);
+
+    if (e.target.parentElement.dataset.operationid) {
+      let opt = document.createElement("option");
+      opt.setAttribute(
+        "data-operationid",
+        e.target.parentElement.dataset.operationid
+      );
+      opt.value = e.target.previousElementSibling.textContent.trim();
+      opt.textContent = e.target.previousElementSibling.textContent.trim();
+
+      proccessTypeForEdit.add(opt);
+      let indexcontrol =
+        selectedAppointmentForEdit.plannedOperations.oldOperations.findIndex(
+          (item) =>
+            item.operationId === e.target.parentElement.dataset.operationid
+        );
+      selectedAppointmentForEdit.plannedOperations.oldOperations.splice(
+        indexcontrol,
+        1
+      );
+    } else {
+      // if operations is a new
+      let indexcontrol =
+        selectedAppointmentForEdit.plannedOperations.newOperations.findIndex(
+          (item) => item === e.target.previousElementSibling.textContent.trim()
+        );
+      selectedAppointmentForEdit.plannedOperations.newOperations.splice(
+        indexcontrol,
+        1
+      );
+    }
+    console.log(selectedAppointmentForEdit);
+    // remove selected options
+
     e.target.parentElement.remove();
   }
 });
@@ -969,13 +1013,12 @@ async function stopResize() {
     setTimeout(() => {
       isResizing = false; // Reset resizing flag after a short delay
     }, 100);
-    console.log(currentDrag);
+
     const doctorId = currentDrag.parentElement.dataset.doctorid;
     let indexcontrol = allAppointments.findIndex(
       (item) => item.doctorInformations._id === doctorId
     );
 
-    console.log(indexcontrol);
     const appointments = allAppointments[indexcontrol];
     const index = appointments.sessionsofdoctorforactualDay.findIndex(
       (app) => app._id === currentDrag.dataset.session
@@ -994,7 +1037,7 @@ async function stopResize() {
 
       await request
         .postWithUrl(
-          "./appointments/" + appointment._id + "/updateAppointment",
+          "./appointments/" + appointment._id + "/resizeAppointment",
           appointment
         )
         .then((response) => {
@@ -1017,7 +1060,6 @@ async function stopResize() {
       currentDrag = null;
       dragType = null;
     }
-   
   }
 }
 
@@ -1025,8 +1067,46 @@ async function stopResize() {
 
 // @@TODO hemen buranın aşağısına bak önemli
 
-// document.getElementById("edit-form").addEventListener("submit", (e) => {
-//   e.preventDefault();
-//   const updatedData = new FormData(e.target);
-//   updateAppointment(appointment.id, Object.fromEntries(updatedData.entries()));
-// });
+formEditAppointment.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  // selectedAppointmentForEdit.plannedOperations.oldOperations.forEach(element => {
+  //   if (element._id) {
+  //     element=element._id
+  //   }
+  // });
+  let data = {
+    id: selectedAppointmentForEdit._id,
+    user: selectedAppointmentForEdit.user._id,
+    doctor:
+      formEditAppointment.doctor.options[
+        formEditAppointment.doctor.options.selectedIndex
+      ].dataset.doctorid,
+    startHour: formEditAppointment.startHour.value,
+    date: formEditAppointment.date.value,
+    endHour: formEditAppointment.endHour.value,
+    description: formEditAppointment.description.value,
+    plannedOperations: selectedAppointmentForEdit.plannedOperations,
+  };
+  console.log(data);
+  await request
+    .postWithUrl(
+      "./appointments/" + selectedAppointmentForEdit._id + "/updateAppointment",
+      data
+    )
+    .then((response) => {
+      if (response.success === true) {
+        ui.showNotification(true, response.message);
+        
+        modalEditAppointment.classList.add("hidden");
+      } else {
+        ui.showNotification(false, response.message);
+        selectedAppointmentForEdit = "";
+        formEditAppointment.reset();
+      }
+      getAllSessions();
+    })
+    .catch((err) => {
+      console.log(err);
+      ui.showNotification(false, err);
+    });
+});

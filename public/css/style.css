@@ -61,7 +61,7 @@ input::placeholder {
 }
 
 * {
-  user-select: none;
+  /* user-select: none; */
 }
 .disable{
   background-color: #8080804d !important;
@@ -342,7 +342,7 @@ body {
   font-family: "Poppins", sans-serif;
   font-size: 0.88rem;
   background-color: #dfdfdf2d;
-  user-select: none;
+ 
 
   color: var(--color-dark);
 }
@@ -936,11 +936,12 @@ tfoot td {
  width: 100px;
  position: absolute;
  right: 0;
- border-radius: var(--border-radius-1);
+ border-radius: 1rem;
+ padding: 0.5rem;
  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
  display: block;
  background-color: white;
- 
+ z-index: 999;
 }
 .small_modal button:hover {
   background-color: var(--color-danger);

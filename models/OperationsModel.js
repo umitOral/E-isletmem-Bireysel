@@ -12,7 +12,7 @@ const OperationSchema = new Schema(
     },
     operationAppointmentStatus: {
       type: String,
-      default: OPERATION_APPOINTMENT_AVALIABLE_STATUS.YES,
+      default: OPERATION_APPOINTMENT_AVALIABLE_STATUS.AVALIABLE,
     },
     operationStatus: {
       type: String,

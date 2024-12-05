@@ -98,6 +98,7 @@ const getSingleDayAllDoctorSessions = async (req, res,next) => {
         })
           .populate("user", ["name","surname"])
           .populate("doctor", ["name","surname"])
+          .populate('plannedOperations.oldOperations',"operationName")
           .sort({ startHour: 1 });
         
         allDoctorDatas.push({

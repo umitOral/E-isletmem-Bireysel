@@ -529,7 +529,20 @@ i:hover {
 }
 
 
-
+.selected_proccess {
+  padding: 0.5rem;
+  text-align: left;
+}
+.selected_proccess span {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+.old{
+  background-color: #41f1b6;
+}
+.new{
+  background-color:rgb(219, 237, 253);
+}
 .panel {
   padding: 0 18px;
   display: none;

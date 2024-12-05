@@ -49,15 +49,16 @@ const smsStatus = async (req, res, next) => {
     console.log("hahoo");
     console.log("smsStatus");
     // console.log(req.body);
-    
+
     let data = await Sms.findOneAndUpdate(
       { "pkg.id": req.body.pkg.id },
       {
         pkg: req.body.pkg,
         items: req.body.items,
         userID: req.body.userID,
-      },{
-        new:true
+      },
+      {
+        new: true,
       }
     );
     res.status(201).json({
@@ -152,29 +153,103 @@ const sendBulkSms = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const sendSingleSms = async (req, res, next) => {
-  const session = await mongoose.startSession();
+// const sendSingleSms = async (req, res, next) => {
+//   const session = await mongoose.startSession();
 
+//   try {
+//     session.startTransaction();
+//     console.log(req.body);
+//     let foundedUser = await User.findById(req.body.userId, null, { session });
+
+//     if (foundedUser.phone === "") {
+//       return next(
+//         new CustomError("kullanıcının telefon bilgisi eksiktir", 401)
+//       );
+//     }
+//     let modifiedMessage = req.body.messageContent.replace(
+//       "{{isim}}",
+//       foundedUser.name
+//     );
+
+//     let message = {
+//       messageContent: modifiedMessage,
+//       company: res.locals.company,
+//       user: foundedUser,
+//       phone: foundedUser.phone,
+//     };
+//     let sendedSms = await Sms.create(message);
+//     const pushSettings = {
+//       url:
+//         process.env.MODE === "production"
+//           ? process.env.PUSH_NOTIFICATION_URL_LIVE
+//           : process.env.PUSH_NOTIFICATION_URL_LOCAL,
+//     };
+//     console.log(pushSettings);
+
+//     let data = {
+//       type: 1,
+//       sendingType: 2,
+//       title: req.body.messageName || "",
+//       numbers: [
+//         {
+//           nr: foundedUser.phone,
+//           msg: modifiedMessage,
+//         },
+//       ],
+//       encoding: 0,
+//       sender: res.locals.company.smsConfig.smsTitle,
+//       validity: 60,
+//       commercial: false,
+//       skipAhsQuery: true,
+//       recipientType: 0,
+//       customID: sendedSms._id,
+//       pushSettings: pushSettings,
+//     };
+
+//     // decoded user sms password
+//     const authorization = await createSmsAuthorization(res.locals.company);
+
+//     await axios
+//       .post("http://panel4.ekomesaj.com:9587/sms/create", data, {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: authorization,
+//         },
+//       })
+//       .then(async (response) => {
+//         console.log(response.data);
+//         sendedSms.pkg.id = response.data.data.pkgID;
+//         await sendedSms.save();
+//       });
+
+//     await session.commitTransaction();
+//     console.log("Transaction başarılı!");
+
+//     res.json({ success: true, message: "mesaj gönderildi." });
+//   } catch (error) {
+//     await session.abortTransaction();
+//     console.log("transaction iptal!");
+//     return next(new CustomError("bilinmeyen hata", 500, error));
+//   } finally {
+//     session.endSession();
+//     console.log("oturum sonlandırıldı!");
+//   }
+// };
+const sendSingleSms = async (user,company, smsContent, messageTitle) => {
   try {
-    session.startTransaction();
-    console.log(req.body);
-    let foundedUser = await User.findById(req.body.userId, null, { session });
+    
 
-    if (foundedUser.phone === "") {
+    if (user.phone === "") {
       return next(
         new CustomError("kullanıcının telefon bilgisi eksiktir", 401)
       );
     }
-    let modifiedMessage = req.body.messageContent.replace(
-      "{{isim}}",
-      foundedUser.name
-    );
 
     let message = {
-      messageContent: modifiedMessage,
-      company: res.locals.company,
-      user: foundedUser,
-      phone: foundedUser.phone,
+      messageContent: smsContent,
+      company: company,
+      user: user,
+      phone: user.phone,
     };
     let sendedSms = await Sms.create(message);
     const pushSettings = {
@@ -188,15 +263,15 @@ const sendSingleSms = async (req, res, next) => {
     let data = {
       type: 1,
       sendingType: 2,
-      title: req.body.messageName || "",
+      title: messageTitle || "",
       numbers: [
         {
-          nr: foundedUser.phone,
-          msg: modifiedMessage,
+          nr: user.phone,
+          msg: smsContent,
         },
       ],
       encoding: 0,
-      sender: res.locals.company.smsConfig.smsTitle,
+      sender: messageTitle,
       validity: 60,
       commercial: false,
       skipAhsQuery: true,
@@ -206,7 +281,7 @@ const sendSingleSms = async (req, res, next) => {
     };
 
     // decoded user sms password
-    const authorization = await createSmsAuthorization(res.locals.company);
+    const authorization = await createSmsAuthorization(company);
 
     await axios
       .post("http://panel4.ekomesaj.com:9587/sms/create", data, {
@@ -219,19 +294,12 @@ const sendSingleSms = async (req, res, next) => {
         console.log(response.data);
         sendedSms.pkg.id = response.data.data.pkgID;
         await sendedSms.save();
-      });
+      })
+      .catch((err) => console.log(err));
 
-    await session.commitTransaction();
-    console.log("Transaction başarılı!");
-
-    res.json({ success: true, message: "mesaj gönderildi." });
+    return { success: true, message: "mesaj gönderildi." };
   } catch (error) {
-    await session.abortTransaction();
-    console.log("transaction iptal!");
-    return next(new CustomError("bilinmeyen hata", 500, error));
-  } finally {
-    session.endSession();
-    console.log("oturum sonlandırıldı!");
+    return { success: false, message: "mesaj gönderilemedi.", data: error };
   }
 };
 const getSmsDetails = async (req, res, next) => {
@@ -239,9 +307,9 @@ const getSmsDetails = async (req, res, next) => {
 
   try {
     session.startTransaction();
-    let data={
-      "pkgID": req.params.packageId,
-  }	
+    let data = {
+      pkgID: req.params.packageId,
+    };
     // decoded user sms password
     const authorization = await createSmsAuthorization(res.locals.company);
     let smsData;
@@ -254,13 +322,13 @@ const getSmsDetails = async (req, res, next) => {
       })
       .then(async (response) => {
         console.log(response.data);
-        smsData=response.data
+        smsData = response.data;
       });
 
     await session.commitTransaction();
     console.log("Transaction başarılı!");
 
-    res.json({ success: true, data:smsData,SMS_STATUS});
+    res.json({ success: true, data: smsData, SMS_STATUS });
   } catch (error) {
     await session.abortTransaction();
     console.log("transaction iptal!");
@@ -279,5 +347,5 @@ export {
   sendBulkSms,
   sendSingleSms,
   smsStatus,
-  getSmsDetails
+  getSmsDetails,
 };

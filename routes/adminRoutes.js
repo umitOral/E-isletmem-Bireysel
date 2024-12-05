@@ -42,7 +42,7 @@ import {
   findEmployees,
   deactivateEmployee,
   activateEmployee,
-  getUsersAllSessions,
+  getUsersAllAppointments,
   getUsersAllSms,
   updateUserNotifications,
   getUserNotifications
@@ -147,7 +147,7 @@ router
   router
   .route("/users/:id/updateUserNotifications")
   .post(updateUserNotifications);
-router.route("/users/:id/getUsersAllSessions").get(getUsersAllSessions);
+router.route("/users/:id/getUsersAllAppointments").get(getUsersAllAppointments);
 router.route("/users/:id/getUsersAllSms").get(checkSmsActive(),getUsersAllSms);
 
 // employee routes

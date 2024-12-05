@@ -29,6 +29,7 @@ import { Response } from "../helpers/error/Response.js";
 import { AuditLogs } from "../helpers/auditLogs.js";
 import Sms from "../models/smsModel.js";
 import { NOTIFICATIONS } from "../config/notifications.js";
+import Appointment from "../models/appointmentModel.js";
 
 const deactivateEmployee = async (req, res, next) => {
   try {
@@ -48,16 +49,16 @@ const activateEmployee = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const getUsersAllSessions = async (req, res, next) => {
+const getUsersAllAppointments = async (req, res, next) => {
   try {
-    const sessions = await Appointment.find({ user: req.params.id }).populate([
+    const appointments = await Appointment.find({ user: req.params.id }).populate([
       "doctor",
-      "operations.operation",
+      "plannedOperations.oldOperations",
     ]);
 
     res.status(200).json({
       succes: true,
-      sessions: sessions,
+      appointments,
       APPOINTMENT_STATUS,
       message: "seanslar başarıyla çekildi",
     });
@@ -1032,7 +1033,7 @@ export {
   addDataToOperation,
   addDiscountToOperation,
   getUsersOldOperations,
-  getUsersAllSessions,
+  getUsersAllAppointments,
   getUsersAllSms,
   getUserNotifications
 };
