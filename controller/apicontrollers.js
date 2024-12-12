@@ -4,7 +4,7 @@ import Appointment from "../models/appointmentModel.js";
 import Company from "../models/companyModel.js";
 import jwt from "jsonwebtoken";
 import { CustomError } from "../helpers/error/CustomError.js";
-import  {SESSION_STATUS_LIST,OPERATION_STATUS,APPOINTMENT_STATUS} from "../config/status_list.js";
+import  {SESSION_STATUS_LIST,OPERATION_STATUS,APPOINTMENT_STATUS, OPERATION_STATUS_AUTOMATIC, SESSION_STATUS_LIST_AUTOMATIC, OPERATION_APPOINTMENT_AVALIABLE_STATUS} from "../config/status_list.js";
 import Operation from "../models/OperationsModel.js";
 
 
@@ -18,6 +18,109 @@ const getAllUsers = async (req, res) => {
       message: "success",
     });
   } catch (error) {
+    res.status(500).json({
+      succes: false,
+      message: "api hatası",
+    });
+  }
+};
+const newOperationAddProved = async (req, res) => {
+  try {
+    console.log("denemex")
+    console.log(req.params)
+    console.log(req.body)
+    
+    let service=res.locals.company.services.find((item)=>item.serviceName===req.body.serviceName)
+   
+
+
+
+    ////////////////
+    let data={
+      user:req.params.userId,
+      operationName:service.serviceName,
+      operationPrice:service.servicePrice,
+      company : res.locals.company,
+      operationStatus : OPERATION_STATUS_AUTOMATIC.CONTINUE,
+    }
+
+    let foundedOperation = await Operation.create(data);
+   
+    foundedOperation.sessionOfOperation.push({
+      sessionState:SESSION_STATUS_LIST_AUTOMATIC.WAITING,
+      refAppointmentId:req.params.appointmentId,
+      sessionDatas:[],
+      sessionDate:new Date(),
+    })
+
+
+    if (foundedOperation.totalAppointments === foundedOperation.sessionOfOperation.length) {
+      foundedOperation.operationStatus = OPERATION_STATUS_AUTOMATIC.FINISH;
+      
+    }
+    foundedOperation.operationAppointmentStatus = OPERATION_APPOINTMENT_AVALIABLE_STATUS.AVALIABLE;
+    await foundedOperation.save();
+
+   
+/////////////
+    const appointment = await Appointment.findById(req.params.appointmentId );
+    if (appointment.operations.length===0 ) {
+      console.log("okey1")
+      appointment.operations.push(req.params.operationId)
+        await appointment.save()
+    }else{
+      console.log("okey2")
+      console.log("okey2")
+      console.log(foundedOperation._id)
+      let index=appointment.operations.findIndex(item=>item===foundedOperation._id)
+      console.log(index)
+      if (  index===-1) {
+        console.log("okey3")
+        appointment.operations.push(foundedOperation._id)
+        await appointment.save()
+      }
+    }
+   
+    res.status(200).json({
+      data:appointment ,
+      success:true,
+      link: "users",
+      message: "işlem eklendi",
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      succes: false,
+      message: "api hatası",
+    });
+  }
+};
+
+const oldOperationAddProved = async (req, res) => {
+  try {
+    console.log("hahooo")
+    const appointment = await Appointment.findById(req.params.appointmentId );
+    if (appointment.operations.length===0 ) {
+      console.log("okey1")
+      appointment.operations.push(req.params.operationId)
+        await appointment.save()
+    }else{
+      let index=appointment.operations?.findIndex(item=>item===req.params.appointmentId)
+      if (  index!==-1) {
+        console.log("okey")
+        appointment.operations.push(req.params.operationId)
+        await appointment.save()
+      }
+    }
+   
+    res.status(200).json({
+      data:appointment ,
+      success:true,
+      link: "users",
+      message: "işlem eklendi",
+    });
+  } catch (error) {
+    console.log(error)
     res.status(500).json({
       succes: false,
       message: "api hatası",
@@ -126,37 +229,40 @@ const getSingleDayAllDoctorSessions = async (req, res,next) => {
 };
 const getAllAppointmentofSingleDoctor = async (req, res) => {
   try {
-    
+    console.log("burası")
     const doctor=res.locals.employee._id
     const company=res.locals.company
    
    
     // test codes
     const workHours = res.locals.company.workHours;
-  
-    const actualDate = new Date(req.params.date + ",Z00:00:00");
+    console.log(req.params)
+    const actualDate = new Date(`${req.params.date.split("-")[0]}-${req.params.date.split("-")[1]}-${req.params.date.split("-")[2]}`);
     console.log(actualDate)
-        const sessionsOfDoctorSingleDay = await Appointment.find({
+        const appointmentsOfDoctorSingleDay = await Appointment.find({
           date: actualDate,
           doctor:doctor,
         })
-          .populate(["user","operations"])
+          .populate(["user","plannedOperations.oldOperations","operations"])
           .sort({ startHour: 1 });
 
     res.status(200).json({
       succes:true,
       message:"Randevular çekildi",
       workHours:workHours,
-      sessionsOfDoctorSingleDay: sessionsOfDoctorSingleDay,
+      allDoctorDatas:[{doctorInformations:res.locals.employee,
+        sessionsofdoctorforactualDay:appointmentsOfDoctorSingleDay
+      }],
       company:company,
       SESSION_STATUS_LIST,
       OPERATION_STATUS,
       APPOINTMENT_STATUS
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       succes: false,
-      message: "api hatası",
+      message: "bir sorun oluştu yöneticiye başvurun",
     });
   }
 };
@@ -230,5 +336,7 @@ export {
   getSingleDayAllDoctorSessions,
   newPassword,
   getDaysFullorNot,
-  getAllAppointmentofSingleDoctor
+  getAllAppointmentofSingleDoctor,
+  oldOperationAddProved,
+  newOperationAddProved
 };

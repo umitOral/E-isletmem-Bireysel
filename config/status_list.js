@@ -72,8 +72,6 @@ const OPERATION_STATUS = {
 const OPERATION_STATUS_AUTOMATIC = {
   FINISH: "tamamlandı",
   CONTINUE: "devam ediyor",
-  WAITING: "aksiyon bekliyor",
-  PLANNED: "planlandı",
 };
 const OPERATION_APPOINTMENT_AVALIABLE_STATUS = {
   NO: "var",

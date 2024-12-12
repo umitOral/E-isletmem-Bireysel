@@ -16,7 +16,7 @@ const OperationSchema = new Schema(
     },
     operationStatus: {
       type: String,
-      default: OPERATION_STATUS_AUTOMATIC.WAITING,
+      default: OPERATION_STATUS_AUTOMATIC.CONTINUE,
     },
     paymentStatus: {
       type: String,
@@ -61,7 +61,7 @@ const OperationSchema = new Schema(
           type: Schema.Types.ObjectId,
           ref: "Session",
         },
-        sessionState: { type: String, default: OPERATION_STATUS_AUTOMATIC.WAITING},
+        sessionState: { type: String, default: OPERATION_STATUS_AUTOMATIC.CONTINUE},
         sessionDatas: [{ dataName:{type:String}, data:{type:String} }],
         sessionDescription:{type:String},
         sessionDate:{type:Date},

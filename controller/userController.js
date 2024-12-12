@@ -532,7 +532,7 @@ const addOperation = async (req, res, next) => {
 
     req.body.selectedOperations.forEach((element) => {
       element.company = res.locals.company;
-      element.operationStatus = OPERATION_STATUS_AUTOMATIC.WAITING;
+      element.operationStatus = OPERATION_STATUS_AUTOMATIC.CONTINUE;
       element.user = req.params.id;
 
       if (req.body.discount !== 0) {
@@ -602,7 +602,7 @@ const addOperationInsideAppointment = async (req, res, next) => {
     req.body.selectedOperations.forEach((element) => {
       element.company = res.locals.company;
       element.user = req.params.id;
-      element.operationStatus = OPERATION_STATUS_AUTOMATIC.PLANNED;
+      element.operationStatus = OPERATION_STATUS_AUTOMATIC.CONTINUE;
       element.sessionOfOperation = [
         {
           sessionID: req.body.appointment,

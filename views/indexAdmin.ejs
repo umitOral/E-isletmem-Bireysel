@@ -4,6 +4,7 @@
 <head>
     <%- include('partials/head.ejs') %>
         <link rel="stylesheet" href="/css/indexAdmin.css">
+        <link rel="stylesheet" href="/css/sessions.css">
 
 </head>
 
@@ -18,54 +19,53 @@
                 <!----------- end of sidebar ----------->
 
                 <main>
-                    <h1>Ana Sayfa</h1>
+                    <div class="header">
+                        <h1> Ana Sayfa</h1>
+                    </div>
 
-                    <div class="insights">
+                    <div class="content">
                         <div id="appointments">
-
-                            <h2>
-                                <%= new Date().toLocaleDateString("tr-TR") %>
-                            </h2>
+                            <div class="header">
+                                <h1><%= new Date().toLocaleDateString("tr-TR") %></h1>
+                            </div>
+                            
 
                             <hr>
-                            <div class="appointments-of-doctor">
-
+                            <div class="time-line-area">
 
                             </div>
 
 
                         </div>
                         <div id="operations">
-                            <h2>İşlemler:</h2>
+                            <div class="header">
+                                <h1>""</h1>
+                            </div>
 
                             <hr>
-                            <div class="centered_div">
-                                <button class="add btn" id="add_operation_modal">İşlem Ekle+</button>
+                            
+                            <div id="operations_content_planned">
+                                <h2 style="text-align: center;">Planlanan işlemler</h2>
+                                <div class=""></div>
                             </div>
-                            <div id="operations_content"></div>
+                            <br>
+                            <div id="operations_content">
+                                
+                               
+                                    <button class="add btn" id="add_operation_btn" >İşlem Ekle+</button>
+                                
+                                <div class=""></div>
+                            </div>
                         </div>
                         <div class="old_operations">
-                            <h2>Eski İşlemler:</h2>
+                            <div class="header">
+                                <h1>Eski İşlemler:</h1>
+                            </div>  
+                           
                             <hr>
-                            <div class="centered_div">
-                                <button class="add btn" id="old_operation">Bütün İşlemler</button>
-                            </div>
+                          
 
-                            <div id="old_operations_content">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <td>İşlem</td>
-                                            <td>Tarih</td>
-                                            <td>Durum</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-
-                                </table>
-                            </div>
+                    
 
                         </div>
 
@@ -82,7 +82,18 @@
 
 
                             <div>
-                                <span>İşlem:</span>
+                                <span>Devam edenler:</span>
+                                <select class="users_continue operations">
+
+                                    <option value="" selected disabled hidden>İşlem seçiniz</option>
+                                    <% locals.company.services.forEach(element=> { %>
+                                        <% if (element.activeorNot===true) { %>
+                                            <option data-price="<%= element.servicePrice %>" value="<%= element._id %>">
+                                                <%= element.serviceName %>
+                                            </option>
+                                            <% } %>
+                                                <% }) %>
+                                </select>
                                 <select class="service_type_add">
 
                                     <option value="" selected disabled hidden>İşlem seçiniz</option>
@@ -96,39 +107,7 @@
                                 </select>
 
 
-                                <div class="selected_proccess_type_add">
-                                    <table id="selected_proccess_table">
-                                        <thead>
-                                            <th>Hizmet</th>
-                                            <th>Seans Sayısı</th>
-                                            <th>Fiyat</th>
-                                            <th>İndirim Tutarı</th>
-                                        </thead>
-
-                                        <tbody>
-                                        </tbody>
-                                        <tfoot>
-
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td>Yüzde İndirimi: </td>
-                                                <td><input type="number" id="percent_discount" class="tdform-group"
-                                                        max="100"></td>
-
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td>toplam:</td>
-                                                <td id="total_value"></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div class="processes_datas form-group">
-
-                                </div>
+                                
 
                             </div>
                             <div class="form-group">
@@ -142,7 +121,7 @@
                     </div>
 
                 </div>
-                <div class="modal hidden" id="modal add-data-modal">
+                <div class="modal hidden" id="add-data-modal">
                     <div class="inner_modal">
                         <h2>Seansa Veri Ekle</h2>
                         <form action="" id="add-data-form" data-operationid="" data-sessionid="" data-dataid="">

@@ -5,12 +5,29 @@ import {
 } from "../config/status_list.js";
 import Operation from "../models/OperationsModel.js";
 import {CustomError} from '../helpers/error/CustomError.js'
+import { response } from "express";
+import Appointment from "../models/appointmentModel.js";
 
+const updateSessionStatusForNew = async (req,res,next) => {
+  try {
+    console.log("updateSessionStatusForNew")
+   
+
+  
+    res.status(200).json({
+      success: true,
+      data:foundedOperation,
+      message: "İşlem durumu değişti.",
+    });
+  } catch (error) {
+    console.log(error)
+  }
+};
 const updateSessionStatus = async (req,res,next) => {
   try {
     console.log(req.body)
     console.log(req.params)
-    let responseData = await Operation.findOneAndUpdate(
+    let foundedOperation = await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
       {
         $set: {
@@ -23,20 +40,18 @@ const updateSessionStatus = async (req,res,next) => {
       }
     );
 
-    responseData.appointmensCount = responseData.sessionOfOperation.length;
-    if (responseData.totalAppointments === responseData.appointmensCount) {
-      responseData.operationStatus = OPERATION_STATUS_AUTOMATIC.FINISH;
+    console.log(foundedOperation.sessionOfOperation.length);
+    if (foundedOperation.totalAppointments === foundedOperation.sessionOfOperation.length) {
+      foundedOperation.operationStatus = OPERATION_STATUS_AUTOMATIC.FINISH;
       
-    } else {
-      responseData.operationStatus = OPERATION_STATUS_AUTOMATIC.WAITING;
     }
-    responseData.operationAppointmentStatus = OPERATION_APPOINTMENT_AVALIABLE_STATUS.AVALIABLE;
-    await responseData.save();
-    console.log(responseData);
+    foundedOperation.operationAppointmentStatus = OPERATION_APPOINTMENT_AVALIABLE_STATUS.AVALIABLE;
+    await foundedOperation.save();
+  
 
     res.status(200).json({
       success: true,
-      responseData,
+      data:foundedOperation,
       message: "İşlem durumu değişti.",
     });
   } catch (error) {
@@ -318,4 +333,5 @@ export {
   addSessionToOperation,
   addDescriptiontoSession,
   addDescriptiontoOperation,
+  updateSessionStatusForNew
 };

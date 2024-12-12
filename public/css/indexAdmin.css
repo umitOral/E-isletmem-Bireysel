@@ -19,26 +19,26 @@ div.search input[type="search"] {
     gap: 0.5rem;
 }
 
-main .insights {
+main .content {
   display: flex;
-  grid-template-columns: repeat(3, 1fr);
   gap: 1.6rem;
-  margin-bottom: 3rem;
+
 }
 
-main .insights > div {
+main .content > div {
   background-color: var(--color-white);
   padding: var(--card-padding);
   border-radius: var(--card-border-radius);
   margin-top: 1rem;
   box-shadow: var(--box-shadow);
   background-color: var(--color-white);
+  width: 100%;
 }
 
-main .insights > div:hover {
+main .content > div:hover {
   box-shadow: none;
 }
-main .insights h2 {
+main .content h2 {
   text-align: center;
 }
 
@@ -74,17 +74,12 @@ main .insights h2 {
   flex-direction: column;
 }
 .operation-wrapper{
-  border: 1px solid gray;
+  border: 1px solid var(--color-main-lighter3);
   border-radius: 0.5rem;
   margin-top: 0.3rem;
   padding: 0.5rem;
 }
-.operation {
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  
-}
+
 
 .operation-describe {
   border-top: 1px solid rgba(128, 128, 128, 0.185);
@@ -97,9 +92,10 @@ input[type="radio"] {
   width: 1.5rem;
   height: 1.5rem;
 }
-.operation_options{
+.session-of-operation{
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap:1rem
  }
  .operation_header h3 {
   text-align: center;
@@ -119,6 +115,8 @@ input[type="radio"] {
   border-radius: 0.5rem;
   padding: 0.5rem;
   background-color: aliceblue;
+  width: fit-content;
+  margin-left: 1rem;
 }
 .operation-datas div,.data_options div{
   display: flex;
@@ -140,8 +138,10 @@ input[type="radio"] {
   gap: 0.5rem;
 }
 
-#add_operation_modal,#old_operation{
-  visibility: hidden;
+#add_operation_btn{
+  display:none;
+  width: 100px;
+  margin: 0 auto;
 }
 
 

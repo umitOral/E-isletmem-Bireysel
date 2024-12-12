@@ -294,8 +294,7 @@ userSelect.addEventListener("change", () => {
   console.log(userSelect.value);
   let value = userSelect.value.replaceAll(" ", "");
   console.log(value);
-  userID = document.querySelector(`#user-names option[data-userdata=${value}]`)
-    .dataset.userid;
+  userID = document.querySelector(`#user-names option[data-userdata=${value}]`).dataset.userid;
   useremail = document.querySelector(
     `#user-names option[data-userdata=${value}]`
   ).dataset.useremail;

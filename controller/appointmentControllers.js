@@ -42,7 +42,7 @@ const createAppointment = async (req, res, next) => {
           },
         },
         $set: {
-          operationStatus: OPERATION_STATUS_AUTOMATIC.PLANNED,
+          operationStatus: OPERATION_STATUS_AUTOMATIC.CONTINUE,
           operationAppointmentStatus: OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO,
           "sessionOfOperation[sessionOfOperation.length-1].sessionState":
             SESSION_STATUS_LIST_AUTOMATIC.WAITING,
@@ -201,7 +201,7 @@ const updateAppointment = async (req, res, next) => {
           },
         },
         $set: {
-          operationStatus: OPERATION_STATUS_AUTOMATIC.PLANNED,
+          operationStatus: OPERATION_STATUS_AUTOMATIC.CONTINUE,
           operationAppointmentStatus: OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO,
           "sessionOfOperation[sessionOfOperation.length-1].sessionState":
             SESSION_STATUS_LIST_AUTOMATIC.WAITING,
@@ -216,7 +216,7 @@ const updateAppointment = async (req, res, next) => {
     for (const element of deletedOperations) {
       let foundedOperation = await Operation.findById(element);
 
-      foundedOperation.operationStatus = OPERATION_STATUS_AUTOMATIC.WAITING;
+      // foundedOperation.operationStatus = OPERATION_STATUS_AUTOMATIC.WAITING;
       foundedOperation.operationAppointmentStatus =
         OPERATION_APPOINTMENT_AVALIABLE_STATUS.AVALIABLE;
       foundedOperation.appointmensCount = foundedOperation.appointmensCount - 1;

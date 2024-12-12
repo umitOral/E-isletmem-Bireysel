@@ -109,6 +109,7 @@ import {
 } from "../controller/companyControllers.js";
 import {
   updateSessionStatus,
+  updateSessionStatusForNew,
   updateOperationStatus,
   deleteOperationsData,
   deleteSessionData,
@@ -192,6 +193,9 @@ router.route("/users/createUser").post(createUser);
 router
   .route("/operations/:operationID/updateSessionStatus/:sessionID")
   .post(updateSessionStatus);
+router
+  .route("/operations/updateSessionStatusForNew/:userId")
+  .post(updateSessionStatusForNew);
 router
   .route("/operations/:operationID/updateOperationStatus")
   .post(updateOperationStatus);
