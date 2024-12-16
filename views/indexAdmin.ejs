@@ -26,11 +26,10 @@
                     <div class="content">
                         <div id="appointments">
                             <div class="header">
-                                <h1><%= new Date().toLocaleDateString("tr-TR") %></h1>
+                                <h1 style="text-align: center;"><%= new Date().toLocaleDateString("tr-TR") %></h1>
                             </div>
                             
 
-                            <hr>
                             <div class="time-line-area">
 
                             </div>
@@ -39,16 +38,13 @@
                         </div>
                         <div id="operations">
                             <div class="header">
-                                <h1>""</h1>
+                                
+                                <h1 style="text-align: center;">Planlanan işlemler</h1>
                             </div>
 
-                            <hr>
+
                             
-                            <div id="operations_content_planned">
-                                <h2 style="text-align: center;">Planlanan işlemler</h2>
-                                <div class=""></div>
-                            </div>
-                            <br>
+                           
                             <div id="operations_content">
                                 
                                
@@ -57,15 +53,12 @@
                                 <div class=""></div>
                             </div>
                         </div>
+
                         <div class="old_operations">
                             <div class="header">
-                                <h1>Eski İşlemler:</h1>
+                                <h1 style="text-align: center;">Eski İşlemler:</h1>
                             </div>  
-                           
-                            <hr>
-                          
 
-                    
 
                         </div>
 
@@ -80,36 +73,34 @@
                         <form action="./addOperation" id="add_operation_form" onsubmit="return false" method="POST"
                             enctype="multipart/form-data">
 
+                            <div class="form-group">
+                                <span>İşlemler:</span>
+                                <div class="form-group vertical">
+                                    <span>Kayıtlı:</span>
+                                    <select name="" id="continue_operations_select">
 
-                            <div>
-                                <span>Devam edenler:</span>
-                                <select class="users_continue operations">
-
-                                    <option value="" selected disabled hidden>İşlem seçiniz</option>
-                                    <% locals.company.services.forEach(element=> { %>
-                                        <% if (element.activeorNot===true) { %>
-                                            <option data-price="<%= element.servicePrice %>" value="<%= element._id %>">
-                                                <%= element.serviceName %>
-                                            </option>
-                                            <% } %>
-                                                <% }) %>
-                                </select>
-                                <select class="service_type_add">
-
-                                    <option value="" selected disabled hidden>İşlem seçiniz</option>
-                                    <% locals.company.services.forEach(element=> { %>
-                                        <% if (element.activeorNot===true) { %>
-                                            <option data-price="<%= element.servicePrice %>" value="<%= element._id %>">
-                                                <%= element.serviceName %>
-                                            </option>
-                                            <% } %>
-                                                <% }) %>
-                                </select>
-
-
-                                
-
+                                    </select>
+                                    <span>Yeni:</span>
+                                    <select class="" id="new_operations_select">
+                                        <option value="" selected="" hidden="" disable="">İşlem Seçiniz</option>
+                                        <% locals.company.services.forEach(element=> { %>
+                                            <% if (element.activeorNot===true) { %>
+                                                <option data-price="<%= element.servicePrice %>" value="<%= element.serviceName %>">
+                                                    <%= element.serviceName %>
+                                                </option>
+                                                <% } %>
+                                                    <% }) %>    
+                                    </select>
+                                </div>
+                                <span>
+                                    Seçilen işlem:
+                                </span>
+                                <div class="form-group" id="selected-operations-for-add">
+                                   
+                                </div>
                             </div>
+
+                           
                             <div class="form-group">
                                 <button type="submit" class="btn save form-btn" id="add_operation">Kaydet</button>
                                 <button type="button" class="btn cancel form-btn">Vazgeç</button>

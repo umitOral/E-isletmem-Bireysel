@@ -997,7 +997,7 @@ thead th {
 
 
 table tbody tr:hover {
-  background-color: rgba(216, 213, 213, 0.1);
+  background-color: var(--color-main-lighter2) !important;
 }
 table thead {
   font-weight: 600;

@@ -269,12 +269,13 @@
   background-color: var(--color-danger);
   cursor: pointer;
   border-left: 5px solid gray;
-
-
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
   position: absolute;
   box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
+}
+.single-doctor-events .event.selected {
+  background-color: var(--color-main) !important;
 }
 .single-doctor-events .event:hover {
   border: 1px solid gray;

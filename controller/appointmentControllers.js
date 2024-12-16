@@ -20,12 +20,32 @@ const createAppointment = async (req, res, next) => {
     req.body.appointmentData.company = res.locals.company;
     req.body.appointmentData.date = new Date(req.body.appointmentData.date);
     req.body.appointmentData.operations = [];
-    let plannedOperations = [];
-
-   
-
-   
     let appointment = await Appointment.create(req.body.appointmentData);
+
+    for (const element of req.body.appointmentData.plannedOperations.newOperations) {
+      let service =res.locals.company.services.find(item=>item.serviceName===element);
+     
+      let data={
+        operationName:service.serviceName,
+        operationDate:new Date(),
+        operationAppointmentStatus: OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO,
+        operationStatus: OPERATION_STATUS_AUTOMATIC.CONTINUE,
+        company:res.locals.company,
+        user:req.body.appointmentData.user,
+        operationPrice:service.price,
+        appointmensCount:1,
+        operationPrice:service.servicePrice,
+        sessionOfOperation:[ {
+          sessionDate: new Date(req.body.appointmentData.date),
+          sessionState: SESSION_STATUS_LIST_AUTOMATIC.WAITING,
+          refAppointmentID: appointment._id,
+        }],
+      }
+      let operation=await Operation.create(data)
+      appointment.plannedOperations.oldOperations.push(operation._id)
+    }
+   
+   
 
     await Operation.updateMany(
       {
@@ -44,11 +64,13 @@ const createAppointment = async (req, res, next) => {
         $set: {
           operationStatus: OPERATION_STATUS_AUTOMATIC.CONTINUE,
           operationAppointmentStatus: OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO,
-          "sessionOfOperation[sessionOfOperation.length-1].sessionState":
-            SESSION_STATUS_LIST_AUTOMATIC.WAITING,
+          "sessionOfOperation[sessionOfOperation.length-1].sessionState":SESSION_STATUS_LIST_AUTOMATIC.WAITING,
         },
       }
     );
+
+    appointment.plannedOperations.newOperations=[]
+    await appointment.save()
 
     let data = {
       brandName: appointment.company.brandName,
@@ -177,15 +199,14 @@ const updateAppointment = async (req, res, next) => {
       req.body.plannedOperations.oldOperations.map(
         (item) => (item = item._id)
       );
-      console.log(foundedOperations)
+      
     let newOperations = requestedOperations.filter(
       (item) => !foundedOperations.includes(item)
     ); //yeni gelen öğeler
     let deletedOperations = foundedOperations.filter(
       (item) => !requestedOperations.includes(item)
     ); //silinenler öğeler
-    console.log(newOperations);
-    console.log(deletedOperations);
+  //  yeni eklenen kayıtlı işlemler
     await Operation.updateMany(
       {
         _id: {
@@ -208,9 +229,34 @@ const updateAppointment = async (req, res, next) => {
         },
       }
     );
+// yeni eklenen kayıtsız işlemler
+    for (const element of req.body.plannedOperations.newOperations) {
+      let service =res.locals.company.services.find(item=>item.serviceName===element);
+     
+      let data={
+        operationName:service.serviceName,
+        operationDate:new Date(req.body.date),
+        operationAppointmentStatus: OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO,
+        operationStatus: OPERATION_STATUS_AUTOMATIC.CONTINUE,
+        company:res.locals.company,
+        user:req.body.user,
+        operationPrice:service.price,
+        appointmensCount:1,
+        operationPrice:service.servicePrice,
+        sessionOfOperation:[ {
+          sessionDate: new Date(req.body.date),
+          sessionState: SESSION_STATUS_LIST_AUTOMATIC.WAITING,
+          refAppointmentID: foundedAppointment._id,
+        }],
+      }
+      let operation=await Operation.create(data)
+      foundedAppointment.plannedOperations.oldOperations.push(operation);
+    }
+
 
     for (const element of newOperations) {
       foundedAppointment.plannedOperations.oldOperations.push(element);
+      
     }
 
     for (const element of deletedOperations) {
@@ -237,8 +283,7 @@ const updateAppointment = async (req, res, next) => {
     foundedAppointment.endHour = req.body.endHour;
     foundedAppointment.startHour = req.body.startHour;
     foundedAppointment.description = req.body.description;
-    foundedAppointment.plannedOperations.newOperations =
-      req.body.plannedOperations.newOperations;
+    foundedAppointment.plannedOperations.newOperations = []
     await foundedAppointment.save();
 
     res.json({

@@ -164,7 +164,7 @@ router
   .route("/users/:id/addDiscountToOperation/:operationID")
   .post(addDiscountToOperation);
 router
-  .route("/users/:id/addOperationInsideAppointment")
+  .route("/users/:userId/addOperationInsideAppointment")
   .post(addOperationInsideAppointment);
 router.route("/users/:id/deleteOperation/:operationId").get(deleteOperation);
 router.route("/users/:id/getSessionsofOperation/:operationId").get(getSessionsofOperation);

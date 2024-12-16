@@ -24,109 +24,9 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
-const newOperationAddProved = async (req, res) => {
-  try {
-    console.log("denemex")
-    console.log(req.params)
-    console.log(req.body)
-    
-    let service=res.locals.company.services.find((item)=>item.serviceName===req.body.serviceName)
-   
 
 
 
-    ////////////////
-    let data={
-      user:req.params.userId,
-      operationName:service.serviceName,
-      operationPrice:service.servicePrice,
-      company : res.locals.company,
-      operationStatus : OPERATION_STATUS_AUTOMATIC.CONTINUE,
-    }
-
-    let foundedOperation = await Operation.create(data);
-   
-    foundedOperation.sessionOfOperation.push({
-      sessionState:SESSION_STATUS_LIST_AUTOMATIC.WAITING,
-      refAppointmentId:req.params.appointmentId,
-      sessionDatas:[],
-      sessionDate:new Date(),
-    })
-
-
-    if (foundedOperation.totalAppointments === foundedOperation.sessionOfOperation.length) {
-      foundedOperation.operationStatus = OPERATION_STATUS_AUTOMATIC.FINISH;
-      
-    }
-    foundedOperation.operationAppointmentStatus = OPERATION_APPOINTMENT_AVALIABLE_STATUS.AVALIABLE;
-    await foundedOperation.save();
-
-   
-/////////////
-    const appointment = await Appointment.findById(req.params.appointmentId );
-    if (appointment.operations.length===0 ) {
-      console.log("okey1")
-      appointment.operations.push(req.params.operationId)
-        await appointment.save()
-    }else{
-      console.log("okey2")
-      console.log("okey2")
-      console.log(foundedOperation._id)
-      let index=appointment.operations.findIndex(item=>item===foundedOperation._id)
-      console.log(index)
-      if (  index===-1) {
-        console.log("okey3")
-        appointment.operations.push(foundedOperation._id)
-        await appointment.save()
-      }
-    }
-   
-    res.status(200).json({
-      data:appointment ,
-      success:true,
-      link: "users",
-      message: "işlem eklendi",
-    });
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({
-      succes: false,
-      message: "api hatası",
-    });
-  }
-};
-
-const oldOperationAddProved = async (req, res) => {
-  try {
-    console.log("hahooo")
-    const appointment = await Appointment.findById(req.params.appointmentId );
-    if (appointment.operations.length===0 ) {
-      console.log("okey1")
-      appointment.operations.push(req.params.operationId)
-        await appointment.save()
-    }else{
-      let index=appointment.operations?.findIndex(item=>item===req.params.appointmentId)
-      if (  index!==-1) {
-        console.log("okey")
-        appointment.operations.push(req.params.operationId)
-        await appointment.save()
-      }
-    }
-   
-    res.status(200).json({
-      data:appointment ,
-      success:true,
-      link: "users",
-      message: "işlem eklendi",
-    });
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({
-      succes: false,
-      message: "api hatası",
-    });
-  }
-};
 
 
 const newPassword = async (req, res, next) => {
@@ -337,6 +237,5 @@ export {
   newPassword,
   getDaysFullorNot,
   getAllAppointmentofSingleDoctor,
-  oldOperationAddProved,
-  newOperationAddProved
+
 };

@@ -21,6 +21,8 @@ import {
   OPERATION_STATUS_AUTOMATIC,
   PAYMENT_STATUS,
   SMS_PACKAGE_STATUS,
+  OPERATION_APPOINTMENT_AVALIABLE_STATUS,
+  SESSION_STATUS_LIST_AUTOMATIC,
 } from "../config/status_list.js";
 import Subscription from "../models/subscriptionModel.js";
 
@@ -51,10 +53,9 @@ const activateEmployee = async (req, res, next) => {
 };
 const getUsersAllAppointments = async (req, res, next) => {
   try {
-    const appointments = await Appointment.find({ user: req.params.id }).populate([
-      "doctor",
-      "plannedOperations.oldOperations",
-    ]);
+    const appointments = await Appointment.find({
+      user: req.params.id,
+    }).populate(["doctor", "plannedOperations.oldOperations"]);
 
     res.status(200).json({
       succes: true,
@@ -69,9 +70,7 @@ const getUsersAllAppointments = async (req, res, next) => {
 const getUsersAllSms = async (req, res, next) => {
   try {
     const authorization = await createSmsAuthorization(res.locals.company);
-    let data = {
-    
-    };
+    let data = {};
     await axios
       .post("https://panel4.ekomesaj.com:9588/sms/list", data, {
         headers: {
@@ -275,7 +274,7 @@ const createUser = async (req, res, next) => {
               _id: response._id,
               name: response.name,
               surname: response.surname,
-              email:response?.email
+              email: response?.email,
             });
             const updatedToken = createTokenSingleData(decodedToken.usersNames);
             res.cookie("userData", updatedToken, {
@@ -384,7 +383,7 @@ const loginUser = async (req, res, next) => {
 
         const usersNames = await User.find(
           { role: "customer", company: company },
-          { name: true, surname: true,email:true}
+          { name: true, surname: true, email: true }
         );
 
         const token2 = createTokenSingleData(usersNames);
@@ -596,34 +595,58 @@ const addDiscountToOperation = async (req, res, next) => {
 };
 const addOperationInsideAppointment = async (req, res, next) => {
   try {
+    console.log("burası");
     console.log(req.body);
     console.log(req.params);
-
-    req.body.selectedOperations.forEach((element) => {
-      element.company = res.locals.company;
-      element.user = req.params.id;
-      element.operationStatus = OPERATION_STATUS_AUTOMATIC.CONTINUE;
-      element.sessionOfOperation = [
+    let foundedAppointment = await Appointment.findById(req.body.appointment).populate("plannedOperations.oldOperations");
+    if (req.body.selectedOperationsForAdd.new === "") {
+      console.log("deneme1");
+      let operation = await Operation.findById(
+        req.body.selectedOperationsForAdd.old
+      );
+      operation.sessionOfOperation.push({
+        refAppointmentID: foundedAppointment._id,
+        sessionState: SESSION_STATUS_LIST_AUTOMATIC.WAITING,
+        sessionDate: req.body.date,
+      });
+      operation.appointmensCount = operation.appointmensCount + 1;
+      operation.operationAppointmentStatus =
+        OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO;
+      foundedAppointment.plannedOperations.oldOperations.push(operation._id);
+      await operation.save();
+    } else {
+      console.log("deneme2");
+      let service = res.locals.company.services.find(
+        (item) => item.serviceName === req.body.selectedOperationsForAdd.new
+      );
+      console.log(service);
+      let newOperation = {};
+      newOperation.operationName = service.serviceName;
+      newOperation.operationPrice = service.servicePrice;
+      newOperation.company = res.locals.company;
+      newOperation.user = req.params.userId;
+      newOperation.operationAppointmentStatus =
+        OPERATION_APPOINTMENT_AVALIABLE_STATUS.NO;
+      newOperation.operationStatus = OPERATION_STATUS_AUTOMATIC.CONTINUE;
+      newOperation.sessionOfOperation = [
         {
-          sessionID: req.body.appointment,
+          sessionDate: new Date(req.body.date),
+          sessionState: SESSION_STATUS_LIST_AUTOMATIC.WAITING,
+          refAppointmentID: req.body.appointment,
         },
       ];
-      element.percentDiscount = req.body.percentDiscount;
-      element.discount = element.operationDiscount;
-    });
 
-    const results = await Operation.insertMany(req.body.selectedOperations);
-
-    for (const iterator of results) {
-      await Appointment.findByIdAndUpdate(req.body.appointment, {
-        $push: { operations: iterator._id },
-      });
+      let operation = await Operation.create(newOperation);
+      foundedAppointment.plannedOperations.oldOperations.push(operation._id);
+      foundedAppointment.plannedOperations.oldOperations.push(operation._id);
     }
 
+    await foundedAppointment.save();
+    let  modifiedAppointment=await Appointment.findById(req.body.appointment).populate("plannedOperations.oldOperations")
     res.json({
       succes: true,
-      responseData: results,
       message: "işlem başarıyla eklendi",
+      data:modifiedAppointment
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -804,18 +827,21 @@ const getUsersContinueOperations = async (req, res, next) => {
 
     const operations = await Operation.find({
       user: req.params.id,
-      operationStatus: {
-        $in: [
-          OPERATION_STATUS_AUTOMATIC.WAITING,
-          OPERATION_STATUS_AUTOMATIC.CONTINUE,
-        ],
+      operationAppointmentStatus:
+        OPERATION_APPOINTMENT_AVALIABLE_STATUS.AVALIABLE,
+      $expr: {
+        $ne: [{ $size: "$sessionOfOperation" }, "$totalAppointments"],
       },
     });
+
+    // let filteredOperations = operations.filter((item) => {
+    //   item.sessionOfOperation.length === item.totalAppointments;
+    // });
 
     res.json({
       success: true,
       message: "işlemler çekildi",
-      operations,
+      operations:operations,
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -924,7 +950,7 @@ const logOut = (req, res, next) => {
 
 const getUserNotifications = async (req, res, next) => {
   try {
-    let user=await User.findById(req.params.id)
+    let user = await User.findById(req.params.id);
     let userNotifications = user.notifications || {};
     let allNotifications = NOTIFICATIONS;
 
@@ -949,7 +975,6 @@ const updateUserNotifications = async (req, res, next) => {
     } else {
       user.notifications.push(req.body.notificationkey);
     }
-    
 
     console.log(user.notifications);
     await user.save();
@@ -962,7 +987,6 @@ const updateUserNotifications = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-
 
 const resetPasswordMail = async (req, res, next) => {
   try {
@@ -1035,5 +1059,5 @@ export {
   getUsersOldOperations,
   getUsersAllAppointments,
   getUsersAllSms,
-  getUserNotifications
+  getUserNotifications,
 };

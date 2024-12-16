@@ -521,7 +521,7 @@ function getAllAppointments() {
         </td>
         <td>
           <div class="selected_proccess" >
-             Kayıtlı:
+             Planlanan:
               ${appointment.plannedOperations.oldOperations.map(
                 (item, i) => `
             
@@ -529,20 +529,10 @@ function getAllAppointments() {
                 ${item.operationName}
               </span>
                 `
-              )}
+              ).join(" ") }
           </div>
           
-          <div class="selected_proccess" >
-             Planlanan:
-            ${appointment.plannedOperations.newOperations.map(
-            (item, i) => `
-                 <span type="text" class="new">
-                ${item}
-              </span>
-          `
-          )}
-          </div>
-       
+         
        
         </td>
 
@@ -940,14 +930,21 @@ function handleOperationEditBtn() {
             console.log(response);
             ui.showNotification(response.succes, response.message);
             allSessionsofOperationModalContent.innerHTML = "";
-            response.data.sessionOfOperation.map((element) => {
+            response.data.sessionOfOperation.map((element,index) => {
               allSessionsofOperationModalContent.innerHTML += `
                         <tr>
+                            <td>${"Seans:"+(index+1)}</td>
                             <td>${new Date(
                               element.sessionDate
-                            ).toLocaleDateString()}</td>
+                            ).toLocaleDateString()}//${new Date(
+                              element.sessionDate
+                            ).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</td>
                             <td>${element.sessionState}</td>
-                            <td>${element.sessionDatas}</td>
+                            <td>${element.sessionDatas.map((item)=>{
+                              return `${item.dataName}:${item.data} <br>`
+                            }).join(" ")}</td>
+                           
+                            <td>${element.sessionDescription||""}</td>
                         </tr>
                         `;
             });
@@ -1424,7 +1421,7 @@ addDSessionSaveButton.addEventListener("click", (e) => {
     )
     .then((response) => {
       ui.showNotification(true, response.message);
-      addSessionModal.classList.remove("showed_modal");
+      addSessionModal.classList.add("hidden");
       getAllOperations();
     })
     .catch((err) => ui.showNotification(false, err.message));

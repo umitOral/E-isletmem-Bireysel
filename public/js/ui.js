@@ -241,39 +241,42 @@ export class UI {
     OPERATION_STATUS,
     SESSION_STATUS
   ) {
-    const plannedOperationsArea = document.querySelector("#operations_content_planned div");
+    
     const operationsArea = document.querySelector("#operations_content div");
-    selectedAppointment.operations.forEach((element) => {
+    operationsArea.innerHTML=""
+    console.log(selectedAppointment)
+    selectedAppointment.plannedOperations.oldOperations.forEach((element) => {
+      let session=element.sessionOfOperation.find(item=>item.refAppointmentID===selectedAppointment._id)
+      console.log(session)
+      let index=element.sessionOfOperation.findIndex(item=>item.refAppointmentID===selectedAppointment._id)
+      console.log(index)
       operationsArea.innerHTML += `
       <div class="operation-wrapper">
       <div class="operation" data-operationid="${element._id}" ata-operationType="old">
         
               <span style="font-weight:700">${element.operationName}</span>
-              <i title="Veri Ekle" class="fa-solid fa-plus add-dataToOperation"></i>
+              <i title="İşleme Veri Ekle" class="fa-solid fa-plus add-dataToOperation"></i>
               <i title="İşleme Açıklama ekle"class="fa-solid fa-comment-medical add-descriptionToOperation"></i>
               
       <div class="session-of-operation" data-sessionid="${
-        element.sessionOfOperation[element.sessionOfOperation.length - 1]._id
+        session._id
       }">
        
-       
           <span>
-            Seans:${element.sessionOfOperation.length}
+            Seans:${index+1}
           </span>
         
           <select name="" class="edit-session-status">
           <option value="${
-            element.sessionOfOperation[element.sessionOfOperation.length - 1]
-              .sessionState
+            session.sessionState
             }" selected hidden disable>${
-              element.sessionOfOperation[element.sessionOfOperation.length - 1]
-                .sessionState
+              session.sessionState
                 } </option>
                   ${SESSION_STATUS.map(
                     (item) => `<option value="${item}">${item}</option>`
                   )}
           </select> 
-          <i title="Veri Ekle" class="fa-solid fa-plus add-dataToSession"></i>
+          <i title="Seansa Veri Ekle" class="fa-solid fa-plus add-dataToSession"></i>
           <i title="Seansa Açıklama ekle"class="fa-solid fa-comment-medical add-description"></i>
           
         
@@ -283,33 +286,8 @@ export class UI {
       
       `;
     });
-    selectedAppointment.plannedOperations.newOperations.forEach((element) => {
-      plannedOperationsArea.innerHTML += `
-       Yeniler:
-      <div class="operation-wrapper" style="background-color:aliceblue">
-        <div class="operation" data-operationType="new" data-serviceName="${element}">
-                <span style="font-weight:700">${element}</span>
-                <i title="Onayla" class="fa-solid fa-check add-operation-proved"></i>
-            
-        </div>
-      </div>
-      
-      `;
-    });
-    selectedAppointment.plannedOperations.oldOperations.forEach((element) => {
-      plannedOperationsArea.innerHTML += `
-      Eskiler:
-      <div class="operation-wrapper" style="background-color:#41f1b6;">
-        <div class="operation" data-operationType="old" data-operationid="${element._id}">
-                <span style="font-weight:700">${element.operationName}</span>
-               
-                 <i title="Onayla" class="fa-solid fa-check add-operation-proved"></i>
-            
-        </div>
-      </div>
-      
-      `;
-    });
+    
+   
   }
   showModalWithoutResponse(success, message) {
     const messageBox = document.querySelector(".information-modal");
@@ -570,7 +548,7 @@ export class UI {
       opt.setAttribute("selected", "");
       opt.setAttribute("disable", "");
       opt.setAttribute("hidden", "");
-      opt.textContent = "hastaya Ait İşlem Yok";
+      opt.textContent = "Bekleyen İşlem Yok";
       orderSelect.add(opt);
     } else {
       for (let index = orderSelect.options.length - 1; index >= 0; index--) {

@@ -14,6 +14,8 @@ const serviceAddSelect = document.querySelector(".service_type_add");
 const allModals = document.querySelectorAll(".modal");
 const cancelBtns = document.querySelectorAll(".cancel.form-btn");
 const eventArea = document.querySelector(".time-line-area");
+const newOperationsSelect = document.querySelector("#new_operations_select");
+const oldOperationsSelect = document.querySelector("#continue_operations_select");
 
 
 const plannedOperationsAreaButtons = document.querySelector("#operations");
@@ -56,15 +58,13 @@ const TotalValueCell = document.querySelector("#total_value");
 
 
 const timeLineArea = document.querySelector(".time-line-area");
-const plannedOperationsArea = document.querySelector(
-  "#operations_content_planned div"
-);
+
 const operationsArea = document.querySelector("#operations_content div");
 
 // created values
 let allAppointments = [];
 let selectedAppointment = {};
-let selectedUser = {};
+let selectedUserId = {};
 
 let selectedAppointmentOperations = [];
 let company = {};
@@ -123,54 +123,37 @@ operationsArea.addEventListener("change", (e) => {
   }
  
 });
-
-plannedOperationsArea.addEventListener("click", (e) => {
-  if (e.target.classList.contains("add-operation-proved")) {
-    if (e.target.parentElement.dataset.operationtype === "old") {
-      handleOldOperationAddProved(e);
-    }
-    if (e.target.parentElement.dataset.operationtype === "new") {
-      handleNewOperationAddProved(e);
-    }
-  }
+let selectedOperationsForAdd={
+  new:"",
+  old:""
+}
+let selectedOperationsArea=document.querySelector("#selected-operations-for-add")
+newOperationsSelect.addEventListener("change", (e) => {
+  oldOperationsSelect.options.selectedIndex=0
+  selectedOperationsForAdd.new=e.target.value
+  selectedOperationsForAdd.old=""
+  console.log(selectedOperationsForAdd)
+  selectedOperationsArea.innerHTML=`
+  <div>
+    <span>${e.target.value}</span>
+  </div>
+  `
 });
 
-function handleNewOperationAddProved(e) {
-  let data = {
-    serviceName: e.target.parentElement.dataset.servicename,
-  };
+oldOperationsSelect.addEventListener("change", (e) => {
+  console.log(e.target)
+  newOperationsSelect.options.selectedIndex=0
+  selectedOperationsForAdd.old=e.target.value
+  selectedOperationsForAdd.new=""
+  console.log(selectedOperationsForAdd)
+  selectedOperationsArea.innerHTML=`
+  <div>
+    <span>${e.target.options[e.target.options.selectedIndex].textContent}</span>
+  </div
+  `
+});
 
-  request
-    .postWithUrl(
-      "/api/newOperationAddProved/"+ selectedAppointment._id+"/"+selectedUser,data
-    )
-    .then((response) => {
-      console.log(response);
-      ui.showNotification(response.success, response.message);
-    })
-    .catch((err) => {
-      ui.showNotification(false, err.message);
-      console.log(err);
-    });
-}
 
-function handleOldOperationAddProved(e) {
-  request
-    .getwithUrl(
-      "/api/oldOperationAddProved/" +
-        selectedAppointment._id +
-        "/" +
-        e.target.parentElement.dataset.operationid
-    )
-    .then((response) => {
-      console.log(response);
-      ui.showNotification(response.success, response.message);
-    })
-    .catch((err) => {
-      ui.showNotification(false, err.message);
-      console.log(err);
-    });
-}
 
 dataSelectInput.addEventListener("change", (e) => {
   while (datasOptionsSelectInput.children[0]) {
@@ -237,20 +220,17 @@ function sessionStatusSelectHandle(e) {
 function handleAppointmentSelect(element) {
   addOperationModalBtn.style.display = "block";
 
-  selectedAppointment = allAppointments.sessionsofdoctorforactualDay.find(
+  selectedAppointment = allAppointments.find(
     (item) => item._id === element.dataset.session
   );
 
-  selectedUser = selectedAppointment.user._id;
+  selectedUserId = selectedAppointment.user._id;
 
-  plannedOperationsArea.innerHTML = ``;
-  console.log(allAppointments);
 
   console.log(selectedAppointment);
 
   ui.updateOperationstoUI(
     selectedAppointment,
-    plannedOperationsArea,
     OPERATION_STATUS,
     SESSION_STATUS_LIST
   );
@@ -260,13 +240,10 @@ function updateOperationsofAppointment(responseData) {
   let index = selectedAppointment.plannedOperations.oldOperations.findIndex(
     (item) => item._id === responseData._id
   );
-  selectedAppointment.plannedOperations.oldOperations[index] = response.data;
+  selectedAppointment.plannedOperations.oldOperations[index] = responseData;
 
-
-  plannedOperationsArea.innerHTML = "";
   ui.updateOperationstoUI(
     selectedAppointment,
-    plannedOperationsArea,
     OPERATION_STATUS,
     SESSION_STATUS_LIST
   );
@@ -291,7 +268,7 @@ function getAllAppointmentofSingleDoctor() {
       SESSION_STATUS_LIST = Object.values(response.SESSION_STATUS_LIST);
       OPERATION_STATUS = Object.values(response.OPERATION_STATUS);
       APPOINTMENT_STATUS = Object.values(response.APPOINTMENT_STATUS);
-      allAppointments = response.allDoctorDatas[0];
+      allAppointments = response.allDoctorDatas[0].sessionsofdoctorforactualDay;
 
       createTimeline(workHours, response.allDoctorDatas);
       ui.showAllSessionToUI(response.allDoctorDatas, response.workHours);
@@ -366,8 +343,13 @@ function handleAppointments() {
   const appointmentsDiv = document.querySelectorAll(".event");
 
   appointmentsDiv.forEach((element) => {
+    
     element.addEventListener("click", (e) => {
-      console.log("haho");
+      
+      appointmentsDiv.forEach(element => {
+        element.classList.remove("selected")
+      });
+      element.classList.add("selected")
       handleAppointmentSelect(element);
     });
   });
@@ -376,26 +358,52 @@ function handleAppointments() {
 function addOperationHandle() {
   console.log(selectedAppointment);
   addOperationModal.classList.remove("hidden");
+  oldOperationsSelect.innerHTML=`
+   <option value="" selected="" hidden="" disable="">İşlem Seçiniz</option>`
+  request
+  .getwithUrl("admin/users/" + selectedUserId + "/getUsersContinueOperations")
+  .then((response) => {
+    console.log(response);
+    response.operations.forEach(element => {
+       oldOperationsSelect.innerHTML+=`
+        <option value="${element._id}">${element.operationName}</option>
+       `
+    });
+   
+  })
+  .catch((err) => console.log(err));
 }
 
 function addOperation() {
   let data = {
-   
-    appointment: selectedAppointment,
-    percentDiscount: Number(addOperationForm.percent_discount.value),
+    selectedOperationsForAdd:selectedOperationsForAdd,
+    appointment: selectedAppointment._id,
+    date:new Date()
   };
   request
     .postWithUrl(
-      "./admin/users/" + selectedUser + "/addOperationInsideAppointment",
+      "./admin/users/" + selectedUserId + "/addOperationInsideAppointment",
       data
-    )
+    ) 
     .then((response) => {
+      console.log(response)
       ui.showNotification(response.succes, response.message);
-      console.log(response);
+      let index=allAppointments.findIndex(item=>item._id===response.data._id)
+      console.log(index)
+      allAppointments[index]=response.data
+      selectedAppointment=response.data
+      console.log(selectedAppointment)
+     
+      ui.updateOperationstoUI(
+        selectedAppointment,
+        OPERATION_STATUS,
+        SESSION_STATUS_LIST
+      );
       
-      updateOperationsofAppointment(response.responseData);
+      
     })
     .catch((err) => {
+      console.log(err)
       ui.showNotification(err.succes, err.message);
     });
   addOperationModal.classList.add("hidden");
@@ -418,8 +426,6 @@ function editSessionData(e) {
     )
     .then((response) => {
       ui.showNotification(response.succes, response.message);
-      console.log(response);
-      updateOperationsofAppointment(response.responseData);
       editDataModal.classList.add("hidden");
     })
     .catch((err) => {
@@ -496,26 +502,23 @@ function handleOperationsButtons(e) {
     }
   }
   if (e.target.classList.contains("add-description")) {
-    const operationDescribeDetails = document.querySelector(
-      "#operation-describe-details"
-    );
+  
     addDescriptionModal.classList.remove("hidden");
     addDescriptionForm.dataset.operationid =
-      e.target.parentElement.parentElement.parentElement.dataset.operationid;
+      e.target.parentElement.parentElement.dataset.operationid;
     addDescriptionForm.dataset.sessionid =
-      e.target.parentElement.parentElement.dataset.sessionid;
-    addDescriptionForm.adddescription.value =
-      operationDescribeDetails.textContent.trim();
+      e.target.parentElement.dataset.sessionid;
+    
   }
   if (e.target.classList.contains("add-descriptionToOperation")) {
     addDescriptioToOperationModal.classList.remove("hidden");
     addDescriptionToOperationForm.dataset.operationid =
-      e.target.parentElement.parentElement.parentElement.dataset.operationid;
+      e.target.parentElement.dataset.operationid;
   }
   if (e.target.classList.contains("add-dataToOperation")) {
     addDataToOperationModal.classList.remove("hidden");
     addDataToOperationForm.dataset.operationid =
-      e.target.parentElement.parentElement.parentElement.dataset.operationid;
+      e.target.parentElement.dataset.operationid;
   }
   if (e.target.classList.contains("edit-data")) {
     editDataForm.dataNameEdit.value = e.target.parentElement.dataset.dataname;
@@ -568,9 +571,9 @@ function handleOperationsButtons(e) {
     console.log("+++");
     addDataModal.classList.remove("hidden");
     addSessionDataForm.dataset.operationid =
-      e.target.parentElement.parentElement.parentElement.dataset.operationid;
+      e.target.parentElement.parentElement.dataset.operationid;
     addSessionDataForm.dataset.sessionid =
-      e.target.parentElement.parentElement.dataset.sessionid;
+      e.target.parentElement.dataset.sessionid;
   }
 }
 
