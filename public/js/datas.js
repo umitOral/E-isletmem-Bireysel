@@ -9,9 +9,10 @@ ui.closeNotification()
 
 
 const addDataButton = document.querySelector("#add_data_btn")
+const addOptionButtons = document.querySelectorAll(".add_option_btn")
 
 const cancelBtns = document.querySelectorAll(".btn.cancel")
-const addServiceOptionBtn = document.querySelectorAll(".add_serviceOption")
+
 
 const modalDataAdd = document.querySelector("#add_data")
 const modalOptionAdd = document.querySelector("#add_option")
@@ -33,9 +34,14 @@ cancelBtns.forEach(element => {
   })
 });
 
-addServiceOptionBtn.forEach(element => {
-  element.addEventListener("click", openAddOptionModal)
+addOptionButtons.forEach(element => {
+  element.addEventListener("click",(e)=>{
+    modalOptionAdd.classList.remove("hidden")
+    addOptionsModalHandle(e)
+  })
 });
+
+
 
 modalOptionEditBtns.forEach(element => {
   element.addEventListener("click", openEditModal)
@@ -72,9 +78,8 @@ function openEditModal(e) {
   editDataForm.dataOption.value = e.target.parentElement.textContent.trim()
 }
 
-function openAddOptionModal(e) {
+function addOptionsModalHandle(e) {
   console.log(e.target.parentElement.parentElement.dataset.id)
-  modalOptionAdd.classList.remove("hidden")
   addDataForm.action = "/admin/datas/addOptiontoData/" + e.target.parentElement.parentElement.dataset.id
 }
 

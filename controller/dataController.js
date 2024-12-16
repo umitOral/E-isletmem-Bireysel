@@ -38,6 +38,7 @@ const addOptiontoData = async (req, res) => {
       .catch((err) => console.log(err));
 
     res.redirect("back");
+    
   } catch (error) {
     res.status(500).json({
       succes: false,
