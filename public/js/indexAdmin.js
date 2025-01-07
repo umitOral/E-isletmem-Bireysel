@@ -27,6 +27,8 @@ const datasOptionsSelectInput = document.querySelector(
 const datasOptionsSelectInput2 = document.querySelector(
   "#datasOptions_select_input2"
 );
+let dataOptionNumberValue = document.querySelector("#dataOptionNumberValue");
+let dataOptionNumberValue2 = document.querySelector("#dataOptionNumberValue2");
 
 const addOperationModal = document.querySelector("#modal_add_operation");
 const addDescriptionModal = document.querySelector("#add-description-modal");
@@ -156,39 +158,84 @@ oldOperationsSelect.addEventListener("change", (e) => {
 
 
 dataSelectInput.addEventListener("change", (e) => {
-  while (datasOptionsSelectInput.children[0]) {
-    datasOptionsSelectInput.children[0].remove();
-  }
+ 
+  
+  let dataID = e.target.value;
+  request
+    .getwithUrl("/admin/datas/" + dataID)
+    .then((response) => {
+      console.log(response);
+      let indexcontrol = response.serviceDatas.findIndex(
+        (item) =>
+          item.dataName ===
+          e.target.options[e.target.options.selectedIndex].textContent.trim()
+      );
+      console.log(indexcontrol);
 
-  let indexcontrol = company.serviceDatas.findIndex(
-    (item) => item._id === e.target.value
-  );
-  console.log(indexcontrol);
-  datasOptionsSelectInput.innerHTML += "";
+      while (datasOptionsSelectInput.children[0]) {
+        datasOptionsSelectInput.children[0].remove();
+      }
 
-  company.serviceDatas[indexcontrol].dataOptions.forEach((element) => {
-    datasOptionsSelectInput.innerHTML += `
-            <option value="${element}">${element}</option>
+      console.log(response.serviceDatas[indexcontrol].dataOptions.length);
+      if (response.serviceDatas[indexcontrol].dataOptions.length === 0) {
+        datasOptionsSelectInput.setAttribute("disable", "true");
+        datasOptionsSelectInput.parentElement.style = "display:none";
+        dataOptionNumberValue.setAttribute("disable", "false");
+        dataOptionNumberValue.parentElement.style = "display:block";
+      } else {
+        datasOptionsSelectInput.setAttribute("disable", "false");
+        datasOptionsSelectInput.parentElement.style = "display:block";
+        dataOptionNumberValue.setAttribute("disable", "true");
+        dataOptionNumberValue.parentElement.style = "display:none";
+        response.serviceDatas[indexcontrol].dataOptions.forEach((element) => {
+          datasOptionsSelectInput.innerHTML += `
+        <option value="${element}">${element}</option>
         `;
-  });
+        });
+      }
+    })
+    .catch((err) => console.log(err));
+
+
+
 });
 
 dataSelectInput2.addEventListener("change", (e) => {
-  while (datasOptionsSelectInput2.children[0]) {
-    datasOptionsSelectInput2.children[0].remove();
-  }
+   let dataID = e.target.value;
+  request
+    .getwithUrl("/admin/datas/" + dataID)
+    .then((response) => {
+      console.log(response);
+      let indexcontrol = response.serviceDatas.findIndex(
+        (item) =>
+          item.dataName ===
+          e.target.options[e.target.options.selectedIndex].textContent.trim()
+      );
+      console.log(indexcontrol);
 
-  let indexcontrol = company.serviceDatas.findIndex(
-    (item) => item._id === e.target.value
-  );
-  console.log(indexcontrol);
-  datasOptionsSelectInput2.innerHTML += "";
+      while (datasOptionsSelectInput2.children[0]) {
+        datasOptionsSelectInput2.children[0].remove();
+      }
 
-  company.serviceDatas[indexcontrol].dataOptions.forEach((element) => {
-    datasOptionsSelectInput2.innerHTML += `
-            <option value="${element}">${element}</option>
+      console.log(response.serviceDatas[indexcontrol].dataOptions.length);
+      if (response.serviceDatas[indexcontrol].dataOptions.length === 0) {
+        datasOptionsSelectInput2.setAttribute("disable", "true");
+        datasOptionsSelectInput2.parentElement.style = "display:none";
+        dataOptionNumberValue2.setAttribute("disable", "false");
+        dataOptionNumberValue2.parentElement.style = "display:block";
+      } else {
+        datasOptionsSelectInput2.setAttribute("disable", "false");
+        datasOptionsSelectInput2.parentElement.style = "display:block";
+        dataOptionNumberValue2.setAttribute("disable", "true");
+        dataOptionNumberValue2.parentElement.style = "display:none";
+        response.serviceDatas[indexcontrol].dataOptions.forEach((element) => {
+          datasOptionsSelectInput2.innerHTML += `
+        <option value="${element}">${element}</option>
         `;
-  });
+        });
+      }
+    })
+    .catch((err) => console.log(err));
 });
 
 

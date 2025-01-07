@@ -106,9 +106,9 @@ let datasOptionsSelectInput = document.querySelector(
   "#datasOptions_select_input"
 );
 let dataOptionNumberValue = document.querySelector("#dataOptionNumberValue");
+
 datasSelectInput.addEventListener("change", (e) => {
   let dataID = e.target.value;
-
   request
     .getwithUrl("/admin/datas/" + dataID)
     .then((response) => {

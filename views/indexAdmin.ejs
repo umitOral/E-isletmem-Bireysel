@@ -118,25 +118,31 @@
                         <form action="" id="add-data-form" data-operationid="" data-sessionid="" data-dataid="">
                             <div class="form-group">Veri Adı:
                                 <select name="datas" id="datas_select_input">
+                                    <option value="" selected disable hidden>Veri seçiniz</option>
                                     <% locals.company.serviceDatas.forEach(element=> { %>
                                         <option value="<%= element._id %>">
                                             <%= element.dataName %>
                                         </option>
-
+        
                                         <% }) %>
                                 </select>
-
-                                Opsiyon:
-                                <select name="datasOption" id="datasOptions_select_input">
-                                    <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
-                                        <option value="">
-                                            <%= element %>
-                                        </option>
-
-                                        <% }) %>
-                                </select>
-                                Sayısal Değer:
-                                <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
+        
+                                <div style="display: none;">
+                                    Opsiyon:
+                                    <select name="datasOption" id="datasOptions_select_input">
+                                        <option value="" selected disable hidden>seçiniz</option>
+                                        <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
+                                            <option value="">
+                                                <%= element %>
+                                            </option>
+        
+                                            <% }) %>
+                                    </select>
+                                </div>
+                                <div style="display:none">
+                                    Sayısal Değer:
+                                    <input name="dataOptionNumberValue" id="dataOptionNumberValue" type="Number">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn save form-btn"
@@ -152,24 +158,31 @@
                         <form action="" id="add-dataToOperation-form" data-operationid="" data-sessionid="">
                             <div class="form-group">Veri Adı:
                                 <select name="datas" id="datas_select_input2">
+                                    <option value="" selected disable hidden>Veri seçiniz</option>
                                     <% locals.company.serviceDatas.forEach(element=> { %>
                                         <option value="<%= element._id %>">
                                             <%= element.dataName %>
                                         </option>
+        
                                         <% }) %>
                                 </select>
-
-                                Opsiyon:
-                                <select name="datasOption" id="datasOptions_select_input2">
-                                    <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
-                                        <option value="">
-                                            <%= element %>
-                                        </option>
-
-                                        <% }) %>
-                                </select>
-                                Sayısal Değer:
-                                <input name="dataOptionNumberValue" class="dataOptionNumberValue" type="Number">
+        
+                                <div style="display: none;">
+                                    Opsiyon:
+                                    <select name="datasOption" id="datasOptions_select_input2">
+                                        <option value="" selected disable hidden>seçiniz</option>
+                                        <% locals.company.serviceDatas[0].dataOptions.forEach(element=> { %>
+                                            <option value="">
+                                                <%= element %>
+                                            </option>
+        
+                                            <% }) %>
+                                    </select>
+                                </div>
+                                <div style="display:none">
+                                    Sayısal Değer:
+                                    <input name="dataOptionNumberValue2" id="dataOptionNumberValue2" type="Number">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn save form-btn"

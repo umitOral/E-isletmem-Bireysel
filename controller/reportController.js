@@ -6,6 +6,7 @@ import Payment from "../models/paymentsModel.js";
 import Product from "../models/productModel.js";
 import { createSmsAuthorization } from "../helpers/smsHelpers.js";
 import { SMS_PACKAGE_STATUS } from "../config/status_list.js";
+import Appointment from "../models/appointmentModel.js";
 
 const getUserReports = async (req, res, next) => {
   try {
