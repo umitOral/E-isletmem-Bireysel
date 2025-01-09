@@ -115,10 +115,16 @@ addCustomerButton.addEventListener("click", () =>
 
 optionsSelects.forEach((element) => {
   element.addEventListener("change", (e) => {
-    modalSms.classList.remove("hidden");
+    if (
+      e.target.options[e.target.options.selectedIndex].value === "send-sms"
+    ) {
+      modalSms.classList.remove("hidden");
     formSms.dataset.userid =
       e.target.parentElement.parentElement.dataset.userid;
     e.target.selectedIndex = 0;
+
+    }
+
   });
 });
 
@@ -130,12 +136,12 @@ formSms.addEventListener("submit", (e) => {
   e.preventDefault();
  
   let data={
-    messageName:smsTypeSelect.options[smsTypeSelect.selectedIndex].dataset.smsname,
+    messageTitle:smsTypeSelect.options[smsTypeSelect.selectedIndex].dataset.smsname,
     messageContent:messageText.value,
-    userId:formSms.dataset.userid
+    userId:formSms.dataset.userid,
   }
   console.log(data)
-  request.postWithUrl("./sms/sendSingleSms",data)
+  request.postWithUrl("./users/sendSingleSms",data)
   .then(response=>{
     console.log(response)
       if (response.success===true) {

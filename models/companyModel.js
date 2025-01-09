@@ -95,8 +95,9 @@ const companySchema = new Schema(
         smsName: {
           type: String,
         },
+        type:{type:String, enum:["general","system","reminder"],default:"general"},
         activeorNot: { type: Boolean, default: true },
-        content: String,
+        content: { type: String },
       },
     ],
     companyDocs: [
@@ -112,7 +113,9 @@ const companySchema = new Schema(
         public_id: String,
       },
     ],
+    smsBalance:{type:Number,default:0}
   },
+  
   { timestamps: true }
 );
 

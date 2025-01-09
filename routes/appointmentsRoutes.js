@@ -1,7 +1,8 @@
 import express from 'express';
-import {getAppointment,updateAppointment,sendReminderSms,createAppointment,updateStateAppointment, resizeAppointment, changeAppointmentStatus} from '../controller/appointmentControllers.js';
+import {getAppointment,updateAppointment,createAppointment,updateStateAppointment, resizeAppointment, changeAppointmentStatus} from '../controller/appointmentControllers.js';
 import { checkSmsActive } from '../middlewares/smsMiddleware.js';
 import { checkPriviliges } from '../middlewares/authMiddleware.js';
+import { sendReminderSms } from '../controller/smsControllers.js';
 
 const router =express.Router()
 

@@ -12,7 +12,7 @@ import {
 import { sendUserAppointmentMail } from "./mailControllers.js";
 import Appointment from "../models/appointmentModel.js";
 import User from "../models/userModel.js";
-import { sendSingleSms } from "./smsControllers.js";
+
 
 const createAppointment = async (req, res, next) => {
   try {

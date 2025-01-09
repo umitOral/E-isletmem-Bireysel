@@ -331,12 +331,17 @@ const getUsersPage = async (req, res, next) => {
       .limit(limit)
       .sort({ updatedAt: -1 });
 
+      let smsTemplates= res.locals.company.smsTemplates.filter((item)=>item.type==="general")
+      
+      console.log(smsTemplates)
     res.status(200).render("users", {
       users,
+      smsTemplates,
       succes: true,
       link: "users",
     });
   } catch (error) {
+    console.log(error);
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
@@ -759,11 +764,12 @@ const getPaymentsPage = async (req, res, next) => {
 const getUserPage = async (req, res, next) => {
   try {
     const singleUser = await User.findById(req.params.id);
-
+    let smsTemplates=res.locals.company.smsTemplates.filter(item=>item.type==="reminder")
     res.status(200).render("user-details", {
       moment,
       singleUser,
       link: "users",
+      smsTemplates
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));

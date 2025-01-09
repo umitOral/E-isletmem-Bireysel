@@ -9,6 +9,7 @@ import axios from "axios";
 import { createSmsAuthorization } from "../helpers/smsHelpers.js";
 import { sendCustomMail } from "./mailControllers.js";
 import { SMS_STATUS } from "../config/status_list.js";
+import Appointment from "../models/appointmentModel.js";
 
 const addSmsTemplate = async (req, res, next) => {
   try {
@@ -130,178 +131,128 @@ const editSmsTemplate = async (req, res, next) => {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
-const sendBulkSms = async (req, res, next) => {
+
+const sendReminderSms = async (req, res, next) => {
   try {
     console.log(req.body);
-    console.log("bulk sms");
-    req.body.message.replace("{{isim}}");
-    let messages = [];
-    for (const element of req.body.users) {
-      await User.findById(element)
-        .then((response) => {
-          messages.push({
-            user: response.phone,
-            message: req.body.message.replace("{{isim}}", response.name),
-          });
-        })
-        .catch((err) => console.log(err));
-    }
-    console.log(messages);
-
-    res.json({ success: true, message: "mesaj içeriği değiştirildi" });
+    let appointment = await Appointment.findById(req.body.appointmentId);
+    let messageContent = res.locals.company.smsTemplates.find(
+      (item) => item.type === "reminder"
+    ).content;
+    let smsName = res.locals.company.smsTemplates.find(
+      (item) => item.type === "reminder"
+    ).smsName;
+    await User.findById(req.body.user).then(async (response) => {
+      if (response.phone !== "") {
+        messageContent = messageContent
+          .replace("{{isim}}", response.name)
+          .replace("{{soyisim}}", response.surname)
+          .replace("{{randevu-tarihi}}", appointment.date.toLocaleDateString())
+          .replace("{{randevu-saati}}", appointment.startHour);
+        let result = await sendSingleSms(
+          response,
+          res.locals.company,
+          messageContent,
+          smsName,
+          res.locals.company.smsConfig.smsTitle
+        );
+        res.status(200).json({
+          success: result.success,
+          message: result.message,
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "kullanıcının telefon numarası eksik",
+        });
+      }
+    });
   } catch (error) {
-    return next(new CustomError("bilinmeyen hata", 500, error));
+    console.log(error);
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-// const sendSingleSms = async (req, res, next) => {
-//   const session = await mongoose.startSession();
 
-//   try {
-//     session.startTransaction();
-//     console.log(req.body);
-//     let foundedUser = await User.findById(req.body.userId, null, { session });
-
-//     if (foundedUser.phone === "") {
-//       return next(
-//         new CustomError("kullanıcının telefon bilgisi eksiktir", 401)
-//       );
-//     }
-//     let modifiedMessage = req.body.messageContent.replace(
-//       "{{isim}}",
-//       foundedUser.name
-//     );
-
-//     let message = {
-//       messageContent: modifiedMessage,
-//       company: res.locals.company,
-//       user: foundedUser,
-//       phone: foundedUser.phone,
-//     };
-//     let sendedSms = await Sms.create(message);
-//     const pushSettings = {
-//       url:
-//         process.env.MODE === "production"
-//           ? process.env.PUSH_NOTIFICATION_URL_LIVE
-//           : process.env.PUSH_NOTIFICATION_URL_LOCAL,
-//     };
-//     console.log(pushSettings);
-
-//     let data = {
-//       type: 1,
-//       sendingType: 2,
-//       title: req.body.messageName || "",
-//       numbers: [
-//         {
-//           nr: foundedUser.phone,
-//           msg: modifiedMessage,
-//         },
-//       ],
-//       encoding: 0,
-//       sender: res.locals.company.smsConfig.smsTitle,
-//       validity: 60,
-//       commercial: false,
-//       skipAhsQuery: true,
-//       recipientType: 0,
-//       customID: sendedSms._id,
-//       pushSettings: pushSettings,
-//     };
-
-//     // decoded user sms password
-//     const authorization = await createSmsAuthorization(res.locals.company);
-
-//     await axios
-//       .post("http://panel4.ekomesaj.com:9587/sms/create", data, {
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: authorization,
-//         },
-//       })
-//       .then(async (response) => {
-//         console.log(response.data);
-//         sendedSms.pkg.id = response.data.data.pkgID;
-//         await sendedSms.save();
-//       });
-
-//     await session.commitTransaction();
-//     console.log("Transaction başarılı!");
-
-//     res.json({ success: true, message: "mesaj gönderildi." });
-//   } catch (error) {
-//     await session.abortTransaction();
-//     console.log("transaction iptal!");
-//     return next(new CustomError("bilinmeyen hata", 500, error));
-//   } finally {
-//     session.endSession();
-//     console.log("oturum sonlandırıldı!");
-//   }
-// };
-const sendSingleSms = async (user,company, smsContent, messageTitle) => {
+const sendSingleSms = async (
+  user,
+  companyID,
+  smsContent,
+  messageTitle,
+  sender
+) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
-    
-
-    if (user.phone === "") {
-      return next(
-        new CustomError("kullanıcının telefon bilgisi eksiktir", 401)
-      );
-    }
-
+    const company = await Company.findById(companyID).session(session);
     let message = {
       messageContent: smsContent,
-      company: company,
-      user: user,
+      company: companyID,
+      user: user._id,
       phone: user.phone,
     };
-    let sendedSms = await Sms.create(message);
+    console.log("burası");
+
+    let sendedSms = await Sms.create([message], { session });
+
     const pushSettings = {
       url:
         process.env.MODE === "production"
           ? process.env.PUSH_NOTIFICATION_URL_LIVE
           : process.env.PUSH_NOTIFICATION_URL_LOCAL,
     };
-    console.log(pushSettings);
 
     let data = {
       type: 1,
-      sendingType: 2,
+      sendingType: 0,
       title: messageTitle || "",
-      numbers: [
-        {
-          nr: user.phone,
-          msg: smsContent,
-        },
-      ],
+      content: smsContent,
+      number: user.phone,
       encoding: 0,
-      sender: messageTitle,
+      sender: sender,
       validity: 60,
       commercial: false,
       skipAhsQuery: true,
       recipientType: 0,
-      customID: sendedSms._id,
+      customID: sendedSms[0]._id,
       pushSettings: pushSettings,
     };
+    console.log(data);
 
     // decoded user sms password
     const authorization = await createSmsAuthorization(company);
-
-    await axios
+    console.log("burası1");
+    const response=await axios
       .post("http://panel4.ekomesaj.com:9587/sms/create", data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: authorization,
         },
       })
-      .then(async (response) => {
-        console.log(response.data);
-        sendedSms.pkg.id = response.data.data.pkgID;
-        await sendedSms.save();
-      })
-      .catch((err) => console.log(err));
-
-    return { success: true, message: "mesaj gönderildi." };
+      
+        if (response.data.err) {
+          await session.abortTransaction();
+          console.log(response.data)
+          return { success: false, message: "mesaj gönderilemedi." };
+        }
+       
+        sendedSms[0].pkg = {
+          pkgID: response.data.pkgID,
+        };
+        await sendedSms[0].save({ session });
+        company.smsBalance -= 1;
+        await company.save({ session });
+        await session.commitTransaction();
+        return { success: true, message: "mesaj gönderildi.", response };
+      
   } catch (error) {
-    return { success: false, message: "mesaj gönderilemedi.", data: error };
+    console.log("buraso5");
+    await session.abortTransaction();
+    return { success: false, message: "mesaj gönderilemedi.", error };
+  } finally {
+    session.endSession();
   }
 };
+
 const getSmsDetails = async (req, res, next) => {
   const session = await mongoose.startSession();
 
@@ -344,7 +295,7 @@ export {
   activateSmsTemplate,
   deactivateSmsTemplate,
   editSmsTemplate,
-  sendBulkSms,
+  sendReminderSms,
   sendSingleSms,
   smsStatus,
   getSmsDetails,

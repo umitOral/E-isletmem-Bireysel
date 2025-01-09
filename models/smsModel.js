@@ -12,11 +12,9 @@ const smsSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    userID: {
-      type: String,
-    },
+    phone: {type:String},
     pkg: {
-      id: String,
+      pkgID: String,
       state: String,
       statistics: {
         total: Number,
@@ -37,7 +35,7 @@ const smsSchema = new Schema(
     },
   },
   {
-    timeStamps: true,
+    timestamps: true,
   }
 );
 

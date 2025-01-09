@@ -32,6 +32,7 @@ import { AuditLogs } from "../helpers/auditLogs.js";
 import Sms from "../models/smsModel.js";
 import { NOTIFICATIONS } from "../config/notifications.js";
 import Appointment from "../models/appointmentModel.js";
+import { sendSingleSms } from "./smsControllers.js";
 
 const deactivateEmployee = async (req, res, next) => {
   try {
@@ -69,8 +70,14 @@ const getUsersAllAppointments = async (req, res, next) => {
 };
 const getUsersAllSms = async (req, res, next) => {
   try {
+    console.log(req.params);
     const authorization = await createSmsAuthorization(res.locals.company);
-    let data = {};
+    let sendedSms = await Sms.find({ user: req.params.id });
+    let data = {
+      sender: res.locals.company.smsConfig.smsTitle,
+      customIDs: sendedSms.map((item) => item._id),
+    };
+    console.log(data);
     await axios
       .post("https://panel4.ekomesaj.com:9588/sms/list", data, {
         headers: {
@@ -79,26 +86,63 @@ const getUsersAllSms = async (req, res, next) => {
         },
       })
       .then(async (response) => {
-        console.log("haho");
-        console.log(response.data);
-        console.log(response.err);
-        if (response.data.err === null) {
+        console.log("deneme");
+        console.log(response.data.data);
+        // console.log(response.data);
+        // console.log(response.err);
+        if (!response.data.err) {
           res.status(200).json({
             success: true,
             sms: response.data.data,
             SMS_PACKAGE_STATUS,
             message: "sms başarıyla çekildi",
           });
-        } else {
-          res.status(200).json({
-            success: false,
-            response: response.data.err,
-            message: "sms sisteminde bir sorun var",
-          });
         }
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        res.status(500).json({
+          success: false,
+          sms: err,
+          message: "sms çekilirken hata oluştu",
+        });
       });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
+  }
+};
+
+const sendSingleSmsController = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    await User.findById(req.body.userId).then(async (response) => {
+      if (response.phone !== "") {
+        req.body.messageContent = req.body.messageContent
+          .replace("{{isim}}", response.name)
+          .replace("{{soyisim}}", response.surname);
+        await sendSingleSms(
+          response,
+          res.locals.company,
+          req.body.messageContent,
+          req.body.messageTitle,
+          res.locals.company.smsConfig.smsTitle
+        ).then((response) => {
+          console.log(response);
+          res.status(200).json({
+            success: true,
+            message: "mesaj gönderildi",
+          });
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "kullanıcının telefon numarası eksik",
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const findUser = async (req, res, next) => {
@@ -598,7 +642,9 @@ const addOperationInsideAppointment = async (req, res, next) => {
     console.log("burası");
     console.log(req.body);
     console.log(req.params);
-    let foundedAppointment = await Appointment.findById(req.body.appointment).populate("plannedOperations.oldOperations");
+    let foundedAppointment = await Appointment.findById(
+      req.body.appointment
+    ).populate("plannedOperations.oldOperations");
     if (req.body.selectedOperationsForAdd.new === "") {
       console.log("deneme1");
       let operation = await Operation.findById(
@@ -642,11 +688,13 @@ const addOperationInsideAppointment = async (req, res, next) => {
     }
 
     await foundedAppointment.save();
-    let  modifiedAppointment=await Appointment.findById(req.body.appointment).populate("plannedOperations.oldOperations")
+    let modifiedAppointment = await Appointment.findById(
+      req.body.appointment
+    ).populate("plannedOperations.oldOperations");
     res.json({
       succes: true,
       message: "işlem başarıyla eklendi",
-      data:modifiedAppointment
+      data: modifiedAppointment,
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -841,7 +889,7 @@ const getUsersContinueOperations = async (req, res, next) => {
     res.json({
       success: true,
       message: "işlemler çekildi",
-      operations:operations,
+      operations: operations,
     });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -880,8 +928,12 @@ const getUsersAllOperations = async (req, res, next) => {
     const operations = await Operation.find({
       user: req.params.id,
     });
-
-    res.json({ success: true, message: "işlemler çekildi", data: operations });
+    
+    res.json({
+      success: true,
+      message: "işlemler çekildi",
+      data: operations,
+    });
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
@@ -1060,4 +1112,5 @@ export {
   getUsersAllAppointments,
   getUsersAllSms,
   getUserNotifications,
+  sendSingleSmsController,
 };

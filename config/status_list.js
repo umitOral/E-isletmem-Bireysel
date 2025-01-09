@@ -129,7 +129,7 @@ const SMS_TEMPLATES= [
     content: "Değerli danışanımız yeni yılınızın sağlıklı geçmesini dileriz.",
   },
   {
-    smsName: "hatırlatma mesajı",  // code içinde kullanılacak
+    smsName: "Randevu hatırlatma mesajı",  // code içinde kullanılacak
     activeorNot: "true", //arayüzde kullanılacak
     content: "değerli danışanımız, randevu tarihiniz: {{randevu-tarihi}}, saat {{randevu-saati}} ",
   },

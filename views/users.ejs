@@ -79,7 +79,7 @@
                                         <td>
                                             <select name="" class="user-options-select">
                                                 <option selected disable hidden>Seçenekler</option>
-                                                <option value="edit-payment">SMS Gönder</option>
+                                                <option value="send-sms">SMS Gönder</option>
                                             </select>
                                         </td>
                                         
@@ -167,12 +167,12 @@
                 <div class="modal hidden" id="sms_modal">
                     <div class="inner_modal">
                         <h2>Sms Gönder</h2>
-                        <form action="./users/createUser" method="POST" id="sms-form">
+                        <form action="" method="POST" id="sms-form">
                             <div class="form-group ">
                                 <select name="" id="sms-type-select" required>
                                     <option value="" disable selected hidden>Sms Tipi</option>
                                     <option value="" data-smsName="özel sms">Özel</option>
-                                    <% company.smsTemplates.forEach(element => { %>
+                                    <% smsTemplates.forEach(element => { %>
                                         <option value="<%= element.content%>" data-smsName="<%= element.smsName %>"><%= element.smsName %></option>
                                     <% }) %>
                                    

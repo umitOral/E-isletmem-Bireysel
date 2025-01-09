@@ -258,10 +258,11 @@ sendSmsForm.addEventListener("submit", (e) => {
 
   let data = {
     users: selectedUsers,
+    messageTitle: smsNameSelect.options[smsNameSelect.options.selectedIndex].value ,
     message: messageContents[smsNameSelect.options.selectedIndex - 1].value,
   };
   request
-    .postWithUrl("../sms/sendBulkSms", data)
+    .postWithUrl("./sendBulkSms", data)
     .then((response) => {
       ui.showNotification(response.success, response.message);
       console.log(response);

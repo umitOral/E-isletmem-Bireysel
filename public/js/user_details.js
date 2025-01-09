@@ -41,6 +41,7 @@ let addSessionForm = document.querySelector("#add-session-form");
 let addDiscountForm = document.querySelector("#add-discount-form");
 
 let datasSelectInput = document.querySelector("#datas_select_input");
+let formSms = document.querySelector("#sms-form");
 
 // modals
 const allModals = document.querySelectorAll(".modal");
@@ -48,6 +49,7 @@ const allModals = document.querySelectorAll(".modal");
 const modalUser = document.querySelector("#modal_user");
 const addDiscountModal = document.querySelector("#add_discount_modal");
 const modalSlider = document.querySelector("#modal_slider");
+const modalSendSms = document.querySelector("#sms_modal");
 
 const modalImage = document.querySelector("#modal_image");
 const modalOrders = document.querySelector("#modal_order");
@@ -144,6 +146,28 @@ datasSelectInput.addEventListener("change", (e) => {
     })
     .catch((err) => console.log(err));
 });
+
+
+formSms.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  let data={
+    user:window.location.pathname.split("/").pop(),
+    appointmentId:formSms.dataset.appointmentid
+  }
+  console.log(data)
+  request
+    .postWithUrl("../sms/sendReminderSms",data)
+    .then((response) => {
+      console.log(response);
+      ui.showNotification(response.success, response.message);
+      modalSendSms.classList.add("hidden");
+    })
+    .catch((err) => {
+      console.log(err);
+      ui.showNotification(false, err.message);
+    });
+})
 
 function userInformationEdit(e) {
   e.preventDefault();
@@ -560,7 +584,8 @@ function getAllAppointments() {
         <select name="" class="appointment-edit-select">
         <option value="" disable hidden selected >Seçenekler</option>
         
-        <option class="addDescriptionAppointment">Açıklama ekle</option>
+        <option value="add-description-appointment">Açıklama ekle</option>
+        <option value="send-reminder-sms">Hatırlatma smsi gönder</option>
         
         </select>
         </td>
@@ -628,15 +653,7 @@ function getAllSms() {
           <td>
           ${sms.senders[0]}
           </td>
-          <td>
-          ${sms.statistics.total}
-          </td>
-          <td>
-          ${sms.statistics.delivered}
-          </td>
-          <td>
-          ${sms.statistics.undelivered}
-          </td>
+         
           <td>
           ${response.SMS_PACKAGE_STATUS[sms.state]}
           </td>
@@ -646,7 +663,9 @@ function getAllSms() {
       });
 
       smsTableFoot.innerHTML=`
-        <div>Toplam ${response.sms.stats.totalRecord} adet Kayıt  Bulundu.</div>
+        <tr>
+          Toplam ${response.sms.list.length} adet Kayıt  Bulundu.
+        </tr>
       `
 
      
@@ -1350,6 +1369,11 @@ function handleAppointmentEditBtn() {
             .catch((err) => ui.showNotification(false, err.message));
         }
       }
+
+      if (e.target.options[e.target.options.selectedIndex].value==="send-reminder-sms") {
+        modalSendSms.classList.remove("hidden");
+        formSms.dataset.appointmentid=appointmentID;
+      }
       if (
         e.target.options[e.target.options.selectedIndex].classList.contains(
           "updateStateAppointment"
@@ -1368,6 +1392,7 @@ function handleAppointmentEditBtn() {
           })
           .catch((err) => ui.showNotification(false, err.message));
       }
+      e.target.selectedIndex = 0;
     });
   });
 }

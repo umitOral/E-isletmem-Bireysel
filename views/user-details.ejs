@@ -322,7 +322,7 @@
                                                         </div>
                                                     </th>
                                                   
-                                                    <th>
+                                                    <!-- <th>
                                                         <div class="table_head">
                                                             <i class="fa-solid fa-cart-arrow-down" title="Mesaj Sayısı" style="color: rgb(138, 189, 255);font-size: 1rem;"></i>
                                                         </div>
@@ -336,7 +336,7 @@
                                                         <div class="table_head">
                                                             <i class="fa-solid fa-xmark" title="İletilemeyen" style="color: rgb(254, 100, 100);font-size: 1rem;"></i>
                                                         </div>
-                                                    </th>
+                                                    </th> -->
                                                     <th>
                                                         <div class="table_head">
                                                             Durum<i class="fa-solid fa-arrow-up"></i>
@@ -790,6 +790,34 @@
             </div>
 
 
+        </div>
+
+        <div class="modal hidden" id="sms_modal">
+            <div class="inner_modal">
+                <h2>Sms Gönder</h2>
+                <form action="" method="POST" id="sms-form">
+                    <div class="form-group ">
+                        <select name="" id="sms-type-select" required>
+                            <% smsTemplates.forEach(element => { %>
+                                <option value="<%= element.content%>" data-smsName="<%= element.smsName %>"><%= element.smsName %></option>
+                            <% }) %>
+                           
+                        </select>
+                    </div>
+                    
+                  
+                    <div class="form-group">
+                        <span>Mesaj</span>
+                       <textarea name="message_text" id="message_text" required><%= smsTemplates[0].content%></textarea>
+                    </div>
+                
+                   
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn">Gönder</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
 

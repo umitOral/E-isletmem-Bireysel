@@ -38,6 +38,7 @@ import {
   getUsersAllOperations,
   editInformations,
   findUser,
+  sendSingleSmsController,
   findSingleUser,
   findEmployees,
   deactivateEmployee,
@@ -45,7 +46,7 @@ import {
   getUsersAllAppointments,
   getUsersAllSms,
   updateUserNotifications,
-  getUserNotifications
+  getUserNotifications,
 } from "../controller/userController.js";
 import {
   createEmployees,
@@ -73,9 +74,7 @@ import {
   activateSmsTemplate,
   deactivateSmsTemplate,
   editSmsTemplate,
-  sendBulkSms,
-  sendSingleSms,
-  getSmsDetails
+  getSmsDetails,sendReminderSms
 } from "../controller/smsControllers.js";
 
 import {
@@ -127,7 +126,7 @@ import { verifyRoles, checkPriviliges, checkEmployee } from "../middlewares/auth
 import appointmentsRoutes from "./appointmentsRoutes.js";
 import reportsRoutes from "./reportsRoutes.js";
 import staticsRoutes from "./staticsRoutes.js";
-import { checkSmsActive } from "../middlewares/smsMiddleware.js";
+import { checkSmsActive, checksmsBalance } from "../middlewares/smsMiddleware.js";
 
 const router = express.Router();
 
@@ -135,7 +134,10 @@ router.route("/").get(getAdminPage);
 router.route("/santral/:companyId/:phone").get(getSantralPage);
 router.route("/adminControllers/addbulkproducttoGeneral").get(addbulkproducttoGeneral);
 router.route("/adminControllers/topluIslemler").get(topluIslemler);
+
 router.route("/users").get(checkPriviliges("user_view"), getUsersPage);
+router.route("/users/sendSingleSms").post(checkPriviliges("sms_single_send"),checkSmsActive(),checksmsBalance(1), sendSingleSmsController);
+
 
 router.route("/users/findUser").post(checkPriviliges("user_view"), findUser);
 router
@@ -149,7 +151,7 @@ router
   .route("/users/:id/updateUserNotifications")
   .post(updateUserNotifications);
 router.route("/users/:id/getUsersAllAppointments").get(getUsersAllAppointments);
-router.route("/users/:id/getUsersAllSms").get(checkSmsActive(),getUsersAllSms);
+router.route("/users/:id/getUsersAllSms").get(getUsersAllSms);
 
 // employee routes
 router
@@ -297,13 +299,13 @@ router.route("/products/addPassiveProduct").post(checkPriviliges("product_add"),
 
 router.route("/sms").get(checkPriviliges("sms_view"), getSmsPage);
 router.route("/sms/addSmsTemplate").post(checkPriviliges("sms_add"), addSmsTemplate);
+router.route("/sms/sendReminderSms").post(checkPriviliges("sms_single_send"),checkSmsActive(),checksmsBalance(1), sendReminderSms);
 router.route("/sms/:id/activateSmsTemplate").get(checkPriviliges("sms_update"), activateSmsTemplate);
 router.route("/sms/:id/deactivateSmsTemplate").get(checkPriviliges("sms_update"), deactivateSmsTemplate);
 router.route("/sms/:id/editSmsTemplate").post(checkPriviliges("sms_update"), editSmsTemplate);
 
 router.route("/sms/:packageId/getSmsDetails").post(getSmsDetails);
-router.route("/sms/sendBulkSms").post(checkPriviliges("sms_bulk_send"), sendBulkSms);
-router.route("/sms/sendSingleSms").post(checkPriviliges("sms_single_send"),checkSmsActive(), sendSingleSms);
+
 
 
 router.route("/services/:id/editService").post(checkPriviliges("service_update"), editService);

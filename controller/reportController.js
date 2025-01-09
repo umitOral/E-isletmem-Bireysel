@@ -7,7 +7,40 @@ import Product from "../models/productModel.js";
 import { createSmsAuthorization } from "../helpers/smsHelpers.js";
 import { SMS_PACKAGE_STATUS } from "../config/status_list.js";
 import Appointment from "../models/appointmentModel.js";
+import { sendSingleSms } from "./smsControllers.js";
 
+const sendBulkSmsController = async (req, res, next) => {
+  try {
+    let missedPhoneCount = 0;
+    console.log(req.body)
+    for (const user of req.body.users) {
+      await User.findById(user).then(async (response) => {
+        if (response.phone !== "") {
+          req.body.message = req.body.message
+            .replace("{{isim}}", response.name)
+            .replace("{{soyisim}}", response.surname);
+          await sendSingleSms(
+            response,
+            res.locals.company,
+            req.body.message,
+            req.body.messageTitle,
+            res.locals.company.smsConfig.smsTitle
+          ).then((response) => console.log(response));
+        } else {
+          missedPhoneCount = +1;
+        }
+      });
+    }
+
+    res.status(200).json({
+      succes: true,
+      message: "mesajlar gönderildi.eksik numara sayısı:" + missedPhoneCount,
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 const getUserReports = async (req, res, next) => {
   try {
     console.log(req.body);
@@ -292,10 +325,10 @@ const getPaymentReports = async (req, res, next) => {
     if (req.body.cashOrCard !== "") {
       searchObject.cashOrCard = req.body.cashOrCard;
     }
-    if (req.body.employee.length!==0) {
+    if (req.body.employee.length !== 0) {
       searchObject.comissionEmployee = { $in: req.body.employee };
     }
-    if (req.body.users&&req.body.users.length !== 0) {
+    if (req.body.users && req.body.users.length !== 0) {
       searchObject.fromUser = { $in: req.body.users };
     }
 
@@ -309,7 +342,7 @@ const getPaymentReports = async (req, res, next) => {
     // pagination
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    console.log(searchObject)
+    console.log(searchObject);
     let reports = await Payment.find(searchObject)
       .lean()
       .where("createdAt")
@@ -317,7 +350,7 @@ const getPaymentReports = async (req, res, next) => {
       .lt(endDate)
       .populate("fromUser", ["name", "surname"])
       .populate("operations.operationId")
-      .populate("comissionEmployee",["name","surname"])
+      .populate("comissionEmployee", ["name", "surname"])
       .skip(startIndex)
       .limit(limit)
       .sort({ createdAt: -1 });
@@ -393,7 +426,7 @@ const getProductReports = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit)
       .sort({ createdAt: -1 });
-    console.log(reports)
+    console.log(reports);
     let total = await Product.find(searchObject)
       .where("createdAt")
       .gt(startDate)
@@ -440,4 +473,5 @@ export {
   getPaymentReports,
   getProductReports,
   getSmsReports,
+  sendBulkSmsController,
 };

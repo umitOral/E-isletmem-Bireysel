@@ -590,13 +590,13 @@ smallModal.addEventListener("click", (e) => {
   }
   if (e.target.classList.contains("send-reminder-sms")) {
     let data = {
-      userID: selectedAppointmentForEdit.user._id,
-      appointment: selectedAppointmentForEdit,
+      user: selectedAppointmentForEdit.user._id,
+      appointmentId: selectedAppointmentForEdit._id,
     };
     console.log(data)
     request
       .postWithUrl(
-        "./appointments/" + selectedAppointmentForEdit._id + "/sendReminderSms",data
+        "./sms/sendReminderSms",data
       )
       .then((response) => {
         if (response.success === true) {
