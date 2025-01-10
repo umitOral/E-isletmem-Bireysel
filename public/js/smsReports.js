@@ -87,9 +87,6 @@ function datasToTable(data,SMS_PACKAGE_STATUS,pagination) {
       </td>
     
       <td>
-      ${sms.id}
-      </td>
-      <td>
       ${sms.title}
       </td>
       <td>
@@ -98,15 +95,7 @@ function datasToTable(data,SMS_PACKAGE_STATUS,pagination) {
       <td>
       ${sms.senders[0]}
       </td>
-      <td>
-      ${sms.statistics.total}
-      </td>
-      <td>
-      ${sms.statistics.delivered}
-      </td>
-      <td>
-      ${sms.statistics.undelivered}
-      </td>
+      
       <td>
       ${SMS_PACKAGE_STATUS[sms.state]}
       </td>
@@ -205,9 +194,9 @@ function smsDetailsIconHandle() {
         return `
             <div class="form-group "> 
               <h3> 
-                  ${item.target} (${response.SMS_STATUS[item.state]})
+                 
               </h3>
-                 <p style="border:1px solid gray;border-radius:1rem;margin-bottom:0.5rem;background-color:aliceblue;padding:0.5rem;">${item.msg}
+                 <p style="border:1px solid gray;border-radius:1rem;margin-bottom:0.5rem;background-color:aliceblue;padding:0.5rem;"> ${item.target} (${response.SMS_STATUS[item.state]})
                  </p>
             </div>
           

@@ -290,7 +290,7 @@
                                     <div>
                                         <h2>SMSler</h2>
                                     </div>
-                                    <div class=""><button class="btn add normal-btn" id="order_btn">Sms Gönder+</button>
+                                    <div class=""><button class="btn add normal-btn" id="send_sms_btn">Sms Gönder+</button>
                                     </div>
                                     <div class="table-wrapper">
                                         <table class="sms-table">
@@ -301,11 +301,7 @@
                                                             Tarih :<i class="fa-solid fa-arrow-up"></i>
                                                         </div>
                                                     </th>
-                                                    <th>
-                                                        <div class="table_head">
-                                                            Sms Numarası<i class="fa-solid fa-arrow-up"></i>
-                                                        </div>
-                                                    </th>
+                                                 
                                                     <th>
                                                         <div class="table_head">
                                                             Sms Adı<i class="fa-solid fa-arrow-up"></i>
@@ -792,6 +788,33 @@
 
         </div>
 
+        <div class="modal hidden" id="sms_modal_reminder">
+            <div class="inner_modal">
+                <h2> Hatırlatma Sms'i Gönder</h2>
+                <form action="" method="POST" id="sms-form-reminder">
+                    <div class="form-group ">
+                        <select name="" id="sms-type-select-reminder" required disabled>
+                            <% smsTemplatesReminder.forEach(element => { %>
+                                <option value="<%= element.content%>" data-smsName="<%= element.smsName %>"><%= element.smsName %></option>
+                                
+                            <% }) %>
+                           
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <span>Mesaj</span>
+                       <textarea name="message_text" id="message_text_reminder" required><%= smsTemplatesReminder[0].content%></textarea>
+                    </div>
+                
+                   
+                    <div class="form-group">
+                        <button type="submit" class="btn save form-btn">Gönder</button>
+                        <button type="button" class="btn cancel form-btn">Vazgeç</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="modal hidden" id="sms_modal">
             <div class="inner_modal">
                 <h2>Sms Gönder</h2>
@@ -804,12 +827,12 @@
                            
                         </select>
                     </div>
-                    
-                  
+
                     <div class="form-group">
                         <span>Mesaj</span>
                        <textarea name="message_text" id="message_text" required><%= smsTemplates[0].content%></textarea>
                     </div>
+                    <div ><span id="remaining">155</span> Karakter kaldı.</div>
                 
                    
                     <div class="form-group">

@@ -95,6 +95,7 @@ const companySchema = new Schema(
         smsName: {
           type: String,
         },
+        credit: { type: Number, default: 1 },
         type:{type:String, enum:["general","system","reminder"],default:"general"},
         activeorNot: { type: Boolean, default: true },
         content: { type: String },

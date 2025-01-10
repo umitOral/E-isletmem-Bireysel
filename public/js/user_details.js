@@ -20,8 +20,10 @@ const userInformationForm = document.querySelector(
 
 const addPictureForm = document.querySelector("#add_picture_form");
 const editBtn = document.querySelector(".edit-informations-btn");
-
+const smsTypeSelect = document.querySelector("#sms-type-select");
+const messageText = document.querySelector("#message_text");
 const loader = document.querySelector(".loader_wrapper.hidden");
+const remainingText = document.querySelector("#remaining");
 
 const cancelBtns = document.querySelectorAll(".cancel.form-btn");
 const cancelAddPhoto = document.querySelector("#cancel-add-photo");
@@ -41,6 +43,7 @@ let addSessionForm = document.querySelector("#add-session-form");
 let addDiscountForm = document.querySelector("#add-discount-form");
 
 let datasSelectInput = document.querySelector("#datas_select_input");
+let formSmsReminder = document.querySelector("#sms-form-reminder");
 let formSms = document.querySelector("#sms-form");
 
 // modals
@@ -49,6 +52,7 @@ const allModals = document.querySelectorAll(".modal");
 const modalUser = document.querySelector("#modal_user");
 const addDiscountModal = document.querySelector("#add_discount_modal");
 const modalSlider = document.querySelector("#modal_slider");
+const modalSendSmsReminder = document.querySelector("#sms_modal_reminder");
 const modalSendSms = document.querySelector("#sms_modal");
 
 const modalImage = document.querySelector("#modal_image");
@@ -148,12 +152,12 @@ datasSelectInput.addEventListener("change", (e) => {
 });
 
 
-formSms.addEventListener("submit", (e) => {
+formSmsReminder.addEventListener("submit", (e) => {
   e.preventDefault();
 
   let data={
     user:window.location.pathname.split("/").pop(),
-    appointmentId:formSms.dataset.appointmentid
+    appointmentId:formSmsReminder.dataset.appointmentid
   }
   console.log(data)
   request
@@ -161,7 +165,27 @@ formSms.addEventListener("submit", (e) => {
     .then((response) => {
       console.log(response);
       ui.showNotification(response.success, response.message);
+      modalSendSmsReminder.classList.add("hidden");
+    })
+    .catch((err) => {
+      console.log(err);
+      ui.showNotification(false, err.message);
+    });
+})
+formSms.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let data={
+    messageTitle:smsTypeSelect.options[smsTypeSelect.selectedIndex].dataset.smsname,
+    messageContent:messageText.value,
+    userId:window.location.pathname.split("/").pop(),
+  }
+    request
+    .postWithUrl("./sendSingleSms",data)
+    .then((response) => {
+      console.log(response);
+      ui.showNotification(response.success, response.message);
       modalSendSms.classList.add("hidden");
+      getAllSms()
     })
     .catch((err) => {
       console.log(err);
@@ -614,6 +638,8 @@ showSmsBtn.addEventListener("click", () => {
   getAllSms();
 });
 
+
+
 function getAllSms() {
   console.log("sms");
   request
@@ -641,9 +667,6 @@ function getAllSms() {
               })}
           </td>
         
-          <td>
-          ${sms.id}
-          </td>
           <td>
           ${sms.title}
           </td>
@@ -832,9 +855,14 @@ function getAllOperations() {
 // order modal processes
 
 const orderModalBtn = document.querySelector("#order_btn");
+const sendSmsBtn = document.querySelector("#send_sms_btn");
 
 orderModalBtn.addEventListener("click", () => {
   modalOrders.classList.remove("hidden");
+});
+
+sendSmsBtn.addEventListener("click", () => {
+  modalSendSms.classList.remove("hidden");
 });
 
 // add order section
@@ -1371,8 +1399,8 @@ function handleAppointmentEditBtn() {
       }
 
       if (e.target.options[e.target.options.selectedIndex].value==="send-reminder-sms") {
-        modalSendSms.classList.remove("hidden");
-        formSms.dataset.appointmentid=appointmentID;
+        modalSendSmsReminder.classList.remove("hidden");
+        formSmsReminder.dataset.appointmentid=appointmentID;
       }
       if (
         e.target.options[e.target.options.selectedIndex].classList.contains(
@@ -1747,3 +1775,32 @@ function accordionHandle(params) {
   });
   }
 }
+
+
+smsTypeSelect.addEventListener("change", (e) => {
+  console.log("xx")
+  messageText.value = e.target.value;
+  remainingText.textContent=calculateRemainingText(e.target.value);
+});
+
+
+
+messageText.addEventListener("keyup", (e) => {
+  let maksChar=calculateRemainingText(e.target.value);
+  remainingText.textContent = maksChar;
+})
+
+
+function calculateRemainingText  (textAreaValue) {
+  const turkishChar=["ç", "ğ" , "ı" ,"ş" , "Ğ" , "İ" , "Ş" , "Ç"]
+  let maksChar=140
+
+  textAreaValue.split("").forEach((char) => {
+    if (turkishChar.includes(char)) {
+      maksChar -= 2;
+    }else{
+      maksChar-=1
+    }
+  })
+  return maksChar
+};

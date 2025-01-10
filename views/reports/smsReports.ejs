@@ -34,11 +34,11 @@
 
                             <div class="form-group">Gönderim tarihi Başlangıç:
                                 <input type="datetime-local" name="startDate" class="startDate"
-                                    value="" required>
+                                value="<%= new Date().toISOString().substr(0, 10)+"T00:00" %>">
                             </div>
                             <div class="form-group">Gönderim tarihi Bitiş:
                                 <input type="datetime-local" name="endDate" class=""
-                                    value="" required>
+                                value="<%= new Date().toISOString().substr(0, 10)+"T23:59" %>">
                             </div>
 
                             <div class="form-group" style="align-self: end;">
@@ -92,11 +92,7 @@
                                         Tarih :<i class="fa-solid fa-arrow-up"></i>
                                     </div>
                                 </th>
-                                <th>
-                                    <div class="table_head">
-                                        Sms id<i class="fa-solid fa-arrow-up"></i>
-                                    </div>
-                                </th>
+                                
                                 <th>
                                     <div class="table_head">
                                         Sms Adı<i class="fa-solid fa-arrow-up"></i>
@@ -113,7 +109,7 @@
                                     </div>
                                 </th>
                               
-                                <th>
+                                <!-- <th>
                                     <div class="table_head">
                                         <i class="fa-solid fa-cart-arrow-down" title="Mesaj Sayısı" style="color: rgb(138, 189, 255);font-size: 1rem;"></i>
                                     </div>
@@ -127,7 +123,7 @@
                                     <div class="table_head">
                                         <i class="fa-solid fa-xmark" title="İletilemeyen" style="color: rgb(254, 100, 100);font-size: 1rem;"></i>
                                     </div>
-                                </th>
+                                </th> -->
                                 <th>
                                     <div class="table_head">
                                         Durum<i class="fa-solid fa-arrow-up"></i>

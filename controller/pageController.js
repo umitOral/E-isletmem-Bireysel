@@ -319,7 +319,7 @@ const getSantralPage = async (req, res, next) => {
 
 const getUsersPage = async (req, res, next) => {
   try {
-    console.log("burası");
+    console.log("users page");
     //pagination
 
     let limit = 10;
@@ -331,9 +331,13 @@ const getUsersPage = async (req, res, next) => {
       .limit(limit)
       .sort({ updatedAt: -1 });
 
-      let smsTemplates= res.locals.company.smsTemplates.filter((item)=>item.type==="general")
       
-      console.log(smsTemplates)
+
+      const smsTemplates = res.locals.company.smsTemplates.filter(
+        (item) => item.activeorNot === true && item.type === 'general'
+      );
+      
+     
     res.status(200).render("users", {
       users,
       smsTemplates,
@@ -761,13 +765,18 @@ const getPaymentsPage = async (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getUserPage = async (req, res, next) => {
+const getUserDetailsPage = async (req, res, next) => {
   try {
     const singleUser = await User.findById(req.params.id);
-    let smsTemplates=res.locals.company.smsTemplates.filter(item=>item.type==="reminder")
+    let smsTemplates=res.locals.company.smsTemplates.filter(item=>item.type==="general")
+    const smsTemplatesReminder = res.locals.company.smsTemplates.filter(
+      (item) => item.activeorNot === true && item.type === 'reminder'
+    );
     res.status(200).render("user-details", {
       moment,
       singleUser,
+      smsTemplatesReminder,
+      smsTemplates,
       link: "users",
       smsTemplates
     });
@@ -820,7 +829,7 @@ export {
   getUsersPage,
   getAboutUsPage,
   getAppointmentsPage,
-  getUserPage,
+  getUserDetailsPage,
   getservicesPage,
   getEmployeesPage,
   resetPasswordPage,

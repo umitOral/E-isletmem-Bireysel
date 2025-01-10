@@ -17,7 +17,7 @@ const addCustomerButton = document.querySelector(".add_customer_btn");
 const messageText = document.querySelector("#message_text");
 const modalCustomerAdd = document.querySelector("#add_customer");
 const modalSms = document.querySelector("#sms_modal");
-
+const remainingText = document.querySelector("#remaining");
 eventListeners();
 function eventListeners() {
   form.addEventListener("submit", createUser);
@@ -130,11 +130,15 @@ optionsSelects.forEach((element) => {
 
 smsTypeSelect.addEventListener("change", (e) => {
   messageText.value = e.target.value;
+  remainingText.textContent=calculateRemainingText(e.target.value);
 });
 
 formSms.addEventListener("submit", (e) => {
   e.preventDefault();
- 
+  if (remainingText.textContent < 0) {
+    ui.showNotification(false, "karakter sınırını aştınız");
+    return;
+  }
   let data={
     messageTitle:smsTypeSelect.options[smsTypeSelect.selectedIndex].dataset.smsname,
     messageContent:messageText.value,
@@ -155,3 +159,26 @@ formSms.addEventListener("submit", (e) => {
     ui.showNotification(false,err.message)
   })
 });
+
+
+function calculateRemainingText  (textAreaValue) {
+  const turkishChar=["ç", "ğ" , "ı" ,"ş" , "Ğ" , "İ" , "Ş" , "Ç"]
+  let maksChar=140
+
+  textAreaValue.split("").forEach((char) => {
+    if (turkishChar.includes(char)) {
+      maksChar -= 2;
+    }else{
+      maksChar-=1
+    }
+  })
+  return maksChar
+};
+
+
+
+
+messageText.addEventListener("keyup", (e) => {
+  let maksChar=calculateRemainingText(e.target.value);
+  remainingText.textContent = maksChar;
+})

@@ -120,6 +120,7 @@ const editSmsTemplate = async (req, res, next) => {
       {
         $set: {
           "smsTemplates.$[xxx].content": req.body.content,
+          "smsTemplates.$[xxx].credit": req.body.credit,
         },
       },
       {

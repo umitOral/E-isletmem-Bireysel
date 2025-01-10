@@ -7,7 +7,7 @@ import {
   getSantralPage,
   getUsersPage,
   getAppointmentsPage,
-  getUserPage,
+  getUserDetailsPage,
   getSingleEmployeePage,
   getEmployeeSelfPage,
   getservicesPage,
@@ -143,7 +143,7 @@ router.route("/users/findUser").post(checkPriviliges("user_view"), findUser);
 router
   .route("/users/search/findSingleUser")
   .get(checkPriviliges("user_view"), findSingleUser);
-router.route("/users/:id").get(checkPriviliges("user_view"), getUserPage);
+router.route("/users/:id").get(checkPriviliges("user_view"), getUserDetailsPage);
 router
   .route("/users/:id/uploadpictures")
   .post(checkPriviliges("user_update"), uploadPictures);

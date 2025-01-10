@@ -5,6 +5,7 @@
     <%- include('partials/head.ejs') %>
         <link rel="stylesheet" href="/css/users.css">
         <link rel="stylesheet" href="/css/services.css">
+		
 
 </head>
 
@@ -58,9 +59,9 @@
 
                                 <th>sms adı<i class="fa-solid fa-arrow-up"></i></th>
                                 <th>sms içeriği<i class="fa-solid fa-arrow-up"></i></th>
-                               
-                                <th>Aktiflik<i class="fa-solid fa-arrow-up"></i></th>
-                                <th></th>
+                                <th style="width: 10px;">sms Uzunluğu(maks 140)<i class="fa-solid fa-arrow-up"></i></th>
+                                <th style="width: 10px;">Aktiflik<i class="fa-solid fa-arrow-up"></i></th>
+                                
                             </thead>
                             <tbody>
                                 <% smsTemplates.forEach(sms=> { %>
@@ -79,11 +80,16 @@
                                                 
                                                 <i class="ph ph-floppy-disk input_save_buttons"></i>
                                             </div>
-                                            
+                                        </td>
+                                        <td data-smsContent="smsCredit" class="form-group">
+                                            <div class="inputs">
+                                                <input type="text" name="credit" class="" value="<%= sms.credit %>" readonly>
+                                                
+                                            </div>
                                         </td>
                                         
                                         
-                                        <td>
+                                        <td style="white-space: nowrap;">
                                             <div class="inputs">
                                                 <% if(sms.activeorNot===true){ %>
                                                     <span class="continue">Aktif</span>
@@ -139,7 +145,7 @@
                         <textarea name="content" id="sms-content" required placeholder="sevgili {{isim}}"></textarea>
                     </div>
                   
-                  
+                   <div ><span id="remaining">155</span> Karakter kaldı.</div>
                     <div class="form-group">
                         <button type="submit" class="btn save form-btn" id="add-sms">Kaydet</button>
                         <button type="button" class="btn cancel form-btn">Vazgeç</button>
@@ -154,6 +160,7 @@
         <script type="module" src="/js/main.js"></script>
         <script src="/js/sidebar.js"></script>
         <script type="module" src="/js/sms.js"></script>
+        
 
 
 

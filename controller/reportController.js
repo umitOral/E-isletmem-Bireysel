@@ -244,7 +244,7 @@ const getAppointmentReports = async (req, res, next) => {
 };
 const getSmsReports = async (req, res, next) => {
   try {
-    console.log("payment reports");
+    console.log("sms reports");
 
     const authorization = await createSmsAuthorization(res.locals.company);
     req.body.page -= 1;
@@ -271,7 +271,7 @@ const getSmsReports = async (req, res, next) => {
           smsReport = response.data;
         }
       });
-    console.log(smsReport);
+    console.log(smsReport.data);
 
     // pagination
     const startIndex = (page - 1 + 1) * limit;
@@ -296,7 +296,6 @@ const getSmsReports = async (req, res, next) => {
         page: page + 2,
       };
     }
-    console.log(pagination);
 
     res.status(200).json({
       success: true,

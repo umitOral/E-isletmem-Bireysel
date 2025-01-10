@@ -87,7 +87,7 @@ const getUsersAllSms = async (req, res, next) => {
       })
       .then(async (response) => {
         console.log("deneme");
-        console.log(response.data.data);
+        console.log(response.data);
         // console.log(response.data);
         // console.log(response.err);
         if (!response.data.err) {
