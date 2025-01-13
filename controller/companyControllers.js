@@ -224,19 +224,20 @@ const addCompanyPayment = async (req, res, next) => {
       conversationId: id,
       price: price.toString(),
       basketId: `basket-${Date.now()}`,
-      paymentGroup: "PRODUCT",
+      
       buyer: {
         id: company._id.toString(),
         name: employee.name,
         surname: employee.surname,
         identityNumber: company.VKN,
         email: company.email,
+        gsmNumber: company.phone,
         registrationAddress: company.address.address,
         city: company.address.city,
         country: "TR",
         ip:"85.34.78.112",
       },
-      shippingAddress: {},
+      
       billingAddress: {
         address: company.billingAddress.address,
         contactName: employee.name,
@@ -254,11 +255,11 @@ const addCompanyPayment = async (req, res, next) => {
         },
       ],
       enabledInstallments: [1],
-      callbackUrl: "http://localhost:3004/admin/companyPaymentPage",
+      callbackUrl: "http://localhost:3004/handlePaymentCallback",
       currency: "TRY",
       paidPrice: price.toString(),
     };
-  //  console.log(data);
+  
 
     var iyzipay = new Iyzipay({
       apiKey: process.env.IYZICO_API_KEY,
@@ -266,9 +267,7 @@ const addCompanyPayment = async (req, res, next) => {
       uri: "https://api.iyzipay.com"
     });
    
-    console.log('API Key:', process.env.IYZICO_API_KEY);
-    console.log('Secret Key:', process.env.IYZICO_SECRET_KEY?.substring(0, 5) + '...'); // Güvenlik için tamamını yazdırmıyoruz
-    console.log('Request Data:', JSON.stringify(data, null, 2));
+
    
 
     iyzipay.checkoutFormInitialize.create(
@@ -293,12 +292,12 @@ const addCompanyPayment = async (req, res, next) => {
             
           }
          
-          
+          // @@ GOTO
           // await orderSuccesEmail(result)
           res.json({
-            success: result.status,
-            message: result.errorMessage,
-            data: result.paymentPageUrl,
+            success: true,
+            message: "ödeme ekranına yönlendiriliyorsunuz",
+            data: result,
           });
         }
 
@@ -314,7 +313,7 @@ const addCompanyPayment = async (req, res, next) => {
   }
 };
 
-const companyPaymentResult = async (req, res, next) => {
+const handlePaymentCallback = async (req, res, next) => {
   try {
     console.log("önemli");
     console.log(req.body);
@@ -331,22 +330,34 @@ const companyPaymentResult = async (req, res, next) => {
       {
         locale: Iyzipay.LOCALE.TR,
         conversationId: subscription.conversationId,
-        token: subscription.token,
+        token: req.body.token,
       },
       async (err, result) => {
         if (err) {
-          console.log(err);
+          return res.status(500).json({
+            success: false,
+            message: "Ödeme doğrulama hatası",
+            error: err
+          });
         } else {
-          await Subscription.findOneAndUpdate(
-            { conversationId: subscription.conversationId },
-            {
-              status: "success",
-            }
-          );
+          subscription.status = result.paymentStatus;
+          subscription.errorMessage = result.errorMessage;
+          console.log(result);
+          console.log("x") 
+          await subscription.save()
 
-          addSubscription(subscription);
+          const redirectUrl = `/payment-result?status=${result.status}&message=${result.errorMessage || 'Ödeme başarılı'}`;
 
-          res.redirect("admin/companyPaymentsList");
+          // addSubscription(subscription);
+
+          res.send(`
+            <script>
+              window.parent.postMessage({
+                status: '${result.status}',
+                message: '${result.errorMessage || 'Ödeme başarılı'}'
+              }, '*');
+            </script>
+          `);
         }
       }
     );
@@ -411,11 +422,21 @@ const updateCompanyNotification = async (req, res, next) => {
   }
 };
 
+const handlePaymentResult = async (req, res) => {
+  const { status, message } = req.query;
+  console.log("xyxy:"+status+message);
+  res.json({
+    success: status === 'success',
+    message: message
+  });
+};
+
 export {
   updateCompanyPassword,
+  handlePaymentResult,
   updateCompanyInformations,
   addCompanyPayment,
-  companyPaymentResult,
+  handlePaymentCallback,
   createCompany,
   updateSmsConfig,
   updateCompanyDocs,

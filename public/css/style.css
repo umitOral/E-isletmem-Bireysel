@@ -284,6 +284,19 @@ hr {
 .form-group.vertical {
   width: max-content;
 }
+dialog{
+  left: 0;
+  border: 1px solid rgba(128, 128, 128, 0.584);
+  border-radius: 1rem;
+  padding: 4rem 6rem;
+  text-align: center;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  
+  z-index: 999;
+  
+}
 .form-group.horizontal select {
   padding: 0.7rem;
 }

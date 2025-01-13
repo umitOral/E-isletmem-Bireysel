@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import moment from "moment";
 import fs from "fs";
 import Employee from "../models/EmployeesModel.js";
+
 import { COMPANY_DOCS, DOC_STATUS } from "../config/status_list.js";
 
 import Sessions from "../models/appointmentModel.js";
@@ -719,12 +720,16 @@ const getSettingsPage = (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const companyPaymentPage = (req, res, next) => {
+const companyPaymentPage = async(req, res, next) => {
   try {
     const user = res.locals.company;
+    let subscriptions=await Subscription.find({ company: user._id, status:"SUCCESS"})
+    console.log(subscriptions)
     res.status(200).render("companyPaymentPage", {
       link: "companyPaymentPage",
       user,
+      activeSubscription:subscriptions.length>0?subscriptions[0]:null,
+      passiveSubscriptions:subscriptions.length>1?subscriptions.slice(1):[]
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -749,11 +754,13 @@ const getPaymentsPage = async (req, res, next) => {
   try {
     const users = await User.find({ company: res.locals.company._id });
     const employees = await Employee.find({ company: res.locals.company._id });
+  
 
     res.status(200).render("payments", {
       link: "payments",
       users: users,
       employees,
+      subscriptions
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));

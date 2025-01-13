@@ -19,7 +19,13 @@ const SubscribtionSchema = new Schema(
     paymentDuration:{
       type:Number
     },
+    userCount:{
+      type:Number
+    },
     paymentTransactionId: {
+      type: String,
+    },
+    errorMessage: {
       type: String,
     },
     systemTime: {
@@ -34,7 +40,7 @@ const SubscribtionSchema = new Schema(
     authorization: {
       type: String,
     },
-    randmKey: {
+    randomKey: {
       type: String,
     }
     

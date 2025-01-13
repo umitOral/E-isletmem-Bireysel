@@ -24,7 +24,6 @@ const closeButton = document.querySelector("dialog span");
 console.log(closeButton);
 closeButton.addEventListener("click", () => {
   dialog.close();
-
 });
 
 
