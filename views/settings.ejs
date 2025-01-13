@@ -63,7 +63,7 @@
                                             readonly>
                                     </div>
                                     <div class="form-group ">
-                                        <span>Şirket İsmi:</span>
+                                        <span>Şirket Adı(Vergi Levhasındaki):</span>
                                         <input type="text" name="companyName" id="surname"
                                             value="<%= company.companyName %>" readonly>
                                     </div>
@@ -77,23 +77,39 @@
                                         <span>Telefon:</span>
                                         <input type="text" name="phone"  value="<%= company.phone %>" readonly>
                                     </div>
+                                    <div class="form-group ">
+                                        <span>Vergi Kimlik Numarası(Vergi Levhasındaki):</span>
+                                        <input type="number" name="VKN"  value="<%= company.VKN %>" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <fieldset class="vertical">
+                                            <legend>Adres Bilgileri:</legend>
+                                            <span>Adres:</span>
+                                        <input type="text" name="address" value="<%= company.address.address %>" readonly>
+                                        <span>Şehir:</span>
+                                        <input type="text" name="city" value="<%= company.address.city %>" readonly>
+                                        </fieldset>
+                                    </div>
+                                    
+                                 
 
                                     <div class="form-group">
-                                        <span>Adres:</span>
-                                        <input type="text" name="address" value="<%= company.address %>" readonly>
+                                        <fieldset class="vertical">
+                                            <legend>Fatura Adresi</legend>
+                                            <span>Adres:</span>
+                                        <input type="text" name="address" value="<%= company.billingAddress.address %>" readonly>
+                                        <span>Şehir:</span>
+                                        <input type="text" name="city" value="<%= company.billingAddress.city %>" readonly>
+                                        </fieldset>
                                     </div>
                                     <div class="form-group">
-                                        <span>Fatura Adresi:</span>
-                                        <input type="text" name="billingAddress" value="<%= company.billingAddress %>"
-                                            readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <span>Başlangıç Saati:</span>
+                                        <span>Randevu Başlangıç Saati:</span>
                                         <input type="text" name="workHours"
                                             value="<%=locals.company.workHours.workStart %>" readonly>
                                     </div>
                                     <div class="form-group">
-                                        <span>Bitiş Saati:</span>
+                                        <span>Randevu Bitiş Saati:</span>
                                         <input type="text" name="workHours"
                                             value="<%= locals.company.workHours.workEnd%>" readonly>
                                     </div>
@@ -230,7 +246,7 @@
                         <input type="text" name="brandName"  value="<%= company.brandName %>">
                     </div>
                     <div class="form-group ">
-                        <span>Şirket Adı:</span>
+                        <span>Şirket Adı(Vergi Levhasındaki):</span>
                         <input type="text" name="companyName"  value="<%= company.companyName %>">
                     </div>
     
@@ -245,31 +261,61 @@
                         <input type="text" name="phone"  value="<%= company.phone %>">
                     </div>
                     <div class="form-group ">
-                        <span>Adres</span>
-                        <input type="text" name="address" value="<%= company.address %>"
-                            placeholder="<%= company.address %>">
+                        <span>Vergi Kimlik Numarası(Vergi Levhasındaki):</span>
+                        <input type="number" name="VKN"  value="<%= company.VKN %>">
                     </div>
-                    <div class="form-group ">
-                        <span>Fatura Adresi:</span>
-                        <textarea name="billingAddress" cols="70" rows="2"><%= company.billingAddress %></textarea>
+                   
+                    <div class="form-group">
+                        <fieldset class="vertical">
+                            <legend>Adres Bilgileri</legend>
+                            <label for="address">Adres:</label>
+                            <input name="address[address]" id="" value="<%= company.address.address %>"></input>
+                            <label for="city">Şehir:</label>
+                            <select name="address[city]" id="">
+                                <option value="<%= company.address.city %>" selected><%= company.address.city %></option>
+                                <% CITIES.forEach(element => { %>
+                                    <option value="<%= element.name %>"><%= element.name %></option>
+                                <% }) %>
+                            </select>
+                          </fieldset>
                     </div>
+                    <div class="form-group">
+                        <fieldset class="vertical">
+                            <legend>Fatura Bilgileri</legend>
+                            <label for="address">Adres:</label>
+                            <input type="text" name="billingAddress[address]" value="<%= company.billingAddress.address %>"placeholder="<%= company.billingAddress.address %>">
+                            <label for="city">Şehir:</label>
+                            <select name="billingAddress[city]" id="">
+                                <option value="<%= company.city %>" selected><%= company.billingAddress.city %></option>
+                                <% CITIES.forEach(element => { %>
+                                    <option value="<%= element.name %>"><%= element.name %></option>
+                                <% }) %>
+                            </select>
+                          </fieldset>
+                    </div>
+                
     
-                    <div class="form-group ">
-                        <span>Başlangıç Saati:</span>
-                        <input type="time" name="workStart" value="<%= locals.company.workHours.workStart%>">
-                        <span>Bitiş Saati:</span>
-                        <input type="time" name="workEnd"  value="<%=locals.company.workHours.workEnd %>">
-                        <span>Seans aralığı:</span>
-                        <select name="workPeriod" >
-                            <option value="<%=locals.company.workHours.workPeriod %>" selected><%=locals.company.workHours.workPeriod %>dk</option>
-                            <option value="10">10dk</option>
-                            <option value="15">15dk</option>
-                            <option value="20">20dk</option>
-                            <option value="30">30dk</option>
-                            <option value="60">60dk</option>
-                        </select>
-    
+                  
+                    <div class="form-group">
+                        <fieldset class="vertical">
+                            <legend>Çalışma Saatleri</legend>
+                            <label for="workStart">Başlangıç Saati:</label>
+                            <input type="time" id="workStart" name="workHours[workStart]" value="<%= locals.company.workHours.workStart%>" />
+                            <label for="workEnd">Bitiş Saati:</label>
+
+                            <input type="time" id="workEnd" name="workHours[workEnd]" value="<%=locals.company.workHours.workEnd %>" />
+                            <label for="workPeriod">Seans aralığı:</label>
+                            <select name="workHours[workPeriod]" >
+                                <option value="<%=locals.company.workHours.workPeriod %>" selected><%=locals.company.workHours.workPeriod %>dk</option>
+                                <option value="10">10dk</option>
+                                <option value="15">15dk</option>
+                                <option value="20">20dk</option>
+                                <option value="30">30dk</option>
+                                <option value="60">60dk</option>
+                            </select>
+                          </fieldset>
                     </div>
+                   
     
     
                     <button type="submit" class="btn save form-btn" id="edit-user">Kaydet</button>

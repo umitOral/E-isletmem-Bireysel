@@ -18,6 +18,7 @@ import Iyzipay from "iyzipay";
 
 import { v4 as uuidv4 } from "uuid";
 import { NOTIFICATIONS } from "../config/notifications.js";
+import User from "../models/userModel.js";
 
 const createCompany = async (req, res, next) => {
   try {
@@ -57,9 +58,7 @@ const createCompany = async (req, res, next) => {
     data.permissions = role_privileges.privileges.map(
       (privilege, value) => privilege.key
     );
-    data.notifications = NOTIFICATIONS.map(
-      (item, value) => item.key
-    );
+    data.notifications = NOTIFICATIONS.map((item, value) => item.key);
 
     await Employee.create(data);
     let subscriptionData = {
@@ -105,14 +104,26 @@ const updateCompanyPassword = async (req, res, next) => {
 };
 const updateCompanyInformations = async (req, res, next) => {
   try {
-    req.body.workHours = {
-      workStart: req.body.workStart,
-      workEnd: req.body.workEnd,
-      workPeriod: req.body.workPeriod,
+    console.log("updateCompanyInformations");
+    console.log(req.body);
+    req.body.address = {
+      address: req.body["address[address]"],
+      city: req.body["address[city]"],
     };
 
-    await Company.findByIdAndUpdate(req.params.id, req.body);
+    req.body.billingAddress = {
+      address: req.body["billingAddress[address]"],
+      city: req.body["billingAddress[city]"],
+    };
 
+    req.body.workHours = {
+      workStart: req.body["workHours[workStart]"],
+      workEnd: req.body["workHours[workEnd]"],
+      workPeriod: req.body["workHours[workPeriod]"],
+    };
+
+    let result = await Company.findByIdAndUpdate(req.params.id, req.body);
+    console.log(result);
     res.json({
       succes: true,
       message: "bilgiler başarıyla değiştirildi.",
@@ -197,100 +208,117 @@ const updateCompanyDocs = async (req, res, next) => {
 const addCompanyPayment = async (req, res, next) => {
   try {
     // TODO
-
+    console.log("addCompanyPayment");
+    console.log(req.body);
+    console.log(req.params);
     const id = uuidv4();
-    const company = await Company.findOne({ _id: res.locals.company._id });
-
-    const { price, paymentDuration } = req.body;
-    console.log(price);
+    const company = res.locals.company;
+    const employee = res.locals.employee;
+    console
+    //req.body= { type: 'subscription', price: 750, paymentDuration: '1' }
+    const { paymentDuration } = req.body;
+    let price = 1;
+    
     let data = {
       locale: "tr",
       conversationId: id,
-      price: price,
-      basketId: "B67832",
+      price: price.toString(),
+      basketId: `basket-${Date.now()}`,
       paymentGroup: "PRODUCT",
       buyer: {
-        id: "BY789",
-        name: "John",
-        surname: "Doe",
-        identityNumber: "74300864791",
-        email: "email@email.com",
-        gsmNumber: "+905350000000",
-        registrationDate: "2013-04-21 15:12:09",
-        lastLoginDate: "2015-10-05 12:43:35",
-        registrationAddress:
-          "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-        city: "Istanbul",
-        country: "Turkey",
-        zipCode: "34732",
-        ip: "85.34.78.112",
+        id: company._id.toString(),
+        name: employee.name,
+        surname: employee.surname,
+        identityNumber: company.VKN,
+        email: company.email,
+        registrationAddress: company.address.address,
+        city: company.address.city,
+        country: "TR",
+        ip:"85.34.78.112",
       },
-      shippingAddress: {
-        address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-        zipCode: "34742",
-        contactName: "Jane Doe",
-        city: "Istanbul",
-        country: "Turkey",
-      },
+      shippingAddress: {},
       billingAddress: {
-        address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-        zipCode: "34742",
-        contactName: "Jane Doe",
-        city: "Istanbul",
-        country: "Turkey",
+        address: company.billingAddress.address,
+        contactName: employee.name,
+        city: company.billingAddress.city,
+        country: "TR",
       },
       basketItems: [
         {
           id: "BI101",
-          price: price,
+          price: price.toString(),
           name: "Binocular",
           category1: "Collectibles",
           category2: "Accessories",
-          itemType: "PHYSICAL",
+          itemType: "VIRTUAL",
         },
       ],
-      enabledInstallments: [1, 2, 3, 6, 9],
-      callbackUrl: " http://localhost:3004/companyPaymentResultPage",
+      enabledInstallments: [1],
+      callbackUrl: "http://localhost:3004/admin/companyPaymentPage",
       currency: "TRY",
-      paidPrice: price,
+      paidPrice: price.toString(),
     };
+  //  console.log(data);
 
     var iyzipay = new Iyzipay({
       apiKey: process.env.IYZICO_API_KEY,
       secretKey: process.env.IYZICO_SECRET_KEY,
-      uri: "https://api.iyzipay.com",
+      uri: "https://api.iyzipay.com"
     });
+   
+    console.log('API Key:', process.env.IYZICO_API_KEY);
+    console.log('Secret Key:', process.env.IYZICO_SECRET_KEY?.substring(0, 5) + '...'); // Güvenlik için tamamını yazdırmıyoruz
+    console.log('Request Data:', JSON.stringify(data, null, 2));
+   
 
-    iyzipay.checkoutFormInitialize.create(data, async function (err, result) {
-      if (err) {
-        console.log(err);
-      } else {
-        let data = {
-          company: res.locals.company,
-          amount: price,
-          paymentDuration: paymentDuration,
-          systemTime: result.systemTime,
-          conversationId: result.conversationId,
-          token: result.token,
-        };
-        await Subscription.create(data);
-        await orderSuccesEmail(result)
-        res.json({
-          success: true,
-          message: "ödeme sayfasına yönlendiriliyorsunuz.",
-          data: result.paymentPageUrl,
-        });
+    iyzipay.checkoutFormInitialize.create(
+      data,
+      async function (err, result) {
+        if (err) {
+
+          return next(new CustomError("ödeme sunucusunda hata oluştu", 500, err));
+        }else{
+          console.log("result");
+          console.log(result);
+          if (result.status === "success") {
+            let data = {
+              company: res.locals.company,
+              amount: price,
+              paymentDuration: paymentDuration,
+              systemTime: result.systemTime,
+              conversationId: result.conversationId,
+              token: result.token,
+            };
+            await Subscription.create(data);
+            
+          }
+         
+          
+          // await orderSuccesEmail(result)
+          res.json({
+            success: result.status,
+            message: result.errorMessage,
+            data: result.paymentPageUrl,
+          });
+        }
+
       }
-    });
+    );
 
     
+    
+    
   } catch (error) {
+    console.log(error);
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
 const companyPaymentResult = async (req, res, next) => {
   try {
+    console.log("önemli");
+    console.log(req.body);
+    console.log(req.params);
     const subscription = await Subscription.findOne({ token: req.body.token });
 
     var iyzipay = new Iyzipay({
@@ -307,7 +335,7 @@ const companyPaymentResult = async (req, res, next) => {
       },
       async (err, result) => {
         if (err) {
-          // console.log(err);
+          console.log(err);
         } else {
           await Subscription.findOneAndUpdate(
             { conversationId: subscription.conversationId },
@@ -315,12 +343,10 @@ const companyPaymentResult = async (req, res, next) => {
               status: "success",
             }
           );
+
           addSubscription(subscription);
-          res.status(200).render("front/companyPaymentResultPage", {
-            success: true,
-            link: "companyPaymentResultPage",
-            message: "ödemeniz başarıyla alınmıştır.",
-          });
+
+          res.redirect("admin/companyPaymentsList");
         }
       }
     );
@@ -360,15 +386,16 @@ async function addSubscription(subscription) {
   }
 }
 
-
 const updateCompanyNotification = async (req, res, next) => {
   console.log(req.body);
   try {
     let company = await Company.findById(res.locals.company._id);
     if (company.notifications.includes(req.body.notificationkey)) {
-      company.notifications = company.notifications.filter((x) => x !== req.body.notificationkey);
+      company.notifications = company.notifications.filter(
+        (x) => x !== req.body.notificationkey
+      );
     } else {
-      company.notifications.push(req.body.notificationkey)
+      company.notifications.push(req.body.notificationkey);
     }
 
     console.log(company.notifications);
@@ -392,5 +419,5 @@ export {
   createCompany,
   updateSmsConfig,
   updateCompanyDocs,
-  updateCompanyNotification
+  updateCompanyNotification,
 };

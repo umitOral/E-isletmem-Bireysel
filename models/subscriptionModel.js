@@ -23,7 +23,7 @@ const SubscribtionSchema = new Schema(
       type: String,
     },
     systemTime: {
-      type: String,
+      type: String, default: Date.now()
     },
     conversationId: {
       type: String,

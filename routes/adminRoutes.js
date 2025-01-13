@@ -240,6 +240,7 @@ router.route("/payments/addPayment").post(addPayment);
 router.route("/payments/addExpense").post(addExpense);
 
 router.route("/companyPaymentPage").get(companyPaymentPage);
+
 router.route("/companyPaymentsList").get(companyPaymentsListPage);
 
 router.route("/addCompanyPayment").post(addCompanyPayment);

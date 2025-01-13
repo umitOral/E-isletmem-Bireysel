@@ -251,7 +251,7 @@ const sendErrorEmail = async (err) => {
     console.log(error);
   }
 };
-const orderSuccesEmail = async (request) => {
+const orderSuccesEmail = async (data) => {
   try {
     const transporter = createTransport({
       host: process.env.EMAIL_SMTP,

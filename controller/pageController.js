@@ -27,6 +27,8 @@ import { getTenantDb } from "./db.js";
 import { BRAND_LIST } from "../config/brands.js";
 import { sendRegisterMail } from "./mailControllers.js";
 import Appointment from "../models/appointmentModel.js";
+import CITIES from "../config/cities.js";
+import { Console } from "console";
 
 let now = new Date();
 let day = now.getDate();
@@ -103,15 +105,7 @@ const getLoginPage = (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getcompanyPaymentResult = (req, res, next) => {
-  try {
-    res.status(200).render("front/companyPaymentResultPage", {
-      link: "login",
-    });
-  } catch (error) {
-    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
-  }
-};
+
 const getAboutUsPage = (req, res, next) => {
   try {
     res.status(200).render("front/about-us", {
@@ -713,11 +707,11 @@ const getSettingsPage = (req, res, next) => {
         finishedDocs[finishedDocs.length - 1].name = element.name;
       }
     });
-
     res.status(200).render("settings", {
       DOC_STATUS,
       finishedDocs,
       missedDocs,
+      CITIES: CITIES,
       link: "settings",
       company,
     });
@@ -844,7 +838,7 @@ export {
   getSingleEmployeePage,
   getDatasPage,
   deneme,
-  getcompanyPaymentResult,
+  
   getProductsPage,
   getAppointmentReportsPage,
   getUserReportsPage,

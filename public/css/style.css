@@ -287,6 +287,13 @@ hr {
 .form-group.horizontal select {
   padding: 0.7rem;
 }
+.form-group.horizontal fieldset {
+  padding: 0.5rem;
+  border: var(--border-style-1);
+}
+ fieldset legend {
+  font-weight: 600;
+}
 .vertical  {
   display: flex;
   gap: 1rem;

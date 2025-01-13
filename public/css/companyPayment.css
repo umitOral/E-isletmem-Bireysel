@@ -1,16 +1,14 @@
-.companyPaymentContent {
+.companyPaymentContents {
     display: flex;
     gap: 1rem;
 }
-.premium {
-     border: 2px solid #36E0E0 ;
-     border-radius: 1rem;
+.companyPaymentContent {
      display: flex;
-     justify-content: space-evenly;
+     justify-content: space-between;
      flex-direction: column;
-     padding: 0.75rem;
+     
 }
-.premium.selected{
+.companyPaymentContent.selected{
      border: 2px solid #36E0E0 ;
      background-color: rgba(128, 128, 128, 0.1);
      border-radius: 1rem;
@@ -29,15 +27,11 @@
     color: white;
     padding: 0.75rem;
 }
-.price{
-    font-size: x-large;
-    text-align: center;
+.plan_body{
+    padding: 0.5rem;
+    border: 1px solid #36E0E0;
 }
 
-.select_packet{
-    width: 100%;
-    background-color: #36E0E0;
-    color: white;
-  }
+
 
 

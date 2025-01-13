@@ -14,17 +14,24 @@ const companySchema = new Schema(
       index: { unique: true },
       lowercase: true,
     },
-
+    VKN: { type: Number, unique: true },
     password: {
       type: String,
       require: true,
       minLength: [4, "şifre uzunluğu en az 4 karakter olmalıdır."],
     },
     phone: { type: String },
-    address: { type: String, lowercase: true },
-    billingAddress: { type: String, lowercase: true },
+    address: {
+      address: { type: String, lowercase: true },
+      city: { type: String, lowercase: true },
+    },
+    billingAddress: {
+      address: { type: String, lowercase: true },
+      city: { type: String, lowercase: true },
+    },
     registerDate: { type: Date, default: Date.now },
     notes: { type: String, require: false, lowercase: true },
+
     debtStatus: { type: Number, require: 0 },
     employees: [
       {
@@ -89,14 +96,18 @@ const companySchema = new Schema(
       type: Boolean,
       default: false,
     },
-    notifications:[],
+    notifications: [],
     smsTemplates: [
       {
         smsName: {
           type: String,
         },
         credit: { type: Number, default: 1 },
-        type:{type:String, enum:["general","system","reminder"],default:"general"},
+        type: {
+          type: String,
+          enum: ["general", "system", "reminder"],
+          default: "general",
+        },
         activeorNot: { type: Boolean, default: true },
         content: { type: String },
       },
@@ -114,9 +125,9 @@ const companySchema = new Schema(
         public_id: String,
       },
     ],
-    smsBalance:{type:Number,default:0}
+    smsBalance: { type: Number, default: 0 },
   },
-  
+
   { timestamps: true }
 );
 
@@ -129,10 +140,8 @@ companySchema.pre("save", function (next) {
 });
 
 companySchema.pre("findOneAndUpdate", async function (next) {
-
   const update = this.getUpdate();
   const passwordChange = update["$set"]["smsConfig.password"];
- 
 
   // console.log(update['$set']['smsConfig.userName']);
 

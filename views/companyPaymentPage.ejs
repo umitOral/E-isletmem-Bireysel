@@ -24,116 +24,47 @@
 
                     </div>
 
-                    <div class="companyPaymentContent">
+                    <div class="companyPaymentContents">
 
-                        <div class="premium">
-                            <div class="plan_head">Aylık Ödeme</div>
-                            <span class="price">500TL/Ay</span>
-                            
-                            <div>
-                                <hr>
-                                <ul>
-                                    <li><i class="ph ph-check"></i>Sınırsız Randevu</li>
-                                    <li><i class="ph ph-check"></i>Ürün / Hizmet Yönetimi</li>
-                                    <li><i class="ph ph-check"></i>Gelişmiş Raporlama</li>
-                                    <li><i class="ph ph-check"></i>Kasa (Gelir/Gider) Yönetimi</li>
-                                    <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
-                                </ul>
-                            </div>
-                            <div class="" data-price="1.00" data-type="aylık" data-paymentDuration="30">
-                                <button class="select_packet">Seç</button>
-                            </div>
-
-                        </div>
-                        <div class="premium">
-                            <div class="plan_head">6 Aylık Ödeme</div>
-                            <span class="price">400TL/Ay</span>
-                            <span>(Kazancınız <b>600TL</b>)</span>
-                            <span>Toplam tutar: 2400TL</span>
-                            <div>
-                                <hr>
-                                <ul>
-                                    <li><i class="ph ph-check"></i>Sınırsız Randevu</li>
-                                    <li><i class="ph ph-check"></i>Ürün / Hizmet Yönetimi</li>
-                                    <li><i class="ph ph-check"></i>Gelişmiş Raporlama</li>
-                                    <li><i class="ph ph-check"></i>Kasa (Gelir/Gider) Yönetimi</li>
-                                    <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
-                                </ul>
-                            </div>
-                             
-                            <div class="" data-price="2" data-type="6aylık" data-paymentDuration="180">
-                                <button class="select_packet">Seç</button>
-                            </div>
-
-                        </div>
-                        <div class="premium">
-                            <div class="plan_head"> Yıllık Ödeme</div>
-                            <span class="price">300TL/Ay</span>
-                            <span>(Kazancınız <b>2400TL</b>)</span>
-                            <span>Toplam tutar: 3600TL</span>
-                            <div>
-                                <hr>
-                                <ul>
-                                    <li><i class="ph ph-check"></i>Sınırsız Randevu</li>
-                                    <li><i class="ph ph-check"></i>Ürün / Hizmet Yönetimi</li>
-                                    <li><i class="ph ph-check"></i>Gelişmiş Raporlama</li>
-                                    <li><i class="ph ph-check"></i>Kasa (Gelir/Gider) Yönetimi</li>
-                                    <li><i class="ph ph-check"></i>Sınırsız Eğitim</li>
-                                </ul>
-                            </div>
-                            <div class="" data-price="3" data-type="yıllık" data-paymentDuration="365">
-                                <button class="select_packet">Seç</button>
-                            </div>
-
-                        </div>
-                        <form action="./addCompanyPayment" method="POST" id="register-form">
-
-                            <div class="inputs ">
-                                <span>Kart Numarası</span>
-                                <input type="text" name="cardNumber" id="cardNumber" value="5528790000000008" placeholder="5528790000000008" maxlength="16">
-                            </div>
-                            <div class="inputs ">
-                                <span>Kart Sahibi</span>
-                                <input type="text" name="cardUserName" id="cardUserName" value="John Doe" placeholder="John Doe" >
-                            </div>
-                            <div class="inputs dates">
-                                <div>
-                                    <span>expireMonth</span>
-                                    <input type="number" name="expireMonth" id="expireMonth" value="12" placeholder="12" max="12">
+                        <div class="companyPaymentContent">
+                            <div class="plan_head">Yeni Paket</div>
+                            <form action="" id="add_subscription">
+                                <div class="plan_body">
+                                    <span>İlk Personel 750TL</span> <br>
+                                    <span>Ek her personel için 250TL</span>
+                                    <hr>
+                                    <br>
+                                <div class="form-group">
+                                    <label for="userCount">Personel sayısı</label>
+                                    <input type="number" id="userCount" name="userCount" min="1" max="100" value="1">
                                 </div>
-                                <div>
-                                    <span>expireYear</span>
-                                    <input type="number" name="expireYear" id="expireYear" value="2030" placeholder="2030" maxlength="4">
+                                <div class="form-group">
+                                    <label for="mounthCount">Süre</label>
+                                    <select name="mounthCount" id="mounthCount">
+                                        <option value="1">1 Ay</option>
+                                        <option value="3">3 Ay</option>
+                                        <option value="6">6 Ay</option>
+                                        <option value="12">12 Ay</option>
+                                    </select>
                                 </div>
-                                <div>
-                                    <span>cvc</span>
-                                    <input type="number" name="cvc" id="cvc" value="123" placeholder="123" maxlength="3">
+                                <div style="padding: 0.5rem;">
+                                    Toplam Tutar: <span id="payment_value">750</span> TL
                                 </div>
+                                <div class="">
+                                    <button class="btn save">Satın Al</button>
+                                </div>
+                                </div>
+    
                             </div>
+
+                            </form>
                             
-                            <div class="registerCard">
-                                <input type="checkbox" name="registerCard" id="" value="1">
-                                <span>Kartımı Sakla</span>
-
-                            </div>
-
-
-                            <button type="submit" class="save_button" id="add-user">Ödeme Yap</button>
-                            
-
-                        </form>
-                        <button type="" class="" id="pay-button">Ödeme Yap</button>
-                        <div style="font-size: 1.5rem;">
-                            <span>Toplam Tutar:</span>
-                            <span class="total">0</span><span>TL</span>
-                        </div>
-                        <div class="installement">
-                            
-                        </div>
-                    </div>
-                    <div id="iyzipay-checkout-form" class="popup">
                         
+                       
+                        
+                       
                     </div>
+                  
 
 
 

@@ -58,6 +58,7 @@
 
                                         <td>
                                             <%= subscription.createdAt.toLocaleDateString("tr-TR")%>
+                                            <%= subscription.createdAt.toLocaleTimeString("tr-TR")%>
                                         </td>
                                         <td>
                                             <%= subscription.amount %>TL
@@ -67,6 +68,9 @@
                                         </td>
                                         <td>
                                             <span><%= subscription.paymentDuration %>Gün</span>
+                                        </td>
+                                        <td>
+                                            <span><%= subscription.status %></span>
                                         </td>
                                         
                                     </tr>

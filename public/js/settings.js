@@ -24,6 +24,8 @@ const request = new Request();
 
 eventListeners();
 
+
+
 function eventListeners() {
   editBtn.addEventListener("click", () => modalUser.classList.remove("hidden"));
   changePassworForm.addEventListener("submit", changePassword);
@@ -56,18 +58,12 @@ function changePassword(e) {
 function changeInformations(e) {
   e.preventDefault();
 
+  let formData = new FormData(informationForm);
+  
+
+
   request
-    .postWithUrl("./settings/" + userID + "/updateCompanyInformations", {
-      brandName: informationForm.brandName.value,
-      companyName: informationForm.companyName.value,
-      email: informationForm.email.value,
-      phone: informationForm.phone.value,
-      address: informationForm.address.value,
-      billingAddress: informationForm.billingAddress.value,
-      workStart: informationForm.workStart.value,
-      workEnd: informationForm.workEnd.value,
-      workPeriod: Number(informationForm.workPeriod.value),
-    })
+    .postWithUrlformData("./settings/" + userID + "/updateCompanyInformations", formData)
     .then((response) => {
       modalUser.classList.remove("hidden");
       ui.showNotification(true, response.message);
