@@ -741,7 +741,7 @@ proccessType.addEventListener("change", () => {
     selectedProcessTable.innerHTML += `
     <tr data-operationname="${element.operationName}" data-operationprice="${element.operationPrice}">
         <td>${element.operationName}</td>
-        <td><input type="number"class="appointment-count" value="1"></td>
+        <td><input type="number"class="appointment-count" value="${element.totalAppointments}"></td>
         <td>${element.operationPrice}</td>
         <td><i class="fa-solid fa-trash delete_items_from_basket"></i></td>
     </tr>
@@ -1517,8 +1517,15 @@ function addDiscount(e) {
       data
     )
     .then((response) => {
+      console.log(response)
       ui.showNotification(response.success, response.message);
-      getAllOperations();
+      if (response.success===true) {
+        console.log("burası")
+        getAllOperations();
+        addDiscountModal.classList.add("hidden")
+      }
+     
+      
     })
     .catch((err) => console.log(err));
 }

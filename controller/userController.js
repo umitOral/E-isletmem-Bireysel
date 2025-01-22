@@ -655,7 +655,7 @@ const addDiscountToOperation = async (req, res, next) => {
     }
 
     res.json({
-      succes: true,
+      success: true,
       message: "indirim başarıyla tanımlandı",
     });
   } catch (error) {
