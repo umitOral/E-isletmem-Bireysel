@@ -4,8 +4,7 @@ import { sendErrorEmail } from "../controller/mailControllers.js";
 
 const ErrorHandler = async (err, req, res, next) => {
   console.log("errorHandler");
-  // console.log(err);
-
+  
   if (err.name === "CustomError") {
     console.log("haho2");
     await sendErrorEmail(err);

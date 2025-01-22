@@ -19,16 +19,18 @@ import Iyzipay from "iyzipay";
 import { v4 as uuidv4 } from "uuid";
 import { NOTIFICATIONS } from "../config/notifications.js";
 import User from "../models/userModel.js";
+import CompanyPayment from "../models/companyPaymentModel.js";
+import { PRODUCTS } from "../config/companyProducts.js";
+import { Response } from "../helpers/error/Response.js";
+import moment from "moment";
 
 const createCompany = async (req, res, next) => {
   try {
+    console.log(req.body);
     const data = req.body;
-    const newDate = new Date();
-    req.body.subscribeEndDate = new Date(
-      newDate.setMonth(newDate.getMonth() + 1)
-    ).toISOString();
 
     req.body.serviceDatas = [];
+    req.body.smsTemplates = [];
     DATAS_LIST.forEach((singleData) => {
       req.body.serviceDatas.push({
         dataName: singleData.dataName,
@@ -58,14 +60,18 @@ const createCompany = async (req, res, next) => {
     data.permissions = role_privileges.privileges.map(
       (privilege, value) => privilege.key
     );
-    data.notifications = NOTIFICATIONS.map((item, value) => item.key);
+    data.notifications = NOTIFICATIONS.notifications.map(
+      (item, value) => item.key
+    );
 
     await Employee.create(data);
     let subscriptionData = {
       company: company._id,
-      amount: 0,
-      paymentDuration: 30,
-      paymentTransactionId: 0,
+      paymentDuration: 14,
+      subscriptionType: "trial",
+      status: "active",
+      userCount: 5,
+      startDate: Date.now(),
     };
     await Subscription.create(subscriptionData);
     await sendRegisterMail();
@@ -105,29 +111,68 @@ const updateCompanyPassword = async (req, res, next) => {
 const updateCompanyInformations = async (req, res, next) => {
   try {
     console.log("updateCompanyInformations");
-    console.log(req.body);
-    req.body.address = {
-      address: req.body["address[address]"],
-      city: req.body["address[city]"],
-    };
+    console.log(Number(req.body.VKN)=== res.locals.company.VKN);
+    console.log( res.locals.company.VKN);
 
-    req.body.billingAddress = {
-      address: req.body["billingAddress[address]"],
-      city: req.body["billingAddress[city]"],
-    };
+    if (req.body.VKN !== "" &&( res.locals.company.VKN!==Number(req.body.VKN))) {
+      console.log("heyt")
+      let company = await Company.findOne({ VKN: req.body.VKN });
+      if (company) {
+        console.log("burası");
+        res.json(
+          Response.unsuccessResponse(
+            false,
+            "Bu VKN adresi kullanılmaktadır.",
+            401
+          )
+        );
+      } else {
+        
+        req.body.address = {
+          address: req.body["address[address]"],
+          city: req.body["address[city]"],
+        };
 
-    req.body.workHours = {
-      workStart: req.body["workHours[workStart]"],
-      workEnd: req.body["workHours[workEnd]"],
-      workPeriod: req.body["workHours[workPeriod]"],
-    };
+        req.body.billingAddress = {
+          address: req.body["billingAddress[address]"],
+          city: req.body["billingAddress[city]"],
+        };
 
-    let result = await Company.findByIdAndUpdate(req.params.id, req.body);
-    console.log(result);
-    res.json({
-      succes: true,
-      message: "bilgiler başarıyla değiştirildi.",
-    });
+        req.body.workHours = {
+          workStart: req.body["workHours[workStart]"],
+          workEnd: req.body["workHours[workEnd]"],
+          workPeriod: req.body["workHours[workPeriod]"],
+        };
+        await Company.findOneAndUpdate({_id:req.params.id},req.body)
+        res.json({
+          success: true,
+          message: "bilgiler başarıyla değiştirildi.",
+        });
+      }
+    }else{
+      req.body.address = {
+        address: req.body["address[address]"],
+        city: req.body["address[city]"],
+      };
+
+      req.body.billingAddress = {
+        address: req.body["billingAddress[address]"],
+        city: req.body["billingAddress[city]"],
+      };
+
+      req.body.workHours = {
+        workStart: req.body["workHours[workStart]"],
+        workEnd: req.body["workHours[workEnd]"],
+        workPeriod: req.body["workHours[workPeriod]"],
+      };
+      await Company.findOneAndUpdate({_id:req.params.id},req.body)
+      res.json({
+        success: true,
+        message: "bilgiler başarıyla değiştirildi.",
+      });
+    }
+
+    
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
@@ -210,21 +255,21 @@ const addCompanyPayment = async (req, res, next) => {
     // TODO
     console.log("addCompanyPayment");
     console.log(req.body);
-    console.log(req.params);
     const id = uuidv4();
     const company = res.locals.company;
     const employee = res.locals.employee;
-    console
+    console;
     //req.body= { type: 'subscription', price: 750, paymentDuration: '1' }
-    const { paymentDuration } = req.body;
+    let { paymentDuration } = req.body;
+    paymentDuration = paymentDuration * 30;
     let price = 1;
-    
+
     let data = {
       locale: "tr",
       conversationId: id,
       price: price.toString(),
       basketId: `basket-${Date.now()}`,
-      
+
       buyer: {
         id: company._id.toString(),
         name: employee.name,
@@ -232,12 +277,12 @@ const addCompanyPayment = async (req, res, next) => {
         identityNumber: company.VKN,
         email: company.email,
         gsmNumber: company.phone,
-        registrationAddress: company.address.address,
-        city: company.address.city,
+        registrationAddress: company.billingAddress.address,
+        city: company.billingAddress.city,
         country: "TR",
-        ip:"85.34.78.112",
+        ip: "85.34.78.112",
       },
-      
+
       billingAddress: {
         address: company.billingAddress.address,
         contactName: employee.name,
@@ -246,11 +291,10 @@ const addCompanyPayment = async (req, res, next) => {
       },
       basketItems: [
         {
-          id: "BI101",
+          id: PRODUCTS.subscriptionPurchase.id,
           price: price.toString(),
-          name: "Binocular",
-          category1: "Collectibles",
-          category2: "Accessories",
+          name: PRODUCTS.subscriptionPurchase.name,
+          category1: PRODUCTS.subscriptionPurchase.category,
           itemType: "VIRTUAL",
         },
       ],
@@ -259,54 +303,139 @@ const addCompanyPayment = async (req, res, next) => {
       currency: "TRY",
       paidPrice: price.toString(),
     };
-  
 
     var iyzipay = new Iyzipay({
       apiKey: process.env.IYZICO_API_KEY,
       secretKey: process.env.IYZICO_SECRET_KEY,
-      uri: "https://api.iyzipay.com"
+      uri: process.env.IYZICO_URI,
     });
-   
 
-   
-
-    iyzipay.checkoutFormInitialize.create(
-      data,
-      async function (err, result) {
-        if (err) {
-
-          return next(new CustomError("ödeme sunucusunda hata oluştu", 500, err));
-        }else{
-          console.log("result");
-          console.log(result);
-          if (result.status === "success") {
-            let data = {
-              company: res.locals.company,
-              amount: price,
+    iyzipay.checkoutFormInitialize.create(data, async function (err, result) {
+      if (err) {
+        return next(new CustomError("ödeme sunucusunda hata oluştu", 500, err));
+      } else {
+        console.log("result");
+        console.log(result);
+        if (result.status === "success") {
+          let data = {
+            company: res.locals.company,
+            price: price,
+            systemTime: result.systemTime,
+            conversationId: result.conversationId,
+            token: result.token,
+            product: {
+              userCount: req.body.userCount,
               paymentDuration: paymentDuration,
-              systemTime: result.systemTime,
-              conversationId: result.conversationId,
-              token: result.token,
-            };
-            await Subscription.create(data);
-            
-          }
-         
-          // @@ GOTO
-          // await orderSuccesEmail(result)
+              price: price,
+            },
+            paymentType: "subscription",
+          };
+          await CompanyPayment.create(data);
           res.json({
             success: true,
             message: "ödeme ekranına yönlendiriliyorsunuz",
             data: result,
           });
+        } else {
+          res.json({
+            success: false,
+            message: result.errorMessage,
+          });
+        }
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  }
+};
+const addEmployeeToSubscription = async (req, res, next) => {
+  try {
+    // TODO
+    console.log("addEmployeePayment");
+    console.log(req.body);
+    const id = uuidv4();
+    const company = res.locals.company;
+    const employee = res.locals.employee;
+    // const price = req.body.price;
+    let price = 1;
+
+    let data = {
+      locale: "tr",
+      conversationId: id,
+      price: price.toString(),
+      basketId: `basket-${Date.now()}`,
+
+      buyer: {
+        id: company._id.toString(),
+        name: employee.name,
+        surname: employee.surname,
+        identityNumber: company.VKN,
+        email: company.email,
+        gsmNumber: company.phone,
+        registrationAddress: company.billingAddress.address,
+        city: company.billingAddress.city,
+        country: "TR",
+        ip: "85.34.78.112",
+      },
+
+      billingAddress: {
+        address: company.billingAddress.address,
+        contactName: employee.name,
+        city: company.billingAddress.city,
+        country: "TR",
+      },
+      basketItems: [
+        {
+          id: PRODUCTS.userPurchaseForSubscription.id,
+          price: price.toString(),
+          name: PRODUCTS.userPurchaseForSubscription.name,
+          category1: PRODUCTS.userPurchaseForSubscription.category,
+          itemType: "VIRTUAL",
+        },
+      ],
+      enabledInstallments: [1],
+      callbackUrl:
+        "http://localhost:3004/handlePaymentCallback?paymentType=User_Purchase",
+      currency: "TRY",
+      paidPrice: price.toString(),
+    };
+
+    var iyzipay = new Iyzipay({
+      apiKey: process.env.IYZICO_API_KEY,
+      secretKey: process.env.IYZICO_SECRET_KEY,
+      uri: process.env.IYZICO_URI,
+    });
+
+    iyzipay.checkoutFormInitialize.create(data, async function (err, result) {
+      if (err) {
+        return next(new CustomError("ödeme sunucusunda hata oluştu", 500, err));
+      } else {
+        console.log("result");
+        console.log(result);
+        if (result.status === "success") {
+          let data = {
+            company: res.locals.company,
+            price: price,
+            systemTime: result.systemTime,
+            conversationId: result.conversationId,
+            token: result.token,
+            product: {
+              userCount: req.body.userCount,
+              price: price,
+            },
+            paymentType: PRODUCTS.userPurchaseForSubscription.name,
+          };
+          await CompanyPayment.create(data);
         }
 
+        res.json({
+          success: true,
+          message: "ödeme ekranına yönlendiriliyorsunuz",
+          data: result,
+        });
       }
-    );
-
-    
-    
-    
+    });
   } catch (error) {
     console.log(error);
     return next(new CustomError("bilinmeyen hata", 500, error));
@@ -317,8 +446,13 @@ const handlePaymentCallback = async (req, res, next) => {
   try {
     console.log("önemli");
     console.log(req.body);
-    console.log(req.params);
-    const subscription = await Subscription.findOne({ token: req.body.token });
+    console.log(req.query);
+
+    const companyPayment = await CompanyPayment.findOne({
+      token: req.body.token,
+    });
+
+    let company = await Company.findById(companyPayment.company._id);
 
     var iyzipay = new Iyzipay({
       apiKey: process.env.IYZICO_API_KEY,
@@ -329,7 +463,7 @@ const handlePaymentCallback = async (req, res, next) => {
     iyzipay.checkoutForm.retrieve(
       {
         locale: Iyzipay.LOCALE.TR,
-        conversationId: subscription.conversationId,
+        conversationId: companyPayment.conversationId,
         token: req.body.token,
       },
       async (err, result) => {
@@ -337,27 +471,84 @@ const handlePaymentCallback = async (req, res, next) => {
           return res.status(500).json({
             success: false,
             message: "Ödeme doğrulama hatası",
-            error: err
+            error: err,
           });
         } else {
-          subscription.status = result.paymentStatus;
-          subscription.errorMessage = result.errorMessage;
+          let message = "Ödeme Başarılı";
+          companyPayment.paymentStatus = result.paymentStatus;
+          companyPayment.errorMessage = result.errorMessage;
           console.log(result);
-          console.log("x") 
-          await subscription.save()
+          console.log("x");
+          if (result.paymentStatus === "SUCCESS") {
+            companyPayment.price = result.paidPrice;
+            companyPayment.paymentId = result.paymentId;
+            if (req.query.paymentType === "User_Purchase") {
+              await Subscription.findOneAndUpdate(
+                { company: company, status: "active" },
+                {
+                  $push: {
+                    payments: {
+                      paymentId: companyPayment._id,
+                      price: companyPayment.price,
+                    },
+                  },
+                  $inc: { userCount: companyPayment.product.userCount },
+                }
+              );
+            } else {
+              await Subscription.create({
+                status:company.activeOrNot?"waiting": "active",
+                startDate: company.activeOrNot
+                  ? company.subscribeEndDate
+                  : Date.now(),
+                endDate: company.activeOrNot
+                  ? moment(company.subscribeEndDate).add(
+                      companyPayment.product.paymentDuration,
+                      "days"
+                    )
+                  : moment().add(
+                      companyPayment.product.paymentDuration,
+                      "days"
+                    ),
+                company: companyPayment.company,
+                subscriptionType: "purchased",
+                payments: [
+                  {
+                    paymentId: companyPayment._id,
+                    price: companyPayment.price,
+                  },
+                ],
+                paymentDuration: companyPayment.product.paymentDuration,
+                userCount: companyPayment.product.userCount,
+              });
 
-          const redirectUrl = `/payment-result?status=${result.status}&message=${result.errorMessage || 'Ödeme başarılı'}`;
+              company.subscribeEndDate = company.activeOrNot
+                ? moment(company.subscribeEndDate).add(
+                    companyPayment.product.paymentDuration,
+                    "days"
+                  )
+                : moment().add(companyPayment.product.paymentDuration, "days");
+              await company.save();
+            }
+            await orderSuccesEmail({
+              paymentType: (req.query.paymentType==="User_Purchase")?"Ek Personel Alımı":"Abonelik Satın Alımı",
+              price: companyPayment.price,
+            });
+          }
+
+          await companyPayment.save();
+          
+          if (result.paymentStatus === "FAILURE") {
+            message = "Ödeme Başarısız";
+          }
+
+          const redirectUrl = `/payment-result?status=${
+            result.paymentStatus
+          }&message=${result.errorMessage || message}`;
 
           // addSubscription(subscription);
 
-          res.send(`
-            <script>
-              window.parent.postMessage({
-                status: '${result.status}',
-                message: '${result.errorMessage || 'Ödeme başarılı'}'
-              }, '*');
-            </script>
-          `);
+          res.redirect(redirectUrl);
         }
       }
     );
@@ -424,10 +615,10 @@ const updateCompanyNotification = async (req, res, next) => {
 
 const handlePaymentResult = async (req, res) => {
   const { status, message } = req.query;
-  console.log("xyxy:"+status+message);
-  res.json({
-    success: status === 'success',
-    message: message
+  console.log("xyxy:" + status + message);
+  res.render("front/payment-result", {
+    success: status,
+    message: message,
   });
 };
 
@@ -441,4 +632,5 @@ export {
   updateSmsConfig,
   updateCompanyDocs,
   updateCompanyNotification,
+  addEmployeeToSubscription,
 };

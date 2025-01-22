@@ -51,16 +51,27 @@ const createEmployees = async (req, res, next) => {
 };
 const editInformationsEmployees = async (req, res) => {
   try {
-    console.log("hahı");
+   
     console.log(req.body);
+   
     if (req.body.workHours) {
       req.body.workHours = {
         workStart: req.body.workHours[0],
         workEnd: req.body.workHours[1],
       };
     }
+    let data={
+      name: req.body.name,
+      surname: req.body.surname,
+      email: req.body.email,
+      sex: req.body.sex,
+      address: req.body.address,
+      phone: req.body.phone,
+      identity:req.body.identity,
+      birthDate:new Date(req.body.birthDate),
+    }
     
-    await Employee.findByIdAndUpdate(req.params.id, req.body);
+    await Employee.findByIdAndUpdate(req.params.id, data);
     res.status(200).json({
       success: true,
       message: "kullanıcı bilgileri başarıyla değiştirildi.",

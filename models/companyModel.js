@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import CryptoJS from "crypto-js";
 import { DOC_STATUS } from "../config/status_list.js";
+import moment from "moment";
 
 const Schema = mongoose.Schema;
 const companySchema = new Schema(
@@ -14,7 +15,7 @@ const companySchema = new Schema(
       index: { unique: true },
       lowercase: true,
     },
-    VKN: { type: Number, unique: true },
+    VKN: { type: Number, unique:true,},
     password: {
       type: String,
       require: true,
@@ -33,6 +34,7 @@ const companySchema = new Schema(
     notes: { type: String, require: false, lowercase: true },
 
     debtStatus: { type: Number, require: 0 },
+
     employees: [
       {
         type: Schema.Types.ObjectId,
@@ -63,12 +65,8 @@ const companySchema = new Schema(
         ref: "User",
       },
     ],
-    plan: {
-      type: String,
-      enum: ["deneme", "premium", "hediye"],
-      default: "deneme",
-    },
-    subscribeEndDate: { type: Date, default: null },
+    subscribeEndDate: { type: Date,default:moment().add(14,"days")  },
+    subscribeType: { type: String,enum:["trial","gift","purchased","finished"] ,default:"trial"},
 
     activeOrNot: { type: Boolean, default: true },
     smsConfig: {
@@ -138,6 +136,8 @@ companySchema.pre("save", function (next) {
     next();
   });
 });
+
+
 
 companySchema.pre("findOneAndUpdate", async function (next) {
   const update = this.getUpdate();

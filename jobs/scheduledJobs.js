@@ -4,6 +4,7 @@ import Company from "../models/companyModel.js";
 import Appointment from "../models/appointmentModel.js";
 import User from "../models/userModel.js";
 import Employee from "../models/EmployeesModel.js";
+import { handleSubscriptionExpiration } from "../helpers/subscriptionHelpers.js";
 
 const dailyReportsforUser = async () => {
   try {
@@ -11,8 +12,7 @@ const dailyReportsforUser = async () => {
     let endDate = new Date(startDate)
     endDate.setDate(startDate.getDate()+1);
     
-    console.log(startDate)
-    console.log(endDate)
+   
     let appointments = await Appointment.find({ date: { $gt: startDate,$lt:endDate} })
     .populate("user",["phone","email"])
     .populate("company",["brandName","phone"])
@@ -20,7 +20,7 @@ const dailyReportsforUser = async () => {
 
     for (const element of appointments) {
       let user=await User.findById(element.user._id)
-      console.log(element)
+     
      
       if (user.notifications.includes("user_appointment_last_day_mail")) {
         let data={
@@ -52,14 +52,23 @@ const dailyReportsforEmployee = async () => {
     }
   } catch (error) {}
 };
+const dailySubscriptionCheck = async () => {
+  try {
+    
+    await handleSubscriptionExpiration()
+  } catch (error) {}
+};
 
 const scheduledJobs = () => {
   cron.schedule("0 18 * * *", () => {
     dailyReportsforEmployee();
   });
   cron.schedule("0 9 * * *", () => {
-    console.log("haho")
+    
     dailyReportsforUser()
+  });
+  cron.schedule("* * * * *", () => {
+    dailySubscriptionCheck()
   });
 };
 

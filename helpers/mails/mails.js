@@ -1108,7 +1108,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
     `;
 };
-const paymentSuccessMailHTML = function (data) {
+const paymentSuccessMailHTML = function (paymentType,price) {
   return `
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -1300,7 +1300,8 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <div class="v-text-align v-line-height" style="font-size: 14px; color: #ffffff; line-height: 160%; text-align: center; word-wrap: break-word;">
     <p style="font-size: 20px; line-height: 300%;">Ödeme Alındı</p>
 <p style="font-size: 14px; line-height: 160%;">Ödeme Detayları:</p>
-<p style="font-size: 14px; line-height: 160%;">${data.paidPrice}</p>
+<p style="font-size: 14px; line-height: 160%;">${paymentType}</p>
+<p style="font-size: 14px; line-height: 160%;">Ödenen Tutar:${price}</p>
 
   </div>
 

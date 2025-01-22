@@ -18,13 +18,13 @@
                 <main>
 
                     <div class="header">
-                        <h1> Satın alınan Abonelikler</h1>
+                        <h1> Satın Almalar</h1>
                     </div>
 
 
                     <div class="search">
                        
-                        <div class="add_customer_btn"><a href="/admin/companyPaymentPage">Yeni Ödeme Yap +</a></div>
+                        <div class="add_customer_btn"><a href="/admin/companyPaymentPage">Abonelik AL+</a></div>
 
                     </div>
 
@@ -46,31 +46,39 @@
                             <thead>
 
                                 <th>Tarih<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Miktar<i class="fa-solid fa-arrow-up"></i></th>
-                                <th>Ödeme No<i class="fa-solid fa-arrow-up"></i></td>
-                                <th>Süre</th>
+                                <th>Tutar<i class="fa-solid fa-arrow-up"></i></th>
+                                <th>Ödeme Tipi<i class="fa-solid fa-arrow-up"></i></td>
+                                <th>Durum</th>
                                 
 
                             </thead>
                             <tbody id="userList">
-                                <% subscriptions.forEach(subscription=> { %>
+                                <% companyPayments.forEach(companyPayment=> { %>
                                     <tr>
 
                                         <td>
-                                            <%= subscription.createdAt.toLocaleDateString("tr-TR")%>
-                                            <%= subscription.createdAt.toLocaleTimeString("tr-TR")%>
+                                            <%= companyPayment.createdAt.toLocaleDateString("tr-TR")%>
+                                            <%= companyPayment.createdAt.toLocaleTimeString("tr-TR")%>
                                         </td>
                                         <td>
-                                            <%= subscription.amount %>TL
+                                            <%= companyPayment.price %>TL
+                                        </td>
+                                       
+                                        
+                                        <td>
+                                            <% if (companyPayment.paymentType==="subscription") { %>
+                                                <span>Abonelik Satın Alımı</span>
+                                            <% } %>
+                                            <% if (companyPayment.paymentType==="User_Purchase") { %>
+                                                <span>Ek Personel Alımı</span>
+                                            <% } %>
+                                            <% if (companyPayment.paymentType==="SMS_Purchase") { %>
+                                                <span>Sms Alımı</span>
+                                            <% } %>
+                                            
                                         </td>
                                         <td>
-                                            <%= subscription.conversationId %>
-                                        </td>
-                                        <td>
-                                            <span><%= subscription.paymentDuration %>Gün</span>
-                                        </td>
-                                        <td>
-                                            <span><%= subscription.status %></span>
+                                            <span><%= companyPayment.paymentStatus %></span>
                                         </td>
                                         
                                     </tr>
@@ -89,10 +97,10 @@
                   
 
                 </main>
-                
+                <div class="toast-container"></div>
 
                 
-        </seciton>
+        </section>
 
 
         <script src="/js/sidebar.js"></script>

@@ -151,9 +151,10 @@ formSms.addEventListener("submit", (e) => {
       if (response.success===true) {
         modalSms.classList.add("hidden")
       smsTypeSelect.selectedIndex=0
-      }
-      
       ui.showNotification(response.success,response.message)
+      }
+      ui.showWarningPopUp(response.message,response.data)
+     
   })
   .catch(err=>{
     ui.showNotification(false,err.message)

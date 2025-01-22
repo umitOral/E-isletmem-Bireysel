@@ -646,52 +646,53 @@ function getAllSms() {
     .getwithUrl(userID + "/getUsersAllSms")
     .then((response) => {
       console.log(response);
-      // APPOINTMENT_STATUS = Object.values(response.APPOINTMENT_STATUS);
       const smsTableBody = document.querySelector(".sms-table tbody");
       const smsTableFoot = document.querySelector("#sms-table-foot");
       const smsTableRows = document.querySelectorAll(
         ".sms-table tbody tr"
       );
-
-      smsTableRows.forEach((row) => {
-        row.remove();
-      });
-      
-      response.sms.list.forEach((sms) => {
-        smsTableBody.innerHTML += `
-        <tr data-sms-pckId="${sms.id}">
-          <td>
-              ${new Date(sms.sendingDate).toLocaleDateString("tr-TR")} ${new Date(sms.sendingDate).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-          </td>
+      if (response.status===true) {
+        smsTableRows.forEach((row) => {
+          row.remove();
+        });
         
-          <td>
-          ${sms.title}
-          </td>
-          <td>
-          ${sms.content}
-          </td>
-          <td>
-          ${sms.senders[0]}
-          </td>
-         
-          <td>
-          ${response.SMS_PACKAGE_STATUS[sms.state]}
-          </td>
-
-    </tr>
-        `;
-      });
-
-      smsTableFoot.innerHTML=`
-        <tr>
-          Toplam ${response.sms.list.length} adet Kayıt  Bulundu.
-        </tr>
-      `
-
-     
+        response.sms.list.forEach((sms) => {
+          smsTableBody.innerHTML += `
+          <tr data-sms-pckId="${sms.id}">
+            <td>
+                ${new Date(sms.sendingDate).toLocaleDateString("tr-TR")} ${new Date(sms.sendingDate).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+            </td>
+          
+            <td>
+            ${sms.title}
+            </td>
+            <td>
+            ${sms.content}
+            </td>
+            <td>
+            ${sms.senders[0]}
+            </td>
+           
+            <td>
+            ${response.SMS_PACKAGE_STATUS[sms.state]}
+            </td>
+  
+      </tr>
+          `;
+        });
+  
+        smsTableFoot.innerHTML=`
+          <tr>
+            Toplam ${response.sms.list.length} adet Kayıt  Bulundu.
+          </tr>
+        `
+      }else {
+        ui.showWarningPopUp(response.message,response.data)
+      }
+    
     })
     .catch((err) => {
       console.log(err);

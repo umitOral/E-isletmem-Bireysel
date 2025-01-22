@@ -12,7 +12,6 @@ const changePassworForm = document.getElementById("change-password-form");
 const formUpdateSmsConfig = document.getElementById("update-smsConfig-form");
 const addDocBtns = document.querySelectorAll(".add_doc");
 
-
 const informationForm = document.getElementById("informations-form");
 const cancelBtns = document.querySelectorAll(".cancel.form-btn");
 
@@ -24,13 +23,11 @@ const request = new Request();
 
 eventListeners();
 
-
-
 function eventListeners() {
   editBtn.addEventListener("click", () => modalUser.classList.remove("hidden"));
   changePassworForm.addEventListener("submit", changePassword);
   formUpdateSmsConfig.addEventListener("submit", UpdateSmsConfig);
-  
+
   informationForm.addEventListener("submit", changeInformations);
 }
 
@@ -59,18 +56,23 @@ function changeInformations(e) {
   e.preventDefault();
 
   let formData = new FormData(informationForm);
-  
-
 
   request
-    .postWithUrlformData("./settings/" + userID + "/updateCompanyInformations", formData)
+    .postWithUrlformData(
+      "./settings/" + userID + "/updateCompanyInformations",
+      formData
+    )
     .then((response) => {
-      modalUser.classList.remove("hidden");
-      ui.showNotification(true, response.message);
-      setTimeout(() => {
-        window.location.reload()
-      }, 500);
-      
+      console.log(response);
+      ui.showNotification(response.success, response.message);
+      if (response.success===true) {
+        modalUser.classList.add("hidden")
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }else{
+        console.log("nothing")
+      }
     })
     .catch((err) => console.log("hata:" + err));
 }
@@ -88,38 +90,42 @@ function UpdateSmsConfig(e) {
     .catch((err) => ui.showNotification(err.success, err.message));
 }
 
-
-addDocBtns.forEach(element => {
-  element.addEventListener("click",(e)=>{
+addDocBtns.forEach((element) => {
+  element.addEventListener("click", (e) => {
     e.preventDefault();
-    console.log("1")
+    console.log("1");
     const fileInput = document.getElementById(e.target.dataset.dockey);
-    console.log(fileInput)
+    console.log(fileInput);
     const file = fileInput.files[0];
-  
+
     if (!file) {
-      alert('Lütfen bir dosya seçin');
+      alert("Lütfen bir dosya seçin");
       return;
     }
-  
+
     const formData = new FormData();
-    formData.append('file', file);
-  
+    formData.append("file", file);
+
     loader.classList.toggle("showed");
     request
-      .postWithUrlformData("./settings/" + userID +"/"+e.target.dataset.dockey+ "/updateCompanyDocs",formData)
+      .postWithUrlformData(
+        "./settings/" +
+          userID +
+          "/" +
+          e.target.dataset.dockey +
+          "/updateCompanyDocs",
+        formData
+      )
       .then((response) => {
         loader.classList.toggle("showed");
         ui.showNotification(true, response.message);
         setTimeout(() => {
-          window.location.reload()
+          window.location.reload();
         }, 500);
-       
       })
       .catch((err) => ui.showNotification(err.success, err.message));
-  })
+  });
 });
-
 
 showContentsBtns.forEach((element, index) => {
   element.addEventListener("click", (e) => {
@@ -135,9 +141,7 @@ showContentsBtns.forEach((element, index) => {
     element.parentElement.nextElementSibling.children[0].children[
       index
     ].classList.add("showed_content");
-   
-    console.log(element.classList)
-   
+
+    console.log(element.classList);
   });
 });
-

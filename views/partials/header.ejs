@@ -27,14 +27,12 @@
         </div>
         
         <div>
-            <a href="/admin/employee/<%= locals.employee._id %>" title="kullanıcı ayarları"><i class="ph ph-user-circle clickable-icon"></i></a>
+            <a href="/admin/employeeSelf/<%= locals.employee._id %>" title="kullanıcı ayarları"><i class="ph ph-user-circle clickable-icon"></i></a>
             
             <span> <%= locals.employee.name ||"kullanıcı adı" %></span>/
             <span> <%= locals.employee.role %></span>
-
-               
-           
         </div>
+        <div><span> <%= locals.company.subscribeType%></span></div>
     </div>
 
 

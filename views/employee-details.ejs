@@ -61,6 +61,7 @@
                                     <div>
                                         <h2>Bilgiler</h2>
                                     </div>
+                                    <div class="content-body">
                                         <div class="form-group ">
                                             <span>İsim</span>
                                             <input type="text" name="name" id="name" value="<%= singleUser.name %>"
@@ -74,8 +75,8 @@
                                         <div class="form-group ">
                                             <span>Görev</span>
 
-                                            <input type="text" name="role" id="user-surname"
-                                                value="<%= singleUser.role %>">
+                                            <input type="text" name="role" id="user-role"
+                                                value="<%= singleUser.role %>" readonly>
                                         </div>
                                         <div class="options">
                                             <span>Çalışma durumu:</span>
@@ -117,7 +118,6 @@
                                                     <% } %>
 
                                         </div>
-                                        
                                         <div class="form-group">
                                             <span>Çalışma saatleri:</span>
                                             <div class="vertical">
@@ -144,7 +144,6 @@
                                             <span>Mail</span>
                                             <input type="email" name="" id="" value="<%= singleUser.email %>" readonly>
                                         </div>
-
                                         <div class="form-group">
                                             <span>Adres:</span>
                                             <input type="text" value="<%= singleUser.address %>" readonly>
@@ -153,7 +152,6 @@
                                             <span>Telefon</span>
                                             <input type="number" name="" id="" value="<%= singleUser.phone %>" readonly>
                                         </div>
-
                                         <div class="form-group">
                                             <span>Kayıt Tarihi:</span>
                                             <input type="text" name="" id=""
@@ -162,11 +160,11 @@
                                         <div class="form-group">
                                             <span>Prim Yüzdesi</span>
                                             <input type="number" name="" id="employeeComission"
-                                                value="<%=singleUser.employeeComission %>" readonly>
+                                                value="<%=singleUser.employeeComission %>">
                                         </div>
+                                    </div>
                                     <span class="edit-informations-btn">Düzenle</span>
-
-
+                                        
                                 </div>
                                 <div class="userInformationsContent  appointments ">
                                     <div>
@@ -316,7 +314,7 @@
 
                     <div class="form-group ">
                         <span>Soyisim</span>
-                        <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>">
+                        <input type="text" name="surname" id="user-surname" value="<%= singleUser.surname %>" readonly>
                     </div>
                    
 
@@ -364,7 +362,7 @@
 
                         <input type="date" name="birthDate" id="birthDate" <% if (singleUser.birthDate) { %>
                         value="<%= singleUser.birthDate %>"
-                            <% } %> readonly>
+                            <% } %> >
                     </div>
                     <div class="form-group ">
                         <span>Email:</span>
@@ -430,7 +428,7 @@
             </div>
            
         </div>
-        <div class="information-modal-wrapper"></div>
+        <div class="toast-container"></div>
         </div>
 
 

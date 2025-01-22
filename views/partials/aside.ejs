@@ -184,9 +184,9 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li>
-                                                    <a href="/admin/employee/<%=locals.employee._id %>">
+                                                    <a href="/admin/employeeSelf/<%=locals.employee._id %>">
                                                             <i class="icon ph-bold ph-stethoscope"></i>
-                                                            <span class="text">Kullanıcı Bilgileri</span>
+                                                            <span class="text">Ayarlarım</span>
                                                     </a>
                                                     
                                                 </li>
@@ -194,7 +194,7 @@
                                             <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Yetkiniz Yok">
                                                 <a href="/admin/settings" <% if (link==="settings" ) { %>class="active"<% } %>>
                                                         <i class="icon ph-bold ph-stethoscope"></i>
-                                                        <span class="text">Şirket Bilgileri</span>
+                                                        <span class="text">Şirket Ayarları</span>
                                                         <i class="ph ph-star"></i>
                                                 </a>
                                             </li>
@@ -202,7 +202,7 @@
                                                 <li>
                                                     <a href="/admin/settings" <% if (link==="settings" ) { %>class="active"<% } %>>
                                                             <i class="icon ph-bold ph-stethoscope"></i>
-                                                            <span class="text">Şirket Bilgileri</span>
+                                                            <span class="text">Şirket Ayarları</span>
                                                     </a>
                                                 </li>
                                                 <% } %>
@@ -230,7 +230,7 @@
                                         <% if(!locals.employee.permissions.includes("settings_view")){ %>
                                             <li onclick="alert('yetkili değilsiniz');return false" class="deactivate" title="Yetkiniz Yok">
                                                 <a href="/admin/companyPaymentsList" <% if (link==="settings" ) { %>class="active"<% } %>>
-                                                        <span class="text">Abonelikler</span>
+                                                        <span class="text">Satın Almalar</span>
                                                         <i class="ph ph-star"></i>
                                                 </a>
                                             </li>
@@ -243,7 +243,7 @@
                                             <% } else{ %>
                                                 <li>
                                                     <a href="/admin/companyPaymentsList">
-                                                        <span class="text">Abonelikler</span>
+                                                        <span class="text">Satın Almalar</span>
                                                     </a>
                                                 </li>
                                                 <li>

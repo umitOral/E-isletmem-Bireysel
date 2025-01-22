@@ -25,7 +25,7 @@ router.route("/prices").get(getPricesPage)
 router.route("/login").get(getLoginPage)
 router.route("/register").get(getRegisterPage)
 router.route("/register").post(verifyCompanyUniqueness,checkPassword,verifyRecaptcha,createCompany)
-router.route("/login").post( authMiddleware.verifyactiveOrNot(),loginUser)
+router.route("/login").post( authMiddleware.verifyEmployeeactiveOrNot(),loginUser)
 
 router.route("/forgotPassword").get(getForgotPasswordPage)
 router.route("/newPassword/:token").get(resetPasswordPage)

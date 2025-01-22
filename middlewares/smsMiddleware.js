@@ -10,7 +10,7 @@ const checkSmsActive = () => {
       next()
     } else {
       console.log("2")
-      res.json(Response.unsuccessResponse(false,"Sms Gönderimi aktif değil."));
+      res.json(Response.unsuccessResponse(false,"Sms Gönderimi aktif değil.",400,`/admin/settings`));
     }
   };
 };

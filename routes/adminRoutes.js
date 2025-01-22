@@ -105,6 +105,7 @@ import {
   updateCompanyDocs,
   addCompanyPayment,
   updateCompanyNotification,
+  addEmployeeToSubscription,
 } from "../controller/companyControllers.js";
 import {
   updateSessionStatus,
@@ -120,7 +121,7 @@ import {
   addDataToSessionInsideAppointment,
 } from "../controller/operationController.js";
 
-import { verifyRoles, checkPriviliges, checkEmployee } from "../middlewares/authMiddleware.js";
+import { verifyRoles, checkPriviliges, checkEmployee, checkBillingInformations, checkEmployeeLimit } from "../middlewares/authMiddleware.js";
 
 
 import appointmentsRoutes from "./appointmentsRoutes.js";
@@ -159,7 +160,7 @@ router
   .get(checkPriviliges("employee_update"), deactivateEmployee);
 router
   .route("/users/:id/activateEmployee")
-  .get(checkPriviliges("employee_update"), activateEmployee);
+  .get(checkPriviliges("employee_update"),checkEmployeeLimit(),activateEmployee);
 
 router.route("/users/:id/addOperation").post(addOperation);
 router
@@ -243,11 +244,12 @@ router.route("/companyPaymentPage").get(companyPaymentPage);
 
 router.route("/companyPaymentsList").get(companyPaymentsListPage);
 
-router.route("/addCompanyPayment").post(addCompanyPayment);
+router.route("/addCompanyPayment").post(checkBillingInformations,addCompanyPayment);
+router.route("/addEmployeeToSubscription").post(addEmployeeToSubscription);
 
 router.route("/updateCompanyNotification").post(updateCompanyNotification);
 
-router.route("/employee/:id").get(checkEmployee,getEmployeeSelfPage);
+router.route("/employeeSelf/:id").get(checkEmployee,getEmployeeSelfPage);
 
 router.route("/employees").get(checkPriviliges("employee_view"),getEmployeesPage);
 router
@@ -272,7 +274,7 @@ router
   .get(getEmployesAppointments);
 
 router.route("/employees/search").get(findEmployees);
-router.route("/employees/createEmployee").post(createEmployees);
+router.route("/employees/createEmployee").post(checkEmployeeLimit(),createEmployees);
 
 // router.route("/employees/addPermissions").post(addPermissions)
 router.route("/employees/:id/editInformations").post(editInformationsEmployees);

@@ -21,6 +21,10 @@ const employeeSchema = new Schema({
     
   ],
   notifications:[],
+  identity: {
+    type: String,
+    trim: true,
+  },
   employeeComission:{type:Number,default:0},
   workHours: {
     type: Object,

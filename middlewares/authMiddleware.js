@@ -4,6 +4,7 @@ import Company from "../models/companyModel.js";
 import Employee from "../models/EmployeesModel.js";
 import { CustomError } from "../helpers/error/CustomError.js";
 import { Response } from "../helpers/error/Response.js";
+import Subscription from "../models/subscriptionModel.js";
 
 const checkUser = async (req, res, next) => {
   const token = req.cookies.jsonwebtoken;
@@ -56,6 +57,31 @@ const authenticateToken = async (req, res, next) => {
     return next(new CustomError("sunucuda bir sorun oluştu", 500, error));
   }
 };
+const checkSubscription = async (req, res, next) => {
+  try {
+    console.log("burası1")
+    let company = res.locals.company;
+
+    if (company.activeOrNot) {
+      console.log("burası2")
+      next();
+    } else {
+      console.log("burası3")
+      console.log(req.path)
+
+      if (req.path === "/companyPaymentPage" ||req.path === "/logout") {
+        console.log("burası4")
+        // Eğer endpoint hariç tutulmuşsa, middleware'i atla
+         next();
+      }else{
+        res.redirect("/admin/companyPaymentPage");
+      }
+      
+    }
+  } catch (error) {
+    return next(new CustomError("sunucuda bir sorun oluştu", 500, error));
+  }
+};
 
 const verifyRoles = (...roles) => {
   return async (req, res, next) => {
@@ -66,7 +92,7 @@ const verifyRoles = (...roles) => {
   };
 };
 
-const verifyactiveOrNot = () => {
+const verifyEmployeeactiveOrNot = () => {
   return async (req, res, next) => {
     const employee = await Employee.findOne({ email: req.body.email });
 
@@ -74,23 +100,27 @@ const verifyactiveOrNot = () => {
       if (!employee.activeOrNot) {
         next(
           new Error(
-            "Hesabınız Pasiftir. Lütfen Mağaza yetkiliniz ile iletişime geçiniz.",
+            "Bu Kullanıcı Pasiftir. Lütfen Mağaza yetkiliniz ile iletişime geçiniz.",
             401
           )
         );
       }
+
       next();
     } else {
-      res.json(Response.successResponse(true, "Kullanıcı bulunamadı"));
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "Bu mail adresi ile kayıtlı kullanıcı bulunamadı"
+        )
+      );
     }
   };
 };
 const checkEmployee = (req, res, next) => {
-  console.log("das1");
-  console.log(req.params)
-  console.log(res.locals.employee)
+  console.log(req.params);
+  console.log(res.locals.employee);
   if (req.params.id == res.locals.employee._id) {
-    console.log("das");
     next();
   } else {
     res.json(
@@ -104,7 +134,6 @@ const checkPriviliges = (...priviliges) => {
     if (res.locals.employee.permissions.includes(priviliges)) {
       next();
     } else {
-     
       res.json(
         Response.unsuccessResponse(
           false,
@@ -114,12 +143,90 @@ const checkPriviliges = (...priviliges) => {
     }
   };
 };
+const checkEmployeeLimit = () => {
+  return async (req, res, next) => {
+    let employes= await Employee.find({company:res.locals.company,activeOrNot:true})
+    let subscription= await Subscription.findOne({company:res.locals.company,status:"active"})
+    console.log(employes.length)
+    console.log(subscription.userCount)
+    if (employes.length>=subscription.userCount) { 
+   
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "Paketinize ait personel limitiniz Dolmuştur.</br> Maksimum Personel Sayısı:"+subscription.userCount+" </br> Ek Personel Satın alabilir ya da diğer personellerden bazılarını pasif edebilirsiniz.",
+          400,
+          "/admin/companyPaymentPage"
+        )
+      );
+    } else {
+      next();
+    }
+  };
+};
+
+const checkBillingInformations = (req, res, next) => {
+  let company = res.locals.company;
+  let employee = res.locals.employee;
+
+  if (!employee.surname) {
+    res.json(
+      Response.unsuccessResponse(
+        false,
+        "Kullanıcı Soyadı Eksiktir.",
+        400,
+        `/admin/employeeSelf/${employee._id}`
+      )
+    );
+  } else if (!employee.name) {
+    res.json(
+      Response.unsuccessResponse(
+        false,
+        "Kullanıcı İsmi Eksiktir.",
+        400,
+        `/admin/employeeSelf/${employee._id}`
+      )
+    );
+  } else if (!company.VKN) {
+    res.json(
+      Response.unsuccessResponse(
+        false,
+        "Vergi Kimlik Numarası Eksiktir.",
+        400,
+        `/admin/settings`
+      )
+    );
+  } else if (!company.billingAddress.address) {
+    res.json(
+      Response.unsuccessResponse(
+        false,
+        "Fatura Adres bilgisi Eksiktir.",
+        400,
+        `/admin/settings`
+      )
+    );
+  } else if (!company.billingAddress.city) {
+    res.json(
+      Response.unsuccessResponse(
+        false,
+        "Fatura Şehir bilgisi Eksiktir.",
+        400,
+        `/admin/settings`
+      )
+    );
+  } else {
+    next();
+  }
+};
 
 export {
   authenticateToken,
   checkUser,
   verifyRoles,
   checkPriviliges,
-  verifyactiveOrNot,
+  verifyEmployeeactiveOrNot,
   checkEmployee,
+  checkBillingInformations,
+  checkSubscription,
+  checkEmployeeLimit
 };

@@ -4,7 +4,7 @@ export class UI {
   }
 
   closeNotification() {
-    const wrapper = document.querySelector(".information-modal-wrapper");
+    const wrapper = document.querySelector(".toast-container");
 
     wrapper.addEventListener("click", (e) => {
       if (e.target.classList.contains("fa-xmark")) {
@@ -55,8 +55,8 @@ export class UI {
     });
   }
 
-  showNotification(success, message) {
-    let wrapper = document.querySelector(".information-modal-wrapper");
+  showNotification(success, message,duration=3000) {
+    let wrapper = document.querySelector(".toast-container");
     var information = document.createElement("div");
     information.className = "information";
 
@@ -74,11 +74,80 @@ export class UI {
       wrapper.appendChild(information);
     }
 
-    setTimeout(() => {
-      information.remove();
-    }, 3000);
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar";
+    information.appendChild(progressBar);
 
-    // Bildirimi görünür hale getir
+   
+    wrapper.appendChild(information);
+
+    // Zaman değişkenleri
+    let remainingTime = duration;
+    let startTime = Date.now();
+    let timer;
+
+    // İlerleme çubuğunu başlat
+    function startCountdown() {
+        setTimeout(() => {
+            progressBar.style.transition = `width ${remainingTime}ms linear`; // Animasyonu başlat
+            progressBar.style.width = "0%";
+        }, 10); // Barın başlangıçta görünmesini sağlamak için kısa bir gecikme ekledik
+
+        timer = setTimeout(() => {
+            information.remove();
+        }, remainingTime);
+    }
+
+    // İlerleme çubuğunu duraklat
+    function pauseCountdown() {
+        clearTimeout(timer);
+        remainingTime -= Date.now() - startTime;
+        progressBar.style.transition = "none"; // Animasyonu durdur
+        const computedWidth = (remainingTime / duration) * 100;
+        progressBar.style.width = `${computedWidth}%`;
+    }
+
+    // İlerleme çubuğunu yeniden başlat
+    function resumeCountdown() {
+        startTime = Date.now();
+        progressBar.style.transition = `width ${remainingTime}ms linear`;
+        progressBar.style.width = "0%";
+        timer = setTimeout(() => {
+            information.remove();
+        }, remainingTime);
+    }
+
+    // Mouse olaylarını dinle
+    information.addEventListener("mouseover", pauseCountdown);
+    information.addEventListener("mouseout", resumeCountdown);
+
+    startCountdown();
+
+
+   
+
+
+    
+  }
+
+  showWarningPopUp (message,data) {
+    console.log("hey")
+    const closePopUp = document.querySelector("#close_warning_popUp") 
+    const warningPopup = document.querySelector(".warning_popup_wrapper")
+    const warningPopupMessage = document.querySelector("#popup_message")
+    const warningPopupMessageExtra = document.querySelector("#popup_message_extra")
+
+    closePopUp.addEventListener("click",()=>{
+      warningPopup.classList.remove("showed")
+    })
+    
+    warningPopup.classList.add("showed")
+    warningPopupMessage.innerHTML=message
+    if (data) {
+      warningPopupMessageExtra.innerHTML=`
+      <a class="btn-link save" href="${data}">Ayarlara Git</a>
+    `
+    }
   }
 
   addPaymentsToTable(table, data) {
@@ -310,7 +379,7 @@ export class UI {
   }
 
   showAlert(message) {
-    const messageBox = document.querySelector(".information-modal-wrapper");
+    const messageBox = document.querySelector(".toast-container");
 
     messageBox.classList.add("failure");
 

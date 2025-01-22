@@ -269,7 +269,7 @@ function editUser(e) {
       sex: form.sex.value,
       address: form.address.value,
       phone: form.phone.value,
-      
+      identity:form.identity.value,
       birthDate: form.birthDate.value,
       
     })

@@ -65,7 +65,7 @@
                             </thead>
                             <tbody id="userList">
                                 <% employees.forEach(employee=> { %>
-                                    <tr>
+                                    <tr data-employeeid="<%= employee._id %>">
 
                                         <td>
                                             <%= new Date(employee.registerDate).toLocaleDateString("tr-TR") %>
@@ -97,7 +97,7 @@
                                                     <% } %>
                                             </td>
                                             <% } else{ %>
-                                                <td><a href="./users/<%= employee._id %>/activateEmployee">Aktif Et</a>
+                                                <td><button class="activate_employee">Aktif Et</button>
                                                 </td>
                                                 <% } %>
 
@@ -222,7 +222,17 @@
             </div>
 
         </div>
-        <div class="information-modal-wrapper"></div>
+        <div class="toast-container"></div>
+        <div class="warning_popup_wrapper" id="warning_popup_wrapper" >
+            <div class="warning_popup">
+              <img src="/photos/error_icon.png" alt="" style="width: 75px;">  
+              <text id=""><strong>Hata:</strong></text>
+              <text id="popup_message"></text>
+              <div id="popup_message_extra" style="width: 100%; text-align: center;">
+              </div>
+              <button class="btn cancel" id="close_warning_popUp">Kapat</button>
+            </div>
+          </div>
 
         <script src="/js/sidebar.js"></script>
         <script type="module" src="../js/main.js"></script>

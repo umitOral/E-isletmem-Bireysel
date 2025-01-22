@@ -243,7 +243,7 @@ const sendErrorEmail = async (err) => {
       from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,
       to: "umit.oralmat10@gmail.com",
       subject: "hata alındı",
-      html: err.stack,
+      html: `${err.stack}+${err.error}`,
     });
 
     transporter.verify().then(console.log).catch(console.error);
@@ -262,7 +262,7 @@ const orderSuccesEmail = async (data) => {
       },
     });
 
-    let html = paymentSuccessMailHTML(data);
+    let html = paymentSuccessMailHTML(data.paymentType,data.price);
 
     const info = await transporter.sendMail({
       from: `E-işletmem <${process.env.EMAIL_ADRESS}>`,

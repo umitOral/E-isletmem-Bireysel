@@ -2,13 +2,13 @@ import { UI } from "./ui.js";
 const ui = new UI();
 import { Request } from "./requests.js";
 const request = new Request();
-ui.closeNotification()
-ui.deleteZeroFromPhone()
+ui.closeNotification();
+ui.deleteZeroFromPhone();
 
 const form = document.querySelector("#register-form");
 const allModals = document.querySelectorAll(".modal");
 const cancelButtons = document.querySelectorAll(".cancel");
-
+const activateBtns = document.querySelectorAll(".activate_employee");
 
 eventListeners();
 function eventListeners() {
@@ -47,27 +47,45 @@ function createEmployee(e) {
 const addCustomerButton = document.querySelector(".add_customer_btn");
 const modalCustomerAdd = document.querySelector("#add_customer");
 
-
 addCustomerButton.addEventListener("click", showModalAddCostumer);
-cancelButtons.forEach(element => {
-  element.addEventListener("click",()=>{
-    allModals.forEach(element => {
-      element.classList.add("hidden")
+cancelButtons.forEach((element) => {
+  element.addEventListener("click", () => {
+    allModals.forEach((element) => {
+      element.classList.add("hidden");
     });
-  })
+  });
+});
+
+activateBtns.forEach((element) => {
+  element.addEventListener("click", () => {
+    request.getwithUrl(
+      `./users/${element.parentElement.parentElement.dataset.employeeid}/activateEmployee`
+    )
+    .then(response=>{
+      console.log(response)
+      if (response.success===true) {
+        ui.showNotification(response.success,response.message)
+        setTimeout(() => {
+          window.location.reload()
+        }, 500);
+        
+      } else {
+        ui.showWarningPopUp(response.message,response.data)
+      }
+      
+    })
+    .catch(err=>console.log(err))
+  });
 });
 
 function showModalAddCostumer() {
   modalCustomerAdd.classList.remove("hidden");
 }
 
+const adminColumn = document.querySelector("#userList");
 
-
-const adminColumn=document.querySelector("#userList")
-
-adminColumn.children[0].children[5].firstChild.style=`
+adminColumn.children[0].children[5].firstChild.style = `
 pointer-events: none !important;
 cursor: default;
 color:Gray;
-`
-
+`;

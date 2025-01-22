@@ -200,7 +200,7 @@ button {
 hr {
   /* margin: 1rem 0; */
 }
-.information-modal-wrapper{
+.toast-container{
   position: fixed;
   top:80px;
   right: 10px;
@@ -215,14 +215,14 @@ hr {
   justify-content: space-between;
   right: 5%;
   top: 20%;
-  z-index: 999;
+  z-index: 997;
   border-radius: var(--border-radius-1);
   position: relative;
   opacity: 0;
   height: fit-content;
   /* transition: opacity 1s ease; */
   transition: height 0.5s ease;
-  margin-bottom: 10px; /* Bildirimler arasında bir boşluk bırakır */
+   /* Bildirimler arasında bir boşluk bırakır */
 }
 
 .information.failure {
@@ -268,17 +268,38 @@ hr {
   padding-left: 1rem;
   
 }
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: #76c7c0;
+  width: 100%; /* Başlangıçta dolu */
+  transition: none; /* İlk anda animasyonu devre dışı bırak */
+}
 
 .form-group input,
 .form-group textarea,
 .form-group select {
-  border: 1px solid rgba(128, 128, 128, 0.394);
+  border: 1px solid rgba(128, 128, 128, 0.394) ;
   display: block;
   background-color: #f4f6f8;
   border-radius: var(--border-radius-1);
   padding: 0.5rem;
   color: var(--color-dark-variant);
   cursor: pointer;
+  width: 100%;
+}
+.form-group input:read-only,
+.form-group textarea:read-only,
+{
+  border: none;
+  display: block;
+  background-color: #f4f6f8;
+  border-radius: var(--border-radius-1);
+  padding: 0.5rem;
+  color: var(--color-dark-variant);
+  cursor: default;
   width: 100%;
 }
 .form-group.vertical {
@@ -297,6 +318,46 @@ dialog{
   z-index: 999;
   
 }
+.warning_popup_wrapper{
+  display: none;
+}
+
+.warning_popup_wrapper.showed{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffffca;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.75s;
+  min-width: 250px;
+}
+.btn-link {
+  width: 100%;
+    padding: 0.7rem;
+    border-radius: var(--border-radius-1);
+    border: 1px solid rgba(128, 128, 128, 0.394);
+    display: block;
+    cursor: pointer;
+    color: black;
+}
+
+.warning_popup{justify-content: center;
+  background-color: white;
+  padding: 2rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 0.5rem;
+  align-items: center;}
 .form-group.horizontal select {
   padding: 0.7rem;
 }
@@ -817,7 +878,7 @@ main {
   background-color: white;
   border-radius: var(--card-border-radius);
   margin: 0.5rem;
-  height: 90%;
+  height: 85%;
 }
 .main-header {
   border-bottom: 1px solid var(--color-border-color);
@@ -1094,7 +1155,7 @@ table thead {
   border: 1px solid rgba(128, 128, 128, 0.394);
 display: block;
   cursor: pointer;
-  color: var(--color-dark-variant);
+  color: black;
 }
 .btn.success {
   background-color: var(--color-success);
@@ -1321,7 +1382,7 @@ header .head {
     
     width: 80% !important;
   }
-  .information-modal-wrapper{
+  .toast-container{
     position: fixed;
     top:80px;
     width: 90%;

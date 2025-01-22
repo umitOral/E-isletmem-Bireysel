@@ -122,23 +122,26 @@ const SMS_TEMPLATES= [
     smsName: "29 ekim",  // code içinde kullanılacak
     activeorNot: "true", //arayüzde kullanılacak
     content: "sevgili {{isim}}, 29 ekim cumhuriyet bayramınız kutlu olsun.",
+    type:"general"
   },
   {
     smsName: "yılbaşı",  // code içinde kullanılacak
     activeorNot: "true", //arayüzde kullanılacak
     content: "Değerli danışanımız yeni yılınızın sağlıklı geçmesini dileriz.",
+    type:"general"
   },
   {
     smsName: "Randevu hatırlatma mesajı",  // code içinde kullanılacak
     activeorNot: "true", //arayüzde kullanılacak
     content: "değerli danışanımız, randevu tarihiniz: {{randevu-tarihi}}, saat {{randevu-saati}} ",
+    type:"reminder"
   },
   {
     smsName: "randevu oluşturma mesajı",  // code içinde kullanılacak
     activeorNot: "true", //arayüzde kullanılacak
     content: "değerli danışanımız,{{randevu-tarihi}}, saat {{randevu-saati}} tarihi için randevunuz oluşturulmuştur.",
+    type:"general"
   },
-
 
 ]
 const SMS_PACKAGE_STATUS = {

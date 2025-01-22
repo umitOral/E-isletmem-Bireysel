@@ -47,7 +47,7 @@ const deactivateEmployee = async (req, res, next) => {
 const activateEmployee = async (req, res, next) => {
   try {
     await Employee.findByIdAndUpdate(req.params.id, { activeOrNot: true });
-    res.redirect("back");
+    res.json(Response.successResponse(true,"personel aktifleştirildi",200));
   } catch (error) {
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
@@ -71,6 +71,18 @@ const getUsersAllAppointments = async (req, res, next) => {
 const getUsersAllSms = async (req, res, next) => {
   try {
     console.log(req.params);
+    console.log(res.locals.company.smsConfig.password);
+    if ( res.locals.company.smsConfig.password === undefined) {
+      console.log("burası")
+      res.json(
+        Response.unsuccessResponse(
+          false,
+          "Sms Gönderiminiz Aktif Değil",400,"/admin/settings"
+        )
+      );
+      return
+    }
+    console.log("burası1")
     const authorization = await createSmsAuthorization(res.locals.company);
     let sendedSms = await Sms.find({ user: req.params.id });
     let data = {
@@ -108,6 +120,7 @@ const getUsersAllSms = async (req, res, next) => {
         });
       });
   } catch (error) {
+    console.log(error)
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
@@ -272,25 +285,31 @@ const findEmployees = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   try {
-    console.log(req.body);
-    const userEmail = req.body.email;
-    const userPhone = req.body.phone;
+ 
     req.body.company = res.locals.company;
     let searchEmail;
+    let searchPhone;
     if (req.body.email !== "") {
+     
       searchEmail = await User.findOne({
-        email: userEmail,
+        email: req.body.email,
         company: res.locals.company,
       });
       console.log(searchEmail);
     }
 
-    const searchPhone = await User.findOne({
-      phone: userPhone,
-      company: res.locals.company,
-    });
-
+    if (req.body.phone !== "") {
+     
+       searchPhone = await User.findOne({
+        phone: req.body.phone,
+        company: res.locals.company,
+      });
+      console.log(searchPhone);
+    }
+    
+    console.log("0")
     if (searchEmail) {
+      console.log("1")
       res.json(
         Response.unsuccessResponse(
           false,
@@ -298,14 +317,17 @@ const createUser = async (req, res, next) => {
         )
       );
     } else if (searchPhone) {
-      res.json(
+     
+      res.json( 
         Response.unsuccessResponse(
           false,
           "Bu Telefon adresi ile kayıtlı kullanıcı bulunmaktadır"
         )
       );
     } else {
+      
       await User.create(req.body).then((response) => {
+        
         jwt.verify(
           req.cookies.userData,
           process.env.JWT_SECRET,
@@ -340,7 +362,7 @@ const createUser = async (req, res, next) => {
       });
     }
   } catch (error) {
-    return next(new CustomError("bilinmeyen hata", 500, error));
+    return next(new CustomError("tanımlanmayan hata", 500, error));
   }
 };
 const editInformations = async (req, res, next) => {
@@ -415,14 +437,17 @@ const editInformations = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
+    console.log(req.body)
     let same = false;
 
     const employee = await Employee.findOne({ email: req.body.email });
 
     if (employee) {
       const company = await Company.findOne({ _id: employee.company });
-      same = bcrypt.compare(req.body.password, employee.password);
+      same =await bcrypt.compare(req.body.password, employee.password);
+      
       if (same) {
+        console.log("burası")
         const token = createToken(company._id, employee._id);
 
         const usersNames = await User.find(
@@ -457,18 +482,18 @@ const loginUser = async (req, res, next) => {
           });
         }
 
-        res.status(401).json({
+        res.status(200).json({
           success: true,
           message: "Giriş Başarılı,yönlendiriliyorsunuz",
         });
       } else {
         res.json(
-          Response.unsuccessResponse(false, "Kullanıcı adı veya şifresi yanlış")
+          Response.unsuccessResponse(false, "Kullanıcı adı veya şifresi yanlış",401)
         );
       }
     } else {
       res.json(
-        Response.unsuccessResponse(false, "Kayıtlı kullanıcı bulunamadı")
+        Response.unsuccessResponse(false, "Kayıtlı kullanıcı bulunamadı",400)
       );
     }
   } catch (error) {

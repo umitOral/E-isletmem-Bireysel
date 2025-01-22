@@ -13,7 +13,7 @@
         </svg>
       </div>
       <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Ödeme Başarılı!</h2>
-      <p class="text-gray-600 text-center mb-6">Aboneliğiniz başarıyla aktifleştirildi.</p>
+      <p class="text-gray-600 text-center mb-6">Aboneliğiniz başarıyla Satın alındı.</p>
     </div>
 
     <div id="error-result" class="hidden">
@@ -27,7 +27,7 @@
     </div>
 
     <div class="flex justify-center">
-      <button onclick="window.location.href='admin'" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+      <button onclick="window.parent.location.reload()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
         Panele Dön
       </button>
     </div>
@@ -38,7 +38,7 @@
     const status = urlParams.get('status');
     const message = urlParams.get('message');
 
-    if (status === 'success') {
+    if (status === 'SUCCESS') {
       document.getElementById('success-result').classList.remove('hidden');
     } else {
       document.getElementById('error-result').classList.remove('hidden');

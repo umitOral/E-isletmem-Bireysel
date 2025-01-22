@@ -18,7 +18,8 @@ const connectGeneralDb = async (dbName) => {
           console.log("db development bağlantısı başarılı:" + dbName);
         })
         .catch((err) => {
-          console.log(err);
+          console.log("xxx"); 
+          return new CustomError("Veritabanı bağlantısı başarısız", 500);
         });
     } else {
       await mongoose

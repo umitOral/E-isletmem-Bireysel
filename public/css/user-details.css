@@ -35,6 +35,7 @@
 
   display: flex;
   gap: 1rem;
+  height: 100%;
 }
 .selected_proccess_type_add {
   display: flex;
@@ -149,6 +150,7 @@
 .contents {
   border-radius: var(--card-border-radius);
   /* min-width: 300px; */
+  height: 100%;
 }
 .contents .edit-informations-btn {
   background-color: var(--color-success);
@@ -159,6 +161,10 @@
   margin: 0.5rem;
   align-self: center;
   text-align: center;
+}
+
+.content-body {
+ overflow: auto;
 }
 .tabs {
   display: flex;
@@ -203,6 +209,7 @@
 .userInformationsContent.showed_content {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 .userInformationsContent.showed_content .table-wrapper {
   overflow-y: auto;
@@ -322,6 +329,7 @@ i:hover {
   padding: 0.5rem;
   border: 1px solid rgba(128, 128, 128, 0.402);
   border-radius: 0.5rem;
+  white-space:nowrap;
 }
 .small_images_options a {
   background-color: var(--color-danger);

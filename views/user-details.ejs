@@ -26,6 +26,7 @@
             <!---------- left aside ------------->
 
             <%- include('partials/header.ejs') %>
+            
 
                 <!----------- end of sidebar ----------->
 
@@ -376,7 +377,7 @@
 
 
 
-                <div class="information-modal-wrapper"></div>
+                <div class="toast-container"></div>
                 <%- include('partials/loader.ejs') %>
 
         </section>
@@ -842,6 +843,17 @@
                 </form>
             </div>
         </div>
+
+        <div class="warning_popup_wrapper" id="warning_popup_wrapper" >
+            <div class="warning_popup">
+              <img src="/photos/error_icon.png" alt="" style="width: 75px;">  
+              <text id=""><strong>Hata:</strong></text>
+              <text id="popup_message"></text>
+              <div id="popup_message_extra" style="width: 100%; text-align: center;">
+              </div>
+              <button class="btn cancel" id="close_warning_popUp">Kapat</button>
+            </div>
+          </div>
 
 
 

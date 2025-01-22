@@ -30,6 +30,7 @@ import { sendRegisterMail } from "./mailControllers.js";
 import Appointment from "../models/appointmentModel.js";
 import CITIES from "../config/cities.js";
 import { Console } from "console";
+import CompanyPayment from "../models/companyPaymentModel.js";
 
 let now = new Date();
 let day = now.getDate();
@@ -722,14 +723,21 @@ const getSettingsPage = (req, res, next) => {
 };
 const companyPaymentPage = async(req, res, next) => {
   try {
-    const user = res.locals.company;
-    let subscriptions=await Subscription.find({ company: user._id, status:"SUCCESS"})
-    console.log(subscriptions)
+    console.log("companyPaymentPage")
+    const company = res.locals.company;
+    let activeSubscription=await Subscription.findOne({ company: company._id, status:"active"})
+    let waitingSubscriptions=await Subscription.find({ company: company._id, status:"waiting"})
+    let finishedSubscriptions=await Subscription.find({ company: company._id, status:"finished"})
+    console.log(activeSubscription)
+    console.log(waitingSubscriptions)
+    console.log(finishedSubscriptions)
     res.status(200).render("companyPaymentPage", {
       link: "companyPaymentPage",
-      user,
-      activeSubscription:subscriptions.length>0?subscriptions[0]:null,
-      passiveSubscriptions:subscriptions.length>1?subscriptions.slice(1):[]
+      company,
+      moment,
+      activeSubscription,
+      waitingSubscriptions,
+      finishedSubscriptions
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -738,13 +746,13 @@ const companyPaymentPage = async(req, res, next) => {
 
 const companyPaymentsListPage = async (req, res, next) => {
   try {
-    const subscriptions = await Subscription.find({
+    const companyPayments = await CompanyPayment.find({
       company: res.locals.company,
     });
 
     res.status(200).render("companyPaymentsList", {
       link: "companyPaymentsList",
-      subscriptions,
+      companyPayments,
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -760,7 +768,6 @@ const getPaymentsPage = async (req, res, next) => {
       link: "payments",
       users: users,
       employees,
-      subscriptions
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -805,6 +812,7 @@ const getEmployeeSelfPage = async (req, res, next) => {
     res.status(200).render("employee-self", {
       singleUser,
       link: "employees",
+      moment
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
