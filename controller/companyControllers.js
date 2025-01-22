@@ -26,7 +26,7 @@ import moment from "moment";
 
 const createCompany = async (req, res, next) => {
   try {
-    console.log(req.body);
+    (req.body);
     const data = req.body;
 
     req.body.serviceDatas = [];
@@ -110,15 +110,15 @@ const updateCompanyPassword = async (req, res, next) => {
 };
 const updateCompanyInformations = async (req, res, next) => {
   try {
-    console.log("updateCompanyInformations");
-    console.log(Number(req.body.VKN)=== res.locals.company.VKN);
-    console.log( res.locals.company.VKN);
+    
+    
+    
 
     if (req.body.VKN !== "" &&( res.locals.company.VKN!==Number(req.body.VKN))) {
-      console.log("heyt")
+      
       let company = await Company.findOne({ VKN: req.body.VKN });
       if (company) {
-        console.log("burası");
+        
         res.json(
           Response.unsuccessResponse(
             false,
@@ -179,8 +179,8 @@ const updateCompanyInformations = async (req, res, next) => {
 };
 const updateSmsConfig = async (req, res, next) => {
   try {
-    console.log("updateSmsConfig");
-    console.log(req.body);
+    
+    
 
     let { userName, password } = req.body;
     await Company.findOneAndUpdate(
@@ -203,14 +203,14 @@ const updateSmsConfig = async (req, res, next) => {
 };
 const updateCompanyDocs = async (req, res, next) => {
   try {
-    console.log("updateCompanyDocs");
+    
 
-    console.log(req.params.docKey);
+    
     const files = req.files;
     const path = files.file.tempFilePath;
-    console.log(files.file.mimetype);
+    
     const doc = await cloudinaryImageUploadMethod(path);
-    console.log(doc);
+    
     const name = COMPANY_DOCS.find((doc) => doc.key === req.params.docKey).name;
     let data = {
       docKey: req.params.docKey,
@@ -253,8 +253,8 @@ const updateCompanyDocs = async (req, res, next) => {
 const addCompanyPayment = async (req, res, next) => {
   try {
     // TODO
-    console.log("addCompanyPayment");
-    console.log(req.body);
+    
+    
     const id = uuidv4();
     const company = res.locals.company;
     const employee = res.locals.employee;
@@ -314,8 +314,8 @@ const addCompanyPayment = async (req, res, next) => {
       if (err) {
         return next(new CustomError("ödeme sunucusunda hata oluştu", 500, err));
       } else {
-        console.log("result");
-        console.log(result);
+        
+        
         if (result.status === "success") {
           let data = {
             company: res.locals.company,
@@ -345,15 +345,15 @@ const addCompanyPayment = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const addEmployeeToSubscription = async (req, res, next) => {
   try {
     // TODO
-    console.log("addEmployeePayment");
-    console.log(req.body);
+    
+    
     const id = uuidv4();
     const company = res.locals.company;
     const employee = res.locals.employee;
@@ -411,8 +411,8 @@ const addEmployeeToSubscription = async (req, res, next) => {
       if (err) {
         return next(new CustomError("ödeme sunucusunda hata oluştu", 500, err));
       } else {
-        console.log("result");
-        console.log(result);
+        
+        
         if (result.status === "success") {
           let data = {
             company: res.locals.company,
@@ -437,16 +437,16 @@ const addEmployeeToSubscription = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
 const handlePaymentCallback = async (req, res, next) => {
   try {
-    console.log("önemli");
-    console.log(req.body);
-    console.log(req.query);
+    
+    
+    
 
     const companyPayment = await CompanyPayment.findOne({
       token: req.body.token,
@@ -477,8 +477,8 @@ const handlePaymentCallback = async (req, res, next) => {
           let message = "Ödeme Başarılı";
           companyPayment.paymentStatus = result.paymentStatus;
           companyPayment.errorMessage = result.errorMessage;
-          console.log(result);
-          console.log("x");
+          
+          
           if (result.paymentStatus === "SUCCESS") {
             companyPayment.price = result.paidPrice;
             companyPayment.paymentId = result.paymentId;
@@ -560,19 +560,14 @@ const handlePaymentCallback = async (req, res, next) => {
 async function addSubscription(subscription) {
   let company = await Company.findById(subscription.company);
 
-  console.log(subscription.paymentDuration);
+  
   let today = new Date();
   let diffTime = Math.ceil(
     (company.subscribeEndDate - today) / (1000 * 60 * 60 * 24)
   );
-  console.log(diffTime);
-  console.log(
-    new Date().setDate(
-      company.subscribeEndDate.getDate() +
-        subscription.paymentDuration +
-        diffTime
-    )
-  );
+  
+  
+ 
   if (company.subscribeEndDate > today) {
     company.subscribeEndDate = new Date().setDate(
       company.subscribeEndDate.getDate() +
@@ -589,7 +584,7 @@ async function addSubscription(subscription) {
 }
 
 const updateCompanyNotification = async (req, res, next) => {
-  console.log(req.body);
+  
   try {
     let company = await Company.findById(res.locals.company._id);
     if (company.notifications.includes(req.body.notificationkey)) {
@@ -600,7 +595,7 @@ const updateCompanyNotification = async (req, res, next) => {
       company.notifications.push(req.body.notificationkey);
     }
 
-    console.log(company.notifications);
+    
     await company.save();
     res.status(200).json({
       success: true,

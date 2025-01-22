@@ -67,7 +67,7 @@ const scheduledJobs = () => {
     
     dailyReportsforUser()
   });
-  cron.schedule("* * * * *", () => {
+  cron.schedule("1 * * * *", () => {
     dailySubscriptionCheck()
   });
 };

@@ -1,6 +1,6 @@
 $(".chosen-select").chosen({ width: "100%" });
 
-console.log("reports");
+
 $(".chosen-select").chosen({ width: "100%" });
 
 import { Request } from "./requests.js";
@@ -31,8 +31,8 @@ searchForm.addEventListener("submit", (e) => {
 function getAppointments(page) {
   let options = searchForm.status.selectedOptions;
   var values = Array.from(options).map(({ value }) => value);
-  console.log(options);
-  console.log(values);
+  
+  
   let data = {
     page: page || 1,
     startDate: searchForm.startDate.value,
@@ -48,13 +48,13 @@ function getAppointments(page) {
     .postWithUrl("./appointmentsReportsPage", data)
     .then((response) => {
       ui.showNotification(response.success, response.message);
-      console.log(response);
+      
       datasToTable(response.data);
       datasToPagination(response.data.pagination);
     })
     .catch((err) => {
       ui.showNotification(false, err.message);
-      console.log(err);
+      
     });
 }
 
@@ -63,7 +63,7 @@ function datasToTable(data) {
   let lastpage = document.querySelector("#lastpage");
   let total = document.querySelector("#total");
 
-  console.log(table);
+  
   while (tableBody.children[0]) {
     tableBody.children[0].remove();
   }
@@ -192,7 +192,7 @@ function paginatioButtonsHandle() {
   let paginationBtns = document.querySelectorAll(".pagination-buttons");
   paginationBtns.forEach((element) => {
     element.addEventListener("click", (e) => {
-      console.log(e.target.dataset.pagenumber);
+      
       getAppointments(e.target.dataset.pagenumber);
     });
   });
@@ -218,7 +218,7 @@ operationTypeSelect.addEventListener("change", () => {
       element.parentElement.parentElement.parentElement.dataset.userid
     );
   });
-  console.log(selectedUsers);
+  
   let operationType =
     operationTypeSelect.options[operationTypeSelect.options.selectedIndex]
       .value;

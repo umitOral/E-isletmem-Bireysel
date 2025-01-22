@@ -2,13 +2,13 @@ export class Tables {
   constructor() {}
 
   sortingStart(table, columnIndex) {
-    console.log("başarılı");
+    
     
     
     const sortIcons = document.querySelectorAll(".list_icon");
     const tableHeads = table.querySelectorAll("thead th");
     const tableRows = table.querySelectorAll("tbody>tr");
-    console.log(tableRows)
+   
 
     tableHeads.forEach((element) => {
       element.classList.remove("active");
@@ -32,7 +32,7 @@ export class Tables {
     tableRows.forEach((row) => {
       row.querySelectorAll("td")[columnIndex].classList.add("active");
     });
-    console.log("buraso")
+    
     let sort_arc = tableHeads[columnIndex].classList.contains("asc")
       ? true
       : false;

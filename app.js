@@ -27,7 +27,7 @@ dotenv.config();
 const app = express();
 
 //db connection
-connectGeneralDb(process.env.DB_NAME)
+connectGeneralDb()
 
 
 

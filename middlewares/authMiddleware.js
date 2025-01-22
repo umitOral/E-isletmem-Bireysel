@@ -33,7 +33,7 @@ const checkUser = async (req, res, next) => {
     res.locals.company = null;
     res.redirect("../login");
 
-    console.log("gerekli token bulunamadı lütfen giriş yapınız");
+    
   }
 };
 
@@ -59,18 +59,18 @@ const authenticateToken = async (req, res, next) => {
 };
 const checkSubscription = async (req, res, next) => {
   try {
-    console.log("burası1")
+    
     let company = res.locals.company;
 
     if (company.activeOrNot) {
-      console.log("burası2")
+      
       next();
     } else {
-      console.log("burası3")
-      console.log(req.path)
+      
+      
 
       if (req.path === "/companyPaymentPage" ||req.path === "/logout") {
-        console.log("burası4")
+        
         // Eğer endpoint hariç tutulmuşsa, middleware'i atla
          next();
       }else{
@@ -118,8 +118,8 @@ const verifyEmployeeactiveOrNot = () => {
   };
 };
 const checkEmployee = (req, res, next) => {
-  console.log(req.params);
-  console.log(res.locals.employee);
+  
+  
   if (req.params.id == res.locals.employee._id) {
     next();
   } else {
@@ -147,8 +147,8 @@ const checkEmployeeLimit = () => {
   return async (req, res, next) => {
     let employes= await Employee.find({company:res.locals.company,activeOrNot:true})
     let subscription= await Subscription.findOne({company:res.locals.company,status:"active"})
-    console.log(employes.length)
-    console.log(subscription.userCount)
+    
+    
     if (employes.length>=subscription.userCount) { 
    
       res.json(

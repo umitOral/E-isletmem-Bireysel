@@ -10,7 +10,7 @@ import Appointment from "../models/appointmentModel.js";
 
 const updateSessionStatusForNew = async (req,res,next) => {
   try {
-    console.log("updateSessionStatusForNew")
+    
    
 
   
@@ -20,13 +20,13 @@ const updateSessionStatusForNew = async (req,res,next) => {
       message: "İşlem durumu değişti.",
     });
   } catch (error) {
-    console.log(error)
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const updateSessionStatus = async (req,res,next) => {
   try {
-    console.log(req.body)
-    console.log(req.params)
+    
+    
     let foundedOperation = await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
       {
@@ -40,7 +40,7 @@ const updateSessionStatus = async (req,res,next) => {
       }
     );
 
-    console.log(foundedOperation.sessionOfOperation.length);
+    
     if (foundedOperation.totalAppointments === foundedOperation.sessionOfOperation.length) {
       foundedOperation.operationStatus = OPERATION_STATUS_AUTOMATIC.FINISH;
       
@@ -59,9 +59,9 @@ const updateSessionStatus = async (req,res,next) => {
 };
 const updateOperationStatus = async (req,res,next) => {
   try {
-    console.log("denden");
-    console.log(req.body);
-    console.log(req.params);
+    
+    
+    
     let actualDate = new Date();
     let responseData = await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
@@ -78,7 +78,7 @@ const updateOperationStatus = async (req,res,next) => {
     responseData.appointmensCount = responseData.sessionOfOperation.length;
 
     await responseData.save();
-    console.log(responseData);
+    
 
     res.status(200).json({
       success: true,
@@ -91,7 +91,7 @@ const updateOperationStatus = async (req,res,next) => {
 };
 const deleteOperationsData = async (req,res,next) => {
   try {
-    console.log(req.params);
+    
 
     let responseData = {};
     await Operation.findOneAndUpdate(
@@ -106,7 +106,7 @@ const deleteOperationsData = async (req,res,next) => {
       }
     )
       .then((res) => (responseData = res))
-      .catch((err) => console.log("err" + err));
+     
 
     res.status(200).json({
       success: true,
@@ -120,7 +120,7 @@ const deleteOperationsData = async (req,res,next) => {
 const deleteSessionData = async (req,res,next) => {
   try {
 
-    console.log(req.params);
+    
 
     let responseData = {};
     await Operation.findOneAndUpdate(
@@ -138,7 +138,7 @@ const deleteSessionData = async (req,res,next) => {
       }
     )
       .then((res) => (responseData = res))
-      .catch((err) => console.log("err" + err));
+      
 
     res.status(200).json({
       success: true,
@@ -151,8 +151,8 @@ const deleteSessionData = async (req,res,next) => {
 };
 const addSessionToOperation = async (req,res,next) => {
   try {
-    console.log("addd data");
-    console.log(req.body);
+    
+    
     await Operation.findByIdAndUpdate(
       { _id: req.params.operationID },
       {
@@ -176,9 +176,9 @@ const addSessionToOperation = async (req,res,next) => {
 };
 const addDescriptiontoSession = async (req,res,next) => {
   try {
-    console.log("addd description");
-    console.log(req.body);
-    console.log(req.params);
+    
+    
+    
     await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
       {
@@ -203,8 +203,8 @@ const addDescriptiontoSession = async (req,res,next) => {
 };
 const addDescriptiontoOperation = async (req,res,next) => {
   try {
-    console.log("addd addDescriptiontoOperation");
-    console.log(req.body);
+    
+    
     await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
       {
@@ -216,7 +216,7 @@ const addDescriptiontoOperation = async (req,res,next) => {
         returnOriginal: false,
       }
     ).then(async (response) => {
-      console.log(response);
+      
       res.json({
         succes: true,
         responseData: response,
@@ -229,9 +229,9 @@ const addDescriptiontoOperation = async (req,res,next) => {
 };
 const addDataToSessionInsideAppointment = async (req,res,next) => {
   try {
-    console.log("addd data");
-    console.log(req.body);
-    console.log(req.params);
+    
+    
+    
 
     let responseData = await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
@@ -277,7 +277,7 @@ const editDataofOperation = async (req,res,next) => {
         returnOriginal: false,
       }
     );
-    console.log(responseData);
+    
 
     res.status(200).json({
       responseData,
@@ -290,9 +290,9 @@ const editDataofOperation = async (req,res,next) => {
 };
 const editDataOfSession = async (req,res,next) => {
   try {
-    console.log(req.body);
-    console.log(req.params);
-    console.log(req.query);
+    
+    
+    
 
     let responseData = await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
@@ -310,7 +310,7 @@ const editDataOfSession = async (req,res,next) => {
         returnOriginal: false,
       }
     );
-    console.log(responseData);
+    
 
     res.status(200).json({
       responseData,

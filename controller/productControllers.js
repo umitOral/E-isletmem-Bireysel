@@ -15,7 +15,7 @@ import { BRAND_LIST } from "../config/brands.js";
 
 const addPassiveProduct = async (req, res, next) => {
   try {
-    console.log("addPassiveProduct");
+    
 
     req.body.barcodes = [req.body.barcode];
     req.body.company = res.locals.company._id;
@@ -35,20 +35,20 @@ const addPassiveProduct = async (req, res, next) => {
 };
 const addProduct = async (req, res, next) => {
   try {
-    console.log("add product");
-    console.log(req.body);
+    
+    
 
     req.body.barcodes = [req.body.barcode];
     req.body.company = res.locals.company._id;
     let product = await ProductGeneral.findOne({
       "barcodes.barcode": req.body.barcode,
     });
-    console.log(product);
+    
 
     let brandList = BRAND_LIST;
 
     if (!brandList.includes(req.body.brand)) {
-      console.log("haho");
+      
       brandList.push(req.body.brand);
       const updatedList = `const BRAND_LIST = ${JSON.stringify(
         brandList,
@@ -72,7 +72,7 @@ const addProduct = async (req, res, next) => {
       };
 
       // Yeni eleman ekle
-      console.log(data);
+      
       await ProductGeneral.create(data).then((response) => {
         res.json({
           success: true,
@@ -86,14 +86,14 @@ const addProduct = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const addStock = async (req, res, next) => {
   try {
-    console.log("addStock");
-    console.log(req.body);
+    
+    
 
     await Product.findOneAndUpdate(
       { _id: req.params.productId },
@@ -110,17 +110,13 @@ const addStock = async (req, res, next) => {
       });
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      success: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const fixStock = async (req, res, next) => {
   try {
-    console.log("fixStock");
-    console.log(req.body);
+    
+    
 
     let product = await Product.findById(req.params.productId);
 
@@ -137,17 +133,13 @@ const fixStock = async (req, res, next) => {
       });
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      success: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 const updateComission = async (req, res, next) => {
   try {
-    console.log("updateComission");
-    console.log(req.body);
+    
+    
 
     let product = await Product.findByIdAndUpdate(req.params.productId, {
       $set: { baseComission: req.body.comission },
@@ -160,17 +152,14 @@ const updateComission = async (req, res, next) => {
       data: product.baseComission,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      success: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
+   
   }
 };
 const editProduct = async (req, res, next) => {
   try {
-    console.log("edit product");
-    console.log(req.body);
+    
+    
 
     await Product.findByIdAndUpdate(req.params.productId, req.body, {
       new: true,
@@ -182,17 +171,14 @@ const editProduct = async (req, res, next) => {
       });
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      success: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
+    
   }
 };
 const searchProductInner = async (req, res, next) => {
   try {
-    console.log("searchProductInner");
-    console.log(req.body);
+    
+    
 
     await Product.findOne({
       company: res.locals.company._id,
@@ -213,16 +199,13 @@ const searchProductInner = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      success: false,
-      message: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
+  
   }
 };
 const searchProductName = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     let productName = req.body.productName;
 
     await Product.find({
@@ -260,17 +243,13 @@ const searchProductName = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      success: false,
-      message: "ürün bulunurken bir sorun oluştu",
-      error: error,
-    });
+    return next(new CustomError("bilinmeyen hata", 500, error));
+   
   }
 };
 const searchProduct = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     let barcode = Number(req.body.barcode);
     await Product.findOne({
       company: res.locals.company._id,

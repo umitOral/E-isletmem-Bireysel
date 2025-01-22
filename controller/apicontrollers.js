@@ -52,7 +52,7 @@ const newPassword = async (req, res, next) => {
         }
         return next(err);
       } else {
-        console.log(decoded);
+        
       }
     });
 
@@ -85,10 +85,10 @@ const getSingleDayAllDoctorSessions = async (req, res,next) => {
     // test codes
     const workHours = res.locals.company.workHours;
     const allDoctorDatas = [];
-    console.log(req.params)
+    
     const actualDate = new Date(`${req.params.date.split("-")[0]}-${req.params.date.split("-")[1]}-${req.params.date.split("-")[2]}`);
     // actualDate.setHours(0,0,0,0)
-    console.log(actualDate)
+  
 
 
     for (const i in doctors) {
@@ -122,8 +122,6 @@ const getSingleDayAllDoctorSessions = async (req, res,next) => {
       allDoctorDatas: allDoctorDatas,
     });
   } catch (error) {
-    console.log(error)
-    
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };

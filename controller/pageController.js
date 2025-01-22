@@ -175,10 +175,10 @@ const getPricesPage = (req, res, next) => {
 const getservicesPage = async (req, res, next) => {
   try {
     let company = res.locals.company;
-    console.log("burası");
+    
     let services = await company.services;
-    // console.log(services)
-    console.log(req.query);
+    // 
+    
 
     if (req.query.serviceName) {
       if (req.query.serviceName !== "") {
@@ -194,7 +194,7 @@ const getservicesPage = async (req, res, next) => {
       link: "services",
     });
   } catch (error) {
-    console.log(error);
+    
     res.status(500).json({
       succes: false,
       message: error,
@@ -208,7 +208,7 @@ const getProductsPage = async (req, res, next) => {
       link: "products",
     });
   } catch (error) {
-    console.log(error);
+    
     res.status(500).json({
       succes: false,
       message: error,
@@ -245,7 +245,7 @@ const getSmsPage = async (req, res, next) => {
       link: "services",
     });
   } catch (error) {
-    console.log(error);
+    
     res.status(500).json({
       succes: false,
       message: error,
@@ -315,7 +315,7 @@ const getSantralPage = async (req, res, next) => {
 
 const getUsersPage = async (req, res, next) => {
   try {
-    console.log("users page");
+    
     //pagination
 
     let limit = 10;
@@ -341,14 +341,14 @@ const getUsersPage = async (req, res, next) => {
       link: "users",
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const getAppointmentReportsPage = async (req, res, next) => {
   try {
     //pagination
-    console.log(req.query);
+    
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
 
@@ -442,7 +442,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
 
     let STATUS = { ...APPOINTMENT_STATUS };
     STATUS = Object.values(STATUS);
-    console.log(pagination);
+    
     res.status(200).render("reports/appointmentReports", {
       reports,
       STATUS,
@@ -512,8 +512,8 @@ const getUserReportsPage = async (req, res, next) => {
     startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
     startDate.setHours(24, 0, 0);
-    console.log(startDate);
-    console.log(endDate);
+    
+    
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -526,7 +526,7 @@ const getUserReportsPage = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit)
       .sort({ date: -1 });
-    console.log(reports);
+    
 
     let total = reports.length;
 
@@ -548,7 +548,7 @@ const getUserReportsPage = async (req, res, next) => {
       };
     }
 
-    console.log(pagination);
+    
     res.status(200).render("reports/userReports", {
       reports,
       total,
@@ -723,14 +723,14 @@ const getSettingsPage = (req, res, next) => {
 };
 const companyPaymentPage = async(req, res, next) => {
   try {
-    console.log("companyPaymentPage")
+    
     const company = res.locals.company;
     let activeSubscription=await Subscription.findOne({ company: company._id, status:"active"})
     let waitingSubscriptions=await Subscription.find({ company: company._id, status:"waiting"})
     let finishedSubscriptions=await Subscription.find({ company: company._id, status:"finished"})
-    console.log(activeSubscription)
-    console.log(waitingSubscriptions)
-    console.log(finishedSubscriptions)
+    
+    
+    
     res.status(200).render("companyPaymentPage", {
       link: "companyPaymentPage",
       company,

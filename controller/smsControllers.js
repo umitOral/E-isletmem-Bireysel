@@ -13,8 +13,7 @@ import Appointment from "../models/appointmentModel.js";
 
 const addSmsTemplate = async (req, res, next) => {
   try {
-    console.log("add sms");
-    console.log(req.body);
+    
 
     await Company.updateOne(
       { _id: res.locals.company._id },
@@ -25,7 +24,7 @@ const addSmsTemplate = async (req, res, next) => {
       }
     )
       .then((response) => {
-        console.log(response);
+        
         res.json({
           success: true,
           message: "sms eklendi",
@@ -47,9 +46,9 @@ const addSmsTemplate = async (req, res, next) => {
 };
 const smsStatus = async (req, res, next) => {
   try {
-    console.log("hahoo");
-    console.log("smsStatus");
-    // console.log(req.body);
+    
+    
+    // 
 
     let data = await Sms.findOneAndUpdate(
       { "pkg.id": req.body.pkg.id },
@@ -114,7 +113,7 @@ const activateSmsTemplate = async (req, res, next) => {
 };
 const editSmsTemplate = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     await Company.updateOne(
       { "smsTemplates._id": req.params.id },
       {
@@ -135,7 +134,7 @@ const editSmsTemplate = async (req, res, next) => {
 
 const sendReminderSms = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     let appointment = await Appointment.findById(req.body.appointmentId);
     let messageContent = res.locals.company.smsTemplates.find(
       (item) => item.type === "reminder"
@@ -169,7 +168,7 @@ const sendReminderSms = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
@@ -191,13 +190,13 @@ const sendSingleSms = async (
       user: user._id,
       phone: user.phone,
     };
-    console.log("burası");
+    
 
     let sendedSms = await Sms.create([message], { session });
 
     const pushSettings = {
       url:
-        process.env.MODE === "production"
+        process.env.NODE_ENV === "production"
           ? process.env.PUSH_NOTIFICATION_URL_LIVE
           : process.env.PUSH_NOTIFICATION_URL_LOCAL,
     };
@@ -217,11 +216,11 @@ const sendSingleSms = async (
       customID: sendedSms[0]._id,
       pushSettings: pushSettings,
     };
-    console.log(data);
+    
 
     // decoded user sms password
     const authorization = await createSmsAuthorization(company);
-    console.log("burası1");
+   
     const response=await axios
       .post("http://panel4.ekomesaj.com:9587/sms/create", data, {
         headers: {
@@ -232,7 +231,7 @@ const sendSingleSms = async (
       
         if (response.data.err) {
           await session.abortTransaction();
-          console.log(response.data)
+          
           return { success: false, message: "mesaj gönderilemedi." };
         }
        
@@ -246,7 +245,7 @@ const sendSingleSms = async (
         return { success: true, message: "mesaj gönderildi.", response };
       
   } catch (error) {
-    console.log("buraso5");
+    
     await session.abortTransaction();
     return { success: false, message: "mesaj gönderilemedi.", error };
   } finally {
@@ -273,21 +272,21 @@ const getSmsDetails = async (req, res, next) => {
         },
       })
       .then(async (response) => {
-        console.log(response.data);
+        
         smsData = response.data;
       });
 
     await session.commitTransaction();
-    console.log("Transaction başarılı!");
+    
 
     res.json({ success: true, data: smsData, SMS_STATUS });
   } catch (error) {
     await session.abortTransaction();
-    console.log("transaction iptal!");
+    
     return next(new CustomError("bilinmeyen hata", 500, error));
   } finally {
     session.endSession();
-    console.log("oturum sonlandırıldı!");
+    
   }
 };
 

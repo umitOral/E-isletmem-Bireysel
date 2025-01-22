@@ -36,7 +36,7 @@ import { sendSingleSms } from "./smsControllers.js";
 
 const deactivateEmployee = async (req, res, next) => {
   try {
-    console.log("başarılı");
+    
 
     await Employee.findByIdAndUpdate(req.params.id, { activeOrNot: false });
     res.redirect("back");
@@ -70,10 +70,10 @@ const getUsersAllAppointments = async (req, res, next) => {
 };
 const getUsersAllSms = async (req, res, next) => {
   try {
-    console.log(req.params);
-    console.log(res.locals.company.smsConfig.password);
+    
+    
     if ( res.locals.company.smsConfig.password === undefined) {
-      console.log("burası")
+      
       res.json(
         Response.unsuccessResponse(
           false,
@@ -82,14 +82,14 @@ const getUsersAllSms = async (req, res, next) => {
       );
       return
     }
-    console.log("burası1")
+    
     const authorization = await createSmsAuthorization(res.locals.company);
     let sendedSms = await Sms.find({ user: req.params.id });
     let data = {
       sender: res.locals.company.smsConfig.smsTitle,
       customIDs: sendedSms.map((item) => item._id),
     };
-    console.log(data);
+    
     await axios
       .post("https://panel4.ekomesaj.com:9588/sms/list", data, {
         headers: {
@@ -98,10 +98,10 @@ const getUsersAllSms = async (req, res, next) => {
         },
       })
       .then(async (response) => {
-        console.log("deneme");
-        console.log(response.data);
-        // console.log(response.data);
-        // console.log(response.err);
+        
+        
+        // 
+        // 
         if (!response.data.err) {
           res.status(200).json({
             success: true,
@@ -112,7 +112,7 @@ const getUsersAllSms = async (req, res, next) => {
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        
         res.status(500).json({
           success: false,
           sms: err,
@@ -120,14 +120,14 @@ const getUsersAllSms = async (req, res, next) => {
         });
       });
   } catch (error) {
-    console.log(error)
+    
     return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
 const sendSingleSmsController = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     await User.findById(req.body.userId).then(async (response) => {
       if (response.phone !== "") {
         req.body.messageContent = req.body.messageContent
@@ -140,7 +140,7 @@ const sendSingleSmsController = async (req, res, next) => {
           req.body.messageTitle,
           res.locals.company.smsConfig.smsTitle
         ).then((response) => {
-          console.log(response);
+          
           res.status(200).json({
             success: true,
             message: "mesaj gönderildi",
@@ -154,7 +154,7 @@ const sendSingleSmsController = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
@@ -178,7 +178,7 @@ const findUser = async (req, res, next) => {
       searchObject.identity = req.body.identity;
     }
 
-    console.log(searchObject);
+    
     let users = await User.find(searchObject);
 
     res.status(200).json({
@@ -195,7 +195,7 @@ const findSingleUser = async (req, res, next) => {
   try {
     //search
 
-    console.log(req.query);
+    
     let query = User.find();
 
     if (req.query) {
@@ -295,7 +295,7 @@ const createUser = async (req, res, next) => {
         email: req.body.email,
         company: res.locals.company,
       });
-      console.log(searchEmail);
+      
     }
 
     if (req.body.phone !== "") {
@@ -304,12 +304,12 @@ const createUser = async (req, res, next) => {
         phone: req.body.phone,
         company: res.locals.company,
       });
-      console.log(searchPhone);
+      
     }
     
-    console.log("0")
+    
     if (searchEmail) {
-      console.log("1")
+      
       res.json(
         Response.unsuccessResponse(
           false,
@@ -333,7 +333,7 @@ const createUser = async (req, res, next) => {
           process.env.JWT_SECRET,
           async (err, decodedToken) => {
             if (err) {
-              console.log(err);
+              
             }
 
             decodedToken.usersNames.push({
@@ -437,7 +437,7 @@ const editInformations = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    console.log(req.body)
+    
     let same = false;
 
     const employee = await Employee.findOne({ email: req.body.email });
@@ -447,7 +447,7 @@ const loginUser = async (req, res, next) => {
       same =await bcrypt.compare(req.body.password, employee.password);
       
       if (same) {
-        console.log("burası")
+        
         const token = createToken(company._id, employee._id);
 
         const usersNames = await User.find(
@@ -469,7 +469,7 @@ const loginUser = async (req, res, next) => {
         let today = new Date();
         let endDate = new Date(company.subscribeEndDate);
         let diffTime = endDate - today;
-        console.log(diffTime);
+        
         if (diffTime < 0) {
           res.cookie("companySubscribe", false, {
             httpOnly: true,
@@ -503,13 +503,13 @@ const loginUser = async (req, res, next) => {
 
 const uploadPictures = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
 
-    console.log(req.files);
+    
     const files = req.files.upload_file;
-    console.log(files);
+    
     if (files.length === undefined) {
-      console.log("tek resim");
+      
       const path = files.tempFilePath;
       const data = await cloudinaryImageUploadMethod(path);
 
@@ -530,7 +530,7 @@ const uploadPictures = async (req, res, next) => {
     }
 
     if (files.length > 0) {
-      console.log("ÇOKLU RESİM");
+      
 
       for (const file of files) {
         const path = file.tempFilePath;
@@ -563,8 +563,8 @@ const uploadPictures = async (req, res, next) => {
 
 const addDataToOperation = async (req, res, next) => {
   try {
-    console.log(req.body);
-    console.log(req.params);
+    
+    
 
     let responseData = await Operation.findOneAndUpdate(
       { _id: req.params.operationID },
@@ -595,8 +595,8 @@ const addDataToOperation = async (req, res, next) => {
 
 const addOperation = async (req, res, next) => {
   try {
-    console.log(req.body);
-    console.log(req.params);
+    
+    
 
     req.body.selectedOperations.forEach((element) => {
       element.company = res.locals.company;
@@ -623,8 +623,8 @@ const addOperation = async (req, res, next) => {
 };
 const addDiscountToOperation = async (req, res, next) => {
   try {
-    console.log(req.body);
-    console.log(req.params);
+    
+    
 
     if ((req.body.discount === "") & (req.body.percentDiscount === "")) {
       res.json(
@@ -664,14 +664,14 @@ const addDiscountToOperation = async (req, res, next) => {
 };
 const addOperationInsideAppointment = async (req, res, next) => {
   try {
-    console.log("burası");
-    console.log(req.body);
-    console.log(req.params);
+    
+    
+    
     let foundedAppointment = await Appointment.findById(
       req.body.appointment
     ).populate("plannedOperations.oldOperations");
     if (req.body.selectedOperationsForAdd.new === "") {
-      console.log("deneme1");
+      
       let operation = await Operation.findById(
         req.body.selectedOperationsForAdd.old
       );
@@ -686,11 +686,11 @@ const addOperationInsideAppointment = async (req, res, next) => {
       foundedAppointment.plannedOperations.oldOperations.push(operation._id);
       await operation.save();
     } else {
-      console.log("deneme2");
+      
       let service = res.locals.company.services.find(
         (item) => item.serviceName === req.body.selectedOperationsForAdd.new
       );
-      console.log(service);
+      
       let newOperation = {};
       newOperation.operationName = service.serviceName;
       newOperation.operationPrice = service.servicePrice;
@@ -727,7 +727,7 @@ const addOperationInsideAppointment = async (req, res, next) => {
 };
 const deleteOperation = async (req, res, next) => {
   try {
-    console.log("delete operation");
+    
     let operation = await Operation.findById(req.params.operationId).then(
       async (response) => {
         if (response.sessionOfOperation.length !== 0) {
@@ -753,20 +753,20 @@ const deleteOperation = async (req, res, next) => {
     // let operation = await Operation.findById(req.params.operationId).populate(
     //   "appointments"
     // );
-    // console.log(operation)
+    // 
     // let appointmentsDates = operation.appointments.map((item) =>
     //   item.date.setTime(item.startHour)
     // );
     // let date = new Date();
     // let diffTime = [];
 
-    // console.log(appointmentsDates);
+    // 
     // appointmentsDates.forEach(async (element) => {
     //   diffTime.push(date - element);
     // });
 
     // let result = diffTime.findIndex((item) => item > 0);
-    // console.log(result);
+    // 
     // if (result !== -1) {
     //   res.status(200).json({
     //     succes: false,
@@ -781,17 +781,17 @@ const deleteOperation = async (req, res, next) => {
     //   await Appointment.deleteMany({ _id: { $in: operation.appointments } });
     //   await Operation.findByIdAndDelete(req.params.operationId)
     //     .then((response) => {
-    //       console.log("işlem silindi");
+    //       
     //       if (response.images.length !== 0) {
-    //         console.log("resimvar");
+    //         
     //         response.images.forEach(async (element) => {
     //           await cloudinary.uploader.destroy(
     //             element.public_id,
     //             function (error, result) {
     //               if (error) {
-    //                 console.log(error);
+    //                 
     //               } else {
-    //                 console.log(result);
+    //                 
     //               }
     //             }
     //           );
@@ -808,7 +808,7 @@ const deleteOperation = async (req, res, next) => {
     //       }
     //     })
     //     .catch((err) => {
-    //       console.log(err);
+    //       
     //       res.status(500).json({
     //         succes: false,
     //         message: "işlem Silinirken bir Sorun oluştu tekrar deneyiniz.",
@@ -821,9 +821,9 @@ const deleteOperation = async (req, res, next) => {
 };
 const getSessionsofOperation = async (req, res, next) => {
   try {
-    console.log("getSessionsofOperation");
+    
     Operation.findById(req.params.operationId).then(async (response) => {
-      console.log(response);
+      
       if (response.sessionOfOperation.length === 0) {
         res.status(200).json({
           succes: false,
@@ -844,7 +844,7 @@ const getSessionsofOperation = async (req, res, next) => {
 };
 
 const deletePhoto = async (req, res, next) => {
-  console.log(req.params);
+  
   try {
     //TODO
     // resim silmeye çalışan müşteri kendisi mi kontrol ediecek  @@SECURITY
@@ -853,7 +853,7 @@ const deletePhoto = async (req, res, next) => {
       "archimet/" + req.params.public_id,
       function (error, result) {
         if (error) {
-          console.log(error);
+          
         }
       }
     );
@@ -881,7 +881,7 @@ const deletePhoto = async (req, res, next) => {
 };
 const getUsersPlannedOperations = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     const operations = await Operation.find({ _id: { $in: req.body } });
 
     res.json({
@@ -895,8 +895,8 @@ const getUsersPlannedOperations = async (req, res, next) => {
 };
 const getUsersContinueOperations = async (req, res, next) => {
   try {
-    console.log(req.body);
-    console.log(req.params);
+    
+    
 
     const operations = await Operation.find({
       user: req.params.id,
@@ -965,7 +965,7 @@ const getUsersAllOperations = async (req, res, next) => {
 };
 const getAllPhotos = async (req, res, next) => {
   try {
-    console.log(req.params);
+    
 
     const operation = await Operation.findById(req.params.operationId);
 
@@ -979,7 +979,7 @@ const getAllPhotos = async (req, res, next) => {
       }
       return 0;
     }
-    console.log(photos);
+    
 
     res.json({ success: true, message: "resimler çekildi", photos });
   } catch (error) {
@@ -995,7 +995,7 @@ const getUsersAllPayments = async (req, res, next) => {
       .populate("products.productId")
       .populate("operations.operationId");
     payments.forEach((element) => {
-      console.log(element.operations.operationId);
+      
     });
 
     if (payments.length === 0) {
@@ -1042,7 +1042,7 @@ const getUserNotifications = async (req, res, next) => {
 };
 
 const updateUserNotifications = async (req, res, next) => {
-  console.log(req.body);
+  
   try {
     let user = await User.findById(req.params.id);
     if (user.notifications.includes(req.body.notificationkey)) {
@@ -1053,7 +1053,7 @@ const updateUserNotifications = async (req, res, next) => {
       user.notifications.push(req.body.notificationkey);
     }
 
-    console.log(user.notifications);
+    
     await user.save();
     res.status(200).json({
       success: true,
@@ -1077,7 +1077,7 @@ const resetPasswordMail = async (req, res, next) => {
       const email = req.body.email;
 
       const resetToken = employee.createResetPasswordToken(email);
-      console.log(resetToken);
+      
       await employee.save();
       const resetUrl = `${req.protocol}://${req.get(
         "host"

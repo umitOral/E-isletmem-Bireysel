@@ -63,7 +63,7 @@ let year = today.getFullYear();
 let selectedDate = today.toString();
 selectedDate = year + "-" + (month + 1) + "-" + activeDay;
 let allAppointments = {};
-console.log(selectedDate);
+
 
 showDatesAtPage();
 getAllSessions();
@@ -94,7 +94,7 @@ changeStatusSelect.addEventListener("change", (e) => {
       data
     )
     .then((response) => {
-      console.log(response);
+      
       ui.showNotification(true, response.message);
       modalChangeStatus.classList.add("hidden");
       getAllSessions();
@@ -119,7 +119,7 @@ addUserForm.addEventListener("submit", (e) => {
   request
     .postWithUrl("./users/createUser", data)
     .then((response) => {
-      console.log(response);
+      
       ui.showNotification(response.success, response.message);
       dataList.innerHTML += `
     <option data-userid="${response.data._id}" data-userdata="${
@@ -133,7 +133,7 @@ addUserForm.addEventListener("submit", (e) => {
 
 function showDatesAtPage(params) {
   if (params) {
-    console.log(params);
+    
     calendarHead.textContent = new Date(params).toLocaleDateString("locale", {
       month: "long",
       year: "numeric",
@@ -243,7 +243,7 @@ function getAllSessions() {
       "/api/getSingleDayAllDoctorSessions/" + selectedDate.replaceAll("/", "-")
     )
     .then((response) => {
-      console.log(response);
+      
       allAppointments = response.allDoctorDatas;
       slotDuration = response.workHours.workPeriod;
       workHours = response.workHours;
@@ -274,8 +274,8 @@ function handleResize() {
   let resizeTops = document.querySelectorAll(".resize-handle.top");
   resizeTops.forEach((element) => {
     element.addEventListener("mousedown", (e) => {
-      console.log("burası1");
-      console.log(e.target);
+      
+      
       startResize(e, e.target.parentElement, "start");
     });
   });
@@ -283,17 +283,17 @@ function handleResize() {
   let resizeBottoms = document.querySelectorAll(".resize-handle.bottom");
   resizeBottoms.forEach((element) => {
     element.addEventListener("mousedown", (e) => {
-      console.log("burası1");
-      console.log(e.target);
+      
+      
       startResize(e, e.target.parentElement, "end");
     });
   });
 }
 
 userSelect.addEventListener("change", () => {
-  console.log(userSelect.value);
+  
   let value = userSelect.value.replaceAll(" ", "");
-  console.log(value);
+  
   userID = document.querySelector(`#user-names option[data-userdata=${value}]`).dataset.userid;
   useremail = document.querySelector(
     `#user-names option[data-userdata=${value}]`
@@ -302,16 +302,16 @@ userSelect.addEventListener("change", () => {
   request
     .getwithUrl("./users/" + userID + "/getUsersContinueOperations")
     .then((response) => {
-      console.log(response);
+      
       ui.addOperationstoUI(response.operations);
     })
     .catch((err) => console.log(err));
 });
 
 doctorSelect.addEventListener("change", () => {
-  console.log(doctorSelect.value);
+  
   let value = doctorSelect.value.replaceAll(" ", "");
-  console.log(value);
+  
   doctorID =
     doctorSelect.options[doctorSelect.options.selectedIndex].dataset.doctorid;
 });
@@ -409,7 +409,7 @@ function prevMonth() {
     year--;
   }
   selectedDate = year + "-" + (month + 1) + "-" + activeDay;
-  console.log(selectedDate);
+  
   showDatesAtPage(selectedDate);
   initCalender();
 }
@@ -422,7 +422,7 @@ function nextMonth() {
   }
 
   selectedDate = year + "-" + (month + 1) + "-" + activeDay;
-  console.log(selectedDate);
+  
   showDatesAtPage(selectedDate);
   initCalender();
 }
@@ -484,9 +484,9 @@ function addListener() {
   days.forEach((element) => {
     element.addEventListener("click", (e) => {
       // set current day active
-      console.log(element);
+      
       activeDay = e.target.textContent.trim();
-      console.log(activeDay);
+      
       selectedDate = year + "-" + (month + 1) + "-" + activeDay;
 
       ui.selectedDatetoAppointmentUI(selectedDate);
@@ -521,7 +521,7 @@ function addListener() {
               !element.classList.contains("next-date") &&
               element.textContent.trim() === e.target.textContent.trim()
             ) {
-              console.log(element);
+              
               element.classList.add("active");
             }
           });
@@ -558,7 +558,7 @@ function appointmentEdit() {
         return;
       }
       e.stopPropagation();
-      console.log(e.target);
+      
       if (!e.target.classList.contains("resize-handle")) {
         selectedAppointmentForEdit = allAppointments
           .flatMap((item) => item.sessionsofdoctorforactualDay)
@@ -593,7 +593,7 @@ smallModal.addEventListener("click", (e) => {
       user: selectedAppointmentForEdit.user._id,
       appointmentId: selectedAppointmentForEdit._id,
     };
-    console.log(data)
+    
     request
       .postWithUrl(
         "./sms/sendReminderSms",data
@@ -601,7 +601,7 @@ smallModal.addEventListener("click", (e) => {
       .then((response) => {
         if (response.success === true) {
           ui.showNotification(true, response.message);
-          console.log(response);
+          
         } else {
           ui.showNotification(false, response.message);
         }
@@ -620,12 +620,12 @@ function editModalHandle() {
         "/getUsersContinueOperations"
     )
     .then((response) => {
-      console.log(response);
+      
       ui.addOperationstoUIforEdit(response.operations);
     })
     .catch((err) => console.log(err));
 
-  console.log(selectedAppointmentForEdit);
+  
 
   formEditAppointment.user.value =
     selectedAppointmentForEdit.user.name +
@@ -694,7 +694,7 @@ const selected_proccess_for_edit = document.querySelector(
 );
 
 addSessionForm.addEventListener("submit", (e) => {
-  console.log("burası");
+  
   const selectedDate = year + "-" + (month + 1) + "-" + activeDay;
 
   const services = [];
@@ -715,7 +715,7 @@ addSessionForm.addEventListener("submit", (e) => {
     },
     userEmail: useremail,
   };
-  console.log(data);
+  
   request
     .postWithUrl("./appointments/createAppointment", data)
     .then((response) => {
@@ -751,12 +751,12 @@ addSessionForm.addEventListener("submit", (e) => {
 // ///////////////////////////////////
 
 proccessType.addEventListener("change", (e) => {
-  console.log("hizmet seçildi");
+  
 
   newAppointment.plannedOperations.oldOperations.push(
     proccessType.options[proccessType.options.selectedIndex].dataset.operationid
   );
-  console.log(newAppointment);
+  
 
   selected_proccess.innerHTML += `
   <div data-operationid="${
@@ -777,7 +777,7 @@ proccessType.addEventListener("change", (e) => {
 });
 
 proccessTypeForEdit.addEventListener("change", (e) => {
-  console.log("hizmet seçildi");
+  
 
   selectedAppointmentForEdit.plannedOperations.oldOperations.push({
     operationName:
@@ -786,7 +786,7 @@ proccessTypeForEdit.addEventListener("change", (e) => {
     _id: proccessTypeForEdit.options[proccessTypeForEdit.options.selectedIndex]
       .dataset.operationid,
   });
-  console.log(selectedAppointmentForEdit);
+  
 
   selected_proccess_for_edit.innerHTML += `
    <div data-operationid="${
@@ -810,8 +810,8 @@ proccessTypeForEdit.addEventListener("change", (e) => {
 });
 
 proccessTypeNew.addEventListener("change", (e) => {
-  console.log("yeni hizmet seçildi");
-  console.log(newAppointment);
+  
+  
 
   newAppointment.plannedOperations.newOperations.push(
     proccessTypeNew.options[proccessTypeNew.options.selectedIndex].value
@@ -831,14 +831,14 @@ proccessTypeNew.addEventListener("change", (e) => {
 });
 
 proccessTypeNewForEdit.addEventListener("change", (e) => {
-  console.log("yeni hizmet seçildi");
-  console.log(selectedAppointmentForEdit);
+  
+  
 
   selectedAppointmentForEdit.plannedOperations.newOperations.push(
     proccessTypeNewForEdit.options[proccessTypeNewForEdit.options.selectedIndex]
       .value
   );
-  console.log(selectedAppointmentForEdit);
+  
 
   selected_proccess_for_edit.innerHTML += `
           <div data-type="new">
@@ -856,8 +856,8 @@ proccessTypeNewForEdit.addEventListener("change", (e) => {
 selected_proccess.addEventListener("click", (e) => {
   if (e.target.classList.contains("ph-x")) {
     // add back to selectedbox
-    console.log(e.target);
-    console.log(e.target.previousElementSibling);
+    
+    
 
     if (e.target.parentElement.dataset.operationid) {
       let opt = document.createElement("option");
@@ -882,7 +882,7 @@ selected_proccess.addEventListener("click", (e) => {
         );
       newAppointment.plannedOperations.newOperations.splice(indexcontrol, 1);
     }
-    console.log(newAppointment);
+    
     // remove selected options
 
     e.target.parentElement.remove();
@@ -891,8 +891,8 @@ selected_proccess.addEventListener("click", (e) => {
 selected_proccess_for_edit.addEventListener("click", (e) => {
   if (e.target.classList.contains("ph-x")) {
     // add back to selectedbox
-    console.log(e.target);
-    console.log(e.target.previousElementSibling);
+    
+    
 
     if (e.target.parentElement.dataset.operationid) {
       let opt = document.createElement("option");
@@ -924,7 +924,7 @@ selected_proccess_for_edit.addEventListener("click", (e) => {
         1
       );
     }
-    console.log(selectedAppointmentForEdit);
+    
     // remove selected options
 
     e.target.parentElement.remove();
@@ -945,7 +945,7 @@ function toMinutes(time) {
 // Start resizing
 function startResize(event, appointment, type) {
   event.stopPropagation();
-  console.log("start");
+  
   resizing = true;
   isResizing = true;
   currentDrag = appointment;
@@ -966,18 +966,18 @@ function resizeAppointment(event) {
   const hours = String(Math.floor(newTime / 60)).padStart(2, "0");
   const minutes = String(newTime % 60).padStart(2, "0");
   const newTimeString = `${hours}:${minutes}`;
-  // console.log(rect);
-  // console.log(offsetY);
-  // console.log(timeIndex);
-  // console.log(scheduleStart);
-  // console.log(slotDuration);
-  // console.log(newTime);
-  // console.log(hours);
-  // console.log(minutes);
-  // console.log(newTimeString);
+  // 
+  // 
+  // 
+  // 
+  // 
+  // 
+  // 
+  // 
+  // 
 
   if (dragType === "start") {
-    console.log("start");
+    
     if (toMinutes(newTimeString) >= toMinutes(currentDrag.dataset.endhour))
       return; // Prevent overlap
     currentDrag.dataset.starthour = newTimeString;
@@ -1023,7 +1023,7 @@ async function stopResize() {
       (app) => app._id === currentDrag.dataset.session
     );
     let appointment = appointments.sessionsofdoctorforactualDay[index];
-    console.log(index);
+    
     if (
       currentDrag.dataset.starthour !== appointment.startHour ||
       currentDrag.dataset.endhour !== appointment.endHour
@@ -1042,10 +1042,10 @@ async function stopResize() {
         .then((response) => {
           if (response.success === true) {
             ui.showNotification(true, response.message);
-            console.log(response);
-            console.log("güncellendi");
+            
+            
             appointment = response.data;
-            console.log(allAppointments);
+            
           } else {
             ui.showNotification(false, response.message);
             getAllSessions();
@@ -1086,7 +1086,7 @@ formEditAppointment.addEventListener("submit", async (e) => {
     description: formEditAppointment.description.value,
     plannedOperations: selectedAppointmentForEdit.plannedOperations,
   };
-  console.log(data);
+  
   await request
     .postWithUrl(
       "./appointments/" + selectedAppointmentForEdit._id + "/updateAppointment",

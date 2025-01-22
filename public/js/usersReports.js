@@ -62,7 +62,7 @@ function datasToTable(data) {
   let lastpage = document.querySelector("#lastpage");
   let total = document.querySelector("#total");
 
-  console.log(table);
+ 
   while (tableBody.children[0]) {
     tableBody.children[0].remove();
   }
@@ -199,7 +199,7 @@ function paginatioButtonsHandle() {
   let paginationBtns = document.querySelectorAll(".pagination-buttons");
   paginationBtns.forEach((element) => {
     element.addEventListener("click", (e) => {
-      console.log(e.target.dataset.pagenumber);
+     
       getReports(e.target.dataset.pagenumber);
     });
   });
@@ -226,7 +226,7 @@ operationTypeSelect.addEventListener("change", () => {
       element.parentElement.parentElement.parentElement.dataset.userid
     );
   });
-  console.log(selectedUsers);
+  
   let operationType =
     operationTypeSelect.options[operationTypeSelect.options.selectedIndex]
       .value;
@@ -242,12 +242,12 @@ operationTypeSelect.addEventListener("change", () => {
 });
 
 smsNameSelect.addEventListener("change", () => {
-  console.log("doruu");
+  
   const allmessageContents = document.querySelectorAll(".message-contents");
   allmessageContents.forEach((element) => {
     element.style = "display:none";
   });
-  console.log(smsNameSelect.options.selectedIndex);
+  
   allmessageContents[smsNameSelect.options.selectedIndex - 1].style =
     "display:block";
 });
@@ -265,13 +265,13 @@ sendSmsForm.addEventListener("submit", (e) => {
     .postWithUrl("./sendBulkSms", data)
     .then((response) => {
       ui.showNotification(response.success, response.message);
-      console.log(response);
+     
       selectedUsers = [];
       sendSmsModal.classList.add("hidden");
     })
     .catch((err) => {
       ui.showNotification(err.success, err.message);
-      console.log(err);
+      
       selectedUsers = [];
       sendSmsModal.classList.add("hidden");
     });

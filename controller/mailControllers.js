@@ -42,10 +42,10 @@ const sendDailyCheckoutReportMail = async (receiver,company) => {
 
     transporter
       .verify()
-      .then(console.log("sendDailyCheckoutReportMail sended"))
+      .then()
       .catch(console.error);
   } catch (error) {
-    console.log(error);
+    
   }
 };
 const sendDailyEmployeeReportMail = async (receiver) => {

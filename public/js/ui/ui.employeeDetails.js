@@ -1,7 +1,6 @@
 export class EmployeeDetailsUI{
 
     responseToUI(data,APPOINTMENT_STATUS) {
-        console.log("burası")
     let sessionsTableBody =document.querySelector(".table.appointments-table tbody")
     sessionsTableBody.innerHTML=""
 

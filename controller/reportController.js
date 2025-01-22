@@ -12,7 +12,7 @@ import { sendSingleSms } from "./smsControllers.js";
 const sendBulkSmsController = async (req, res, next) => {
   try {
     let missedPhoneCount = 0;
-    console.log(req.body)
+    
     for (const user of req.body.users) {
       await User.findById(user).then(async (response) => {
         if (response.phone !== "") {
@@ -25,7 +25,7 @@ const sendBulkSmsController = async (req, res, next) => {
             req.body.message,
             req.body.messageTitle,
             res.locals.company.smsConfig.smsTitle
-          ).then((response) => console.log(response));
+          )
         } else {
           missedPhoneCount = +1;
         }
@@ -37,13 +37,13 @@ const sendBulkSmsController = async (req, res, next) => {
       message: "mesajlar gönderildi.eksik numara sayısı:" + missedPhoneCount,
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const getUserReports = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     const page = parseInt(req.body.page) || 1;
     const limit = parseInt(req.body.limit) || 5;
     let birthDate;
@@ -87,18 +87,18 @@ const getUserReports = async (req, res, next) => {
 
     if (req.body.firstAppointment !== "") {
       if (req.body.firstAppointment === "true") {
-        console.log("varsa");
+        
 
         for (const [index, element] of reports.entries()) {
-          console.log("arama");
+          
           await Appointment.findOne({ user: element._id }).then((resp) => {
-            console.log(index);
-            console.log(resp);
+            
+            
             if (resp === null) {
-              console.log("burası");
+              
               element.firstAppointment = false;
             } else {
-              console.log("burası2");
+              
               element.firstAppointment = true;
               filteredReports.push(element);
             }
@@ -117,7 +117,7 @@ const getUserReports = async (req, res, next) => {
         }
       }
     } else {
-      console.log("xx");
+      
       filteredReports = reports;
     }
 
@@ -127,7 +127,7 @@ const getUserReports = async (req, res, next) => {
       .lt(endDate);
 
     total = total.length;
-    console.log(total);
+    
 
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
@@ -157,14 +157,14 @@ const getUserReports = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const getAppointmentReports = async (req, res, next) => {
   try {
-    console.log("hahooo");
-    console.log(req.body);
+    
+    
     const page = parseInt(req.body.page) || 1;
     const limit = parseInt(req.body.limit) || 5;
 
@@ -208,7 +208,7 @@ const getAppointmentReports = async (req, res, next) => {
       .lt(endDate);
 
     total = total.length;
-    console.log(total);
+    
 
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
@@ -238,13 +238,13 @@ const getAppointmentReports = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const getSmsReports = async (req, res, next) => {
   try {
-    console.log("sms reports");
+    
 
     const authorization = await createSmsAuthorization(res.locals.company);
     req.body.page -= 1;
@@ -257,7 +257,7 @@ const getSmsReports = async (req, res, next) => {
       pageIndex: page,
       pageSize: limit,
     };
-    console.log(data);
+    
     let smsReport;
     await axios
       .post("https://panel4.ekomesaj.com:9588/sms/list", data, {
@@ -271,7 +271,7 @@ const getSmsReports = async (req, res, next) => {
           smsReport = response.data;
         }
       });
-    console.log(smsReport.data);
+    
 
     // pagination
     const startIndex = (page - 1 + 1) * limit;
@@ -306,14 +306,14 @@ const getSmsReports = async (req, res, next) => {
       pagination,
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const getPaymentReports = async (req, res, next) => {
   try {
-    console.log("payment reports");
-    console.log(req.body);
+    
+    
     const page = parseInt(req.body.page) || 1;
     const limit = parseInt(req.body.limit) || 5;
 
@@ -341,7 +341,7 @@ const getPaymentReports = async (req, res, next) => {
     // pagination
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    console.log(searchObject);
+    
     let reports = await Payment.find(searchObject)
       .lean()
       .where("createdAt")
@@ -360,7 +360,7 @@ const getPaymentReports = async (req, res, next) => {
       .lt(endDate);
 
     total = total.length;
-    console.log(total);
+    
 
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
@@ -389,14 +389,14 @@ const getPaymentReports = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const getProductReports = async (req, res, next) => {
   try {
-    console.log("product reports");
-    console.log(req.body);
+    
+    
     const page = parseInt(req.body.page) || 1;
     const limit = parseInt(req.body.limit) || 5;
 
@@ -425,14 +425,14 @@ const getProductReports = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit)
       .sort({ createdAt: -1 });
-    console.log(reports);
+    
     let total = await Product.find(searchObject)
       .where("createdAt")
       .gt(startDate)
       .lt(endDate);
 
     total = total.length;
-    console.log(total);
+    
 
     const lastpage = Math.ceil(total / limit);
     const pagination = {};
@@ -461,7 +461,7 @@ const getProductReports = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };

@@ -6,7 +6,7 @@ import Product from "../models/productModel.js";
 
 const addPayment = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     req.body.company = res.locals.company._id;
    
     
@@ -16,20 +16,20 @@ const addPayment = async (req, res, next) => {
     }
 
     if (req.body.comissionEmployee && req.body.products.length !== 0) {
-      console.log("burası")
+      
       const employee = await Employee.findById(req.body.comissionEmployee);
       req.body.products.forEach(element => {
-        console.log( "haho")
-        console.log(employee||"deneme")
+        
+        
         element.employeeComission=employee.employeeComission
       });
     }
 
-console.log("burası2")
+
  
 
     await Payment.create(req.body).then((response) => {
-      console.log(response);
+      
       req.body.operations.forEach(async (element) => {
         let foundedOperation = await Operation.findOne({
           _id: element.operationId,
@@ -41,7 +41,7 @@ console.log("burası2")
           );
           let totalPaymentValue =
             totalPayments.reduce((a, b) => a + b) + element.paymentValue;
-          console.log(totalPaymentValue);
+          
           if (
             (foundedOperation.operationPrice - foundedOperation.discount) *
               ((100 - foundedOperation.percentDiscount) / 100) ===
@@ -101,8 +101,8 @@ console.log("burası2")
       message: "Ödeme kaydedildi",
     });
   } catch (error) {
-    console.log(error)
-    return new CustomError(error);
+
+    return next(new CustomError("bilinmeyen hata", 500, error));
   }
 };
 
@@ -110,7 +110,7 @@ const addExpense = async (req, res, next) => {
   try {
     req.body.company = res.locals.company._id;
     req.body.totalPrice = req.body.totalPrice * -1;
-    console.log(req.body);
+    
     const payment = await Payment.create(req.body);
 
     res.redirect("back");
@@ -147,7 +147,7 @@ const deletePayment = async (req, res, next) => {
   try {
     const payment = await Payment.findByIdAndDelete(req.params.id);
 
-    console.log(payment);
+    
     payment.operations.forEach(async (element) => {
       const operation = await Operation.findById({ _id: element.operationId });
       let index = operation.payments.findIndex(
@@ -168,7 +168,7 @@ const deletePayment = async (req, res, next) => {
 
 const editPayment = async (req, res, next) => {
   try {
-    console.log(req.body);
+    
     let requestPayments = req.body.operations.map((item) => item.operationId);
     let requestProducts = req.body.products;
 
@@ -184,9 +184,9 @@ const editPayment = async (req, res, next) => {
         (item) => (item.productId === value.productId.toString())
       );
       
-      console.log(i);
-      console.log(indexcontrol);
-      console.log(value.productId.toString());
+      
+      
+      
       
       
 
@@ -273,8 +273,8 @@ const editPayment = async (req, res, next) => {
           .reduce((a, b) => a + b)
       );
     }
-    console.log(totalPriceOperations)
-    console.log(totalPriceProducts)
+    
+    
     payment.totalPrice = totalPriceProducts + totalPriceOperations;
 
     await payment.save();
@@ -282,7 +282,7 @@ const editPayment = async (req, res, next) => {
       .populate("operations.operationId")
       .populate("products.productId");
 
-    console.log("haho2");
+    
     res.json({
       success: true,
       message: "ödeme düzenlendi.",
@@ -300,13 +300,13 @@ const getSearchedPayments = async (req, res, next) => {
     startDate.setDate(startDate.getDate() - 1);
     startDate.setHours(24, 0, 0);
     endDate.setHours(24, 0, 0);
-    // console.log(startDate)
+    // 
     //  startDate = toDateInputValue(new Date(startDate));
 
     // let endDate = toDateInputValue(new Date(req.query.endDate));
 
-    console.log(startDate);
-    console.log(endDate);
+    
+    
     const payments = await Payment.find({
       company: res.locals.company._id,
       createdAt: {

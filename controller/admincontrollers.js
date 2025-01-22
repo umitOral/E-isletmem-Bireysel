@@ -9,7 +9,7 @@ import Appointment from "../models/appointmentModel.js";
 import Subscription from "../models/subscriptionModel.js";
 const addbulkproducttoGeneral = async (req, res, next) => {
   try {
-    console.log("add product");
+    
     let data = [];
 
     let modifiedData = [];
@@ -60,21 +60,21 @@ const topluIslemler = async (req, res, next) => {
     // await productModel.findOne({ $or: [{ upc: barcode }, { ean: barcode }] })
     //   .then(response => {
     //     if (response) {
-    //       console.log("burasıyy")
+    //       
     //       res.status(200).json({
     //         success: true,
     //         message: "içerden sorgulandı",
     //         data: response
     //       })
     //     } else {
-    //       console.log("burasıxx")
+    //       
 
     //       axios.get(`https://api.vapi.co/products`, {
     //         headers: { Authorization: `Bearer NBpQS2bZ6aizi13S8KM37wKRFLpuUWvih`},
     //         // params:{name:"urofen"}
     //       })
     //         .then(function (response) {
-    //           console.log(response.data);
+    //           
     //           // response.data.items[0].productName=response.data.items[0].title
 
     //             productModel.insertMany(response.data.data)
@@ -88,8 +88,8 @@ const topluIslemler = async (req, res, next) => {
 
     //         })
     //         .catch(function (error) {
-    //           console.log("errrrrro")
-    //            console.log(error.response.data);
+    //           
+    //            
     //         })
     //     }
     //   })
