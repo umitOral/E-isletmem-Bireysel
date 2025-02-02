@@ -460,6 +460,13 @@ export class UI {
           return false;
         }
       }
+      function comissionEmployeeCheck() {
+        if (payment.comissionEmployee) {
+          return true;
+        } else {
+          return false;
+        }
+      }
 
       paymentTable.innerHTML += `
             <tr>
@@ -475,6 +482,12 @@ export class UI {
                         ? payment.fromUser.name + " " + payment.fromUser.surname
                         : ""
                     }</td> 
+                    <td>${
+                      comissionEmployeeCheck()
+                        ? payment.comissionEmployee.name + " " + payment.comissionEmployee.surname
+                        : ""
+                    }</td> 
+                   
                     <td>${payment.cashOrCard}</td>
                     <td class="${
                       payment.totalPrice < -1 ? "red_row" : "green_row"

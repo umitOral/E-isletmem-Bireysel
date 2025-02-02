@@ -286,7 +286,7 @@ const contactEmail = async (req, res) => {
     const data = {
       name: req.body.name,
       messages: req.body.message,
-      phone: req.body.phone,
+      phone: req.body.phone||"",
       email: req.body.email,
       ticketStatus: ticketStatus.OPEN,
     };

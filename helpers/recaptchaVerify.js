@@ -5,6 +5,7 @@ import {Response} from "../helpers/error/Response.js";
 
 const checkPassword = async (req, res, next) => {
   console.log("verifiyin password");
+  console.log(req.body);
   if (req.body.password !== req.body.password2) {
     res.json(Response.unsuccessResponse(false, "Girdiğiniz şifreler farklıdır"));
   } else {
@@ -17,7 +18,6 @@ const verifyCompanyUniqueness = async (req, res, next) => {
     console.log("verifiyin uniqueness");
     await Company.findOne({ email: req.body.email })
       .then((response) => {
-        console.log(req.body.email);
 
         if (response != null) {
           res.json(
@@ -60,7 +60,7 @@ const verifyRecaptcha = async (req, res, next) => {
         if (data.success) {
           next();
         } else {
-            res.json(Response.unsuccessResponse(false,"lütfen doğrulamayı giriniz"));
+            res.json(Response.unsuccessResponse(false,"Alttaki Robot doğrulamasını yapınız"));
         }
       })
       .catch((err) => {

@@ -76,7 +76,7 @@ const createCompany = async (req, res, next) => {
     await Subscription.create(subscriptionData);
     await sendRegisterMail();
     res.json({
-      createSuccess: true,
+      success: true,
       message: "kaydınız başarıyla oluşturuldu",
     });
   } catch (error) {
@@ -112,8 +112,6 @@ const updateCompanyInformations = async (req, res, next) => {
   try {
     
     
-    
-
     if (req.body.VKN !== "" &&( res.locals.company.VKN!==Number(req.body.VKN))) {
       
       let company = await Company.findOne({ VKN: req.body.VKN });

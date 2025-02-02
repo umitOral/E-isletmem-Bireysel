@@ -13,15 +13,7 @@ export class EmployeeDetailsUI{
         </td>
 
         <td>
-            ${new Date(session.startHour).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-                -
-                ${new Date(session.endHour).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+            ${session.startHour}-${session.endHour}
                     
         </td>
 

@@ -10,7 +10,7 @@ const employeeSchema = new Schema({
   email: { type: String, require: true },
   sex: { type: String, require: false },
   birthDate: { type: Date, require: false },
-  role: { type: Object },
+  role: { type: String,default:"personel" },
   password: { type: String, require: false },
   phone: { type: String, require: false },
   address: { type: String, require: false },
@@ -30,13 +30,11 @@ const employeeSchema = new Schema({
     type: Object,
     workStart: {
       type: String,
+      default: "08:00",
     },
     workEnd: {
       type: String,
-    },
-    default: {
-      workStart: "08:00",
-      workEnd: "18:00",
+      default: "18:00",
     },
   },
   company: {

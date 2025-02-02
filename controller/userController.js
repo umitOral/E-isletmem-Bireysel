@@ -437,7 +437,7 @@ const editInformations = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    
+   
     let same = false;
 
     const employee = await Employee.findOne({ email: req.body.email });
@@ -1075,9 +1075,7 @@ const resetPasswordMail = async (req, res, next) => {
       );
     } else {
       const email = req.body.email;
-
       const resetToken = employee.createResetPasswordToken(email);
-      
       await employee.save();
       const resetUrl = `${req.protocol}://${req.get(
         "host"
@@ -1086,7 +1084,7 @@ const resetPasswordMail = async (req, res, next) => {
       sendPasswordResetMail(email, resetUrl);
 
       res.status(200).json({
-        succes: true,
+        success: true,
         message: "şifre sıfırlama maili gönderildi.",
       });
     }

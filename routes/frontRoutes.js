@@ -1,5 +1,5 @@
 import express from 'express';
-import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getServicesPage,getForgotPasswordPage} from '../controller/pageController.js';
+import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getForgotPasswordPage, getBlogPage, getSingleBlogPage, getOurServicesPage} from '../controller/pageController.js';
 import {loginUser,resetPasswordMail} from '../controller/userController.js';
 import {handlePaymentCallback,createCompany,handlePaymentResult} from '../controller/companyControllers.js';
 import {smsStatus} from '../controller/smsControllers.js';
@@ -7,7 +7,7 @@ import {contactEmail} from '../controller/mailControllers.js';
 import {newPassword} from '../controller/apicontrollers.js';
 import * as authMiddleware from '../middlewares/authMiddleware.js'
 import { verifyRecaptcha,checkPassword,verifyCompanyUniqueness} from "../helpers/recaptchaVerify.js";
-
+import ourServicesRoutes from "../routes/ourServicesRoutes.js";
 
 
 const router =express.Router()
@@ -16,11 +16,12 @@ router.route("/").get(getIndexPage)
 router.route("/contactus").get(getContactPage)
 router.route("/about-us").get(getAboutUsPage)
 router.route("/term-of-use").get(getTermOfUsePage)
-router.route("/our-services").get(getServicesPage)
 router.route("/return-policies").get(returnPoliciesPage)
 router.route("/privacy-policies").get(privacyPoliciesPage)
 router.route("/kvkk").get(kvkkPage)
 router.route("/prices").get(getPricesPage)
+router.route("/blog").get(getBlogPage)
+router.route("/blog/:blogName").get(getSingleBlogPage)
 
 router.route("/login").get(getLoginPage)
 router.route("/register").get(getRegisterPage)
@@ -38,6 +39,7 @@ router.get('/result', (req, res) => {
     res.render('front/payment-result');
   });
 router.route("/smsStatus").post(smsStatus)
+router.use("/our-services", ourServicesRoutes)
 
 router.route("/contactEmail").post(verifyRecaptcha,contactEmail)
 

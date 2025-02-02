@@ -291,7 +291,7 @@ hr {
   width: 100%;
 }
 .form-group input:read-only,
-.form-group textarea:read-only,
+.form-group textarea:read-only
 {
   border: none;
   display: block;

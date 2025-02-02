@@ -1,36 +1,28 @@
 import User from "../models/userModel.js";
 import moment from "moment";
-import fs from "fs";
+
 import Employee from "../models/EmployeesModel.js";
 
 import { COMPANY_DOCS, DOC_STATUS } from "../config/status_list.js";
 
-import Sessions from "../models/appointmentModel.js";
-import Payment from "../models/paymentsModel.js";
 import Company from "../models/companyModel.js";
 import Product from "../models/productModel.js";
 import { productGeneralSchema } from "../models/productGeneralModel.js";
 
 import Subscription from "../models/subscriptionModel.js";
 import { Ticket } from "../models/ticketModel.js";
-
-import bcrypt from "bcrypt";
 import { CustomError } from "../helpers/error/CustomError.js";
-import { query } from "express";
 
-import Session from "../models/appointmentModel.js";
-import {
-  APPOINTMENT_STATUS,
+import { APPOINTMENT_STATUS } from "../config/status_list.js";
 
-} from "../config/status_list.js";
-import { searchProduct } from "./productControllers.js";
 import { getTenantDb } from "./db.js";
 import { BRAND_LIST } from "../config/brands.js";
-import { sendRegisterMail } from "./mailControllers.js";
+
 import Appointment from "../models/appointmentModel.js";
 import CITIES from "../config/cities.js";
-import { Console } from "console";
+
 import CompanyPayment from "../models/companyPaymentModel.js";
+import Blog from "../models/blogModel.js";
 
 let now = new Date();
 let day = now.getDate();
@@ -56,7 +48,6 @@ const resetPasswordPage = async (req, res, next) => {
     res.status(200).render("front/newPassword", {
       token: req.params.token,
       link: "newPassword",
-      message: "success",
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -126,7 +117,7 @@ const getTermOfUsePage = (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const getServicesPage = (req, res, next) => {
+const getOurServicesPage = (req, res, next) => {
   try {
     res.status(200).render("front/our-services", {
       link: "about-us",
@@ -172,14 +163,45 @@ const getPricesPage = (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
+const getBlogPage = async (req, res, next) => {
+  try {
+    let page = parseInt(req.query.page) || 1; // URL'den sayfa numarasını al, yoksa 1
+    let limit =3; // Sayfa başına gösterilecek blog sayısı
+
+    const totalBlogs = await Blog.countDocuments(); // Toplam blog sayısı
+    const blogs = await Blog.find()
+      .sort({ createdAt: -1 }) // En yeni bloglar önce gelsin
+      .skip((page - 1) * limit) // Sayfa başına veri kaydırma
+      .limit(limit); // Limit kadar blog getir
+
+    res.status(200).render("front/blog", {
+      blogs,
+      currentPage: page,
+      totalPages: Math.ceil(totalBlogs / limit), // Toplam sayfa sayısı
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getSingleBlogPage = async (req, res, next) => {
+  try {
+    console.log(req.params);
+    const singleBlog = await Blog.findOne({ title: req.params.blogName });
+    console.log(singleBlog);
+    res.status(200).render("front/blog-detail", {
+      singleBlog,
+      link: "prices",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
 const getservicesPage = async (req, res, next) => {
   try {
     let company = res.locals.company;
-    
-    let services = await company.services;
-    // 
-    
 
+    let services = await company.services;
+    //
     if (req.query.serviceName) {
       if (req.query.serviceName !== "") {
         services = services.filter((item) =>
@@ -194,7 +216,6 @@ const getservicesPage = async (req, res, next) => {
       link: "services",
     });
   } catch (error) {
-    
     res.status(500).json({
       succes: false,
       message: error,
@@ -208,7 +229,6 @@ const getProductsPage = async (req, res, next) => {
       link: "products",
     });
   } catch (error) {
-    
     res.status(500).json({
       succes: false,
       message: error,
@@ -245,7 +265,6 @@ const getSmsPage = async (req, res, next) => {
       link: "services",
     });
   } catch (error) {
-    
     res.status(500).json({
       succes: false,
       message: error,
@@ -315,7 +334,6 @@ const getSantralPage = async (req, res, next) => {
 
 const getUsersPage = async (req, res, next) => {
   try {
-    
     //pagination
 
     let limit = 10;
@@ -327,13 +345,10 @@ const getUsersPage = async (req, res, next) => {
       .limit(limit)
       .sort({ updatedAt: -1 });
 
-      
+    const smsTemplates = res.locals.company.smsTemplates.filter(
+      (item) => item.activeorNot === true && item.type === "general"
+    );
 
-      const smsTemplates = res.locals.company.smsTemplates.filter(
-        (item) => item.activeorNot === true && item.type === 'general'
-      );
-      
-     
     res.status(200).render("users", {
       users,
       smsTemplates,
@@ -341,14 +356,13 @@ const getUsersPage = async (req, res, next) => {
       link: "users",
     });
   } catch (error) {
-    
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
 const getAppointmentReportsPage = async (req, res, next) => {
   try {
     //pagination
-    
+
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
 
@@ -442,7 +456,7 @@ const getAppointmentReportsPage = async (req, res, next) => {
 
     let STATUS = { ...APPOINTMENT_STATUS };
     STATUS = Object.values(STATUS);
-    
+
     res.status(200).render("reports/appointmentReports", {
       reports,
       STATUS,
@@ -512,8 +526,6 @@ const getUserReportsPage = async (req, res, next) => {
     startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
     startDate.setHours(24, 0, 0);
-    
-    
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -526,7 +538,6 @@ const getUserReportsPage = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit)
       .sort({ date: -1 });
-    
 
     let total = reports.length;
 
@@ -548,7 +559,6 @@ const getUserReportsPage = async (req, res, next) => {
       };
     }
 
-    
     res.status(200).render("reports/userReports", {
       reports,
       total,
@@ -634,7 +644,7 @@ const getAppointmentsPage = async (req, res, next) => {
     let doctors = await Employee.find({
       activeOrNot: true,
       permissions: "appointment_get",
-      company:res.locals.company._id
+      company: res.locals.company._id,
     });
     const activeServices = [];
     services.services.forEach((element) => {
@@ -648,7 +658,7 @@ const getAppointmentsPage = async (req, res, next) => {
       link: "appointments",
       doctors: doctors,
       services: activeServices,
-      APPOINTMENT_STATUS
+      APPOINTMENT_STATUS,
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -721,23 +731,29 @@ const getSettingsPage = (req, res, next) => {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
   }
 };
-const companyPaymentPage = async(req, res, next) => {
+const companyPaymentPage = async (req, res, next) => {
   try {
-    
     const company = res.locals.company;
-    let activeSubscription=await Subscription.findOne({ company: company._id, status:"active"})
-    let waitingSubscriptions=await Subscription.find({ company: company._id, status:"waiting"})
-    let finishedSubscriptions=await Subscription.find({ company: company._id, status:"finished"})
-    
-    
-    
+    let activeSubscription = await Subscription.findOne({
+      company: company._id,
+      status: "active",
+    });
+    let waitingSubscriptions = await Subscription.find({
+      company: company._id,
+      status: "waiting",
+    });
+    let finishedSubscriptions = await Subscription.find({
+      company: company._id,
+      status: "finished",
+    });
+
     res.status(200).render("companyPaymentPage", {
       link: "companyPaymentPage",
       company,
       moment,
       activeSubscription,
       waitingSubscriptions,
-      finishedSubscriptions
+      finishedSubscriptions,
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -762,7 +778,6 @@ const getPaymentsPage = async (req, res, next) => {
   try {
     const users = await User.find({ company: res.locals.company._id });
     const employees = await Employee.find({ company: res.locals.company._id });
-  
 
     res.status(200).render("payments", {
       link: "payments",
@@ -776,9 +791,11 @@ const getPaymentsPage = async (req, res, next) => {
 const getUserDetailsPage = async (req, res, next) => {
   try {
     const singleUser = await User.findById(req.params.id);
-    let smsTemplates=res.locals.company.smsTemplates.filter(item=>item.type==="general")
+    let smsTemplates = res.locals.company.smsTemplates.filter(
+      (item) => item.type === "general"
+    );
     const smsTemplatesReminder = res.locals.company.smsTemplates.filter(
-      (item) => item.activeorNot === true && item.type === 'reminder'
+      (item) => item.activeorNot === true && item.type === "reminder"
     );
     res.status(200).render("user-details", {
       moment,
@@ -786,7 +803,7 @@ const getUserDetailsPage = async (req, res, next) => {
       smsTemplatesReminder,
       smsTemplates,
       link: "users",
-      smsTemplates
+      smsTemplates,
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -798,7 +815,7 @@ const getSingleEmployeePage = async (req, res, next) => {
 
     res.status(200).render("employee-details", {
       singleUser,
-
+      moment,
       link: "employees",
     });
   } catch (error) {
@@ -812,7 +829,83 @@ const getEmployeeSelfPage = async (req, res, next) => {
     res.status(200).render("employee-self", {
       singleUser,
       link: "employees",
-      moment
+      moment,
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+
+const getRandevuYonetimiPage = async (req, res, next) => {
+  try {
+    console.log("buraso");
+    res.status(200).render("front/our-services-pages/randevu-yonetimi", {
+      link: "Randevu Yönetimi",
+      moment,
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getSmsYonetimiPage = async (req, res, next) => {
+  try {
+    console.log("buraso");
+    res.status(200).render("front/our-services-pages/sms-yonetimi", {
+      link: "Sms Yönetimi",
+      moment,
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getHastaYonetimiPage = async (req, res, next) => {
+  try {
+    console.log("buraso");
+    res.status(200).render("front/our-services-pages/hasta-yonetimi", {
+      link: "Hasta Yönetimi",
+      moment,
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getPersonelYonetimiPage = async (req, res, next) => {
+  try {
+    console.log("buraso");
+    res.status(200).render("front/our-services-pages/personel-yonetimi", {
+      link: "Personel Yönetimi",
+      moment,
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getGelirGiderYonetimiPage = async (req, res, next) => {
+  try {
+    console.log("buraso");
+    res.status(200).render("front/our-services-pages/gelir-gider-yonetimi", {
+      link: "Gelir Gider Yönetimi",
+      moment,
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getUrunHizmetYonetimiPage = async (req, res, next) => {
+  try {
+    console.log("buraso");
+    res.status(200).render("front/our-services-pages/urun-hizmet-yonetimi", {
+      link: "Ürün-Hizmet Yönetimi",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getRaporYonetimiPage = async (req, res, next) => {
+  try {
+    console.log("buraso");
+    res.status(200).render("front/our-services-pages/raporlama-yonetimi", {
+      link: "Rapor Yönetimi",
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -820,6 +913,13 @@ const getEmployeeSelfPage = async (req, res, next) => {
 };
 
 export {
+  getRandevuYonetimiPage,
+  getRaporYonetimiPage,
+  getPersonelYonetimiPage,
+  getGelirGiderYonetimiPage,
+  getUrunHizmetYonetimiPage,
+  getHastaYonetimiPage,
+  getSmsYonetimiPage,
   getForgotPasswordPage,
   getEmployeeSelfPage,
   getSuperAdminPage,
@@ -834,7 +934,7 @@ export {
   getRegisterPage,
   getContactPage,
   getAdminPage,
-  getServicesPage,
+  getOurServicesPage,
   getUsersPage,
   getAboutUsPage,
   getAppointmentsPage,
@@ -853,7 +953,7 @@ export {
   getSingleEmployeePage,
   getDatasPage,
   deneme,
-  
+  getBlogPage,
   getProductsPage,
   getAppointmentReportsPage,
   getUserReportsPage,
@@ -863,4 +963,5 @@ export {
   productReportsPage,
   getSmsReportsPage,
   getSantralPage,
+  getSingleBlogPage,
 };

@@ -20,7 +20,7 @@
 
                 <main>
                     <div class="header">
-                        <h1> Kullanıcılar</h1>
+                        <h1> Personeller</h1>
                     </div>
 
                     <div class="search">
@@ -31,7 +31,7 @@
                             </div>
 
                         </form>
-                        <div class="add_customer_btn">Yeni Kullanıcı Ekle +</div>
+                        <div class="add_customer_btn">Yeni Personel Ekle +</div>
                     </div>
                     <div class="print">
 
@@ -77,6 +77,9 @@
                                             <%= employee.surname %>
                                         </td>
                                        
+                                        <td>
+                                            <%= employee.role %>
+                                        </td>
                                         <td>
                                             <%= employee.email %>
                                         </td>
@@ -160,7 +163,7 @@
         </section>
         <div class="modal hidden" id="add_customer">
             <div class="inner_modal">
-                <h2>Yeni Kullanıcı Ekle</h2>
+                <h2>Yeni Personel Ekle</h2>
                 <form action="./employees/createEmployee" onsubmit="return false" method="POST" id="register-form">
                     <div class="form-group ">
                         <span>İsim<bold>*</bold></span>

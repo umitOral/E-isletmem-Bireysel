@@ -1,411 +1,645 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+<head>
+    <meta charset="utf-8" />
     <title>E-işletmem</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
-    <link rel="stylesheet" href="assets/css/owl.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
-    <script src="//code.jivosite.com/widget/evvUheNYIv" async></script>
-
-
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Bootstrap 4 Landing Page Template" />
+    <meta name="keywords" content="Saas, Software, multi-uses, HTML, Clean, Modern" />
+    <meta name="author" content="Shreethemes" />
+    <meta name="email" content="shreethemes@gmail.com" />
+    <meta name="website" content="http://www.shreethemes.in" />
+    <meta name="Version" content="v2.5.1" />
+    <!-- favicon -->
+    <link rel="shortcut icon" href="front/images/favicon.ico">
+    <!-- Bootstrap -->
+    <link href="front/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Icons -->
+    <link href="front/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    <!-- Slider -->
+    <link rel="stylesheet" href="front/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="front/css/owl.theme.default.min.css" />
+    <!-- Main Css -->
+    <link href="front/css/style.css" rel="stylesheet" type="text/css" id="theme-opt" />
+    <link href="front/css/colors/default.css" rel="stylesheet" id="color-opt">
+</head>
 
 <body>
-
-
-  <!-- ***** Header Area Start ***** -->
-    <%- include('../partials/header-front.ejs') %>
-  <!-- ***** Header Area End ***** -->
-
-  <!-- ***** Main Banner Area Start ***** -->
-  <div class="swiper-container" id="top">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <div class="slide-inner" style="background-image:url(assets/images/slide-01.jpg)">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-8">
-                <div class="header-text">
-                  <h2><em>Randevu</em>,<em>Personel</em>,<em>Finansal</em> işlemleriniz için otomasyon yazılımı<br></h2>
-                  <div class="div-dec"></div>
-                  <div class="buttons">
-                    <div class="green-button">
-                      <a href="#services">Daha fazlasını Gör</a>
-                    </div>
-                    <div class="orange-button">
-                      <a href="/prices">1 Ay Ücretsiz Dene</a>
-                    </div>
-                  </div>
+    <!-- Loader -->
+    <!-- <div id="preloader">
+            <div id="status">
+                <div class="spinner">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <!-- <div class="swiper-slide">
-        <div class="slide-inner" style="background-image:url(assets/images/slide-02.jpg)">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-8">
-                <div class="header-text">
-                  <h2><em>Digital</em> Currency for you <br>&amp; Best <em>Crypto</em> Tips</h2>
-                  <div class="div-dec"></div>
-                  <p>You will see a bunch of free CSS templates when you search on Google. TemplateMo website is probably the best one because it is 100% free. It does not ask you anything in return. You have a total freedom to use any template for any purpose.</p>
-                  <div class="buttons">
-                    <div class="green-button">
-                      <a href="#">Discover More</a>
+        </div> -->
+    <!-- Loader -->
+
+    <%- include('../partials/front/header.ejs') %>
+
+          <!-- Hero Start -->
+          <section class="bg-half-170 pb-0 d-table w-100"  id="home">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-7 order-2 order-md-1">
+                        <div class="title-heading mt-4">
+                            <div class="alert alert-light alert-pills shadow" role="alert">
+                                
+                                <span class="content"> Tamamen dijital bir İşletme hedefiyle</span>
+                            </div>
+                            <h1 class="heading mb-3"><span class="element text-primary" data-elements="Güzellik Salonu,Kuaför, Saç Ekim Merkezi, Diyetisyen, Tırnak Stüdyosu, SPA"></span><br> 
+                                 İşletme Yönetim Yazılımı</h1>
+                            <p class="para-desc text-muted">Launch your campaign and benefit from our expertise on designing and managing conversion centered bootstrap4 html page.</p>
+                            <div class="mt-4">
+                                <a href="/login" class="btn btn-outline-primary rounded">Hemen Başla<i class="mdi mdi-arrow-right-bold-circle" ></i></a>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-lg-6 col-md-5 mt-4 pt-2 mt-sm-0 pt-sm-0">
+                        <div class="position-relative">
+                            <img src="\front\images\busi.png" class="rounded img-fluid mx-auto d-block" alt="">
+                          
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container--> 
+        </section><!--end section-->
+        <!-- Hero End -->
+
+       
+
+        <!-- Feature Start -->
+        <section class="section">
+            <div class="container p-4">
+                <div class="row text-center">
+                    <div class="col-md-4 col-12">
+                        <div class="features">
+                            <div class="image position-relative d-inline-block">
+                                <img src="front/images/icon/user.svg" class="avatar avatar-small" alt="">
+                            </div>
+
+                            <div class="content mt-4">
+                                <h4 class="title-2">Kolay Kullanım</h4>
+                                <p class="text-muted mb-0">Bütün özelliklerimiz personellerinizin rahatça uyum
+                                    sağlayabileceği bir yapıda geliştirilmiştir.</p>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-md-4 col-12 mt-5 mt-sm-0">
+                        <div class="features">
+                            <div class="image position-relative d-inline-block">
+                                <img src="front/images/icon/safety.svg" class="avatar avatar-small" alt="">
+                            </div>
+
+                            <div class="content mt-4">
+                                <h4 class="title-2">Veri Güvenliği</h4>
+                                <p class="text-muted mb-0">Bütün verileriniz Cloud Teknolojisi ile depolanır, asla
+                                    kaybolmaz,silinmez.</p>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-md-4 col-12 mt-5 mt-sm-0">
+                        <div class="features">
+                            <div class="image position-relative d-inline-block">
+                                <img src="front/images/icon/sand-clock.svg" class="avatar avatar-small" alt="">
+                            </div>
+
+                            <div class="content mt-4">
+                                <h4 class="title-2">Her Yerden Erişim</h4>
+                                <p class="text-muted mb-0">Bilgisayar, Tablet veya telefon! Evden İşten veya Tatilden
+                                    istediğiniz yerden işletmenizi yönetin.</p>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+
+            <div class="container  mt-100 p-4 ">
+                
+                <div class="row align-items-center shadow p-3"
+                    style="border: 1px solid rgba(128, 128, 128, 0.1); border-radius: 1rem;">
+                    <div class="col-lg-6 col-md-6">
+                        <img src="front/images/saas/1.png" class="img-fluid shadow rounded" alt="">
+                    </div><!--end col-->
+
+                    <div class="col-lg-6 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <div class="section-title ml-lg-5">
+                            <h4 class="title mb-4">Randevu Yönetimi</h4>
+                            <p class="text-muted"> İşletmenizİ Başka Bir Seviyeye Taşıyın</p>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Personelin Çalışma Saatlerine Göre
+                                    Randevu Alın</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Randevu çakışmalarının Önüne Geçin
+                                </li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>İptal edilen randevuları izleyerek
+                                    müşteri kaçırmayın</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Randevular için hatırlatma sms'i
+                                    gönderin</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Yapılacak işlemleri
+                                    seçerek,karışıklığı bitirin.</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Takvim sayesinde müşterilerinizi
+                                    bekletmeden randevu verin.</li>
+                            </ul>
+                            <a href="our-services/randevu-yonetimi" class="mb-3 h6 text-primary">Diğer Özellikleri Gör<i
+                                    class="mdi mdi-chevron-right"></i></a>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+
+            <div class="container mt-60 p-4">
+                <div class="row align-items-center shadow p-3"
+                    style="border: 1px solid rgba(128, 128, 128, 0.1); border-radius: 1rem;">
+                    <div class="col-lg-7 col-md-6 order-2 order-md-1 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <div class="section-title mr-lg-5">
+                            <h4 class="title  text-center text-lg-start">Sms Yönetimi</h4>
+                            <p class="text-muted text-center text-md-end">Müşterileriniz ile İletişiminiz Kesilmesin ! </p>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Müşteriye Özel isimli Sms Gönderin
+                                </li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Müşteriye Özel Otomatik Doğum günü
+                                    Mesajı Gönderin.</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Müşteriye Özel Tahsilat Mesajı
+                                    Gönderin.</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Belirli Bir(Kadın-erkek,randevu
+                                    iptal eden vs.) Gruba Toplu Mesajı Gönderin.</li>
+                            </ul>
+                            <a href="/our-services/sms-yonetimi" class="mb-3 h6 text-primary">Diğer Özellikleri Gör<i
+                                    class="mdi mdi-chevron-right"></i></a>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-lg-5 col-md-6 order-1 order-md-2">
+                        <img src="front/images/illustrator/app_development_SVG.svg" alt="">
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+            <div class="container mt-100 mt-60">
+                <div class="row align-items-center" background-color: rgba(0, 0, 255, 0.02);>
+                    <div class="col-lg-6 col-md-6">
+                        <img src="front/images/saas/1.png" class="img-fluid shadow rounded" alt="">
+                    </div><!--end col-->
+
+                    <div class="col-lg-6 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <div class="section-title ml-lg-5">
+                            <h4 class="title text-center">Gelir-Gider Yönetimi</h4>
+                            <p class="text-muted text-center"> İşletmenizin Kasası güvenli ellerde!</p>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Günlük gelir-gider takibini yapın.
+                                </li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Hizmet satışı ve Ürün Satışı</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>Seans Başı ya da bütün işlem için
+                                    ödeme alın</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>İşlem için ayrı ödemeler alın</li>
+                                <li class="mb-0"><span class="text-primary h5 mr-2"><i
+                                            class="uim uim-check-circle"></i></span>İSatışta kredi kartı/nakit seçimi
+                                </li>
+                            </ul>
+                            <a href="our-services/gelir-gider-yonetimi" class="mb-3 h6 text-primary">Diğer Özellikleri
+                                Gör<i class="mdi mdi-chevron-right"></i></a>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+            <div class="container mt-100 mb-5" >
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <div class="section-title pb-2">    
+                            <h4 class="title">Bütün Özellikler
+                            </h4>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+
+                <div class="row justify-content-center p-3" style="background-color: rgba(0, 0, 255, 0.02);">
+                  <div class="col-lg-3 col-md-6 col-6 mt-4 pt-2">
+                    <div class="features text-center bordered-card">
+                      <div class="image position-relative d-inline-block" style="font-size: 4rem;">
+                        <i class="uil uil-calendar-alt" style="color: cadetblue;"></i>
+                      </div>
+        
+                      <div class="content mt-4">
+                        <h4 class="title-2">Randevu Yönetimi</h4>
+                      </div>
+                      
+                      <a href="/our-services/randevu-yonetimi" class="btn btn-outline-primary"><i class="mdi mdi-file-document-outline"></i>Detaylar </a>
                     </div>
-                    <div class="orange-button">
-                      <a href="#">Contact Us</a>
+                  </div><!--end col-->
+                  <div class="col-lg-3 col-md-6 col-6 mt-4 pt-2">
+                    <div class="features text-center bordered-card">
+                      <div class="image position-relative d-inline-block" style="font-size: 4rem;">
+                        <i class="uil uil-users-alt" style="color: cadetblue;"></i>
+        
+                      </div>
+        
+                      <div class="content mt-4">
+                        <h4 class="title-2">Hasta Yönetimi</h4>
+                      </div>
+                       <a href="/our-services/hasta-yonetimi" class="btn btn-outline-primary"><i class="mdi mdi-file-document-outline"></i>Detaylar </a>
                     </div>
-                  </div>
-                </div>
+                  </div><!--end col-->
+                  <div class="col-lg-3 col-md-6 col-6 mt-4 pt-2">
+                    <div class="features text-center bordered-card">
+                      <div class="image position-relative d-inline-block" style="font-size: 4rem;">
+                        <i class="uil uil-user-md" style="color: cadetblue;"></i>
+        
+                      </div>
+        
+                      <div class="content mt-4">
+                        <h4 class="title-2">Personel Yönetimi</h4>
+                      </div>
+                       <a href="/our-services/personel-yonetimi" class="btn btn-outline-primary"><i class="mdi mdi-file-document-outline"></i>Detaylar </a>
+                    </div>
+                  </div><!--end col-->
+                  <div class="col-lg-3 col-md-6 col-6 mt-4 pt-2">
+                    <div class="features text-center bordered-card">
+                      <div class="image position-relative d-inline-block" style="font-size: 4rem;">
+                        <i class="uil uil-usd-circle" style="color: cadetblue;"></i>
+        
+                      </div>
+        
+                      <div class="content mt-4">
+                        <h4 class="title-2">Gelir/Gider Yönetimi</h4>
+                      </div>
+                       <a href="/our-services/gelir-gider-yonetimi" class="btn btn-outline-primary"><i class="mdi mdi-file-document-outline"></i>Detaylar </a>
+                    </div>
+                  </div><!--end col-->
+                  <div class="col-lg-3 col-md-6 col-6 mt-4 pt-2">
+                    <div class="features text-center bordered-card">
+                      <div class="image position-relative d-inline-block" style="font-size: 4rem;">
+                        <i class="uil uil-message" style="color: cadetblue;"></i>
+        
+                      </div>
+        
+                      <div class="content mt-4">
+                        <h4 class="title-2">Sms Yönetimi</h4>
+                      </div>
+                       <a href="/our-services/sms-yonetimi" class="btn btn-outline-primary"><i class="mdi mdi-file-document-outline"></i>Detaylar </a>
+                    </div>
+                  </div><!--end col-->
+                  <div class="col-lg-3 col-md-6 col-6 mt-4 pt-2">
+                    <div class="features text-center bordered-card">
+                      <div class="image position-relative d-inline-block" style="font-size: 4rem;">
+                        <i class="uil uil-medkit" style="color: cadetblue;"></i>
+        
+                      </div>
+        
+                      <div class="content mt-4">
+                        <h4 class="title-2">Ürün-Hizmet Yönetimi</h4>
+                      </div>
+                       <a href="/our-services/urun-hizmet-yonetimi" class="btn btn-outline-primary"><i class="mdi mdi-file-document-outline"></i>Detaylar </a>
+                    </div>
+                  </div><!--end col-->
+                  
+                  <div class="col-lg-3 col-md-6 col-6 mt-4 pt-2">
+                    <div class="features text-center bordered-card">
+                      <div class="image position-relative d-inline-block" style="font-size: 4rem;">
+                        <i class="uil uil-file-graph" style="color: cadetblue;"></i>
+        
+                      </div>
+        
+                      <div class="content mt-4">
+                        <h4 class="title-2">Raporlamalar</h4>
+                      </div>
+                       <a href="/our-services/rapor-yonetimi" class="btn btn-outline-primary"><i class="mdi mdi-file-document-outline"></i>Detaylar </a>
+                    </div>
+                  </div><!--end col-->
+        
+        
+                </div><!--end row-->
+        
+        
               </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      
-    </div>
-    <div class="swiper-button-next swiper-button-white"></div>
-    <div class="swiper-button-prev swiper-button-white"></div>
-  </div>
 
-  <!-- ***** Main Banner Area End ***** -->
+            <div class="container mt-100 mt-60">
+                <div class="col">
+                    <div class="row justify-content-center">
+                        <div class="col-12 text-center">
+                            <div class="section-title pb-2">
+                                <h4 class="title">Sizin Gözünüzden <br> <span class="text-primary">E-işletmem</span>
+                                </h4>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
 
-  <section class="services" id="services">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="service-item">
-            <i class="fas fa-archive"></i>
-            <h4>DETAYLI HASTA YÖNETİMİ </h4>
-            <p>TemplateMo website is the best for you to explore and download free website templates.</p>
-            <a class="link" href="/our-services">Detaylı incele</a>
-            
-            
-            
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="service-item">
-            <i class="fas fa-cloud"></i>
-            <h4>PERSONEL YÖNETİM</h4>
-            <p>Templates are based on Bootstrap 5 CSS framework. You can easily adapt or modify based on your needs.</p>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="service-item">
-            <i class="fas fa-charging-station"></i>
-            <h4>CARİ HESAP YÖNETİMİ</h4>
-            <p>All of our CSS templates are 100% free to use for commercial or business websites.</p>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="service-item">
-            <i class="fas fa-suitcase"></i>
-            <h4>RANDEVU YÖNETİMİ</h4>
-            <p>Our HTML CSS templates are well-tested on mobile, tablet, and desktop compatibility.</p>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="service-item">
-            <i class="fas fa-archway"></i>
-            <h4>FATURA YÖNETİMİ</h4>
-            <p>Do not be hesitated to contact us if you have any question or concern about our templates.</p>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="service-item">
-            <i class="fas fa-puzzle-piece"></i>
-            <h4>sMS YÖNETİMİ</h4>
-            <p>If you have any idea or suggestion about new templates, feel free to let us know.</p>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="service-item">
-            <i class="fas fa-puzzle-piece"></i>
-            <h4>VERİ GÜVENLİĞİ</h4>
-            <p>Archimet bulut teknolojisi sayesinde verileriniz asla kaybolmaz. 256 bit ssl sertifikası sayesinde dışardan erişime kapalı.</p>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="service-item">
-            <i class="fas fa-puzzle-piece"></i>
-            <h4>DETAYLI RESİM YÖNETİMİ</h4>
-            <p>Hastalarınızın operasyon öncesi ve operasyon sonrası resimlerini kaydedebilir, istediğiniz zaman istediğiniz yerden erişebilirsiniz.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+                    <div class="row justify-content-center  bordered rounded shadow p-4"  style="background-color: rgba(0, 0, 255, 0.02);">
+                        <div class="col-lg-12">
+                            <div id="customer-testi" class="owl-carousel owl-theme">
+                                <div class="media customer-testi m-2">
+                                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                        </ul>
+                                        <p class="text-muted mt-2">"E-İşletmem sayesinde randevularımı kolayca
+                                            yönetiyorum.
+                                            Sınırsız randevu ekleyebilmek ve her randevuya özel notlar eklemek gerçekten
+                                            işimi kolaylaştırıyor. Özellikle otomatik SMS gönderme özelliği çok pratik."
+                                        </p>
+                                        <h6 class="text-primary">- Ayşe Yılmaz <small class="text-muted">Klinik
+                                                Müdürü</small></h6>
+                                    </div>
+                                </div>
 
-  <%- include('../partials/front_cta') %>
+                                <div class="media customer-testi m-2">
+                                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star-half text-warning"></i>
+                                            </li>
+                                        </ul>
+                                        <p class="text-muted mt-2">"Sistemi kullanmaya başladık ve gerçekten müşteri
+                                            takibi
+                                            çok kolaylaştı. Her müşteriye özel notlar, hastalık bilgileri ve borç takibi
+                                            gibi özelliklerle işleri büyük ölçüde düzenli hale getirdik."</p>
+                                        <h6 class="text-primary">- Mehmet Demir <small class="text-muted">Güzellik
+                                                Salonu
+                                                Sahibi</small></h6>
+                                    </div>
+                                </div>
 
-  <section class="about-us" id="about">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 offset-lg-3">
-          <div class="section-heading">
-            <h6>About Us</h6>
-            <h4>Özelliklere Göz Atın</h4>
-          </div>
-        </div>
-        <div class="col-lg-8">
-          <div class="naccs">
-            <div class="tabs">
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="menu">
-                    <div class="active gradient-border"><span>Randevu yönetimi</span></div>
-                    <div class="gradient-border"><span>Hasta Yönetimi</span></div>
-                    <div class="gradient-border"><span>Personel Yönetimi</span></div>
-                  </div>
+                                <div class="media customer-testi m-2">
+                                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                        </ul>
+                                        <p class="text-muted mt-2">"Randevuları organize etmek artık çok kolay. Personel
+                                            bazlı raporlar ve tahsilat raporları sayesinde iş süreçlerimiz çok daha
+                                            şeffaf
+                                            ve düzenli. Özellikle SMS raporlama özelliğini çok beğeniyorum."</p>
+                                        <h6 class="text-primary">- Ali Kılıç <small class="text-muted">Güzellik Merkezi
+                                                Sahibi</small></h6>
+                                    </div>
+                                </div>
+
+                                <div class="media customer-testi m-2">
+                                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                        </ul>
+                                        <p class="text-muted mt-2">"İşlem bazlı raporlar ve ödeme alma özellikleri çok
+                                            kullanışlı. Hem müşteriler hem de personel için ödeme yöntemlerini çok rahat
+                                            seçebiliyoruz. Ayrıca her işlem için açıklama ekleyebilme özelliği çok
+                                            pratik."
+                                        </p>
+                                        <h6 class="text-primary">- Büşra Yıldız <small class="text-muted">Kozmetik
+                                                Uzmanı</small></h6>
+                                    </div>
+                                </div>
+
+                                <div class="media customer-testi m-2">
+                                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                        </ul>
+                                        <p class="text-muted mt-2">"Sistem sayesinde personel yönetimim çok kolaylaştı.
+                                            Personel çalışma saatlerini belirlemek, özel prim yüzdesi tanımlamak gibi
+                                            işlemleri hızlıca yapabiliyorum."</p>
+                                        <h6 class="text-primary">- Ahmet Can <small class="text-muted">SPA
+                                                Müdürü</small>
+                                        </h6>
+                                    </div>
+                                </div>
+
+                                <div class="media customer-testi m-2">
+                                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                        </ul>
+                                        <p class="text-muted mt-2">"Müşteri takibi ve ödeme düzenlemeleri çok kolay
+                                            oldu.
+                                            Ayrıca raporlama özellikleri sayesinde her ay sonu detaylı raporları
+                                            alabiliyoruz."</p>
+                                        <h6 class="text-primary">- Zeynep Arslan <small class="text-muted">Sağlık
+                                                Merkezi
+                                                Yöneticisi</small></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
                 </div>
-                <div class="col-lg-12">
-                  <ul class="nacc">
-                    <li class="active">
-                      <div>
-                        
-                        <div class="list-item">
-                          <span class="item">+ Sınırsız Online Randevu Oluşturma</span>
-                        </div>
-                        <div class="list-item">
-                          <span class="item">+ Her Personel için Ayrı Randevu Yönetimi</span>
-                        </div>
-                        <div class="list-item">
-                          <span class="item">+ Her Yerden Randevu Sorgulayabilme</span>
-                        </div>
-                        <div class="list-item">
-                          <span class="item">+ Otomatik Hatırlatma Mesajı</span>
-                        </div>
-                        
-                        
-                        <!-- <div class="list-item last-item">
-                          <span class="item item-title">All-new Website</span>
-                          <span class="item">$3,000 to $6,600</span>
-                          <span class="item">2022 Dec 2</span>
-                          <span class="item">Web Presence</span>
-                        </div> -->
-                      </div>
-                    </li>
-                    <li>
-                      <div class="list-item">
-                        <span class="item">+ Sınırsız Hasta Kaydetme</span>
-                      </div>
-                      <div class="list-item">
-                        <span class="item">+ İşlem öncesi ve işlem sonrası resim ekleyebilme</span>
-                      </div>
-                      <div class="list-item">
-                        <span class="item">+ Hasta bilgi düzenleyebilme, bilgi ekleme ve hasta silebilme</span>
-                      </div>
-                      <div class="list-item">
-                        <span class="item">+ Hastalara ait randevu oluşturma</span>
-                      </div>
-                      <div class="list-item">
-                        <span class="item">+ Hastanın ödeme kayıtlarını oluşturabilme, düzenleyebilme ve listeleme </span>
-                      </div>
-                    </li>
-                    <li>
-                      <div>
-                        <div class="list-item">
-                          <span class="item">+ Sınırsız Sayıda Personel ekleyebilme </span>
-                        </div>
-                        <div class="list-item">
-                          <span class="item">+ Her personel için ayrı randevu listeleyebilme</span>
-                        </div>
-                        <div class="list-item">
-                          <span class="item">+ Her personel için Günlük, Haftalık, Aylık Performanslar</span>
-                        </div>
-                        
-                        
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          
-        </div>
-      </div>
-    </div>
-  </section>
+            </div><!--end container-->
 
-  <section class="calculator">
+            <div class="container mt-100 mt-60">
+                <div class="col" >
+                    <div class="row justify-content-center">
+                        <div class="col-12 text-center">
+                            <div class="section-title pb-2">
+                                <h4 class="title">Referanslarımız </h4>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                    <div class="row justify-content-center shadow border rounded p-4" style="background-color: rgba(0, 0, 255, 0.02);">
+                        <div class="col-lg-12 mt-4">
+                            <div id="customer-test2" class="owl-carousel owl-theme">
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="front/images/testimonials/1.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="\front\images\testimonials\medilas.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="front/images/testimonials/2.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="\front\images\testimonials\pera-guzellik.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="front/images/testimonials/3.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="front/images/testimonials/4.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="front/images/testimonials/5.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="front/images/testimonials/6.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="front\images\testimonials\belkis.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="front\images\testimonials\dermvital.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="\front\images\testimonials\dunyamed.png" alt="" style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="\front\images\testimonials\estetika-karaman.png" alt=""
+                                        style="width: 100%;">
+                                </div>
+                                <div class="item shadow p-1"
+                                    style="width: 100%; border: 1px solid rgba(128, 128, 128, 0.1);">
+                                    <img src="\front\images\testimonials\evo-lazer.png" alt="" style="width: 100%;">
+                                </div>
+
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div>
+
+
+
+            </div><!--end container-->
+
+            <div class="container mt-100 mt-60">
+                <div class="col">
+                    <div class="row justify-content-center">
+                        <div class="col-12 text-center">
+                            <div class="section-title pb-2">
+                                <h4 class="title">Bazı İstatistiklerimiz </h4>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                    <div class="row justify-content-center shadow border rounded p-4"  style="background-color: rgba(0, 0, 255, 0.02);" id="counter">
+                        <div class="col-6 col-lg-3 mb-3">
+                            <div class="card counter-box border-0 bg-success shadow text-center rounded">
+                                <div class="card-body py-1 py-lg-5">
+                                    <h2 class="mb-0 text-light">+<span class="counter-value" data-count="35">0</span>%</h2>
+                                    <h5 class="counter-head mb-0 text-light">Ekstra Hizmet Satışı</h5>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-6 col-lg-3 mb-3">
+                            <div class="card counter-box border-0 bg-danger shadow text-center rounded">
+                                <div class="card-body py-1 py-lg-5">
+                                    <h2 class="mb-0 text-light">+<span class="counter-value" data-count="35">0</span>%</h2>
+                                    <h5 class="counter-head mb-0 text-light">Ekstra Ürün Satışı</h5>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-6 col-lg-3 mb-3">
+                            <div class="card counter-box border-0 bg-danger shadow text-center rounded">
+                                <div class="card-body py-1 py-lg-5">
+                                    <h2 class="mb-0 text-light"><span class="counter-value" data-count="65">0</span>+%</h2>
+                                    <h5 class="counter-head mb-0 text-light">Personel Mutluluğu</h5>
+                                </div>
+                            </div>
+                        </div><!--end col-->
     
-  </section>
-
-  <section class="testimonials" id="testimonials">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 offset-lg-3">
-          <div class="section-heading">
-            
-            <h4>MÜŞTERİLERİMİZDEN DİNLEYİN:</h4>
-          </div>
-        </div>
-        <div class="col-lg-10 offset-lg-1">
-          <div class="owl-testimonials owl-carousel" style="position: relative; z-index: 5;">
-            <div class="item">
-              <i class="fa fa-quote-left"></i>
-              <p>“Merhaba, programın diğer özelliklerinin yanında en çok saç ekimi öncesi fotoğraflarımızı saç ekimi sonrası fotoğraflarımızla kıyaslamamızı sağlayabilme özelliği operasyonlarımıza değer kattı. ”</p>
-              <h4>Dr Ahmet Sunmaz</h4>
-              <span>CosmoPark Beauty Sahibi</span>
-              <div class="right-image">
-                <img src="assets/images/cosmopark.png" alt="">
-              </div>
-            </div>
-            <div class="item">
-              <i class="fa fa-quote-left"></i>
-              <p>“Etiam id ligula risus. Fusce fringilla nisl nunc, nec rutrum lectus cursus nec. In blandit nibh dolor, at rutrum leo accumsan porta. Nullam pulvinar eros porttitor risus condimentum tempus.”</p>
-              <h4>Andrew Garfield</h4>
-              <span>CTO of Mexant</span>
-              <div class="right-image">
-                <img src="assets/images/testimonials-01.jpg" alt="">
-              </div>
-            </div>
-            <div class="item">
-              <i class="fa fa-quote-left"></i>
-              <p>“Ut dictum vehicula massa, ac pharetra leo tincidunt eu. Phasellus in tristique magna, ac gravida leo. Integer sed lorem sapien. Ut viverra mauris sed lobortis commodo.”</p>
-              <h4>George Lopez</h4>
-              <span>Crypto Manager</span>
-              <div class="right-image">
-                <img src="assets/images/testimonials-01.jpg" alt="">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-<!--  -->
-
-
-<!--  -->
-
-  <section class="partners">
+                        <div class="col-6 col-lg-3 mb-3 ">
+                            <div class="card counter-box border-0 bg-primary shadow text-center rounded">
+                                <div class="card-body py-1 py-lg-5">
+                                    <h2 class="text-light title-dark mb-0"><span class="counter-value"
+                                            data-count="100">1</span>%</h2>
+                                    <h5 class="counter-head mb-0 title-dark text-light">Randevu Takibi</h5>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-6 col-lg-3 mb-3">
+                            <div class="card counter-box border-0 bg-success shadow text-center rounded">
+                                <div class="card-body py-1 py-lg-5">
+                                    <h2 class="text-light title-dark mb-0"><span class="counter-value"
+                                            data-count="98">0</span>%</h2>
+                                    <h5 class="counter-head mb-0 title-dark text-light">Kasa Doğruluğu</h5>
+                                </div>
+                            </div>
+                        </div><!--end col-->
     
-    <div class="container">
-      <div class="col-lg-6 offset-lg-3">
-        <div class="section-heading">
-          <h4>BERABER ÇALIŞTIĞIMIZ BAZI MARKALAR</h4>
-        </div>
-      </div>
-      <div class="row">
-        <hr>
-        
-        
-        <div class="col-lg-2 col-sm-4 col-6">
-          <div class="item">
-            <img src="assets/images/partners.png" alt="">
-          </div>
-        </div>
-        <div class="col-lg-2 col-sm-4 col-6">
-          <div class="item">
-            <img src="assets/images/cosmopark.png" alt="">
-          </div>
-        </div>
-        <div class="col-lg-2 col-sm-4 col-6">
-          <div class="item">
-            <img src="assets/images/nirvana.png" alt="">
-          </div>
-        </div>
-        <div class="col-lg-2 col-sm-4 col-6">
-          <div class="item">
-            <img src="assets/images/platin-peruk.png" alt="">
-          </div>
-        </div>
-        <div class="col-lg-2 col-sm-4 col-6">
-          <div class="item">
-            <img src="assets/images/san-kaufor.png" alt="">
-          </div>
-        </div>
-        <div class="col-lg-2 col-sm-4 col-6">
-          <div class="item">
-            <img src="assets/images/gloria-beauty.png" alt="">
-          </div>
-        </div>
-        
-      </div>
-    </div>
-  </section>
+                        <div class="col-6 col-lg-3 mb-3">
+                            <div class="card counter-box border-0 bg-warning shadow text-center rounded"
+                                style="background-color:#f17425 ;">
+                                <div class="card-body py-1 py-lg-5">
+                                    <h2 class="mb-0 text-light">+<span class="counter-value" data-count="15">3</span>%</h2>
+                                    <h5 class="counter-head mb-0 text-light">Ekstra Randevu</h5>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+    
+                    </div><!--end row-->
+                </div>
+                
+            </div><!--end container-->
 
-  <%- include('../partials/front-footer.ejs') %>
 
-  <!-- Scripts -->
-  <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        </section><!--end sectipn-->
+        <div class="position-relative">
+            <div class="shape overflow-hidden text-footer">
+                <svg viewBox="0 0 2880 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M720 125L2160 0H2880V250H0V125H720Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+        <!-- Client End -->
 
-    <script src="assets/js/isotope.min.js"></script>
-    <script src="assets/js/owl-carousel.js"></script>
+        <%- include('../partials/front/footer.ejs') %>
 
-    <script src="assets/js/tabs.js"></script>
-    <script src="assets/js/swiper.js"></script>
-    <script src="assets/js/custom.js"></script>
-    <script>
-        var interleaveOffset = 0.5;
+            <!-- javascript -->
+            <script src="front/js/jquery-3.5.1.min.js"></script>
+            <script src="front/js/bootstrap.bundle.min.js"></script>
+            <script src="front/js/jquery.easing.min.js"></script>
+            <script src="front/js/scrollspy.min.js"></script>
+            <!-- SLIDER -->
+            <script src="front/js/owl.carousel.min.js "></script>
+            <script src="front/js/owl.init.js "></script>
+            <!-- Icons -->
+            <script src="front/js/feather.min.js"></script>
+            <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
+            <!-- Main Js -->
+            <script src="front/js/app.js"></script>
 
-      var swiperOptions = {
-        loop: true,
-        speed: 1000,
-        grabCursor: true,
-        watchSlidesProgress: true,
-        mousewheelControl: true,
-        keyboardControl: true,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        },
-        on: {
-          progress: function() {
-            var swiper = this;
-            for (var i = 0; i < swiper.slides.length; i++) {
-              var slideProgress = swiper.slides[i].progress;
-              var innerOffset = swiper.width * interleaveOffset;
-              var innerTranslate = slideProgress * innerOffset;
-              swiper.slides[i].querySelector(".slide-inner").style.transform =
-                "translate3d(" + innerTranslate + "px, 0, 0)";
-            }      
-          },
-          touchStart: function() {
-            var swiper = this;
-            for (var i = 0; i < swiper.slides.length; i++) {
-              swiper.slides[i].style.transition = "";
-            }
-          },
-          setTransition: function(speed) {
-            var swiper = this;
-            for (var i = 0; i < swiper.slides.length; i++) {
-              swiper.slides[i].style.transition = speed + "ms";
-              swiper.slides[i].querySelector(".slide-inner").style.transition =
-                speed + "ms";
-            }
-          }
-        }
-      };
+            <script src="/front/js/counter.init.js"></script>
+            <script src="/front/js/typed.js"></script>
+            <script src="/front/js/typed.init.js"></script>
+            <!-- Parallax -->
+            <script src="/front/js/parallax.js "></script>
 
-      var swiper = new Swiper(".swiper-container", swiperOptions);
-    </script>
-  </body>
+</body>
+
 </html>

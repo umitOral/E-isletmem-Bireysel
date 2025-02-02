@@ -313,7 +313,8 @@ const getSearchedPayments = async (req, res, next) => {
         $gte: startDate,
         $lte: endDate,
       },
-    }).populate("fromUser", ["name", "surname"]);
+    }).populate("fromUser", ["name", "surname"])
+    .populate("comissionEmployee", ["name", "surname"])
 
     let totalIncome = 0;
     let totalExpenses = 0;

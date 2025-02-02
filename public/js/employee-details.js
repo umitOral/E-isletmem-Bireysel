@@ -27,7 +27,7 @@ const permissionsTabButton = document.querySelector(
 const notificationsTabButton = document.querySelector(
   ".show-content.notifications"
 );
-const paymentsTabButton = document.querySelector(".show-content.payments");
+
 
 const editBtn = document.querySelector(".edit-informations-btn");
 const editUserForm = document.getElementById("user-edit-form");
@@ -81,7 +81,7 @@ function editUser(e) {
     workHours.push(element.value);
   });
 
-  console.log(form.action);
+  console.log(form.birthDate.value);
   request
     .postWithUrl(form.action, {
       name: form.name.value,
@@ -91,16 +91,20 @@ function editUser(e) {
       address: form.address.value,
       phone: form.phone.value,
       workHours: workHours,
-      birthDate: form.birthDate.value,
+      birthDate: form.birthDate.value||"",
       employeeComission: form.employeeComission.value,
     })
     .then((response) => {
-      console.log(response);
-      ui.showNotification(true, response.message);
-      modalUser.classList.add("hidden");
-      setTimeout(() => {
+      if (response.success===true) {
+        modalUser.classList.add("hidden");
+        setTimeout(() => {
         window.location.reload();
       }, 800);
+      }
+      console.log(response);
+      ui.showNotification(response.success, response.message);
+      
+      
     })
     .catch((err) => ui.showNotification(false, err));
 }
@@ -120,10 +124,10 @@ function getEmployeesPayment(page) {
     .then((response) => {
       console.log(response);
       let totalComission = calculateTotalComission(response.data.reports);
-      let totalValue = calculateTotalValue(response.data.reports);
       
-
-      datasToTable(response.data, totalValue, totalComission);
+      let data=response.data.reports.filter((item)=>item.products&&item.products.length>0)
+      console.log(data)
+      datasToTable(data, response.data.pagination, totalComission,response.data.total);
       datasToPagination(response.data.pagination);
       ui.showNotification(true, response.message);
     })
@@ -133,7 +137,7 @@ function getEmployeesPayment(page) {
     });
 }
 
-function datasToTable(data, totalValue, totalComission) {
+function datasToTable(data, pagination, totalComission,count) {
   let tableBody = document.querySelector("#payments-table tbody");
   let tableFoot = document.querySelector("#payments-table tfoot");
   let lastpage = document.querySelector("#lastpage");
@@ -148,7 +152,7 @@ function datasToTable(data, totalValue, totalComission) {
 
 
 
-  data.reports.forEach((element, index) => {
+  data.forEach((element, index) => {
     const totalComissionforSingle = element.products.reduce((total, product) => {
       return total + product.paymentValue * (product.baseComission+product.employeeComission)/100;
     }, 0);
@@ -158,8 +162,8 @@ function datasToTable(data, totalValue, totalComission) {
                                        <td>
                                         <div style="display: flex; align-items: center; justify-content: center; gap:0.5rem;">
                                               <label for="">${
-                                                (data.pagination.page - 1) *
-                                                  data.pagination.limit +
+                                                (pagination.page - 1) *
+                                                  pagination.limit +
                                                 index +
                                                 1
                                               }</label>
@@ -174,10 +178,11 @@ function datasToTable(data, totalValue, totalComission) {
                                        </td>
                                       
                                       
-                                     
-
-                                          <td>
+                                        <td>
                                        ${element.totalPrice}
+                                       </td>
+                                        <td>
+                                       ${element.products.map((item)=>{return item.paymentValue}).reduce((a,b)=>a+b)}
                                        </td>
                                         <td><span> ${element.products
                                           .map((product) => {
@@ -201,8 +206,8 @@ function datasToTable(data, totalValue, totalComission) {
                                    </tr>
 `;
 
-    lastpage.innerHTML = `${data.pagination.lastpage}`;
-    total.innerHTML = data.total;
+    lastpage.innerHTML = `${pagination.lastpage}`;
+    total.innerHTML =count;
   });
   tableFoot.innerHTML += `
                   
@@ -283,27 +288,30 @@ function paginatioButtonsHandle() {
 
 function calculateTotalComission(data) {
   let totalComission = 0;
-  
-  data.forEach((element) => {
-    totalComission += element.products
-      .map((product) => {
-        let commission =
-          ((product.baseComission + product.employeeComission) *
-            product.paymentValue) /
-          100;
-        return commission;
-      })
-      .reduce((a, b) => a + b);
-  });
+  let products=data.filter((item)=>item.products && item.products.length>0)
+  console.log(products)
+  if (products.length!==0) {
+    products.forEach((element) => {
+      totalComission += element.products
+        .map((product) => {
+          let commission =
+            ((product.baseComission + product.employeeComission) *
+              product.paymentValue) /
+            100;
+          return commission;
+        })
+        .reduce((a, b) => a + b);
+    });
+  }
+ 
 
   return totalComission;
 }
 function calculateTotalValue(data) {
   let totalValue = 0;
+  
   data.forEach((element) => {
-    totalValue += element.products
-      .map((item) => item.paymentValue)
-      .reduce((a, b) => a + b);
+    totalValue += element.totalPrice
   });
 
   return totalValue;

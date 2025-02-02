@@ -89,18 +89,7 @@ function datasToTable(data) {
                                        ).toLocaleDateString()}
                                        </td>
                                        <td>
-                                       ${new Date(
-                                         element.startHour
-                                       ).toLocaleTimeString([], {
-                                         hour: "2-digit",
-                                         minute: "2-digit",
-                                       })}-
-                                       ${new Date(
-                                         element.endHour
-                                       ).toLocaleTimeString([], {
-                                         hour: "2-digit",
-                                         minute: "2-digit",
-                                       })}
+                                       ${element.startHour}-${element.endHour}
                                       
                                        </td>
                                        <td>

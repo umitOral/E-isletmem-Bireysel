@@ -6,7 +6,7 @@ import fileUpload from "express-fileupload"; ///çoook önemli enctype="multipar
 import { v2 as cloudinary } from "cloudinary";
 import {connectGeneralDb} from "./controller/db.js";
 import dotenv from "dotenv";
-import pageRoute from "./routes/frontRoutes.js";
+import frontRoutes from "./routes/frontRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import superAdminRoutes from "./routes/superAdminRoutes.js";
 import api from "./routes/api.js";
@@ -63,7 +63,7 @@ app.use(express.static("public"));
 
 app.get("/views/front-side/main.ejs");
 //routes,middlewares
-app.use("/", pageRoute);
+app.use("/", frontRoutes);
 
 
 app.use("/api", authMiddleware.checkUser, api);

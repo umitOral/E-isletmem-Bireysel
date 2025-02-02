@@ -1,10 +1,8 @@
 .success_popup_wrapper.showed {
     position: fixed;
-    top: 0;
+    top: 25vh;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #ffffffca;
+    right: 0;
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -47,3 +45,67 @@
    .button:hover{
     background-color: #43ba7f;
    }
+
+   .container-login {
+    font-family: 'Poppins', sans-serif;
+    border:1px solid gray;
+  border-radius: var(--card-border-radius);
+    max-width: 700px;
+    
+    border-radius: var(--card-border-radius);
+    
+    display: flex;
+    justify-content: center;
+    margin: 30px auto;
+    box-shadow: var(--box-shadow);
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    
+    
+}
+
+.loader_wrapper.hidden {
+  display: none;
+}
+.loader_wrapper.showed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff79;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.75s;
+}
+.loader_inner_wrapper {
+  justify-content: center;
+  background-color: white;
+  padding: 4rem;
+  box-shadow: var(--box-shadow);
+  border-radius: 1.5rem;
+}
+
+.g-recaptcha div{
+margin: 0 auto;
+}
+
+
+dialog {
+  border:1px solid #e9ecef;
+  border-radius: 0.3rem;
+}
+
+.login-container{
+  margin-top:150px;
+}
+
+@media (max-width: 767px){
+  .login-container{
+    margin-top:0px;
+  }
+}

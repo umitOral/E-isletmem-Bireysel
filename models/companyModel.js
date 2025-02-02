@@ -15,7 +15,7 @@ const companySchema = new Schema(
       index: { unique: true },
       lowercase: true,
     },
-    VKN: { type: Number, unique:true,},
+    VKN: { type: Number, unique:true, sparse: true},
     password: {
       type: String,
       require: true,

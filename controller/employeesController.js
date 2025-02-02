@@ -24,6 +24,9 @@ const createEmployees = async (req, res, next) => {
           message: "bu mail adresi kullanılmaktadır.",
         });
       } else {
+        req.body.permissions = role_privileges.privileges.map(
+          (privilege, value) => privilege.key
+        );
         await Employee.create(req.body);
         sendEmployeeRegisterMail(userEmail,{email:userEmail,password:req.body.password})
         res.json({
@@ -49,17 +52,13 @@ const createEmployees = async (req, res, next) => {
     });
   }
 };
-const editInformationsEmployees = async (req, res) => {
+const editInformationsEmployees = async (req, res,next) => {
   try {
    
     console.log(req.body);
+
    
-    if (req.body.workHours) {
-      req.body.workHours = {
-        workStart: req.body.workHours[0],
-        workEnd: req.body.workHours[1],
-      };
-    }
+
     let data={
       name: req.body.name,
       surname: req.body.surname,
@@ -67,20 +66,27 @@ const editInformationsEmployees = async (req, res) => {
       sex: req.body.sex,
       address: req.body.address,
       phone: req.body.phone,
-      identity:req.body.identity,
-      birthDate:new Date(req.body.birthDate),
+      identity:req.body.identity||null,
+      birthDate:(req.body.birthDate==="")?"":new Date(req.body.birthDate),
+      workHours : {
+        workStart: req.body.workHours[0],
+        workEnd: req.body.workHours[1],
+      },
+      employeeComission:req.body.employeeComission
     }
+    console.log(data)
     
-    await Employee.findByIdAndUpdate(req.params.id, data);
-    res.status(200).json({
-      success: true,
-      message: "kullanıcı bilgileri başarıyla değiştirildi.",
+    await Employee.findByIdAndUpdate(req.params.id, data)
+    .then(response=>{
+      console.log(response)
+      res.status(200).json({
+        success: true,
+        message: "kullanıcı bilgileri başarıyla değiştirildi.",
+      });
     });
+    
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error,
-    });
+    next(new CustomError("bir sorun oluştu",500,error))
   }
 };
 const getEmployesAppointments = async (req, res, next) => {

@@ -490,6 +490,11 @@ function datasToUI(target, product) {
               </td>
               <td>
                   
+                 %${product.baseComission}
+
+              </td>
+              <td>
+                  
                  ${product.totalStock}
 
               </td>
