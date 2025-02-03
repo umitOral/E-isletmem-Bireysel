@@ -1,5 +1,5 @@
 import express from 'express';
-import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getForgotPasswordPage, getBlogPage, getSingleBlogPage, getOurServicesPage} from '../controller/pageController.js';
+import {resetPasswordPage,getIndexPage,getPricesPage,kvkkPage,getLoginPage,getRegisterPage,privacyPoliciesPage,returnPoliciesPage,getContactPage,getAboutUsPage,getTermOfUsePage,getForgotPasswordPage, getBlogPage, getSingleBlogPage, getOurServicesPage, getSSSPage} from '../controller/pageController.js';
 import {loginUser,resetPasswordMail} from '../controller/userController.js';
 import {handlePaymentCallback,createCompany,handlePaymentResult} from '../controller/companyControllers.js';
 import {smsStatus} from '../controller/smsControllers.js';
@@ -21,6 +21,7 @@ router.route("/privacy-policies").get(privacyPoliciesPage)
 router.route("/kvkk").get(kvkkPage)
 router.route("/prices").get(getPricesPage)
 router.route("/blog").get(getBlogPage)
+router.route("/sss").get(getSSSPage)
 router.route("/blog/:blogName").get(getSingleBlogPage)
 
 router.route("/login").get(getLoginPage)

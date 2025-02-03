@@ -21,8 +21,10 @@ import { BRAND_LIST } from "../config/brands.js";
 import Appointment from "../models/appointmentModel.js";
 import CITIES from "../config/cities.js";
 
+
 import CompanyPayment from "../models/companyPaymentModel.js";
 import Blog from "../models/blogModel.js";
+import COMPANY_TYPES from "../config/company_types.js";
 
 let now = new Date();
 let day = now.getDate();
@@ -103,6 +105,7 @@ const getAboutUsPage = (req, res, next) => {
   try {
     res.status(200).render("front/about-us", {
       link: "about-us",
+      COMPANY_TYPES
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -191,6 +194,16 @@ const getSingleBlogPage = async (req, res, next) => {
     res.status(200).render("front/blog-detail", {
       singleBlog,
       link: "prices",
+    });
+  } catch (error) {
+    return next(new CustomError("sistemsel bir hata oluştu", 500, error));
+  }
+};
+const getSSSPage = async (req, res, next) => {
+  try {
+    console.log("haho")
+    res.status(200).render("front/sss", {
+      link: "sss",
     });
   } catch (error) {
     return next(new CustomError("sistemsel bir hata oluştu", 500, error));
@@ -964,4 +977,5 @@ export {
   getSmsReportsPage,
   getSantralPage,
   getSingleBlogPage,
+  getSSSPage
 };
